@@ -9,63 +9,106 @@
             <!-- <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" /> -->
           </q-avatar>
           Shaded Eyewear
+          <span v-if="isLoggedIn" class="q-ml-lg font-size-responsive-xs">
+            Hi, {{ userDetails.username }}
+          </span>
         </q-toolbar-title>
 
-        <!-- link buttons -->
+        <!-- =================================== big screen -->
         <q-btn
           to="/"
           size="14px"
-          class="q-ma-md custom-button"
+          class="custom-button large-screen-only"
           label="Home"
-          round
           flat
-          dense
         />
         <q-btn
-          to="/products"
+          to="/sunglasses"
           size="14px"
-          class="q-ma-md custom-button"
+          class="custom-button large-screen-only"
           label="Catalogue"
-          round
           flat
-          dense
         />
+
         <!-- Authentication -->
-        <q-btn
-          v-if="!isLoggedIn"
+        <q-btn v-if="!isLoggedIn"
           to="/auth/login"
           size="14px"
-          class="q-ma-md custom-button"
+          class="custom-button large-screen-only"
           label="Login"
-          round
           flat
-          dense
         />
         <q-btn
           v-else
           @click="logout"
           size="14px"
-          class="q-ma-md custom-button"
+          class="custom-button large-screen-only"
           label="Logout"
-          round
           flat
-          dense
         />
+
+        <!-- profiles -->
+        <q-btn
+          v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'"
+          to="/admin/dashboard"
+          size="14px"
+          class="custom-button large-screen-only"
+          label="Admin"
+          flat
+        />
+        <q-btn
+          v-if="userDetails && userDetails.userType != null && userDetails.userType == 'user'"
+          to="/user/dashboard"
+          size="14px"
+          class="custom-button large-screen-only"
+          label="User"
+          flat
+        />
+
         <!-- cart -->
         <q-btn
-          to=""
+          to="/cart"
           size="12px"
-          class="q-ma-md"
-          icon="eva-shopping-cart"
-          round
+          icon="eva-shopping-cart large-screen-only"
           flat
-          dense
         />
+
+        <!-- =================================== small screen -->
+        <q-btn-dropdown
+          class="small-screen-only"
+          icon="menu"
+          flat
+        >
+          <q-list style="width: 200px">
+            <q-item clickable v-close-popup to="/">
+              <q-item-section>Home</q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup to="/sunglasses">
+              <q-item-section>Catalogue</q-item-section>
+            </q-item>
+            <q-item v-if="!isLoggedIn" clickable v-close-popup to="/auth/login">
+              <q-item-section>Login</q-item-section>
+            </q-item>
+            <q-item v-else clickable v-close-popup @click="logout">
+              <q-item-section>Logout</q-item-section>
+            </q-item>
+            <q-item v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'" clickable v-close-popup to="/admin/dashboard">
+              <q-item-section>Admin Profile</q-item-section>
+            </q-item>
+            <q-item v-if="userDetails && userDetails.userType != null && userDetails.userType == 'user'" clickable v-close-popup to="/user/dashboard">
+              <q-item-section>User Profile</q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup to="/cart">
+              <q-item-section>Cart</q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+
       </q-toolbar>
     </q-header>
 
     <!-- body -->
-    <q-page-container class="constrain">
+    <q-page-container>
       <router-view />
     </q-page-container>
 
@@ -84,30 +127,70 @@
 </template>
 
 <script>
+import UserService from 'src/services/UserService';
+
 export default {
   name: "MainLayout",
 
   data() {
     return {
-      isLoggedIn: false
+      userDetails: {
+        _id: '',
+        username: '',
+        userType: ''
+      },
+      isLoggedIn: false,
+      burgerMenuShown: false,
     }
   },
   created() {
     this.checkLoginStatus()
   },
-  // push status to the other pages
   watch: {
+    // push status to the other pages
     '$route': 'checkLoginStatus'
   },
   methods: {
+    // 1. check if logged in
     checkLoginStatus() {
       let token = localStorage.getItem('auth-token')
       this.isLoggedIn = !!token
+
+      // 2. fetch user details to determine usertype
+      if (this.isLoggedIn == true) {
+        this.fetchUserDetails()
+      }
     },
-    logout() {
-      // call the logout service
-      this.isLoggedIn = false
-      window.location.reload()
+
+    // 2.1 fetch user details to determine usertype
+    async fetchUserDetails() {
+      const response = await UserService.FindUserByToken()
+      this.userDetails = response
+      console.log(this.userDetails)
+    },
+
+    // 3. logout and clear local storage
+    async logout() {
+      const response = await UserService.logout(this.userDetails._id)
+      if (response) {
+        this.$q.dialog({
+          title: 'Success',
+          message: 'Logout successful!',
+          ok: 'OK'
+        }).onOk(() => {
+          this.$router.push('/')
+
+          this.isLoggedIn = false
+          window.location.reload()
+        })
+      }
+      else {
+        this.$q.dialog({
+          title: 'Error',
+          message: 'Login failed. Please try again.',
+          ok: 'OK'
+        })
+      }
     }
   }
 };

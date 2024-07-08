@@ -1,5 +1,6 @@
 // app global css in Sass form
 
+// ================================================================= // LAYOUT
 .small-screen-only
   @media (max-width: $breakpoint-xs-max)
     display: block
@@ -20,7 +21,38 @@
   max-width: 600px
   margin: 0 auto
 
-// button styling
+// ================================================================= // MISC
 .custom-button .q-btn__content
   text-transform: none
 
+.sub-title-heading
+  font-size: 14px
+
+// ================================================================= // FONTS
+.text-uppercase
+  text-transform: uppercase
+.text-capitalize
+  text-transform: capitalize
+.text-lowercase
+  text-transform: lowercase
+.text-none
+  text-transform: none
+
+
+/* Responsive font size utility classes */
+.font-size-responsive-xs
+  font-size: $font-size-responsive-xs
+.font-size-responsive-sm
+  font-size: $font-size-responsive-sm
+.font-size-responsive-md
+  font-size: $font-size-responsive-md
+.font-size-responsive-lg
+  font-size: $font-size-responsive-lg
+.font-size-responsive-xl
+  font-size: $font-size-responsive-xl
+.font-size-responsive-xxl
+  font-size: $font-size-responsive-xxl
+.font-size-responsive-xxxl
+  font-size: $font-size-responsive-xxxl
+.font-size-responsive-giant
+  font-size: $font-size-responsive-giant

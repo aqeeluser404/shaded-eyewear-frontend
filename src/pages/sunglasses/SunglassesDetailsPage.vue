@@ -1,11 +1,11 @@
 <template>
   <q-page>
-    <h2>Login</h2>
+    <h2>Sunglasses Details</h2>
   </q-page>
 </template>
 
 <script>
 export default {
-  name: "LoginPage",
+  name: "SunglassesDetailsPage",
 };
 </script>

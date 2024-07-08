@@ -17,6 +17,9 @@
       "pages/*": [
         "src/pages/*"
       ],
+      "pages/subdirectory/*": [
+        "src/pages/subdirectory/*"
+      ],
       "assets/*": [
         "src/assets/*"
       ],

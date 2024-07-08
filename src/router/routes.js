@@ -3,30 +3,34 @@ const routes = [
     path: "/",
     component: () => import("layouts/MainLayout.vue"),
     children: [
+
       // PUBLIC PAGES
       { path: "", component: () => import("pages/HomePage.vue") },
       {
-        path: "/products",
-        component: () => import("pages/ProductsPage.vue"),
+        path: "/sunglasses",
+        component: () => import("src/pages/sunglasses/SunglassesPage.vue"),
       },
       {
-        path: "/products/view/:id",
-        component: () => import("pages/ProductDetailsPage.vue"),
+        path: "/sunglasses/view/:id",
+        component: () => import("src/pages/sunglasses/SunglassesDetailsPage.vue"),
       },
+
       // AUTHENTICATION PAGES
       {
         path: "/auth/login",
-        component: () => import("pages/authentication/LoginPage.vue"),
+        component: () => import("pages/auth/LoginPage.vue"),
       },
       {
         path: "/auth/register",
-        component: () => import("pages/authentication/RegisterPage.vue"),
+        component: () => import("pages/auth/RegisterPage.vue"),
       },
+
       // USER PAGES
       {
         path: "/user/dashboard",
         component: () => import("pages/user/UserDashPage.vue"),
       },
+
       // ADMIN PAGES
       {
         path: "/admin/dashboard",
