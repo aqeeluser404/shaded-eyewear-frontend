@@ -36,6 +36,12 @@ const routes = [
         path: "/admin/dashboard",
         component: () => import("pages/admin/AdminDashPage.vue"),
       },
+
+      // CART & ORDER
+      {
+        path: "/cart",
+        component: () => import("pages/CartPage.vue"),
+      },
     ],
   },
   {

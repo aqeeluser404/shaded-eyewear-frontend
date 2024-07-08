@@ -1,7 +1,6 @@
 <template>
   <q-page>
-    <!-- <h2>Login</h2> -->
-     <q-page class="flex items-center justify-center window-height">
+    <q-page class="flex items-center justify-center window-height">
       <div class="q-pa-md" style="min-width: 300px;">
         <q-form
           @submit="onSubmit"
@@ -36,7 +35,7 @@
 </template>
 
 <script>
-import UserService from 'src/services/UserService';
+import UserService from 'src/services/UserService'
 
 export default {
   name: "LoginPage",
