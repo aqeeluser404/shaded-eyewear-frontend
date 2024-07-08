@@ -26,8 +26,13 @@ class SunglassesService {
   // ================================================================= // ADMIN SERVICES
   static async createSunglasses(sunglasses) {
     const ENDPOINT = "/admin/sunglasses/create";
+    const token = localStorage.getItem("auth-token")
     try {
-      const response = await axios.post(`${API_BASE_URL}${ENDPOINT}`, sunglasses);
+      const response = await axios.post(`${API_BASE_URL}${ENDPOINT}`, sunglasses, {
+        headers: {
+          "auth-token": token
+        },
+      });
       return response.data
     } catch (error) {
       Logger.error(error)
@@ -35,8 +40,13 @@ class SunglassesService {
   }
   static async updateSunglasses(sunglassesId, sunglasses) {
     const ENDPOINT = "/admin/sunglasses/update"
+    const token = localStorage.getItem("auth-token")
     try {
-      const response = await axios.put(`${API_BASE_URL}${ENDPOINT}/${sunglassesId}`)
+      const response = await axios.put(`${API_BASE_URL}${ENDPOINT}/${sunglassesId}`, sunglasses, {
+        headers: {
+          "auth-token": token
+        },
+      })
       return response;
     } catch (error) {
       Logger.error(error)
@@ -44,8 +54,13 @@ class SunglassesService {
   }
   static async deleteSunglasses(sunglassesId) {
     const ENDPOINT = "/admin/sunglasses/delete"
+    const token = localStorage.getItem("auth-token")
     try {
-      const response = await axios.delete(`${API_BASE_URL}${ENDPOINT}/${sunglassesId}`)
+      const response = await axios.delete(`${API_BASE_URL}${ENDPOINT}/${sunglassesId}`, {
+        headers: {
+          "auth-token": token
+        },
+      })
       return response
     } catch (error) {
       Logger.error(error)

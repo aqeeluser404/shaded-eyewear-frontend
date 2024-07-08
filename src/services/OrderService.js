@@ -13,8 +13,14 @@ class OrderService {
   // Basically the cart
   static async createOrder(userId, orderData, orderTypeData) {
     const ENDPOINT = "/order/create"
+    const token = localStorage.getItem("auth-token")
     try {
-      const response = await axios.post(`${API_BASE_URL}${ENDPOINT}`, {userId, orderData, orderTypeData})
+      // userId to be included in orderData
+      const response = await axios.post(`${API_BASE_URL}${ENDPOINT}/${userId}`, {orderData, orderTypeData}, {
+        headers: {
+          "auth-token": token
+        }
+      })
       return response.data
     } catch (error) {
       Logger.error(error)
@@ -23,8 +29,13 @@ class OrderService {
   // Add items to cart
   static async updateOrder(orderId, orderData, orderTypeData) {
     const ENDPOINT = "/order/update"
+    const token = localStorage.getItem("auth-token")
     try {
-      const response = await axios.put(`${API_BASE_URL}${ENDPOINT}/${orderId}`, {orderData, orderTypeData})
+      const response = await axios.put(`${API_BASE_URL}${ENDPOINT}/${orderId}`, {orderData, orderTypeData}, {
+        headers: {
+          "auth-token": token
+        }
+      })
       return response.data
     } catch (error) {
       Logger.error(error)
@@ -33,8 +44,13 @@ class OrderService {
   // Remove items from cart
   static async cancelOrder(orderId) {
     const ENDPOINT = "/order/cancel-order"
+    const token = localStorage.getItem("auth-token")
     try {
-      const response = await axios.put(`${API_BASE_URL}${ENDPOINT}/${orderId}`)
+      const response = await axios.put(`${API_BASE_URL}${ENDPOINT}/${orderId}`, {}, {
+        headers: {
+          "auth-token": token
+        }
+      })
       return response
     } catch (error) {
       Logger.error(error);
@@ -42,8 +58,13 @@ class OrderService {
   }
   static async findOrderById(orderId) {
     const ENDPOINT = "/order/view"
+    const token = localStorage.getItem("auth-token")
     try {
-      const response = await axios.get(`${API_BASE_URL}${ENDPOINT}/${orderId}`)
+      const response = await axios.get(`${API_BASE_URL}${ENDPOINT}/${orderId}`, {
+        headers: {
+          "auth-token": token
+        }
+      })
       return response.data
     } catch (error) {
       Logger.error(error);
@@ -51,8 +72,13 @@ class OrderService {
   }
   static async findAllMyOrders(userId) {
     const ENDPOINT = "/order/my-orders"
+    const token = localStorage.getItem("auth-token")
     try {
-      const response = await axios.get(`${API_BASE_URL}${ENDPOINT}/${userId}`)
+      const response = await axios.get(`${API_BASE_URL}${ENDPOINT}/${userId}`, {
+        headers: {
+          "auth-token": token
+        }
+      })
       return response.data
     } catch (error) {
       Logger.error(error);
@@ -61,8 +87,13 @@ class OrderService {
   // ================================================================= // ADMIN SERVICES
   static async findAllOrders() {
     const ENDPOINT = "/admin/order/all"
+    const token = localStorage.getItem("auth-token")
     try {
-      const response = await axios.get(`${API_BASE_URL}${ENDPOINT}`)
+      const response = await axios.get(`${API_BASE_URL}${ENDPOINT}`, {
+        headers: {
+          "auth-token": token
+        }
+      })
       return response.data
     } catch(error) {
       Logger.error(error)
@@ -70,8 +101,13 @@ class OrderService {
   }
   static async deleteOrder(orderId) {
     const ENDPOINT = "/admin/order/delete"
+    const token = localStorage.getItem("auth-token")
     try {
-      const response = await axios.get(`${API_BASE_URL}${ENDPOINT}/${orderId}`)
+      const response = await axios.get(`${API_BASE_URL}${ENDPOINT}/${orderId}`, {
+        headers: {
+          "auth-token": token
+        }
+      })
       return response;
     } catch(error) {
       Logger.error(error)
