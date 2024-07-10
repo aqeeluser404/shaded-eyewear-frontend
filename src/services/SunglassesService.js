@@ -1,7 +1,7 @@
-import axios from "axios";
-import Logger from "./Logger";
+import axios from "axios"
+import Logger from "./Logger"
 
-const API_BASE_URL = "http://localhost:5000";
+const API_BASE_URL = "http://localhost:5000"
 
 class SunglassesService {
   // ================================================================= // PUBLIC SERVICES

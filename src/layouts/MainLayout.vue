@@ -1,14 +1,15 @@
 <template>
   <q-layout view="hHh lpR fff">
     <!-- header -->
-    <q-header elevated class="bg-white text-black">
+    <q-header class="bg-white text-black">
       <q-toolbar class="constrain">
         <q-toolbar-title>
-          <q-avatar>
-            <!-- logo -->
-            <!-- <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" /> -->
-          </q-avatar>
-          Shaded Eyewear
+          <!-- <q-avatar>
+            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
+          </q-avatar> -->
+          <router-link to="/" class="text-remove-decoration">
+            Shaded Eyewear
+          </router-link>
           <span v-if="isLoggedIn" class="q-ml-lg font-size-responsive-xs">
             Hi, {{ userDetails.username }}
           </span>
@@ -113,7 +114,7 @@
     </q-page-container>
 
     <!-- footer -->
-    <q-footer elevated class="bg-white text-black">
+    <q-footer class="bg-white text-black">
       <q-toolbar class="constrain">
         <q-toolbar-title>
           <q-avatar>

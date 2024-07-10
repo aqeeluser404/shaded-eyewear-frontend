@@ -1,6 +1,14 @@
 <template>
-  <q-page class="flex items-center justify-center window-height">
-    <h2>Home</h2>
+  <q-page>
+    <div class="constrain">
+
+      <q-card bordered flat class="column flex-center">
+        <h4>Home</h4>
+      </q-card>
+
+      <!-- start -->
+      <q-card></q-card>
+    </div>
   </q-page>
 </template>
 

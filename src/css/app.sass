@@ -24,9 +24,8 @@
 // ================================================================= // MISC
 .custom-button .q-btn__content
   text-transform: none
-
-.sub-title-heading
-  font-size: 14px
+.cursor-pointer
+  cursor: pointer
 
 // ================================================================= // FONTS
 .text-uppercase
@@ -35,8 +34,10 @@
   text-transform: capitalize
 .text-lowercase
   text-transform: lowercase
-.text-none
-  text-transform: none
+
+.text-remove-decoration
+  text-decoration: none
+  color: $dark
 
 
 /* Responsive font size utility classes */
@@ -56,3 +57,11 @@
   font-size: $font-size-responsive-xxxl
 .font-size-responsive-giant
   font-size: $font-size-responsive-giant
+
+// ================================================================= // IMAGES
+
+.image
+  border-radius: 5%
+  width: 300px
+  height: 300px
+  object-fit: cover
