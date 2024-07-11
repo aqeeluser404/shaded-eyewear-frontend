@@ -2,14 +2,12 @@
   <q-page>
     <div class="constrain">
 
-      <q-card bordered flat class="q-pa-md column flex-center">
+      <q-card bordered flat class="column flex-center">
         <h4>Products</h4>
-
         <!-- search box -->
-        <div bordered style="width: 50%; border-radius: 2%; border: 1px solid grey; ">
+        <div bordered class="q-mb-md" style="width: 50%; border-radius: 2%; border: 1px solid grey; ">
           <q-input v-model="search" placeholder="Search sunglasses" />
         </div>
-
       </q-card>
 
       <!-- list of sunglasses -->
@@ -22,8 +20,12 @@
               class="q-gutter-sm cursor-pointer"
             >
               <div><q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="image" /></div>
-              <div>{{ sunglass.model }}</div>
-              <div>{{ sunglass.description }}</div>
+
+                <q-item class="row">
+                  <div>{{ sunglass.model }}</div>
+                  <q-space />
+                  <div>R {{ sunglass.price }}.00</div>
+                </q-item>
             </q-card-section>
           </q-card>
 
@@ -49,9 +51,12 @@
     },
     computed: {
       filteredSunglasses() {
+
+        // if search box is empty, display all sunglasses
         if (!this.search) {
           return this.sunglasses;
         }
+        // filter sunglasses based on search
         return this.sunglasses.filter(sunglass =>
           sunglass.model.toLowerCase().includes(this.search.toLowerCase()) ||
           sunglass.description.toLowerCase().includes(this.search.toLowerCase())
@@ -82,9 +87,14 @@
         const relativePath = imagePath.replace(localDir, '');
         return serverUrl + relativePath;
       }
+      // getImageUrl(imagePath) {
+      //   // replace this with hosted url
+      //   const serverUrl = 'http://localhost:5000/uploads/';
+      //   return serverUrl + imagePath;
+      // }
     },
     created() {
       this.fetchSunglasses()
-    }
+    },
   }
 </script>

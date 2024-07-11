@@ -2,7 +2,7 @@
   <q-page>
     <div class="constrain">
 
-      <q-card bordered flat>
+      <q-card bordered flat class="column flex-center">
         <h4>Product Details</h4>
       </q-card>
 
@@ -23,7 +23,7 @@
           <q-separator class="q-mb-xs" style="width: 40%;" />
 
           <q-card-section>
-            <div>ONLY <b>{{ sunglasses.stock }}</b> LEFT IN STOCK</div>
+            <div><b>ONLY {{ sunglasses.stock }} LEFT IN STOCK</b></div>
             <ul>
               <li>Color: {{ sunglasses.color }}</li>
               <li>Description: {{ sunglasses.description }}</li>
@@ -89,5 +89,5 @@ export default {
   created() {
     this.fetchSunglassesDetails()
   }
-};
+}
 </script>
