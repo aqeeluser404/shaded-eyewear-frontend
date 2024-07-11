@@ -8,13 +8,13 @@
 
       <!-- admin block -->
       <div class="q-mt-md">
-        <q-layout view="lHh Lpr lff" container style="height: 300px" class="shadow-2 rounded-borders">
+        <q-layout view="lHh Lpr lff" container style="height: 60vh" class="shadow-2 rounded-borders">
 
           <!-- header -->
           <q-header elevated class="bg-white text-black">
             <q-toolbar>
-              <q-toolbar-title>{{ currentPageTitle }}</q-toolbar-title>
               <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
+              <q-toolbar-title>{{ currentPageTitle }}</q-toolbar-title>
             </q-toolbar>
           </q-header>
 
@@ -23,9 +23,14 @@
             <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
               <q-list padding>
                 <!-- user tab -->
-                <q-item clickable v-ripple @click="changePage('Users', 'UserComponent')">
+                <q-item clickable v-ripple @click="changePage('User Panel', 'UserComponent')">
                   <q-item-section avatar><q-icon name="eva-people-outline" /></q-item-section>
-                  <q-item-section>Users</q-item-section>
+                  <q-item-section>User</q-item-section>
+                </q-item>
+                <!-- sunglasses tab -->
+                <q-item clickable v-ripple @click="changePage('User Panel', 'UserComponent')">
+                  <q-item-section avatar><q-icon name="eva-people-outline" /></q-item-section>
+                  <q-item-section>Sunglasses</q-item-section>
                 </q-item>
               </q-list>
             </q-scroll-area>
@@ -71,14 +76,15 @@ export default {
       userDetails: {},
 
       drawer: false,
-      currentPageTitle: 'Dashboard',
-      currentPageComponent: null,
+      currentPageTitle: 'User Panel',
+      currentPageComponent: 'UserComponent',
     }
   },
   methods: {
     changePage(title, component) {
       this.currentPageTitle = title;
       this.currentPageComponent = component;
+      this.drawer = false
     },
     async fetchUserDetails() {
       // get id from token

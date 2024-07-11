@@ -32,7 +32,7 @@
         </q-card>
 
         <!-- price and cart -->
-        <q-card bordered flat class="q-pa-md col-12 col-md-4">
+        <q-card bordered flat class="q-pa-md col-12 col-md-3">
           <q-card-section>
             <div class="text-h4">R {{ sunglasses.price }}.00</div>
           </q-card-section>

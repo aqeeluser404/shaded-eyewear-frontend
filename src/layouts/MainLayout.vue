@@ -4,12 +4,12 @@
     <q-header class="bg-white text-black">
       <q-toolbar class="constrain">
         <q-toolbar-title>
-          <!-- <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
-          </q-avatar> -->
-          <router-link to="/" class="text-remove-decoration">
+          <router-link to="/" class="text-remove-decoration q-mr-md">
             Shaded Eyewear
           </router-link>
+          <q-avatar>
+            <img src="../assets/sunglasses-icon.png" />
+          </q-avatar>
           <span v-if="isLoggedIn" class="q-ml-lg font-size-responsive-xs">
             Hi, {{ userDetails.username }}
           </span>
@@ -31,23 +31,6 @@
           flat
         />
 
-        <!-- Authentication -->
-        <q-btn v-if="!isLoggedIn"
-          to="/auth/login"
-          size="14px"
-          class="custom-button large-screen-only"
-          label="Login"
-          flat
-        />
-        <q-btn
-          v-else
-          @click="logout"
-          size="14px"
-          class="custom-button large-screen-only"
-          label="Logout"
-          flat
-        />
-
         <!-- profiles -->
         <q-btn
           v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'"
@@ -63,6 +46,23 @@
           size="14px"
           class="custom-button large-screen-only"
           label="User"
+          flat
+        />
+
+        <!-- Authentication -->
+        <q-btn v-if="!isLoggedIn"
+          to="/auth/login"
+          size="14px"
+          class="custom-button large-screen-only"
+          label="Login"
+          flat
+        />
+        <q-btn
+          v-else
+          @click="logout"
+          size="14px"
+          class="custom-button large-screen-only"
+          label="Logout"
           flat
         />
 
@@ -87,17 +87,17 @@
             <q-item clickable v-close-popup to="/sunglasses">
               <q-item-section>Catalogue</q-item-section>
             </q-item>
-            <q-item v-if="!isLoggedIn" clickable v-close-popup to="/auth/login">
-              <q-item-section>Login</q-item-section>
-            </q-item>
-            <q-item v-else clickable v-close-popup @click="logout">
-              <q-item-section>Logout</q-item-section>
-            </q-item>
-            <q-item v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'" clickable v-close-popup to="/admin/dashboard">
+            <q-item clickable v-close-popup to="/admin/dashboard" v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'">
               <q-item-section>Admin Profile</q-item-section>
             </q-item>
-            <q-item v-if="userDetails && userDetails.userType != null && userDetails.userType == 'user'" clickable v-close-popup to="/user/dashboard">
+            <q-item clickable v-close-popup to="/user/dashboard" v-if="userDetails && userDetails.userType != null && userDetails.userType == 'user'">
               <q-item-section>User Profile</q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup to="/auth/login" v-if="!isLoggedIn">
+              <q-item-section>Login</q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click="logout" v-else>
+              <q-item-section>Logout</q-item-section>
             </q-item>
             <q-item clickable v-close-popup to="/cart">
               <q-item-section>Cart</q-item-section>
