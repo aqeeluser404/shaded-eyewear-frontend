@@ -1,11 +1,14 @@
 <template>
+  <!-- constrains -->
   <q-page>
-    <div class="constrain">
+    <div class="constrain window-height">
 
+      <!-- =================================== SUNGLASSES DETAILS HEADER -->
       <q-card bordered flat class="column flex-center">
         <h4>Product Details</h4>
       </q-card>
 
+      <!-- =================================== PRODUCT DETAILS -->
       <div class="row q-pa-md q-gutter-md justify-center">
 
         <!-- image -->
@@ -13,8 +16,8 @@
           <q-img v-if="sunglasses.images && sunglasses.images.length > 0" :src="getImageUrl(sunglasses.images[0])" class="image" />
         </q-card>
 
-        <!-- middle -->
-        <q-card bordered flat class="q-pa-md col-12 col-md-4">
+        <!-- description info -->
+        <q-card bordered flat class="q-pa-md col-12 col-md-3">
 
           <q-card-section>
             <div class="text-h4">{{ sunglasses.model }}</div>
@@ -22,6 +25,7 @@
 
           <q-separator class="q-mb-xs" style="width: 40%;" />
 
+          stock and details
           <q-card-section>
             <div><b>ONLY {{ sunglasses.stock }} LEFT IN STOCK</b></div>
             <ul>
@@ -57,7 +61,6 @@
 <script>
 import SunglassesService from 'src/services/SunglassesService';
 
-
 export default {
   name: "SunglassesDetailsPage",
 
@@ -91,3 +94,9 @@ export default {
   }
 }
 </script>
+
+<style lang="sass" scoped>
+.image
+  width: 100%
+
+</style>

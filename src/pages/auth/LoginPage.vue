@@ -1,13 +1,14 @@
 <template>
+  <!-- constrains -->
   <q-page>
+    <div class="constrain window-height">
 
-    <!-- cannot set vertical center without fullscreen height -->
-    <div class="constrain">
-
+      <!-- =================================== LOGIN HEADER -->
       <q-card bordered flat class="column flex-center q-mb-md">
         <h4>Login</h4>
       </q-card>
 
+      <!-- =================================== LOGIN FORM -->
       <q-card bordered flat class="column flex-center q-pa-md">
         <!-- form -->
         <q-form
@@ -27,18 +28,19 @@
             label="Your password *"
             type="password"
           />
+          <!-- register instead -->
           <div>
             <router-link to="/auth/register" style="text-decoration: underline; font-size: 14px; color: #1976D2">
               Don't have an account?
             </router-link>
           </div>
+          <!-- buttons -->
           <div>
             <q-btn label="Submit" type="submit" color="primary" class="custom-button"/>
             <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm custom-button" />
           </div>
         </q-form>
       </q-card>
-
     </div>
   </q-page>
 </template>

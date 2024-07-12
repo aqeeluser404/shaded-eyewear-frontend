@@ -1,16 +1,18 @@
 <template>
+  <!-- constrains -->
   <q-page>
-    <div class="constrain">
+    <div class="constrain window-height">
 
-      <q-card bordered flat class="column flex-center">
-        <h4>Admin Dashboard</h4>
+      <!-- =================================== ADMIN HEADER -->
+      <q-card bordered flat class="column flex-center q-mb-md">
+        <h4>Admin Dasboard</h4>
       </q-card>
 
-      <!-- admin block -->
+      <!-- =================================== ADMIN CONTROLS -->
       <div class="q-mt-md">
-        <q-layout view="lHh Lpr lff" container style="height: 60vh" class="shadow-2 rounded-borders">
+        <q-layout view="lHh Lpr lff" container style="height: 65vh" class="shadow-2 rounded-borders">
 
-          <!-- header -->
+          <!-- page header -->
           <q-header elevated class="bg-white text-black">
             <q-toolbar>
               <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
@@ -18,7 +20,7 @@
             </q-toolbar>
           </q-header>
 
-          <!-- =================================== side panel -->
+          <!-- =================================== DRAWER PANEL -->
           <q-drawer v-model="drawer" show-if-above :width="200" :breakpoint="400">
             <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
               <q-list padding>
@@ -35,26 +37,27 @@
               </q-list>
             </q-scroll-area>
 
-            <!-- avatar -->
+            <!-- avatar header -->
             <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
               <div class="absolute-bottom bg-transparent">
+                <!-- profile img -->
                 <q-avatar size="56px" class="q-mb-sm">
                   <img src="https://cdn.quasar.dev/img/boy-avatar.png">
                 </q-avatar>
+                <!-- name and email -->
                 <div class="text-weight-bold">{{ userDetails.firstName }} {{ userDetails.lastName }}</div>
                 <div>{{ userDetails.email }}</div>
               </div>
             </q-img>
           </q-drawer>
 
-          <!-- =================================== panel page -->
+          <!-- =================================== DRAWER PAGES -->
           <q-page-container>
             <component :is="currentPageComponent"></component>
           </q-page-container>
         </q-layout>
       </div>
     </div>
-
   </q-page>
 </template>
 
@@ -119,3 +122,8 @@ export default {
   }
 }
 </script>
+
+<style lang="sass" scoped>
+.my-card
+  width: 100%
+</style>

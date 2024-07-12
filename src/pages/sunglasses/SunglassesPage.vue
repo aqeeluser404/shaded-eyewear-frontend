@@ -1,7 +1,9 @@
 <template>
+  <!-- constrains -->
   <q-page>
-    <div class="constrain">
+    <div class="constrain window-height">
 
+      <!-- =================================== SUNGLASSES DETAILS HEADER -->
       <q-card bordered flat class="column flex-center">
         <h4>Products</h4>
         <!-- search box -->
@@ -10,28 +12,26 @@
         </div>
       </q-card>
 
-      <!-- list of sunglasses -->
+      <!-- =================================== LIST OF SUNGLASSES -->
       <div class="row q-pa-md q-gutter-md justify-center">
+        <!-- list -->
         <q-list v-for="sunglass in filteredSunglasses" :key="sunglass._id">
-
-          <q-card bordered flat>
-            <q-card-section
-              @click="viewSunglassesDetails(sunglass._id)"
-              class="q-gutter-sm cursor-pointer"
-            >
-              <div><q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="image" /></div>
-
-                <q-item class="row">
-                  <div>{{ sunglass.model }}</div>
-                  <q-space />
-                  <div>R {{ sunglass.price }}.00</div>
-                </q-item>
-            </q-card-section>
+          <!-- sunglass card -->
+          <q-card bordered flat
+            @click="viewSunglassesDetails(sunglass._id)"
+            class=" cursor-pointer"
+          >
+            <!-- sunglass image -->
+            <div><q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="image" /></div>
+            <!-- sunglass details -->
+            <q-item class="row">
+              <div>{{ sunglass.model }}</div>
+              <q-space />
+              <div>R {{ sunglass.price }}.00</div>
+            </q-item>
           </q-card>
-
         </q-list>
       </div>
-
     </div>
   </q-page>
 </template>

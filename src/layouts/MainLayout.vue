@@ -1,21 +1,27 @@
 <template>
+  <!-- constrains -->
   <q-layout view="hHh lpR fff">
-    <!-- header -->
+
+    <!-- =================================== HEADER DECLARATION, TITLE & IMG -->
     <q-header class="bg-white text-black">
       <q-toolbar class="constrain">
         <q-toolbar-title>
+          <!-- title -->
           <router-link to="/" class="text-remove-decoration q-mr-md">
             Shaded Eyewear
           </router-link>
+          <!-- img -->
           <q-avatar>
             <img src="../assets/sunglasses-icon.png" />
           </q-avatar>
+          <!-- username -->
           <span v-if="isLoggedIn" class="q-ml-lg font-size-responsive-xs">
             Hi, {{ userDetails.username }}
           </span>
         </q-toolbar-title>
 
-        <!-- =================================== big screen -->
+        <!-- =================================== BIG SCREEN CONTENT -->
+        <!-- public -->
         <q-btn
           to="/"
           size="14px"
@@ -30,7 +36,6 @@
           label="Catalogue"
           flat
         />
-
         <!-- profiles -->
         <q-btn
           v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'"
@@ -48,7 +53,6 @@
           label="User"
           flat
         />
-
         <!-- Authentication -->
         <q-btn v-if="!isLoggedIn"
           to="/auth/login"
@@ -65,7 +69,6 @@
           label="Logout"
           flat
         />
-
         <!-- cart -->
         <q-btn
           to="/cart"
@@ -74,7 +77,7 @@
           flat
         />
 
-        <!-- =================================== small screen -->
+        <!-- =================================== SMALL SCREEN CONTENT -->
         <q-btn-dropdown
           class="small-screen-only"
           icon="menu"
@@ -104,16 +107,15 @@
             </q-item>
           </q-list>
         </q-btn-dropdown>
-
       </q-toolbar>
     </q-header>
 
-    <!-- body -->
+    <!-- =================================== BODY -->
     <q-page-container>
       <router-view />
     </q-page-container>
 
-    <!-- footer -->
+    <!-- =================================== FOOTER -->
     <q-footer class="bg-white text-black">
       <q-toolbar class="constrain">
         <q-toolbar-title>

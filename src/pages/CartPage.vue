@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div class="constrain">
+    <div class="constrain window-height">
 
       <q-card bordered flat class="column flex-center">
         <h4>Cart</h4>

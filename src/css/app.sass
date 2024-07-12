@@ -24,8 +24,29 @@
 // ================================================================= // MISC
 .custom-button .q-btn__content
   text-transform: none
+
 .cursor-pointer
   cursor: pointer
+
+.dark-overlay
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  background-color: rgba(0, 0, 0, 0.25)
+  z-index: 1
+
+.element-fixed
+  position: fixed
+  height: fit-content
+  z-index: 1
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  width: fit-content
+  margin: auto
 
 // ================================================================= // FONTS
 .text-uppercase
@@ -38,7 +59,6 @@
 .text-remove-decoration
   text-decoration: none
   color: $dark
-
 
 /* Responsive font size utility classes */
 .font-size-responsive-xs
@@ -59,8 +79,12 @@
   font-size: $font-size-responsive-giant
 
 // ================================================================= // IMAGES
-
 .image
+  width: 300px
+  height: 300px
+  object-fit: cover
+
+.image-rounded
   border-radius: 5%
   width: 300px
   height: 300px
