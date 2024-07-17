@@ -34,6 +34,16 @@
                   <q-item-section avatar><q-icon name="eva-people-outline" /></q-item-section>
                   <q-item-section>Sunglasses</q-item-section>
                 </q-item>
+                <!-- orders tab -->
+                <q-item clickable v-ripple @click="changePage('User Panel', 'UserComponent')">
+                  <q-item-section avatar><q-icon name="eva-people-outline" /></q-item-section>
+                  <q-item-section>Orders</q-item-section>
+                </q-item>
+                <!-- orders tab -->
+                <q-item clickable v-ripple @click="changePage('User Panel', 'UserComponent')">
+                  <q-item-section avatar><q-icon name="eva-people-outline" /></q-item-section>
+                  <q-item-section>Delivery</q-item-section>
+                </q-item>
               </q-list>
             </q-scroll-area>
 

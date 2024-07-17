@@ -56,6 +56,25 @@ class UserService {
       Logger.error(error);
     }
   }
+  static async logoutUser(userId) {
+    const ENDPOINT = "/user/logout";
+    const token = localStorage.getItem("auth-token");
+    try {
+      const response = await axios.post(`${API_BASE_URL}${ENDPOINT}/${userId}`, {}, {
+        headers: {
+          "auth-token": token
+        }
+      });
+
+      if (response.data) {
+        return response.data;
+      } else {
+        throw new Error("Logout failed");
+      }
+    } catch (error) {
+      Logger.error(error);
+    }
+  }
 
   // ================================================================= // ADMIN SERVICES
   static async createUser(user) {
