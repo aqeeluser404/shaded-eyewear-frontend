@@ -2,7 +2,7 @@
   <!-- constrains -->
   <div class="row q-pa-md q-gutter-md justify-center">
 
-    <!-- =================================== GRAPHS -->
+    <!-- =================================== USER STAT CARD -->
     <q-card class="q-pa-md col-12 col-md-5">
       <q-card-section>
         <div class="text-h6">Frequent Users Statistics</div>
@@ -13,10 +13,9 @@
     </q-card>
 
     <!-- =================================== USER DETAILS CARD -->
-    <!-- popout card details -->
     <q-card v-if="selectedUser" class="q-pa-md col-12 col-md-6">
       <q-card-section>
-        <div class="text-h6">{{ selectedUser.firstName }} Details</div>
+        <div class="text-h6">{{ selectedUser.username }} Details</div>
       </q-card-section>
       <q-markup-table>
         <tbody>
@@ -38,9 +37,8 @@
           </tr>
           <tr>
             <td class="text-left cursor-pointer">User Type: </td>
-
             <td class="text-left cursor-pointer">
-              <q-input v-if="editMode.userType" v-model="selectedUser.userType" :options="userTypeOptions" @blur="updateUserType(selectedUser)" emit-value map-options />
+              <q-select v-if="editMode.userType" v-model="selectedUser.userType" :options="userTypeOptions" @blur="updateUserType(selectedUser)" emit-value map-options />
               <div v-else @click="editMode.userType = true">
                 {{ selectedUser.userType }}
                 <q-icon name="eva-edit-outline" style="font-size: 16px; opacity: 75%;" class="q-ml-sm q-mb-xs" />
@@ -51,15 +49,15 @@
         </tbody>
       </q-markup-table>
       <!-- close button -->
-      <div class="row">
+      <div class="row justify-start">
         <q-card-actions>
-          <q-btn rounded flat label="Close" color="primary" @click="closeDetails" />
+          <q-btn flat label="Close" color="primary" @click="closeDetails" />
         </q-card-actions>
         <q-card-actions>
-          <q-btn rounded flat label="Delete" color="negative" @click="deleteUser(selectedUser._id)" />
+          <q-btn flat label="Delete" color="negative" @click="deleteUser(selectedUser._id, selectedUser.username)" />
         </q-card-actions>
         <q-card-actions>
-          <q-btn rounded flat label="Logout" color="warning" v-if="selectedUser.userType === 'user'" @click="logoutUser(selectedUser._id)" />
+          <q-btn flat label="Logout" color="warning" v-if="selectedUser.loginInfo && selectedUser.loginInfo.isLoggedIn === true " @click="logoutUser(selectedUser._id, selectedUser.username)" />
         </q-card-actions>
       </div>
     </q-card>
@@ -96,15 +94,12 @@
       </q-markup-table>
     </q-card>
   </div>
-  <!-- overlay -->
-  <!-- <div v-if="selectedUser" class="dark-overlay"></div> -->
 </template>
 
 <script>
+import UserService from 'src/services/UserService';
 import { Chart, LinearScale, BarController, BarElement, CategoryScale } from 'chart.js';
 Chart.register(LinearScale, BarController, BarElement, CategoryScale);
-
-import UserService from 'src/services/UserService';
 
 export default {
   data() {
@@ -176,51 +171,74 @@ export default {
         firstName: this.selectedUser.firstName,
         lastName: this.selectedUser.lastName,
         email: this.selectedUser.email,
+        phone: this.selectedUser.phone,
+        username: this.selectedUser.username,
+        password: this.selectedUser.password,
+        // update usertype
+        userType: selectedUser.userType,
+        location: this.selectedUser.location,
+        loginInfo: this.selectedUser.loginInfo,
+        order: this.selectedUser.order
+      }
+      const response = await UserService.updateUserDetails(userId, updatedUser)
+      console.log(response)
+      // window.location.reload()
+    },
+    async deleteUser(userId, username) {
+      const admin = await UserService.FindUserByToken()
+      if (admin._id === userId) {
+        this.$q.dialog({
+            title: 'Error',
+            message: 'You cannot delete yourself!',
+            ok: 'OK'
+          }).onOk(() => {
+            return;
+          });
+          return;
+      } else {
+        this.$q.dialog({
+          title: 'Delete user',
+          message: `You are about to delete ${username}, continue?`,
+          cancel: true,
+          persistent: true
+        }).onOk(async () => {
+          try {
+            await UserService.deleteUser(userId)
+            window.location.reload();
+          } catch (error) {
+            console.error(error);
+          }
+        })
+        .onCancel(() => {}).onDismiss(() => {});
       }
     },
-    async deleteUser(id) {
-      const response = await UserService.deleteUser(id)
-      if(response) {
-        window.location.reload()
-      }
-
-      // if (loggedInUser._id === id) {
-      //   this.$q.dialog({
-      //       title: 'Error',
-      //       message: 'You cannot remove remove yourself!',
-      //       ok: 'OK'
-      //     }).onOk(() => {
-      //       return;
-      //     });
-      //     return;
-      // } else {
-      //   // Proceed with the deletion
-      //   this.$q.dialog({
-      //     title: 'Delete user',
-      //     message: `You are about to delete '${username}', continue?`,
-      //     cancel: true,
-      //     persistent: true
-      //   }).onOk(async () => {
-      //     try {
-      //       const response = await UserService.deleteUser(id);
-      //       console.log(response);
-      //       // After deleting the user, you might want to fetch the updated list of users
-      //       await this.fetchUsers();
-      //     } catch (error) {
-      //       console.error(error);
-      //     }
-      //   })
-      //   .onCancel(() => {
-      //     console.log('Cancel');
-      //   }).onDismiss(() => {
-      //     // console.log('I am triggered on both OK and Cancel');
-      //   });
-      // }
-    },
-    async logoutUser(id) {
-      const response = await UserService.logoutUser(id)
-      if (response) {
-        window.location.reload()
+    async logoutUser(userId, username) {
+      const admin = await UserService.FindUserByToken()
+      if (admin._id === userId) {
+        this.$q.dialog({
+            title: 'Error',
+            message: 'You are currently logged in!',
+            ok: 'OK'
+          }).onOk(() => {
+            return;
+          });
+          return;
+      } else {
+        this.$q.dialog({
+          title: 'Logout User',
+          message: `You are about to logout ${username}, continue?`,
+          cancel: true,
+          persistent: true
+        }).onOk(async () => {
+          try {
+            const response = await UserService.logoutUser(userId)
+            console.log(response);
+            await this.getAllUsers();
+          } catch (error) {
+            console.error(error);
+          }
+        })
+        .onCancel(() => {}).onDismiss(() => {});
       }
     },
     openDetails(user) {

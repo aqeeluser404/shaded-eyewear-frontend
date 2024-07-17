@@ -30,19 +30,14 @@
                   <q-item-section>User</q-item-section>
                 </q-item>
                 <!-- sunglasses tab -->
-                <q-item clickable v-ripple @click="changePage('User Panel', 'UserComponent')">
-                  <q-item-section avatar><q-icon name="eva-people-outline" /></q-item-section>
+                <q-item clickable v-ripple @click="changePage('Sunglasses Panel', 'SunglassesComponent')">
+                  <q-item-section avatar><q-icon name="eva-eye-off-2-outline" /></q-item-section>
                   <q-item-section>Sunglasses</q-item-section>
                 </q-item>
                 <!-- orders tab -->
-                <q-item clickable v-ripple @click="changePage('User Panel', 'UserComponent')">
-                  <q-item-section avatar><q-icon name="eva-people-outline" /></q-item-section>
+                <q-item clickable v-ripple @click="changePage('Order Panel', 'OrdersComponent')">
+                  <q-item-section avatar><q-icon name="eva-clipboard-outline" /></q-item-section>
                   <q-item-section>Orders</q-item-section>
-                </q-item>
-                <!-- orders tab -->
-                <q-item clickable v-ripple @click="changePage('User Panel', 'UserComponent')">
-                  <q-item-section avatar><q-icon name="eva-people-outline" /></q-item-section>
-                  <q-item-section>Delivery</q-item-section>
                 </q-item>
               </q-list>
             </q-scroll-area>
@@ -72,14 +67,18 @@
 </template>
 
 <script>
-import UserService from 'src/services/UserService';
+import UserService from 'src/services/UserService'
 import UserComponent from '../../components/admin/UserComponent.vue'
+import SunglassesComponent from '../../components/admin/SunglassesComponent.vue'
+import OrdersComponent from '../../components/admin/OrdersComponent.vue'
 
 export default {
   name: "AdminDashPage",
 
   components: {
-    UserComponent
+    UserComponent,
+    SunglassesComponent,
+    OrdersComponent
   },
 
   data() {
