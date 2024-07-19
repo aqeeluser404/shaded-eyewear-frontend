@@ -41,24 +41,36 @@
             <tr>
               <td class="text-left cursor-pointer">User Type: </td>
               <td class="text-left cursor-pointer">
-                <q-select v-if="editMode.userType" v-model="selectedUser.userType" :options="userTypeOptions" @blur="updateUserType(selectedUser)" emit-value map-options />
-                <div v-else @click="editMode.userType = true">
+                <q-select v-if="editMode === selectedUser._id" v-model="selectedUser.userType" :options="userTypeOptions" emit-value map-options />
+                <div v-else>
                   {{ selectedUser.userType }}
-                  <q-icon name="eva-edit-outline" style="font-size: 16px; opacity: 75%;" class="q-ml-sm q-mb-xs" />
                 </div>
               </td>
             </tr>
             <tr></tr>
           </tbody>
         </q-markup-table>
-        <!-- close button -->
+
         <div class="row justify-start">
+          <!-- close card -->
           <q-card-actions>
             <q-btn dense flat label="Close" color="primary" @click="closeDetails" />
           </q-card-actions>
+          <!-- update user type -->
+          <q-card-actions v-if="editMode !== selectedUser._id">
+            <q-btn dense flat label="Edit" color="primary"  @click="editMode = selectedUser._id" />
+          </q-card-actions>
+          <q-card-actions v-if="editMode === selectedUser._id">
+            <q-btn dense flat label="Update" color="primary"   @click="updateUserType(selectedUser)" />
+          </q-card-actions>
+          <q-card-actions v-if="editMode === selectedUser._id">
+            <q-btn dense flat label="Cancel" color="secondary"  @click="editMode = null" />
+          </q-card-actions>
+          <!-- delete user -->
           <q-card-actions>
             <q-btn dense flat label="Delete" color="negative" @click="deleteUser(selectedUser._id, selectedUser.username)" />
           </q-card-actions>
+          <!-- logout user -->
           <q-card-actions>
             <q-btn dense flat label="Logout" color="warning" v-if="selectedUser.loginInfo && selectedUser.loginInfo.isLoggedIn === true " @click="logoutUser(selectedUser._id, selectedUser.username)" />
           </q-card-actions>
@@ -112,9 +124,8 @@ export default {
     return {
       chart: null,
       users: [{}],
-      editMode: {
-        userType: false
-      },
+      editMode: null,
+
       userTypeOptions: [
         { label: 'admin', value: 'admin' },
         { label: 'user', value: 'user' }
@@ -208,7 +219,7 @@ export default {
         }).onOk(async () => {
           try {
             await UserService.updateUserDetails(userId, updatedUser)
-            // window.location.reload();
+            this.editMode = null
           } catch (error) {
             console.error(error);
           }
