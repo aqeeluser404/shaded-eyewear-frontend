@@ -223,7 +223,11 @@ export default {
           } catch (error) {
             console.error(error);
           }
-        }).onCancel(() => {}).onDismiss(() => {});
+        }).onCancel(() => {
+          this.editMode = null
+          this.getAllUsers()
+          return
+        }).onDismiss(() => {});
       }
     },
     async deleteUser(userId, username) {

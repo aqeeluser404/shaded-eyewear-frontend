@@ -94,7 +94,11 @@ export default {
         } catch (error) {
           console.error(error);
         }
-      }).onCancel(() => {}).onDismiss(() => {});
+      }).onCancel(() => {
+        this.editMode = null
+        this.getAllSunglasses()
+        return
+      }).onDismiss(() => {});
     },
     async deleteSunglasses(sunglasses) {
       this.$q.dialog({
