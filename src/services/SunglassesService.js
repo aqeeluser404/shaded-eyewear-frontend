@@ -30,12 +30,14 @@ class SunglassesService {
     try {
       const response = await axios.post(`${API_BASE_URL}${ENDPOINT}`, sunglasses, {
         headers: {
-          "auth-token": token
+          "auth-token": token,
+          "Content-Type": "multipart/form-data"
         },
       });
       return response.data
     } catch (error) {
       Logger.error(error)
+      throw error; // Re-throw the error to handle it in the calling function
     }
   }
   static async updateSunglasses(sunglassesId, sunglasses) {
