@@ -13,11 +13,11 @@
 
         <!-- navigation -->
         <q-card class="q-pa-md" >
-          <q-item clickable >
+          <q-item clickable @click="changePage('ProfileComponent')" >
             <q-item-section avatar><q-icon name="eva-person-outline" /></q-item-section>
             <q-item-section>Personal Details</q-item-section>
           </q-item>
-          <q-item clickable >
+          <q-item clickable @click="changePage('OrdersComponent')" >
             <q-item-section avatar><q-icon name="eva-clipboard-outline" /></q-item-section>
             <q-item-section>Orders</q-item-section>
           </q-item>
@@ -33,59 +33,7 @@
 
         <!-- personal details -->
         <div class="col-12 col-md-4">
-          <q-card-section>
-            <div class="text-h6">Personal Details</div>
-          </q-card-section>
-          <q-card>
-            <q-item class="">
-              <q-item-section class="text-left">Your Name</q-item-section>
-              <q-item-section class="text-left">
-                <q-input v-model="userDetails.firstName" />
-              </q-item-section>
-            </q-item>
-          </q-card>
-          <br>
-          <q-card>
-            <q-item class="">
-              <q-item-section class="text-left">Last Name</q-item-section>
-              <q-item-section class="text-left">
-                <q-input v-model="userDetails.lastName" />
-              </q-item-section>
-            </q-item>
-          </q-card>
-          <br>
-          <q-card>
-            <q-item class="">
-              <q-item-section class="text-left">Email</q-item-section>
-              <q-item-section class="text-left">
-                <q-input v-model="userDetails.email" />
-              </q-item-section>
-            </q-item>
-          </q-card>
-          <br>
-          <q-card>
-            <q-item class="">
-              <q-item-section class="text-left">Phone</q-item-section>
-              <q-item-section class="text-left">
-                <q-input v-model="userDetails.phone" />
-              </q-item-section>
-            </q-item>
-          </q-card>
-          <br>
-          <q-card>
-            <q-item class="">
-              <q-item-section class="text-left">Username</q-item-section>
-              <q-item-section class="text-left">
-                <q-input v-model="userDetails.username" />
-              </q-item-section>
-            </q-item>
-          </q-card>
-          <br>
-          <q-card flat>
-            <q-card-actions>
-              <q-btn label="Save Changes" color="primary" @click="updateUser"  />
-            </q-card-actions>
-          </q-card>
+          <component :is="currentPageComponent"></component>
         </div>
       </div>
     </div>
@@ -93,61 +41,25 @@
 </template>
 
 <script>
-import UserService from 'src/services/UserService';
+import ProfileComponent from 'src/components/user/ProfileComponent.vue';
+import OrdersComponent from 'src/components/user/OrdersComponent.vue';
+
 
 export default {
+  components: {
+    ProfileComponent,
+    OrdersComponent,
+
+  },
   data() {
     return {
-      userDetails: {},
-      userTokenDetails: {
-        _id : '',
-        username: '',
-        userType: ''
-      }
+      currentPageComponent: 'ProfileComponent'
     }
   },
   methods: {
-    async getUserDetails() {
-      // token details
-      const id = await UserService.FindUserByToken()
-      this.userTokenDetails = id
-      // user details
-      const user = await UserService.findUserById(this.userTokenDetails._id)
-      this.userDetails = user
-    },
-    async updateUser() {
-      const updatedUser = {
-        firstName: this.userDetails.firstName,
-        lastName: this.userDetails.lastName,
-        email: this.userDetails.email,
-        phone: this.userDetails.phone,
-        username: this.userDetails.username,
-        password: this.userDetails.password,
-        userType: this.userDetails.userType,
-        location: this.userDetails.location,
-        loginInfo: this.userDetails.loginInfo,
-        order: this.userDetails.order
-      }
-      this.$q.dialog({
-        title: 'Confirm',
-        message: `You are about to update your profile, continue?`,
-        cancel: true,
-        persistent: true
-      }).onOk(async () => {
-        try {
-          await UserService.updateUserDetails(this.userDetails._id, updatedUser)
-          this.getUserDetails()
-        } catch(error) {
-          console.error(error);
-        }
-      }).onCancel(() => {
-        this.getUserDetails()
-        return
-      }).onDismiss(() => {});
+    changePage(componentName) {
+      this.currentPageComponent = componentName;
     }
-  },
-  created() {
-    this.getUserDetails()
   }
-};
+}
 </script>
