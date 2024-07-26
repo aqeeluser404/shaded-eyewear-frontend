@@ -17,6 +17,14 @@
           <!-- username -->
           <span v-if="isLoggedIn" class="q-ml-lg font-size-responsive-xs">
             Hi, {{ userDetails.username }}
+            <q-btn
+              to="/user/dashboard"
+              size="12px"
+              icon="eva-edit-outline"
+              flat
+              dense
+              round
+            />
           </span>
         </q-toolbar-title>
 
@@ -169,7 +177,6 @@ export default {
     async fetchUserDetails() {
       const response = await UserService.FindUserByToken()
       this.userDetails = response
-      console.log(this.userDetails)
     },
 
     // 3. logout and clear local storage

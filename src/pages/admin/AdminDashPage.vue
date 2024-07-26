@@ -50,8 +50,22 @@
                   <img src="https://cdn.quasar.dev/img/boy-avatar.png">
                 </q-avatar>
                 <!-- name and email -->
-                <div class="text-weight-bold">{{ userDetails.firstName }} {{ userDetails.lastName }}</div>
+                <div class="text-weight-bold">
+                  {{ userDetails.firstName }}
+                  {{ userDetails.lastName }}
+                  <span>
+                    <q-btn
+                      to="/user/dashboard"
+                      size="12px"
+                      icon="eva-edit-outline"
+                      flat
+                      dense
+                      round
+                    />
+                  </span>
+                </div>
                 <div>{{ userDetails.email }}</div>
+
               </div>
             </q-img>
           </q-drawer>
