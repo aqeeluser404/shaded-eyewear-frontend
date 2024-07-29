@@ -73,7 +73,7 @@ export default {
         sunglasses: [{ _id: '', quantity: 1 }],
         user: ''
       },
-      orderTypeData: { priceThreshold: process.env.PRICE_THRESHOLD },
+      orderTypeData: { priceThreshold: 1200 },
       currentOrderId: localStorage.getItem('currentOrderId') || null,
 
       // GET DATA

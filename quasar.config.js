@@ -7,9 +7,8 @@
 
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
-
-const DotEnv = require('dotenv');
-const parsedEnv = DotEnv.config().parsed;
+const dotenv = require('dotenv');
+const env = dotenv.config().parsed;
 const { configure } = require('quasar/wrappers');
 
 
@@ -47,7 +46,11 @@ module.exports = configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
-      env: parsedEnv,
+      env: {
+        API_BASE_URL: env.API_BASE_URL,
+        PRICE_THRESHOLD: env.PRICE_THRESHOLD,
+        // other environment variables
+      },
       target: {
         browser: [ 'es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1' ],
         node: 'node20'
