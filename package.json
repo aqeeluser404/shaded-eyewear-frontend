@@ -13,6 +13,7 @@
     "build": "quasar build"
   },
   "dependencies": {
+    "@quasar/app": "^3.3.3",
     "@quasar/extras": "^1.16.4",
     "axios": "^1.2.1",
     "chart.js": "^4.4.3",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@quasar/app-vite": "^1.8.0",
+    "@quasar/quasar-app-extension-dotenv": "^1.1.0",
     "autoprefixer": "^10.4.2",
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.1.0",

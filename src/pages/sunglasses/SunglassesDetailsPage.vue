@@ -45,7 +45,7 @@
             <p>Deliveries made in Cape Town</p>
             <q-separator class="q-mb-xs" />
             <q-btn
-              to="/cart"
+              @click="addToCart"
               size="12px"
               icon="eva-shopping-cart large-screen-only"
               label="Add to cart"
@@ -60,43 +60,116 @@
 
 <script>
 import SunglassesService from 'src/services/SunglassesService';
+import UserService from 'src/services/UserService';
+import OrderService from 'src/services/OrderService';
 
 export default {
   name: "SunglassesDetailsPage",
 
   data() {
     return {
-      sunglasses: {}
+      // ORDER DATA STRUCTURE
+      orderData: {
+        sunglasses: [{ _id: '', quantity: 1 }],
+        user: ''
+      },
+      orderTypeData: { priceThreshold: process.env.PRICE_THRESHOLD },
+      currentOrderId: localStorage.getItem('currentOrderId') || null,
+
+      // GET DATA
+      sunglasses: {},
+      userDetails: {},
+      userTokenDetails: { _id: '', username: '', userType: '' }
     }
   },
   methods: {
-    async fetchSunglassesDetails() {
-      const sunglassesId = this.$route.params.id
 
-      const response = await SunglassesService.findSunglassesById(sunglassesId)
-      this.sunglasses = response
-      console.log(this.sunglasses)
+    // =================================== FUNCTIONS
+    async addToCart() {
+      if (!this.currentOrderId) {
+        console.log('No current order ID found. Creating a new order.');
+        await this.createOrder();
+        return;
+      }
+      const orderExists = await this.checkOrderExists(this.currentOrderId);
+      if (orderExists) {
+        await this.updateOrder();
+      } else {
+        await this.createOrder();
+      }
     },
+
+    async checkOrderExists(orderId) {
+      if (!orderId) {
+        console.log('Order ID is null or undefined.');
+        return false;
+      }
+      try {
+        const response = await OrderService.findOrderById(orderId);
+        return response !== null;
+      } catch (error) {
+        console.log('Order does not exist or an error occurred:', error);
+        return false;
+      }
+    },
+
+    async createOrder() {
+      this.orderData.user = this.userDetails._id
+      this.orderData.sunglasses[0]._id = this.sunglasses._id;
+      try {
+        const response = await OrderService.createOrder(this.userDetails._id, this.orderData, this.orderTypeData)
+        this.currentOrderId = response.order._id
+        localStorage.setItem('currentOrderId', this.currentOrderId)
+      }
+      catch (error) {
+        console.error('Error creating order: ', error)
+      }
+    },
+
+    async updateOrder() {
+      const orderId = this.currentOrderId;
+      try {
+        this.orderData.sunglasses[0]._id = this.sunglasses._id;
+        await OrderService.updateOrder(orderId, this.orderData, this.orderTypeData);
+      }
+      catch (error) {
+        console.error('Error updating order:', error);
+      }
+    },
+
+    // =================================== GET DATA
+    async fetchSunglassesDetails() {
+      const sunglassesId = this.$route.params.id;
+      const response = await SunglassesService.findSunglassesById(sunglassesId);
+      this.sunglasses = response;
+    },
+
+    async getUserDetails() {
+      const id = await UserService.FindUserByToken();
+      this.userTokenDetails = id;
+      const user = await UserService.findUserById(this.userTokenDetails._id);
+      this.userDetails = user;
+    },
+
     getImageUrl(imagePath) {
       const serverUrl = 'http://localhost:5000/uploads/';
       const localDir = 'C:\\Users\\TerrorX\\Downloads\\code\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
       const relativePath = imagePath.replace(localDir, '');
       return serverUrl + relativePath;
     }
-    // getImageUrl(imagePath) {
-    //   // replace this with hosted url
-    //   const serverUrl = 'http://localhost:5000/uploads/';
-    //   return serverUrl + imagePath;
-    // }
   },
   created() {
-    this.fetchSunglassesDetails()
+    this.getUserDetails();
+    this.fetchSunglassesDetails();
+    console.log('Current Order ID on created:', this.currentOrderId);
+    console.log('Stored Order ID in localStorage on created:', localStorage.getItem('currentOrderId'));
   }
 }
 </script>
 
+
 <style lang="sass" scoped>
 .image
   width: 100%
-
 </style>
+

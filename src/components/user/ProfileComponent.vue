@@ -60,22 +60,12 @@ export default {
   data() {
     return {
       userDetails: {},
-      userTokenDetails: {
-        _id : '',
-        username: '',
-        userType: ''
-      }
+      userTokenDetails: { _id : '', username: '', userType: '' }
     }
   },
   methods: {
-    async getUserDetails() {
-      // token details
-      const id = await UserService.FindUserByToken()
-      this.userTokenDetails = id
-      // user details
-      const user = await UserService.findUserById(this.userTokenDetails._id)
-      this.userDetails = user
-    },
+
+    // =================================== FUNCTIONS
     async updateUser() {
       const updatedUser = {
         firstName: this.userDetails.firstName,
@@ -105,6 +95,14 @@ export default {
         this.getUserDetails()
         return
       }).onDismiss(() => {});
+    },
+
+    // =================================== GET DATA
+    async getUserDetails() {
+      const id = await UserService.FindUserByToken()
+      this.userTokenDetails = id
+      const user = await UserService.findUserById(this.userTokenDetails._id)
+      this.userDetails = user
     }
   },
   created() {

@@ -32,7 +32,7 @@
         </q-card>
 
         <!-- personal details -->
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-6">
           <component :is="currentPageComponent"></component>
         </div>
       </div>
