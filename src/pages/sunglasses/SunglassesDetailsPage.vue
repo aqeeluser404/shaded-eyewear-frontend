@@ -12,31 +12,32 @@
       <div class="row q-pa-md q-gutter-md justify-center">
 
         <!-- image -->
-        <q-card bordered flat class="col-12 col-md-3 row justify-center">
+        <q-card bordered flat class="col-12 col-md-3 row justify-center full-height">
           <q-img v-if="sunglasses.images && sunglasses.images.length > 0" :src="getImageUrl(sunglasses.images[0])" class="image" />
         </q-card>
 
         <!-- description info -->
-        <q-card bordered flat class="q-pa-md col-12 col-md-3">
-
+        <q-card bordered flat class="q-pa-md col-12 col-md-4">
           <q-card-section>
             <div class="text-h4">{{ sunglasses.model }}</div>
           </q-card-section>
-
-          <q-separator class="q-mb-xs" style="width: 40%;" />
-
-          stock and details
           <q-card-section>
-            <div><b>ONLY {{ sunglasses.stock }} LEFT IN STOCK</b></div>
-            <ul>
-              <li>Color: {{ sunglasses.color }}</li>
-              <li>Description: {{ sunglasses.description }}</li>
-            </ul>
+            <q-separator class="q-mb-xs" />
+          </q-card-section>
+          <q-card-section>
+            <div class="text-h6">Product Details</div>
+          </q-card-section>
+          <q-card-section>
+            <div>
+              <b>Color</b>: {{ sunglasses.color }}
+              <br>
+              <b>Description</b>: {{ sunglasses.description }}
+            </div>
           </q-card-section>
         </q-card>
 
         <!-- price and cart -->
-        <q-card bordered flat class="q-pa-md col-12 col-md-3">
+        <q-card bordered flat class="q-pa-md col-12 col-md-3 full-height" >
           <q-card-section>
             <div class="text-h4">R {{ sunglasses.price }}.00</div>
           </q-card-section>
@@ -44,12 +45,23 @@
           <q-card-section class="q-gutter-md">
             <p>Deliveries made in Cape Town</p>
             <q-separator class="q-mb-xs" />
+            <div><b>ONLY {{ sunglasses.stock }} LEFT IN STOCK</b></div>
             <q-btn
               @click="addToCart"
               size="12px"
-              icon="eva-shopping-cart large-screen-only"
+              icon="eva-plus-outline"
               label="Add to cart"
               bordered
+              style="width: 100%;"
+            />
+            <q-btn
+              v-if="currentOrderId && currentOrderId !== null"
+              to="/cart"
+              size="12px"
+              icon="eva-shopping-cart"
+              label="view cart"
+              bordered
+              style="width: 100%;"
             />
           </q-card-section>
         </q-card>
@@ -153,7 +165,8 @@ export default {
 
     getImageUrl(imagePath) {
       const serverUrl = 'http://localhost:5000/uploads/';
-      const localDir = 'C:\\Users\\TerrorX\\Downloads\\code\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
+      // const localDir = 'C:\\Users\\TerrorX\\Downloads\\code\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
+      const localDir = 'D:\\Work\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
       const relativePath = imagePath.replace(localDir, '');
       return serverUrl + relativePath;
     }

@@ -12,8 +12,8 @@
           <tr>
             <th class="text-left">Order ID</th>
             <th class="text-left">Status</th>
-            <th class="text-left">totalAmount</th>
-            <th class="text-left">totalItems</th>
+            <th class="text-left">Total amount</th>
+            <th class="text-left">Total items</th>
           </tr>
         </thead>
         <tbody v-for="order in orders" :key="order._id">

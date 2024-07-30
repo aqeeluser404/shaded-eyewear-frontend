@@ -19,14 +19,15 @@
           <!-- sunglass card -->
           <q-card bordered flat
             @click="viewSunglassesDetails(sunglass._id)"
-            class=" cursor-pointer"
+            class="cursor-pointer"
           >
             <!-- sunglass image -->
-            <div><q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="image" /></div>
+            <div>
+              <q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="image" />
+            </div>
             <!-- sunglass details -->
-            <q-item class="row">
-              <div>{{ sunglass.model }}</div>
-              <q-space />
+            <q-item class="row justify-between ">
+              <div  class="model-text">{{ sunglass.model }}</div>
               <div>R {{ sunglass.price }}.00</div>
             </q-item>
           </q-card>
@@ -80,10 +81,9 @@
         }
       },
       getImageUrl(imagePath) {
-
         const serverUrl = 'http://localhost:5000/uploads/';
-        const localDir = 'C:\\Users\\TerrorX\\Downloads\\code\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
-
+        // const localDir = 'C:\\Users\\TerrorX\\Downloads\\code\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
+        const localDir = 'D:\\Work\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
         const relativePath = imagePath.replace(localDir, '');
         return serverUrl + relativePath;
       }
