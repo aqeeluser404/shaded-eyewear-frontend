@@ -9,7 +9,7 @@
       </q-card>
 
       <!-- if user has any orders -->
-      <div v-if="order && order !== null" class="row q-pa-md q-gutter-md justify-center">
+      <div v-if="currentOrderId !== null" class="row q-pa-md q-gutter-md justify-center">
         <q-card class="col-12 col-md-3">
           <q-card-section class="q-gutter-md ">
             <div class="text-h5">Order Details</div>
@@ -79,7 +79,6 @@ export default {
     }
   },
 
-
   methods: {
 
     // =================================== FUNCTIONS
@@ -120,7 +119,4 @@ export default {
     this.getUserDetails()
   }
 };
-
-
-
 </script>

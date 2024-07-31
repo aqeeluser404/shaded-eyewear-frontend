@@ -138,6 +138,7 @@
 </template>
 
 <script>
+import OrderService from 'src/services/OrderService';
 import UserService from 'src/services/UserService';
 
 export default {
@@ -145,6 +146,7 @@ export default {
 
   data() {
     return {
+      order: {},
       userDetails: {
         _id: '',
         username: '',
@@ -156,12 +158,32 @@ export default {
   },
   created() {
     this.checkLoginStatus()
+    this.getCurrentOrder()
   },
   watch: {
     // push status to the other pages
     '$route': 'checkLoginStatus'
   },
   methods: {
+
+    // =================================== FUNCTIONS
+    async cancelOrder(orderId) {
+      await OrderService.cancelOrder(orderId)
+      localStorage.removeItem('currentOrderId')
+    },
+
+    // =================================== GET DATA
+    async getCurrentOrder() {
+      const orderId = localStorage.getItem('currentOrderId')
+      if (orderId) {
+        const response = await OrderService.findOrderById(orderId)
+        this.order = response
+        console.log(this.order)
+      } else {
+        console.log("No order has been placed")
+      }
+    },
+
     // 1. check if logged in
     checkLoginStatus() {
       let token = localStorage.getItem('auth-token')
@@ -181,6 +203,10 @@ export default {
 
     // 3. logout and clear local storage
     async logout() {
+
+      // cancel order function
+      this.cancelOrder(this.order._id)
+
       const response = await UserService.logout(this.userDetails._id)
       if (response) {
         this.$q.dialog({
@@ -189,7 +215,6 @@ export default {
           ok: 'OK'
         }).onOk(() => {
           this.$router.push('/')
-
           this.isLoggedIn = false
           window.location.reload()
         })
