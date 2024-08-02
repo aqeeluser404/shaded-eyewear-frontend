@@ -42,6 +42,10 @@ const routes = [
         path: "/cart",
         component: () => import("pages/CartPage.vue"),
       },
+      {
+        path: "/buy/review",
+        component: () => import("pages/CheckoutPage.vue"),
+      },
     ],
   },
   {

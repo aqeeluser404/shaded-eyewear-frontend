@@ -42,10 +42,10 @@
             <div class="text-h4">R {{ sunglasses.price }}.00</div>
           </q-card-section>
 
-          <q-card-section class="q-gutter-md">
-            <p>Deliveries made in Cape Town</p>
-            <q-separator class="q-mb-xs" />
-            <div><b>ONLY {{ sunglasses.stock }} LEFT IN STOCK</b></div>
+          <q-card-section>
+            <p class="q-mb-md">Deliveries made in Cape Town</p>
+            <q-separator class="q-mb-md" />
+            <div class="q-mb-md"><b>ONLY {{ sunglasses.stock }} LEFT IN STOCK</b></div>
             <q-btn
               @click="addToCart"
               size="12px"
@@ -53,6 +53,7 @@
               label="Add to cart"
               bordered
               style="width: 100%;"
+              class="q-mb-sm"
             />
             <q-btn
               v-if="currentOrderId && currentOrderId !== null"
@@ -98,17 +99,24 @@ export default {
 
     // =================================== FUNCTIONS
     async addToCart() {
-      if (!this.currentOrderId) {
-        console.log('No current order ID found. Creating a new order.');
-        await this.createOrder();
-        return;
-      }
-      const orderExists = await this.checkOrderExists(this.currentOrderId);
-      if (orderExists) {
-        await this.updateOrder();
-      } else {
-        await this.createOrder();
-      }
+      this.$q.dialog({
+        title: 'Success',
+        message: `You have added ${this.sunglasses.model}, to your cart!`,
+        ok: 'OK'
+      }).onOk(async () => {
+        if (!this.currentOrderId) {
+          console.log('No current order ID found. Creating a new order.');
+          await this.createOrder();
+          return;
+        }
+        const orderExists = await this.checkOrderExists(this.currentOrderId);
+        if (orderExists) {
+          await this.updateOrder();
+        } else {
+          await this.createOrder();
+        }
+        this.fetchSunglassesDetails();
+      })
     },
 
     async checkOrderExists(orderId) {

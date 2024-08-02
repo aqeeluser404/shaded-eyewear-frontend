@@ -10,16 +10,15 @@
 
       <!-- if user has any orders -->
       <div v-if="currentOrderId !== null" class="row q-pa-md q-gutter-md justify-center">
-        <q-card class="col-12 col-md-3">
+        <q-card class="col-12 col-md-6">
           <q-card-section class="q-gutter-md ">
             <div class="text-h5">Order Details</div>
             <q-separator class="q-mb-xs" />
             <q-btn
               @click="cancelOrder(order._id)"
-              size="10px"
+              size="12px"
               label="Clear Cart"
               bordered
-              flat
             />
             <q-btn
               to="/sunglasses"
@@ -30,11 +29,12 @@
           </q-card-section>
         </q-card>
         <q-card class="q-pa-md col-12 col-md-3">
-          <q-card-section class="q-gutter-md ">
-            <div class="text-h5">Cart Summary</div>
+          <q-card-section >
+            <div class="text-h5 q-mb-md">Cart Summary</div>
             <p>Total: <span class="q-ml-lg text-h5">R{{ order.totalAmount }}.00</span></p>
-            <q-separator class="q-mb-xs" />
+            <q-separator class="q-mb-md" />
             <q-btn
+              to="/buy/review"
               size="12px"
               label="Proceed to checkout"
               bordered
@@ -59,15 +59,13 @@
           </q-card-section>
         </q-card>
       </div>
-
-
     </div>
   </q-page>
 </template>
 
 <script>
 import UserService from 'src/services/UserService'
-import OrderService from 'src/services/OrderService';
+import OrderService from 'src/services/OrderService'
 
 export default {
   data() {
