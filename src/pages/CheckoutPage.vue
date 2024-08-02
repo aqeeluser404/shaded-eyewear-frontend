@@ -138,7 +138,7 @@ export default {
     // if delivery type = pickup
     // delivery = must pay for delivery
     async addAddress() {
-      const response = await UserService.updateUserDetails()
+
     },
 
     // =================================== GET DATA
