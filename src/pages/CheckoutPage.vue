@@ -11,6 +11,8 @@
       <div class="row q-pa-md q-gutter-md justify-center">
         <!-- review -->
         <div class="col-12 col-md-6">
+
+          <!-- card to change delivery -->
           <q-card class="row items-center justify-between q-pa-md q-mb-md" >
             <q-card-section>
               Delivery Type
@@ -23,6 +25,7 @@
             </q-card-section>
           </q-card>
 
+          <!-- add address -->
           <q-card class="q-pa-md" >
             <q-card-section class="text-h6">
               Delivery Address
@@ -65,32 +68,41 @@
           </q-card>
         </div>
 
-        <!-- order summary -->
-        <q-card class="q-pa-md col-12 col-md-3 full-height">
-          <q-card-section>
-            <div class="text-h5 q-mb-md">Order Summary</div>
-            <p>{{ order.sunglasses ? order.sunglasses.length : 0 }} item(s)</p>
-            <p>Delivery info</p>
+        <!-- =================================== ORDER SUMMARY -->
+        <div class="col-12 col-md-3 full-height">
+          <q-card class="q-pa-md q-mb-md">
+            <q-card-section>
+              <div class="text-h5 q-mb-md">Order Summary</div>
+              <p>{{ order.sunglasses ? order.sunglasses.length : 0 }} item(s)</p>
+              <p>Delivery info</p>
 
-            <!-- <p v-if="orderType.type === 'delivery'">Delivery: Free</p> -->
-            <!-- <p v-if="orderType.type === 'delivery'">Delivery: Free</p> -->
-            <q-separator class="q-mb-md" />
-            <p>To Pay: <span class="q-ml-lg text-h5">R{{ order.totalAmount }}.00</span></p>
-            <q-btn
-              size="12px"
-              label="Pay with Yoco"
-              style="width: 100%; height: 50px;"
-              class="q-mb-md"
-            />
-            <q-btn
-              size="12px"
-              icon="eva-lock-outline"
-              label="Secure Checkout"
-              flat
-              style="width: 100%;"
-            />
-          </q-card-section>
-        </q-card>
+              <!-- <p v-if="orderType.type === 'delivery'">Delivery: Free</p> -->
+              <!-- <p v-if="orderType.type === 'delivery'">Delivery: Free</p> -->
+              <q-separator class="q-mb-md" />
+              <p>To Pay: <span class="q-ml-lg text-h5">R{{ order.totalAmount }}.00</span></p>
+              <q-btn
+                size="12px"
+                label="Pay with Yoco"
+                style="width: 100%; height: 50px;"
+                class="q-mb-md"
+              />
+              <q-btn
+                size="12px"
+                icon="eva-lock-outline"
+                label="Secure Checkout"
+                flat
+                style="width: 100%;"
+              />
+            </q-card-section>
+          </q-card>
+
+          <q-card>
+            <q-card-section>
+              Items for Delivery
+            </q-card-section>
+          </q-card>
+        </div>
+
       </div>
     </div>
    </q-page>
@@ -126,7 +138,7 @@ export default {
     // if delivery type = pickup
     // delivery = must pay for delivery
     async addAddress() {
-
+      const response = await UserService.updateUserDetails()
     },
 
     // =================================== GET DATA
