@@ -30,16 +30,17 @@
 
         <!-- =================================== BIG SCREEN CONTENT -->
         <!-- public -->
-        <q-btn
+        <div class="row justify-evenly items-center">
+          <q-btn
           to="/"
-          size="14px"
+          size="12px"
           class="custom-button large-screen-only"
           label="Home"
           flat
         />
         <q-btn
           to="/sunglasses"
-          size="14px"
+          size="12px"
           class="custom-button large-screen-only"
           label="Catalogue"
           flat
@@ -48,23 +49,16 @@
         <q-btn
           v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'"
           to="/admin/dashboard"
-          size="14px"
+          size="12px"
+          icon="eva-activity-outline"
           class="custom-button large-screen-only"
-          label="Admin"
-          flat
-        />
-        <q-btn
-          v-if="userDetails && userDetails.userType != null && userDetails.userType == 'user'"
-          to="/user/dashboard"
-          size="14px"
-          class="custom-button large-screen-only"
-          label="User"
+          label="Admin Panel"
           flat
         />
         <!-- Authentication -->
         <q-btn v-if="!isLoggedIn"
           to="/auth/login"
-          size="14px"
+          size="12px"
           class="custom-button large-screen-only"
           label="Login"
           flat
@@ -72,7 +66,7 @@
         <q-btn
           v-else
           @click="logout"
-          size="14px"
+          size="12px"
           class="custom-button large-screen-only"
           label="Logout"
           flat
@@ -84,6 +78,8 @@
           icon="eva-shopping-cart large-screen-only"
           flat
         />
+        </div>
+
 
         <!-- =================================== SMALL SCREEN CONTENT -->
         <q-btn-dropdown
@@ -100,9 +96,6 @@
             </q-item>
             <q-item clickable v-close-popup to="/admin/dashboard" v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'">
               <q-item-section>Admin Profile</q-item-section>
-            </q-item>
-            <q-item clickable v-close-popup to="/user/dashboard" v-if="userDetails && userDetails.userType != null && userDetails.userType == 'user'">
-              <q-item-section>User Profile</q-item-section>
             </q-item>
             <q-item clickable v-close-popup to="/auth/login" v-if="!isLoggedIn">
               <q-item-section>Login</q-item-section>

@@ -10,11 +10,63 @@
 
       <div class="row q-pa-md q-gutter-md justify-center">
         <!-- review -->
-        <q-card class="q-pa-md col-12 col-md-6">
-          test
-        </q-card>
+        <div class="col-12 col-md-6">
+          <q-card class="row items-center justify-between q-pa-md q-mb-md" >
+            <q-card-section>
+              Delivery Type
+            </q-card-section>
+            <q-card-section>
+              <q-btn
+                size="12px"
+                label="Change"
+              />
+            </q-card-section>
+          </q-card>
+
+          <q-card class="q-pa-md" >
+            <q-card-section class="text-h6">
+              Delivery Address
+            </q-card-section>
+
+            <q-card-section>
+              <q-form
+                @submit="addAddress"
+                class="q-gutter-lg"
+              >
+              <q-input
+                filled
+                v-model="userDetails.location.streetAddress"
+                label="Street Address *"
+              />
+              <q-input
+                filled
+                v-model="userDetails.location.suburb"
+                label="Suburb *"
+              />
+              <q-select
+                label="City *"
+                filled
+                v-model="userDetails.location.province"
+                :options="provinceOptions"
+                emit-value
+                map-options
+              />
+              <q-input
+                filled
+                v-model="userDetails.location.postalCode"
+                label="Postal Code *"
+              />
+              <div>
+                <q-btn label="Save Address" type="submit" color="primary" class="custom-button"/>
+              </div>
+              </q-form>
+            </q-card-section>
+
+          </q-card>
+        </div>
+
         <!-- order summary -->
-        <q-card class="q-pa-md col-12 col-md-3">
+        <q-card class="q-pa-md col-12 col-md-3 full-height">
           <q-card-section>
             <div class="text-h5 q-mb-md">Order Summary</div>
             <p>{{ order.sunglasses ? order.sunglasses.length : 0 }} item(s)</p>
@@ -53,7 +105,15 @@ export default {
     return {
       order: {},
       currentOrderId: localStorage.getItem('currentOrderId') || null,
-      userDetails: {},
+      userDetails: {
+        location: {
+          streetAddress: '', suburb: '', province: '', postalCode: ''
+        }, userType: 'user'
+      },
+      provinceOptions: [
+        { label: 'Cape Town', value: 'Cape Town' },
+        { label: 'johannesburg', value: 'johannesburg' }
+      ],
       userTokenDetails: { _id : '', username: '', userType: '' }
     }
   },
@@ -65,6 +125,9 @@ export default {
 
     // if delivery type = pickup
     // delivery = must pay for delivery
+    async addAddress() {
+
+    },
 
     // =================================== GET DATA
     async getCurrentOrder() {
