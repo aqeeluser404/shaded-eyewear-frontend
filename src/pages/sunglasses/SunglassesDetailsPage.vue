@@ -99,24 +99,28 @@ export default {
 
     // =================================== FUNCTIONS
     async addToCart() {
-      this.$q.dialog({
-        title: 'Success',
-        message: `You have added ${this.sunglasses.model}, to your cart!`,
-        ok: 'OK'
-      }).onOk(async () => {
-        if (!this.currentOrderId) {
-          console.log('No current order ID found. Creating a new order.');
-          await this.createOrder();
-          return;
-        }
-        const orderExists = await this.checkOrderExists(this.currentOrderId);
-        if (orderExists) {
-          await this.updateOrder();
-        } else {
-          await this.createOrder();
-        }
-        this.fetchSunglassesDetails();
-      })
+      if (!this.userTokenDetails) {
+        this.$q.notify({ type: 'negative', message: 'Please login to continue.' })
+      } else {
+        this.$q.dialog({
+          title: 'Success',
+          message: `You have added ${this.sunglasses.model}, to your cart!`,
+          ok: 'OK'
+        }).onOk(async () => {
+          if (!this.currentOrderId) {
+            console.log('No current order ID found. Creating a new order.');
+            await this.createOrder();
+            return;
+          }
+          const orderExists = await this.checkOrderExists(this.currentOrderId);
+          if (orderExists) {
+            await this.updateOrder();
+          } else {
+            await this.createOrder();
+          }
+          this.fetchSunglassesDetails();
+        })
+      }
     },
 
     async checkOrderExists(orderId) {

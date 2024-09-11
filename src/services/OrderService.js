@@ -103,7 +103,7 @@ class OrderService {
     const ENDPOINT = "/admin/order/delete"
     const token = localStorage.getItem("auth-token")
     try {
-      const response = await axios.get(`${API_BASE_URL}${ENDPOINT}/${orderId}`, {
+      const response = await axios.delete(`${API_BASE_URL}${ENDPOINT}/${orderId}`, {
         headers: {
           "auth-token": token
         }

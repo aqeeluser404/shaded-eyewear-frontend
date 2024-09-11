@@ -171,6 +171,11 @@ export default {
       if (orderId) {
         const response = await OrderService.findOrderById(orderId)
         this.order = response
+
+        // automatically remove order once paid for
+        if (this.order.status === 'paid') {
+          localStorage.removeItem('currentOrderId')
+        }
         console.log(this.order)
       } else {
         console.log("No order has been placed")

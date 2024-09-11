@@ -89,8 +89,10 @@ export default {
       }).onOk(async () => {
         try {
           await OrderService.cancelOrder(orderId)
+          await OrderService.deleteOrder(orderId)   // temporary to keep database clean
+
           localStorage.removeItem('currentOrderId')
-          window.location.reload();
+          // window.location.reload();
         } catch(error) {
           console.error(error);
         }

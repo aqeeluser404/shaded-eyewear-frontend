@@ -104,7 +104,6 @@
       </q-card>
 
     </q-card>
-
     <q-btn round class="round-btn" :label="buttonLabel" @click="toggleAddSunglasses" />
   </div>
 </template>

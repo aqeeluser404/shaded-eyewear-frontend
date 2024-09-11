@@ -21,12 +21,13 @@
               <q-btn
                 size="12px"
                 label="Change"
+                @click="toggleDeliveryPanel"
               />
             </q-card-section>
           </q-card>
 
           <!-- add address -->
-          <q-card class="q-pa-md" >
+          <q-card class="q-pa-md" v-if="addAddressPanel" >
             <q-card-section class="text-h6">
               Delivery Address
             </q-card-section>
@@ -85,6 +86,7 @@
                 label="Pay with Yoco"
                 style="width: 100%; height: 50px;"
                 class="q-mb-md"
+                @click="initiatePayment"
               />
               <q-btn
                 size="12px"
@@ -111,6 +113,7 @@
 <script>
 import UserService from 'src/services/UserService'
 import OrderService from 'src/services/OrderService'
+import PayService from 'src/services/PayService';
 
 export default {
   data() {
@@ -126,7 +129,8 @@ export default {
         { label: 'Cape Town', value: 'Cape Town' },
         { label: 'johannesburg', value: 'johannesburg' }
       ],
-      userTokenDetails: { _id : '', username: '', userType: '' }
+      userTokenDetails: { _id : '', username: '', userType: '' },
+      addAddressPanel: false
     }
   },
 
@@ -137,8 +141,23 @@ export default {
 
     // if delivery type = pickup
     // delivery = must pay for delivery
+    toggleDeliveryPanel() {
+      this.addAddressPanel = !this.addAddressPanel
+      console.log(this.addAddressPanel)
+    },
     async addAddress() {
 
+    },
+    async initiatePayment() {
+      try {
+        const response = await PayService.initiatePayment(this.currentOrderId);
+        const { checkout } = response;
+        console.log('Checkout URL:', checkout.redirectUrl); // Add this line to log the checkout URL
+        window.location.href = checkout.redirectUrl; // Redirect to Yoco checkout page
+
+      } catch (error) {
+        console.error('Payment initiation failed:', error);
+      }
     },
 
     // =================================== GET DATA
