@@ -18,7 +18,7 @@
       <!-- details -->
       <q-card v-if="selectedUser">
         <q-card-section>
-          <div class="text-h6">{{ selectedUser.username }} Details</div>
+          <div class="text-h6">{{ selectedUser.firstName }} Details</div>
         </q-card-section>
         <q-markup-table>
           <tbody>
@@ -50,18 +50,18 @@
             <tr></tr>
           </tbody>
         </q-markup-table>
-
-        <div class="row justify-start">
+        <br>
+        <div class="row justify-center">
           <!-- close card -->
           <q-card-actions>
             <q-btn dense flat label="Close" color="primary" @click="closeDetails" />
           </q-card-actions>
           <!-- update user type -->
           <q-card-actions v-if="editMode !== selectedUser._id">
-            <q-btn dense flat label="Edit" color="primary"  @click="editMode = selectedUser._id" />
+            <q-btn dense flat icon="eva-edit-outline" color="primary"  @click="editMode = selectedUser._id" />
           </q-card-actions>
-          <q-card-actions v-if="editMode === selectedUser._id">
-            <q-btn dense flat label="Update" color="primary"   @click="updateUserType(selectedUser)" />
+          <q-card-actions v-if="editMode === selectedUser._id" >
+            <q-btn dense flat icon="eva-edit-outline" color="primary"   @click="updateUserType(selectedUser)" />
           </q-card-actions>
           <q-card-actions v-if="editMode === selectedUser._id">
             <q-btn dense flat label="Cancel" color="secondary"  @click="editMode = null" />

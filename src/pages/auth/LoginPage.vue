@@ -29,9 +29,12 @@
             type="password"
           />
           <!-- register instead -->
-          <div>
+          <div class="column">
             <router-link to="/auth/register" style="text-decoration: underline; font-size: 14px; color: #1976D2">
               Don't have an account?
+            </router-link>
+            <router-link to="/forgot-password" style="text-decoration: underline; font-size: 14px; color: #1976D2">
+              Forgot password?
             </router-link>
           </div>
           <!-- buttons -->

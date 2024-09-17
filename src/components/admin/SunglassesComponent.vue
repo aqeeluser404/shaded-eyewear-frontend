@@ -17,7 +17,7 @@
               <th class="text-left">Description</th>
               <th class="text-left">Price</th>
               <th class="text-left">Stock</th>
-              <th class="text-left">Tools</th>
+              <th class="text-left">Quick Tools</th>
             </tr>
           </thead>
           <tbody v-for="(sunglass, index) in sunglasses" :key="sunglass._id">
@@ -48,10 +48,14 @@
                 </div>
               </td>
               <td class="text-left cursor-pointer">
-                <q-btn dense flat label="Delete" color="negative" @click="deleteSunglasses(sunglass)" />
-                <q-btn dense flat label="Edit" color="primary" v-if="editMode !== sunglass._id" @click="editMode = sunglass._id" />
-                <q-btn dense flat label="Update" color="primary"  v-if="editMode === sunglass._id" @click="updateSunglasses(sunglass)" />
-                <q-btn dense flat label="Cancel" color="secondary" v-if="editMode === sunglass._id" @click="editMode = null" />
+                <!-- edit mode -->
+                <q-btn dense flat icon="eva-edit-outline" color="primary" v-if="editMode !== sunglass._id" @click="editMode = sunglass._id" />
+                <!-- update mode -->
+                <q-btn dense flat icon="eva-edit-outline" color="primary"  v-if="editMode === sunglass._id" @click="updateSunglasses(sunglass)" />
+                <!-- cancel/save -->
+                <q-btn dense flat icon="eva-checkmark-square-outline" color="secondary" v-if="editMode === sunglass._id" @click="editMode = null" />
+                <!-- delete -->
+                <q-btn dense flat icon="eva-trash-2-outline" color="negative" @click="deleteSunglasses(sunglass)" />
               </td>
             </tr>
           </tbody>
@@ -162,7 +166,6 @@ export default {
     async getAllSunglasses() {
       const response = await SunglassesService.findAllSunglasses()
       this.sunglasses = response
-      console.log(this.sunglasses)
     },
     // updates only details - no images
     async updateSunglasses(sunglasses) {

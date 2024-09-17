@@ -92,7 +92,8 @@
             message: 'Register successful!',
             ok: 'OK'
           }).onOk(() => {
-            this.$router.push('/auth/login')
+            // this.$router.push('/auth/login')
+            this.$q.notify({ type: 'negative', message: 'Please check your email for verification.' })
           })
         } else {
           this.$q.dialog({

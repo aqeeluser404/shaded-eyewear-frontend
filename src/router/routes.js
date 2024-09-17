@@ -46,9 +46,20 @@ const routes = [
         path: "/buy/review",
         component: () => import("pages/CheckoutPage.vue"),
       },
+
+      // PAYMENT STATUSES
       { path: '/payment-success', component: () => import('pages/payment/PaymentSuccess.vue') },
       { path: '/payment-cancel', component: () => import('pages/payment/PaymentCancel.vue') },
       { path: '/payment-failure', component: () => import('pages/payment/PaymentFailure.vue') },
+
+      // EMAILS
+      { path: '/verify-email', component: () => import('src/pages/email/VerifyEmail.vue')},
+      {
+        path: '/resend-verification',
+        component: () => import('src/pages/email/ResendVerificationEmail.vue')
+      },
+      { path: '/forgot-password', component: () => import('src/pages/email/ForgotPasswordPage.vue') },
+      { path: '/reset-password', component: () => import('src/pages/email/ResetPasswordPage.vue')}
     ],
   },
   {

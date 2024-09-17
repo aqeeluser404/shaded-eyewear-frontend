@@ -22,7 +22,12 @@
   <br>
   <q-card>
     <q-item class="">
-      <q-item-section class="text-left">Email</q-item-section>
+      <q-item-section class="text-left">
+        <span>Email</span>
+        <span v-if="userDetails && userDetails.verification && userDetails.verification.isVerified === true">
+          isVerified <q-icon color="secondary" name="eva-checkmark-circle-2-outline" />
+        </span>
+      </q-item-section>
       <q-item-section class="text-left">
         <q-input v-model="userDetails.email" />
       </q-item-section>
@@ -50,12 +55,14 @@
   <q-card flat>
     <q-card-actions>
       <q-btn label="Save Changes" color="primary" @click="updateUser"  />
+      <q-btn label="Verify Email" @click="resendVerificationEmail" v-if="userDetails && userDetails.verification && userDetails.verification.isVerified === false" />
     </q-card-actions>
   </q-card>
 </template>
 
 <script>
-import UserService from 'src/services/UserService';
+import EmailService from '../../services/EmailService'
+import UserService from 'src/services/UserService'
 export default {
   data() {
     return {
@@ -64,6 +71,21 @@ export default {
     }
   },
   methods: {
+
+    async resendVerificationEmail() {
+      try {
+        const response = await EmailService.resendVerificationEmail(this.userDetails.email);
+
+        if (response) {
+          this.$q.notify({ type: 'negative', message: 'Please check your email for verification link.' })
+          this.getUserDetails()
+        }
+
+        this.message = 'Verification email resent successfully!';
+      } catch (error) {
+        this.message = 'Error resending verification email.';
+      }
+    },
 
     // =================================== FUNCTIONS
     async updateUser() {
