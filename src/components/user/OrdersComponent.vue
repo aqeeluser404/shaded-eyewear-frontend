@@ -84,26 +84,18 @@ export default {
     // =================================== FUNCTIONS
     async cancelOrder(orderId) {
       this.$q.dialog({
-        title: 'Confirm',
-        message: `You are about to delete your order, continue?`,
-        cancel: true,
-        persistent: true
+        title: 'Confirm', message: `You are about to delete your order, continue?`, cancel: true, persistent: true
       }).onOk(async () => {
-        try {
-          await OrderService.cancelOrder(orderId)
+        const response = await OrderService.cancelOrder(orderId)
+        if (response) {
           await OrderService.deleteOrder(orderId)   // temporary to keep database clean
-
           localStorage.removeItem('currentOrderId')
-          // window.location.reload();
-          // reload orders
-          // this.getAllMyOrders()
-        } catch(error) {
-          console.error(error);
+          this.$q.notify({ type: 'positive', color: 'primary', message: 'Cancel successful!' })
+          this.getAllMyOrders()
+        } else {
+          this.$q.notify({ type: 'negative', message: 'Cancel failed. Please try again.' })
         }
-      }).onCancel(() => {
-        this.getAllMyOrders()
-        return
-      }).onDismiss(() => {});
+      })
     },
 
     // =================================== GET DATA

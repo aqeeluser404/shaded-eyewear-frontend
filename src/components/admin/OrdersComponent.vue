@@ -40,7 +40,7 @@
 <script>
 import OrderService from 'src/services/OrderService'
 import UserService from 'src/services/UserService'
-import { formatDate, capitalizeFirstLetter } from 'src/services/utils'
+import Helper from 'src/services/utils'
 
 export default {
   data() {
@@ -49,8 +49,8 @@ export default {
     }
   },
   methods: {
-    formatDate,
-    capitalizeFirstLetter,
+    formatDate: Helper.formatDate,
+    capitalizeFirstLetter: Helper.capitalizeFirstLetter,
     async getAllOrders() {
       const response = await OrderService.findAllOrders()
       this.orders = await Promise.all(response.map(async order => {
@@ -64,11 +64,17 @@ export default {
     },
     async deleteOrder(id) {
       this.$q.dialog({
-        title: 'Delete order', message: `You are about to delete this order, continue?`, cancel: true, persistent: true
+        title: 'Delete order', message: `You are about to delete this order, continue?`, color: 'primary', cancel: true, persistent: true
       }).onOk(async () => {
-        await OrderService.deleteOrder(id)
-        this.getAllOrders()
-      }).onCancel(() => {}).onDismiss(() => {})
+        const response = await OrderService.deleteOrder(id)
+        if(response) {
+          this.$q.notify({ type: 'positive', color: 'primary', message: 'Delete successful!' })
+          this.getAllOrders()
+        } else {
+          this.$q.notify({ type: 'negative', message: 'Delete failed. Please try again.' })
+          this.getAllOrders()
+        }
+      })
     }
   },
   created() {

@@ -85,6 +85,7 @@ import UserService from 'src/services/UserService'
 import UserComponent from '../../components/admin/UserComponent.vue'
 import SunglassesComponent from '../../components/admin/SunglassesComponent.vue'
 import OrdersComponent from '../../components/admin/OrdersComponent.vue'
+import Helper from '../../services/utils.js'
 
 export default {
   name: "AdminDashPage",
@@ -94,10 +95,8 @@ export default {
     SunglassesComponent,
     OrdersComponent
   },
-
   data() {
     return {
-      // user details
       currentUser: {_id: ''},
       userDetails: {},
 
@@ -113,11 +112,9 @@ export default {
       this.drawer = false
     },
     async fetchUserDetails() {
-      // get id from token
       const userId = await UserService.FindUserByToken()
       this.currentUser = userId
 
-      // get user from id
       const user = await UserService.findUserById(this.currentUser._id)
       this.userDetails = user
     }
@@ -125,24 +122,7 @@ export default {
   created() {
     this.fetchUserDetails()
   },
-
-  // PREVENT PAGE ACCESS IF UNAUTHENTICATED
-  beforeRouteEnter(to, from, next) {
-    const token = localStorage.getItem('auth-token');
-    if (!token) {
-      next({ path: '/' });
-    } else {
-      next();
-    }
-  },
-  beforeRouteLeave(to, from, next) {
-    const token = localStorage.getItem('auth-token');
-    if (!token) {
-      next(false);
-    } else {
-      next();
-    }
-  }
+  beforeRouteEnter: Helper.beforeRouteEnter
 }
 </script>
 

@@ -64,10 +64,13 @@
 </template>
 
 <script>
+// import Helper from '../services/utils'
 import UserService from 'src/services/UserService'
 import OrderService from 'src/services/OrderService'
 
 export default {
+
+  // beforeRouteEnter: Helper.beforeRouteEnterUser,
   data() {
     return {
       order: {},
@@ -117,6 +120,6 @@ export default {
   },
   created() {
     this.getUserDetails()
-  }
+  },
 };
 </script>

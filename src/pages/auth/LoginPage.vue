@@ -66,19 +66,10 @@
       async onSubmit() {
         const response = await UserService.login(this.user.usernameOrEmail, this.user.password)
         if (response) {
-          this.$q.dialog({
-            title: 'Success',
-            message: 'Login successful!',
-            ok: 'OK'
-          }).onOk(() => {
-            this.$router.push('/')
-          })
+          this.$q.notify({ type: 'positive', color: 'primary', message: 'Login successful!' })
+          this.$router.push('/')
         } else {
-          this.$q.dialog({
-            title: 'Error',
-            message: 'Login failed. Please try again.',
-            ok: 'OK'
-          })
+          this.$q.notify({ type: 'negative', message: 'Login failed. Please try again!' })
           this.onReset()
         }
       },

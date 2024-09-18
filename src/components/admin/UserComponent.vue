@@ -147,7 +147,6 @@ export default {
     async getFrequentlyLoggedInUsers() {
       const response = await UserService.findUsersFrequentlyLoggedIn()
       this.frequentUsers = response
-      console.log(this.frequentUsers)
       this.createChart()
     },
     createChart() {
@@ -185,7 +184,6 @@ export default {
     async updateUserType(selectedUser) {
       const currentUser = await UserService.FindUserByToken()
       const userId = this.selectedUser._id
-
       const updatedUser = {
         firstName: this.selectedUser.firstName,
         lastName: this.selectedUser.lastName,
@@ -199,91 +197,62 @@ export default {
         loginInfo: this.selectedUser.loginInfo,
         order: this.selectedUser.order
       }
-
       if (currentUser._id === userId) {
-        this.$q.dialog({
-            title: 'Error',
-            message: 'You cannot change your usertype!',
-            ok: 'OK'
-          }).onOk(() => {
-            window.location.reload();
-            return;
-          });
-          return;
+        this.$q.notify({ type: 'negative', message: 'You cannot change your usertype!' })
+        window.location.reload();
       } else {
         this.$q.dialog({
-          title: 'Update user',
-          message: `You are about to update ${updatedUser.username}, continue?`,
-          cancel: true,
-          persistent: true
+          title: 'Update user', message: `You are about to update ${updatedUser.username}, continue?`, color: 'primary', cancel: true, persistent: true
         }).onOk(async () => {
-          try {
-            await UserService.updateUserDetails(userId, updatedUser)
+          const response = await UserService.updateUserDetails(userId, updatedUser)
+          if (response) {
+            this.$q.notify({ type: 'positive', color: 'primary', message: 'Update successful!' })
             this.editMode = null
-          } catch (error) {
-            console.error(error);
+          } else {
+            this.$q.notify({ type: 'negative', message: 'Update failed. Please try again.' })
           }
         }).onCancel(() => {
           this.editMode = null
           this.getAllUsers()
           return
-        }).onDismiss(() => {});
+        })
       }
     },
     async deleteUser(userId, username) {
       const currentUser = await UserService.FindUserByToken()
       if (currentUser._id === userId) {
-        this.$q.dialog({
-            title: 'Error',
-            message: 'You cannot delete yourself!',
-            ok: 'OK'
-          }).onOk(() => {
-            return;
-          });
-          return;
+        this.$q.notify({ type: 'negative', message: 'You cannot change your usertype!' })
       } else {
         this.$q.dialog({
           title: 'Delete user',
-          message: `You are about to delete ${username}, continue?`,
-          cancel: true,
-          persistent: true
+          message: `You are about to delete ${username}, continue?`, color: 'primary', cancel: true, persistent: true
         }).onOk(async () => {
-          try {
-            await UserService.deleteUser(userId)
-            window.location.reload();
-          } catch (error) {
-            console.error(error);
+          const response = await UserService.deleteUser(userId)
+          if (response) {
+            this.$q.notify({ type: 'positive', color: 'primary', message: 'Delete successful!' })
+            window.location.reload()
+          } else {
+            this.$q.notify({ type: 'negative', message: 'Delete failed. Please try again.' })
           }
-        }).onCancel(() => {}).onDismiss(() => {});
+        })
       }
     },
     async logoutUser(userId, username) {
       const currentUser = await UserService.FindUserByToken()
       if (currentUser._id === userId) {
-        this.$q.dialog({
-            title: 'Error',
-            message: 'You are currently logged in!',
-            ok: 'OK'
-          }).onOk(() => {
-            return;
-          });
-          return;
+        this.$q.notify({ type: 'negative', message: 'You are currently logged in!' })
       } else {
         this.$q.dialog({
-          title: 'Logout User',
-          message: `You are about to logout ${username}, continue?`,
-          cancel: true,
-          persistent: true
+          title: 'Logout User', message: `You are about to logout ${username}, continue?`, color: 'primary', cancel: true, persistent: true
         }).onOk(async () => {
-          try {
-            const response = await UserService.logoutUser(userId)
-            console.log(response);
-            await this.getAllUsers();
-          } catch (error) {
-            console.error(error);
+          const response = await UserService.logoutUser(userId)
+          if (response) {
+            this.$q.notify({ type: 'positive', color: 'primary', message: 'Logout successful!' })
+            this.getAllUsers()
+          } else {
+            this.$q.notify({ type: 'negative', message: 'Logout failed. Please try again.' })
           }
         })
-        .onCancel(() => {}).onDismiss(() => {});
       }
     },
     openDetails(user) {

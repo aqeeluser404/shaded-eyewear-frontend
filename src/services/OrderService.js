@@ -1,7 +1,7 @@
 import axios from "axios"
 import Logger from "./Logger"
 
-const API_BASE_URL = "http://localhost:5000"
+const API_BASE_URL = process.env.API_BASE_URL
 
 class OrderService {
   // ================================================================= // USER SERVICES
@@ -100,7 +100,7 @@ class OrderService {
     }
   }
   static async deleteOrder(orderId) {
-    const ENDPOINT = "/admin/order/delete"
+    const ENDPOINT = "/order/delete"
     const token = localStorage.getItem("auth-token")
     try {
       const response = await axios.delete(`${API_BASE_URL}${ENDPOINT}/${orderId}`, {

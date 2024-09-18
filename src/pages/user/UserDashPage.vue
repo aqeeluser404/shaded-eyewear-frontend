@@ -41,15 +41,17 @@
 </template>
 
 <script>
-import ProfileComponent from 'src/components/user/ProfileComponent.vue';
-import OrdersComponent from 'src/components/user/OrdersComponent.vue';
-
+import ProfileComponent from 'src/components/user/ProfileComponent.vue'
+import OrdersComponent from 'src/components/user/OrdersComponent.vue'
+import Helper from '../../services/utils'
 
 export default {
+
+  beforeRouteEnter: Helper.beforeRouteEnter,
+
   components: {
     ProfileComponent,
     OrdersComponent,
-
   },
   data() {
     return {

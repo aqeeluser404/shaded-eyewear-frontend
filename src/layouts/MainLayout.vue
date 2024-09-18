@@ -1,5 +1,4 @@
 <template>
-  <!-- constrains -->
   <q-layout view="hHh lpR fff">
 
     <!-- =================================== HEADER DECLARATION, TITLE & IMG -->
@@ -95,7 +94,7 @@
               <q-item-section>Catalogue</q-item-section>
             </q-item>
             <q-item clickable v-close-popup to="/admin/dashboard" v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'">
-              <q-item-section>Admin Profile</q-item-section>
+              <q-item-section>Admin Panel</q-item-section>
             </q-item>
             <q-item clickable v-close-popup to="/auth/login" v-if="!isLoggedIn">
               <q-item-section>Login</q-item-section>
@@ -149,9 +148,11 @@ export default {
       burgerMenuShown: false,
     }
   },
+  mounted() {
+    this.getCurrentOrder()
+  },
   created() {
     this.checkLoginStatus()
-    this.getCurrentOrder()
   },
   watch: {
     // push status to the other pages
@@ -161,8 +162,11 @@ export default {
 
     // =================================== FUNCTIONS
     async cancelOrder(orderId) {
-      await OrderService.cancelOrder(orderId)
-      localStorage.removeItem('currentOrderId')
+      const response = await OrderService.cancelOrder(orderId)
+      if (response) {
+        await OrderService.deleteOrder(orderId)
+        localStorage.removeItem('currentOrderId')
+      }
     },
 
     // =================================== GET DATA
@@ -176,10 +180,10 @@ export default {
         if (this.order.status === 'paid') {
           localStorage.removeItem('currentOrderId')
         }
-        console.log(this.order)
       } else {
         console.log("No order has been placed")
       }
+      console.log( "current orderId: ", this.order._id)
     },
 
     // 1. check if logged in
@@ -201,29 +205,23 @@ export default {
 
     // 3. logout and clear local storage
     async logout() {
+      this.$q.dialog({
+        title: 'Logout', message: `You are about to logout, continue?`, color: 'primary', cancel: true, persistent: true
+      }).onOk(async () => {
+        // cancel order function
+        await this.getCurrentOrder()
+        await this.cancelOrder(this.order._id)
 
-      // cancel order function
-      this.cancelOrder(this.order._id)
-
-      const response = await UserService.logout(this.userDetails._id)
-      if (response) {
-        this.$q.dialog({
-          title: 'Success',
-          message: 'Logout successful!',
-          ok: 'OK'
-        }).onOk(() => {
+        const response = await UserService.logout(this.userDetails._id)
+        if (response) {
+          this.$q.notify({ type: 'positive', color: 'primary', message: 'You have successfully logged out!' })
           this.$router.push('/')
           this.isLoggedIn = false
           window.location.reload()
-        })
-      }
-      else {
-        this.$q.dialog({
-          title: 'Error',
-          message: 'Login failed. Please try again.',
-          ok: 'OK'
-        })
-      }
+        } else {
+          this.$q.notify({ type: 'negative', message: 'Logout failed. Please try again.' })
+        }
+      })
     }
   }
 };

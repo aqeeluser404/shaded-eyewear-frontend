@@ -113,9 +113,13 @@
 <script>
 import UserService from 'src/services/UserService'
 import OrderService from 'src/services/OrderService'
-import PayService from 'src/services/PayService';
+import PayService from 'src/services/PayService'
+// import Helper from '../services/utils'
 
 export default {
+
+  // beforeRouteEnter: Helper.beforeRouteEnterUser,
+
   data() {
     return {
       order: {},

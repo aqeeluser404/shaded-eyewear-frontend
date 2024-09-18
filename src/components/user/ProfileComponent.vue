@@ -63,6 +63,7 @@
 <script>
 import EmailService from '../../services/EmailService'
 import UserService from 'src/services/UserService'
+
 export default {
   data() {
     return {
@@ -102,21 +103,19 @@ export default {
         order: this.userDetails.order
       }
       this.$q.dialog({
-        title: 'Confirm',
-        message: `You are about to update your profile, continue?`,
-        cancel: true,
-        persistent: true
+        title: 'Confirm', message: `You are about to update your profile, continue?`, color: 'primary', cancel: true, persistent: true
       }).onOk(async () => {
-        try {
-          await UserService.updateUserDetails(this.userDetails._id, updatedUser)
+        const response = await UserService.updateUserDetails(this.userDetails._id, updatedUser)
+        if (response) {
+          this.$q.notify({ type: 'positive', color: 'primary', message: 'Update successful!' })
           this.getUserDetails()
-        } catch(error) {
-          console.error(error);
+        } else {
+          this.$q.notify({ type: 'negative', message: 'Update failed. Please try again.' })
         }
       }).onCancel(() => {
         this.getUserDetails()
         return
-      }).onDismiss(() => {});
+      })
     },
 
     // =================================== GET DATA

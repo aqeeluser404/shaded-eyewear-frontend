@@ -32,12 +32,14 @@ export default {
     async verifyEmail() {
       const token = this.$route.query.token;
       if (token) {
-        try {
-          await EmailService.verifyEmail(token);
+        const response = await EmailService.verifyEmail(token)
+        if (response) {
+          this.$q.notify({ type: 'positive', color: 'primary', message: 'Email verified successfully!' })
           this.message = 'Email verified successfully!';
           this.success = true;
-        } catch (error) {
-          this.message = 'Error verifying email. The token may be invalid or expired.';
+        } else {
+          this.$q.notify({ type: 'negative', message: 'The token may be invalid or expired. Please try again.' })
+          this.message = 'Error verifying email. The token may be invalid or expired.'
           this.success = false;
         }
       } else {

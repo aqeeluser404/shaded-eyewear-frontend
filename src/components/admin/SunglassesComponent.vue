@@ -136,27 +136,19 @@ export default {
       const details = this.sunglassesDetails;
       if (['model', 'description', 'color', 'price', 'stock', 'images'].every(key => details[key] !== '')) {
         this.$q.dialog({
-          title: 'Add sunglasses',
-          message: `You are about to add ${this.sunglassesDetails.model}, continue?`,
-          cancel: true,
-          persistent: true
+          title: 'Add sunglasses', color: 'primary', message: `You are about to add ${this.sunglassesDetails.model}, continue?`, cancel: true, persistent: true
         }).onOk(async () => {
-          try {
-            await SunglassesService.createSunglasses(this.sunglassesDetails)
-            this.toggleAddSunglasses()
+          const response = await SunglassesService.createSunglasses(this.sunglassesDetails)
+          if (response) {
+            this.$q.notify({ type: 'positive', color: 'primary', message: `Addition successful!` })
+            this.onReset()
             this.getAllSunglasses()
-          } catch (error) {
-            console.error(error);
+          } else {
+            this.$q.notify({ type: 'negative', message: 'Addition failed. Please try again.' })
           }
-        }).onCancel(() => {
-          return;
-        }).onDismiss(() => {});
+        })
       } else {
-        this.$q.dialog({
-          title: 'Error',
-          message: 'Please fill in all the fields.',
-          ok: 'OK'
-        });
+        this.$q.notify({ type: 'negative', message: 'Please fill in all the fields.' })
       }
     },
     toggleAddSunglasses() {
@@ -178,37 +170,33 @@ export default {
         images: this.sunglasses.images
       }
       this.$q.dialog({
-        title: 'Update sunglasses',
-        message: `You are about to update ${sunglasses.model}, continue?`,
-        cancel: true,
-        persistent: true
+        title: 'Update sunglasses', message: `You are about to update ${sunglasses.model}, continue?`, color: 'primary', cancel: true, persistent: true
       }).onOk(async () => {
-        try {
-          await SunglassesService.updateSunglasses(sunglasses._id, updatedSunglasses)
+        const response = await SunglassesService.updateSunglasses(sunglasses._id, updatedSunglasses)
+        if (response) {
+          this.$q.notify({ type: 'positive', color: 'primary', message: 'Update successful!' })
           this.editMode = null
-        } catch (error) {
-          console.error(error);
+        } else {
+          this.$q.notify({ type: 'negative', message: 'Update failed. Please try again.' })
         }
       }).onCancel(() => {
         this.editMode = null
         this.getAllSunglasses()
         return
-      }).onDismiss(() => {});
+      })
     },
     async deleteSunglasses(sunglasses) {
       this.$q.dialog({
-        title: 'Delete sunglasses',
-        message: `You are about to delete ${sunglasses.model}, continue?`,
-        cancel: true,
-        persistent: true
+        title: 'Delete sunglasses', message: `You are about to delete ${sunglasses.model}, continue?`, color: 'primary', cancel: true, persistent: true
       }).onOk(async () => {
-        try {
-            await SunglassesService.deleteSunglasses(sunglasses._id)
-            await this.getAllSunglasses()
-          } catch (error) {
-            console.error(error);
-          }
-      }).onCancel(() => {}).onDismiss(() => {});
+        const response = await SunglassesService.deleteSunglasses(sunglasses._id)
+        if (response) {
+          this.$q.notify({ type: 'positive', color: 'primary', message: 'Delete successful!' })
+          this.getAllSunglasses()
+        } else {
+          this.$q.notify({ type: 'negative', message: 'Delete failed. Please try again.' })
+        }
+      })
     },
     onReset() {
         this.sunglassesDetails.model = '',

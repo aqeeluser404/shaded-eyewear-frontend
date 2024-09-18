@@ -2,7 +2,6 @@ import axios from "axios"
 import Logger from "./Logger"
 
 const API_BASE_URL = process.env.API_BASE_URL
-console.log('API_BASE_URL:', process.env.API_BASE_URL);
 
 class SunglassesService {
   // ================================================================= // PUBLIC SERVICES

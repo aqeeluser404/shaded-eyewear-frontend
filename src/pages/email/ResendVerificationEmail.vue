@@ -28,18 +28,19 @@ export default {
     return {
       email: '',
       message: ''
-    };
+    }
   },
   methods: {
     async resendVerificationEmail() {
-      try {
-        await EmailService.resendVerificationEmail(this.email);
-
-        this.message = 'Verification email resent successfully!';
-      } catch (error) {
-        this.message = 'Error resending verification email.';
+      const response = await EmailService.resendVerificationEmail(this.email)
+      if (response) {
+        this.$q.notify({ type: 'positive', color: 'primary', message: 'Verification email resent successfully!' })
+        this.message = 'Verification email resent successfully!'
+      } else {
+        this.$q.notify({ type: 'negative', message: 'Error resending verification email.' })
+        this.message = 'Error resending verification email.'
       }
     }
   }
-};
+}
 </script>

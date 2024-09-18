@@ -28,22 +28,12 @@ export default {
   },
   methods: {
     async ForgotPassword() {
-      console.log(this.email)
       const response = await EmailService.ForgotPassword(this.email)
       if (response) {
-        this.$q.dialog({
-          title: 'Success',
-          message: 'An email has been sent to reset your password!',
-          ok: 'OK'
-        }).onOk(() => {
-          this.$router.push('/auth/login')
-        })
+        this.$q.notify({ type: 'positive', color: 'primary', message: 'An email has been sent to reset your password!' })
+        this.$router.push('/')
       } else {
-        this.$q.dialog({
-          title: 'Error',
-          message: 'Sending email failed. Please try again.',
-          ok: 'OK'
-        })
+        this.$q.notify({ type: 'negative', message: 'Sending email failed. Please try again.' })
         this.onReset()
       }
     },

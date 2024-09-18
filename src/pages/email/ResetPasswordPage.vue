@@ -30,26 +30,17 @@ export default {
   methods: {
     async ResetPassword() {
       const token = this.$route.query.token;
-      console.log(token)
       if (token) {
         const response = await EmailService.ResetPassword(token, this.password)
-
         if (response) {
-          this.$q.dialog({
-            title: 'Success',
-            message: 'Your password has been reset successfully!',
-            ok: 'OK'
-          }).onOk(() => {
-            this.$router.push('/auth/login')
-          })
+          this.$q.notify({ type: 'positive', color: 'primary', message: 'Password reset successful!' })
+          this.$router.push('/auth/login')
         } else {
-          this.$q.dialog({
-            title: 'Error',
-            message: 'Sending email failed. Please try again.',
-            ok: 'OK'
-          })
+          this.$q.notify({ type: 'negative', message: 'Password reset failed. Please try again.' })
           this.onReset()
         }
+      } else {
+        this.$q.notify({ type: 'negative', message: 'The token may be invalid or expired. Please try again.' })
       }
     },
     onReset() {

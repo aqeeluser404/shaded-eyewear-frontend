@@ -87,20 +87,10 @@
       async onSubmit() {
         const response = await UserService.register(this.user)
         if (response) {
-          this.$q.dialog({
-            title: 'Success',
-            message: 'Register successful!',
-            ok: 'OK'
-          }).onOk(() => {
-            // this.$router.push('/auth/login')
-            this.$q.notify({ type: 'negative', message: 'Please check your email for verification.' })
-          })
+          this.$q.notify({ type: 'positive', color: 'primary', message: 'Please check your email to verify your account.' })
+          this.$router.push('/')
         } else {
-          this.$q.dialog({
-            title: 'Error',
-            message: 'Register failed. Please try again.',
-            ok: 'OK'
-          })
+          this.$q.notify({ type: 'negative', message: 'Register failed. Please try again!' })
           this.onReset()
         }
       },
