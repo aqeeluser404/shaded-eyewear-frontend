@@ -1,13 +1,11 @@
-import axios from 'axios'
-import Logger from './Logger'
-
-const API_BASE_URL = process.env.API_BASE_URL
+import axiosInstance from "./axiosInstance"
+import Logger from "./Logger"
 
 class EmailService {
   static async verifyEmail(token) {
     const ENDPOINT = '/verify-email'
     try {
-      const response = await axios.get(`${API_BASE_URL}${ENDPOINT}`, {
+      const response = await axiosInstance.get(ENDPOINT, {
         params: { token }
       })
       return response.data
@@ -19,7 +17,7 @@ class EmailService {
   static async resendVerificationEmail(email) {
     const ENDPOINT = '/resend-verification-email'
     try {
-      const response = await axios.post( `${API_BASE_URL}${ENDPOINT}`, { email } )
+      const response = await axiosInstance.post(ENDPOINT, { email })
       return response.data
     } catch (error) {
       Logger.error('Error resending verification email: ', error.message);
@@ -29,7 +27,7 @@ class EmailService {
   static async ForgotPassword(email) {
     const ENDPOINT = '/forgot-password'
     try {
-      const response = await axios.post(`${API_BASE_URL}${ENDPOINT}`, { email } )
+      const response = await axiosInstance.post(ENDPOINT, { email })
       return response.data
     } catch (error) {
       Logger.error('Error resetting password: ', error.message)
@@ -39,7 +37,7 @@ class EmailService {
   static async ResetPassword(token, password) {
     const ENDPOINT = '/reset-password'
     try {
-      const response = await axios.post(`${API_BASE_URL}${ENDPOINT}`, { token, password })
+      const response = await axiosInstance.post(ENDPOINT, { token, password })
       return response.data
     } catch (error) {
       Logger.error('Error resetting password: ', error.message)
@@ -47,5 +45,4 @@ class EmailService {
     }
   }
 }
-
 export default EmailService

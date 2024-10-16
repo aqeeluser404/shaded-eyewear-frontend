@@ -1,9 +1,6 @@
 <template>
-  <!-- constrains -->
-  <div class="row q-pa-md q-gutter-md justify-center">
-
-    <!-- =================================== USER STAT CARD -->
-    <q-card class="q-pa-sm col-12 col-md-5">
+  <div class="row q-pa-md q-gutter-md justify-center">                                                        <!-- constrains -->
+    <q-card class="q-pa-sm col-12 col-md-5">                                                                  <!---------------- USER STAT CARD ----------------->
       <q-card-section>
         <div class="text-h6">Frequent Users Statistics</div>
       </q-card-section>
@@ -12,11 +9,8 @@
       </q-card-section>
     </q-card>
 
-    <!-- =================================== ALL USERS CARD -->
-    <q-card class="q-pa-sm col-12 col-md-6">
-
-      <!-- details -->
-      <q-card v-if="selectedUser">
+    <q-card class="q-pa-sm col-12 col-md-6">                                                                  <!---------------- USER DETAILS CARD ----------------->
+      <q-card v-if="selectedUser">                                                                            <!-- details -->
         <q-card-section>
           <div class="text-h6">{{ selectedUser.firstName }} Details</div>
         </q-card-section>
@@ -51,34 +45,29 @@
           </tbody>
         </q-markup-table>
         <br>
-        <div class="row justify-center">
-          <!-- close card -->
-          <q-card-actions>
+        <div class="row justify-center">                                                                                            <!---------------- USER DETAILS BUTTONS ----------------->
+          <q-card-actions>                                                                                                          <!-- close card -->
             <q-btn dense flat label="Close" color="primary" @click="closeDetails" />
           </q-card-actions>
-          <!-- update user type -->
-          <q-card-actions v-if="editMode !== selectedUser._id">
-            <q-btn dense flat icon="eva-edit-outline" color="primary"  @click="editMode = selectedUser._id" />
+          <q-card-actions v-if="editMode !== selectedUser._id">                                                                     <!-- edit mode -->
+            <q-btn dense flat icon="eva-edit-outline" color="primary" @click="editMode = selectedUser._id" />
           </q-card-actions>
-          <q-card-actions v-if="editMode === selectedUser._id" >
-            <q-btn dense flat icon="eva-edit-outline" color="primary"   @click="updateUserType(selectedUser)" />
+          <q-card-actions v-if="editMode === selectedUser._id" >                                                                    <!-- update user type -->
+            <q-btn dense flat icon="eva-edit-outline" color="primary" @click="updateUserType(selectedUser)" />
           </q-card-actions>
-          <q-card-actions v-if="editMode === selectedUser._id">
-            <q-btn dense flat label="Cancel" color="secondary"  @click="editMode = null" />
+          <q-card-actions v-if="editMode === selectedUser._id">                                                                     <!-- cancel edit mode -->
+            <q-btn dense flat label="Cancel" color="secondary" @click="editMode = null" />
           </q-card-actions>
-          <!-- delete user -->
-          <q-card-actions>
+          <q-card-actions>                                                                                                          <!-- delete user -->
             <q-btn dense flat label="Delete" color="negative" @click="deleteUser(selectedUser._id, selectedUser.username)" />
           </q-card-actions>
-          <!-- logout user -->
-          <q-card-actions>
+          <q-card-actions>                                                                                                          <!-- logout user -->
             <q-btn dense flat label="Logout" color="warning" v-if="selectedUser.loginInfo && selectedUser.loginInfo.isLoggedIn === true " @click="logoutUser(selectedUser._id, selectedUser.username)" />
           </q-card-actions>
         </div>
       </q-card>
 
-      <!-- all users -->
-      <q-card flat v-else>
+      <q-card flat v-else>                                                                                    <!---------------- ALL USERS CARD ----------------->
         <q-card-section>
           <div class="text-h6">All Users</div>
         </q-card-section>
@@ -144,12 +133,12 @@ export default {
     }
   },
   methods: {
-    async getFrequentlyLoggedInUsers() {
+    async getFrequentlyLoggedInUsers() {                                                                // get frequent users function
       const response = await UserService.findUsersFrequentlyLoggedIn()
       this.frequentUsers = response
       this.createChart()
     },
-    createChart() {
+    createChart() {                                                                                     // chart function
       const ctx = this.$refs.canvas.getContext('2d');
       this.chart = new Chart(ctx, {
         type: 'bar',
@@ -177,11 +166,11 @@ export default {
         }
       });
     },
-    async getAllUsers() {
+    async getAllUsers() {                                                                               // get all users function
       const response = await UserService.findAllUsers()
       this.users = response
     },
-    async updateUserType(selectedUser) {
+    async updateUserType(selectedUser) {                                                                // update usertype function
       const currentUser = await UserService.FindUserByToken()
       const userId = this.selectedUser._id
       const updatedUser = {
@@ -191,7 +180,6 @@ export default {
         phone: this.selectedUser.phone,
         username: this.selectedUser.username,
         password: this.selectedUser.password,
-        // update usertype
         userType: selectedUser.userType,
         location: this.selectedUser.location,
         loginInfo: this.selectedUser.loginInfo,
@@ -218,7 +206,7 @@ export default {
         })
       }
     },
-    async deleteUser(userId, username) {
+    async deleteUser(userId, username) {                                                              // delete user
       const currentUser = await UserService.FindUserByToken()
       if (currentUser._id === userId) {
         this.$q.notify({ type: 'negative', message: 'You cannot change your usertype!' })
@@ -237,7 +225,7 @@ export default {
         })
       }
     },
-    async logoutUser(userId, username) {
+    async logoutUser(userId, username) {                                                              // logout user
       const currentUser = await UserService.FindUserByToken()
       if (currentUser._id === userId) {
         this.$q.notify({ type: 'negative', message: 'You are currently logged in!' })

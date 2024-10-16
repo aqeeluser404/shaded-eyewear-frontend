@@ -1,91 +1,43 @@
 <template>
   <q-layout view="hHh lpR fff">
+    <div class="noise-overlay"></div>
+    <!-- <q-header class="bg-transparent text-white">    -->
+    <q-header class="bg-white text-black">                                                            <!---------------- HEADER ----------------->
+      <q-toolbar class="q-px-lg row items-center">
 
-    <!-- =================================== HEADER DECLARATION, TITLE & IMG -->
-    <q-header class="bg-white text-black">
-      <q-toolbar class="constrain">
-        <q-toolbar-title>
-          <!-- title -->
-          <router-link to="/" class="text-remove-decoration q-mr-md">
-            Shaded Eyewear
-          </router-link>
-          <!-- img -->
-          <q-avatar>
-            <img src="../assets/sunglasses-icon.png" />
+        <q-toolbar-title class="row items-center col-4">
+          <q-avatar size="50px" class="q-mr-md">                                                                   <!-- avatar -->
+            <img src="../assets/logo2.png"/>
           </q-avatar>
-          <!-- username -->
-          <span v-if="isLoggedIn" class="q-ml-lg font-size-responsive-xs">
+          <router-link to="/" class="text-remove-decoration q-mr-md text-black">Shaded Eyewear ™ </router-link>       <!-- title -->
+          <span v-if="isLoggedIn" class="q-ml-lg font-size-responsive-lg caveat">                                  <!-- welcome message -->
             Hi, {{ userDetails.username }}
-            <q-btn
-              to="/user/dashboard"
-              size="12px"
-              icon="eva-edit-outline"
-              flat
-              dense
-              round
-            />
           </span>
         </q-toolbar-title>
 
-        <!-- =================================== BIG SCREEN CONTENT -->
-        <!-- public -->
-        <div class="row justify-evenly items-center">
-          <q-btn
-          to="/"
-          size="12px"
-          class="custom-button large-screen-only"
-          label="Home"
-          flat
-        />
-        <q-btn
-          to="/sunglasses"
-          size="12px"
-          class="custom-button large-screen-only"
-          label="Catalogue"
-          flat
-        />
-        <!-- profiles -->
-        <q-btn
-          v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'"
-          to="/admin/dashboard"
-          size="12px"
-          icon="eva-activity-outline"
-          class="custom-button large-screen-only"
-          label="Admin Panel"
-          flat
-        />
-        <!-- Authentication -->
-        <q-btn v-if="!isLoggedIn"
-          to="/auth/login"
-          size="12px"
-          class="custom-button large-screen-only"
-          label="Login"
-          flat
-        />
-        <q-btn
-          v-else
-          @click="logout"
-          size="12px"
-          class="custom-button large-screen-only"
-          label="Logout"
-          flat
-        />
-        <!-- cart -->
-        <q-btn
-          to="/cart"
-          size="12px"
-          icon="eva-shopping-cart large-screen-only"
-          flat
-        />
+        <div class="col-4 row justify-center">                                                                    <!-- text carousel -->
+          <div class="text-carousel q-ml-lg font font-size-responsive-xs">
+            <q-btn flat icon="eva-arrow-ios-back-outline" @click="prevText" />
+            <span class="q-mx-sm">{{ texts[currentIndex] }}</span>
+            <q-btn flat icon="eva-arrow-ios-forward-outline" @click="nextText" />
+          </div>
         </div>
 
+        <div class="col-4">
+          <div class="row justify-end items-center">                                                    <!------------ DESKTOP NAV ------------->
+          <q-btn to="/" size="12px" class="custom-button large-screen-only " label="Home" flat />                                                    <!-- home -->
+          <q-btn to="/sunglasses" size="12px" class="custom-button large-screen-only" label="Catalogue" flat />                                     <!-- catalogue -->
+          <q-btn v-if="!isLoggedIn"
+            to="/auth/login" size="12px" class="custom-button large-screen-only" label="Login" flat />                                              <!-- login -->
+          <q-btn v-else
+            @click="logout" size="12px" class="custom-button large-screen-only" label="Logout" flat />
+          <q-btn @click="openDash" size="12px" icon="eva-person-outline" flat />                                                  <!-- logout -->
+          <q-btn v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'"
+            to="/admin/dashboard" size="12px" icon="eva-pie-chart-outline" class="custom-button large-screen-only" flat/>         <!-- admin dash -->
+          <q-btn to="/cart" size="12px" icon="eva-shopping-bag-outline large-screen-only" flat />                                                          <!-- cart -->
+        </div>
 
-        <!-- =================================== SMALL SCREEN CONTENT -->
-        <q-btn-dropdown
-          class="small-screen-only"
-          icon="menu"
-          flat
-        >
+        <q-btn-dropdown class="small-screen-only" icon="menu" flat>                                     <!------------ MOBILE NAV ------------->
           <q-list style="width: 200px">
             <q-item clickable v-close-popup to="/">
               <q-item-section>Home</q-item-section>
@@ -93,36 +45,58 @@
             <q-item clickable v-close-popup to="/sunglasses">
               <q-item-section>Catalogue</q-item-section>
             </q-item>
-            <q-item clickable v-close-popup to="/admin/dashboard" v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'">
-              <q-item-section>Admin Panel</q-item-section>
-            </q-item>
             <q-item clickable v-close-popup to="/auth/login" v-if="!isLoggedIn">
               <q-item-section>Login</q-item-section>
             </q-item>
             <q-item clickable v-close-popup @click="logout" v-else>
               <q-item-section>Logout</q-item-section>
             </q-item>
+            <q-item clickable v-close-popup @click="openDash">
+              <q-item-section>User Profile</q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup to="/admin/dashboard" v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'">
+              <q-item-section>Admin Panel</q-item-section>
+            </q-item>
             <q-item clickable v-close-popup to="/cart">
               <q-item-section>Cart</q-item-section>
             </q-item>
           </q-list>
         </q-btn-dropdown>
+        </div>
       </q-toolbar>
     </q-header>
 
-    <!-- =================================== BODY -->
-    <q-page-container>
+    <q-page-container>                                                                                  <!------------ PAGES CONTAINER ------------->
       <router-view />
     </q-page-container>
 
-    <!-- =================================== FOOTER -->
-    <q-footer class="bg-white text-black">
-      <q-toolbar class="constrain">
+    <q-footer class="bg-white text-black">                                                              <!------------ FOOTER ------------->
+      <q-toolbar class=" constrain">
         <q-toolbar-title>
-          <q-avatar>
-            <!-- <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" /> -->
-          </q-avatar>
-          Footer
+          <q-card flat class="q-pa-md">
+
+            Follow Us
+            <q-avatar size="50px" class="q-mr-md">                                                                   <!-- avatar -->
+              <img src="../assets/logo2.png"/>
+            </q-avatar>
+          </q-card>
+          <q-separator class="q-mb-md" />
+          <div class="row">
+            <q-card class="col-3 q-pa-md">
+
+              Get in contact:
+              <div>
+                Email us
+              </div>
+              <div>
+
+              </div>
+
+            </q-card>
+            <!-- <q-card class="col-3 q-pa-md">Hi</q-card>
+            <q-card class="col-3 q-pa-md">Hi</q-card>
+            <q-card class="col-3 q-pa-md">Hi</q-card> -->
+          </div>
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
@@ -130,14 +104,22 @@
 </template>
 
 <script>
-import OrderService from 'src/services/OrderService';
-import UserService from 'src/services/UserService';
+import OrderService from 'src/services/OrderService'
+import UserService from 'src/services/UserService'
+import Helper from 'src/services/utils'
 
 export default {
   name: "MainLayout",
 
   data() {
     return {
+      texts: [
+        "Welcome, Please login to view your account",
+        "Discover our latest collections",
+        "Enjoy exclusive member benefits",
+        "Stay updated with our newsletter"
+      ],
+      currentIndex: 0,
       order: {},
       userDetails: {
         _id: '',
@@ -150,67 +132,45 @@ export default {
   },
   mounted() {
     this.getCurrentOrder()
-  },
-  created() {
     this.checkLoginStatus()
+    this.changeTextAutomatically()
   },
   watch: {
-    // push status to the other pages
     '$route': 'checkLoginStatus'
   },
   methods: {
-
-    // =================================== FUNCTIONS
-    async cancelOrder(orderId) {
-      const response = await OrderService.cancelOrder(orderId)
-      if (response) {
-        await OrderService.deleteOrder(orderId)
-        localStorage.removeItem('currentOrderId')
-      }
+    prevText() {
+      this.currentIndex = (this.currentIndex - 1 + this.texts.length) % this.texts.length
     },
-
-    // =================================== GET DATA
-    async getCurrentOrder() {
-      const orderId = localStorage.getItem('currentOrderId')
-      if (orderId) {
-        const response = await OrderService.findOrderById(orderId)
-        this.order = response
-
-        // automatically remove order once paid for
-        if (this.order.status === 'paid') {
-          localStorage.removeItem('currentOrderId')
-        }
-      } else {
-        console.log("No order has been placed")
-      }
-      console.log( "current orderId: ", this.order._id)
+    nextText() {
+      this.currentIndex = (this.currentIndex + 1) % this.texts.length
     },
-
-    // 1. check if logged in
-    checkLoginStatus() {
-      let token = localStorage.getItem('auth-token')
+    changeTextAutomatically() {
+      setInterval(() => {
+        this.nextText()
+      }, 10000)
+    },
+    checkLoginStatus() {                                        // 1. check if logged in
+      const token = Helper.getCookie('token')
       this.isLoggedIn = !!token
 
-      // 2. fetch user details to determine usertype
-      if (this.isLoggedIn == true) {
+      if (this.isLoggedIn == true) {                           // 2. fetch user details to determine usertype
         this.fetchUserDetails()
       }
     },
-
-    // 2.1 fetch user details to determine usertype
-    async fetchUserDetails() {
+    async fetchUserDetails() {                                // 2.1 fetch user details to determine usertype
       const response = await UserService.FindUserByToken()
       this.userDetails = response
     },
-
-    // 3. logout and clear local storage
-    async logout() {
+    async logout() {                                          // 3. logout and clear local storage
       this.$q.dialog({
         title: 'Logout', message: `You are about to logout, continue?`, color: 'primary', cancel: true, persistent: true
       }).onOk(async () => {
-        // cancel order function
-        await this.getCurrentOrder()
-        await this.cancelOrder(this.order._id)
+
+        if (this.order._id) {
+          await this.getCurrentOrder()                          // get order in local store
+          await this.cancelOrder(this.order._id)                // cancel order function
+        }
 
         const response = await UserService.logout(this.userDetails._id)
         if (response) {
@@ -222,7 +182,35 @@ export default {
           this.$q.notify({ type: 'negative', message: 'Logout failed. Please try again.' })
         }
       })
-    }
+    },
+    async getCurrentOrder() {
+      const orderId = localStorage.getItem('currentOrderId')
+      if (orderId) {
+        const response = await OrderService.findOrderById(orderId)
+        this.order = response
+
+        if (this.order.status === 'paid') {                   // automatically remove order once paid for
+          localStorage.removeItem('currentOrderId')
+        }
+      } else {
+        console.log("No order has been placed")
+      }
+      console.log( "current orderId: ", this.order._id)
+    },
+    async openDash() {
+      if (this.isLoggedIn == true) {
+        this.$router.push('/user/dashboard')
+      } else {
+        this.$q.notify({ type: 'negative', message: 'Please login to continue.' })
+      }
+    },
+    async cancelOrder(orderId) {
+      const response = await OrderService.cancelOrder(orderId)
+      if (response) {
+        await OrderService.deleteOrder(orderId)
+        localStorage.removeItem('currentOrderId')
+      }
+    },
   }
-};
+}
 </script>

@@ -1,35 +1,14 @@
 <template>
-  <!-- constrains -->
-  <q-page>
+  <q-page>                                                                                            <!-- constrains -->
     <div class="constrain window-height">
-
-      <!-- =================================== LOGIN HEADER -->
-      <q-card bordered flat class="column flex-center q-mb-md">
+      <q-card bordered flat class="column flex-center q-mb-md">                                       <!---------------- HEADER ----------------->
         <h4>Login</h4>
       </q-card>
-
-      <!-- =================================== LOGIN FORM -->
-      <q-card bordered flat class="column flex-center q-pa-md">
-        <!-- form -->
-        <q-form
-          @submit="onSubmit"
-          @reset="onReset"
-          class="q-gutter-lg"
-          style="min-width: 400px;"
-        >
-          <q-input
-            filled
-            v-model="user.usernameOrEmail"
-            label="Your username or email *"
-          />
-          <q-input
-            filled
-            v-model="user.password"
-            label="Your password *"
-            type="password"
-          />
-          <!-- register instead -->
-          <div class="column">
+      <q-card bordered flat class="column flex-center q-pa-md">                                       <!-------------- LOGIN FORM --------------->
+        <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-lg" style="min-width: 400px;">
+          <q-input filled v-model="user.usernameOrEmail" label="Your username or email *" />
+          <q-input filled v-model="user.password" label="Your password *" type="password" />
+          <div class="column">                                                                                        <!-- register instead -->
             <router-link to="/auth/register" style="text-decoration: underline; font-size: 14px; color: #1976D2">
               Don't have an account?
             </router-link>
@@ -37,8 +16,7 @@
               Forgot password?
             </router-link>
           </div>
-          <!-- buttons -->
-          <div>
+          <div>                                                                                                       <!-- buttons -->
             <q-btn label="Submit" type="submit" color="primary" class="custom-button"/>
             <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm custom-button" />
           </div>

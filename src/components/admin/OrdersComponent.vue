@@ -1,7 +1,6 @@
 <template>
-  <div class="row q-pa-md q-gutter-md justify-center">
-
-    <q-card class="q-pa-md col-12 col-md-11">
+  <div class="row q-pa-md q-gutter-md justify-center">                                    <!---------------- ORDERS COMPONENT ----------------->
+    <q-card class="q-pa-md col-12 col-md-11">                                             <!-- view all card -->
       <q-card>
         <q-card-section>
           <div class="text-h6">All Orders</div>
@@ -24,8 +23,7 @@
               <td class="text-left cursor-pointer">{{ order.orderType }}</td>
               <td class="text-left cursor-pointer">{{ formatDate(order.deliveryDate) }}</td>
               <td class="text-left cursor-pointer">{{ capitalizeFirstLetter(order.status) }}</td>
-              <td class="text-left cursor-pointer">
-                <!-- delete -->
+              <td class="text-left cursor-pointer">                                                 <!-- delete order -->
                 <q-btn dense flat icon="eva-trash-2-outline" color="negative" v-if="order.status === 'cancelled'" @click="deleteOrder(order._id)" />
               </td>
             </tr>
@@ -33,7 +31,6 @@
         </q-markup-table>
       </q-card>
     </q-card>
-
   </div>
 </template>
 
@@ -49,9 +46,9 @@ export default {
     }
   },
   methods: {
-    formatDate: Helper.formatDate,
+    formatDate: Helper.formatDate,                                                        // Validation functions
     capitalizeFirstLetter: Helper.capitalizeFirstLetter,
-    async getAllOrders() {
+    async getAllOrders() {                                                               // Get all orders
       const response = await OrderService.findAllOrders()
       this.orders = await Promise.all(response.map(async order => {
         // find user by id
@@ -62,7 +59,7 @@ export default {
         }
       }))
     },
-    async deleteOrder(id) {
+    async deleteOrder(id) {                                                              // Delete order
       this.$q.dialog({
         title: 'Delete order', message: `You are about to delete this order, continue?`, color: 'primary', cancel: true, persistent: true
       }).onOk(async () => {
@@ -77,7 +74,7 @@ export default {
       })
     }
   },
-  created() {
+  created() {                                                                            // Get all orders
     this.getAllOrders()
   }
 }

@@ -1,8 +1,9 @@
 <template>
-  <q-card-section>
+  <q-card-section>                                                                                   <!---------------- USER DETAILS COMPONENET ----------------->
     <div class="text-h6">Personal Details</div>
   </q-card-section>
-  <q-card>
+
+  <q-card>                                                                                           <!-- Fields for user details -->
     <q-item class="">
       <q-item-section class="text-left">Your Name</q-item-section>
       <q-item-section class="text-left">
@@ -20,7 +21,7 @@
     </q-item>
   </q-card>
   <br>
-  <q-card>
+  <q-card>                                                                                          <!-- Checks if user is verified -->
     <q-item class="">
       <q-item-section class="text-left">
         <span>Email</span>
@@ -53,7 +54,7 @@
   </q-card>
   <br>
   <q-card flat>
-    <q-card-actions>
+    <q-card-actions>                                                                                    <!-- Actions -->
       <q-btn label="Save Changes" color="primary" @click="updateUser"  />
       <q-btn label="Verify Email" @click="resendVerificationEmail" v-if="userDetails && userDetails.verification && userDetails.verification.isVerified === false" />
     </q-card-actions>
@@ -73,23 +74,19 @@ export default {
   },
   methods: {
 
-    async resendVerificationEmail() {
+    async resendVerificationEmail() {                                                       // Send verification email function
       try {
         const response = await EmailService.resendVerificationEmail(this.userDetails.email);
-
         if (response) {
           this.$q.notify({ type: 'negative', message: 'Please check your email for verification link.' })
           this.getUserDetails()
         }
-
         this.message = 'Verification email resent successfully!';
       } catch (error) {
         this.message = 'Error resending verification email.';
       }
     },
-
-    // =================================== FUNCTIONS
-    async updateUser() {
+    async updateUser() {                                                                      // Update user function
       const updatedUser = {
         firstName: this.userDetails.firstName,
         lastName: this.userDetails.lastName,
@@ -117,9 +114,7 @@ export default {
         return
       })
     },
-
-    // =================================== GET DATA
-    async getUserDetails() {
+    async getUserDetails() {                                                                   // Get user details function
       const id = await UserService.FindUserByToken()
       this.userTokenDetails = id
       const user = await UserService.findUserById(this.userTokenDetails._id)

@@ -1,14 +1,10 @@
 <template>
-  <q-card-section>
+  <q-card-section>                                                                            <!---------------- USER ORDERS COMPONENET ----------------->
     <div class="text-h6">Your previous orders</div>
   </q-card-section>
 
-  <!-- my orders -->
-  <q-card>
-
-    <!-- if user has any orders -->
+  <q-card>                                                                                    <!-- all my orders -->
     <div v-if="orders && orders !== null">
-
       <div v-if="selectedOrder">
         <q-markup-table flat>
           <thead>
@@ -33,7 +29,7 @@
         </q-card-actions>
       </div>
 
-      <div v-else>
+      <div v-else>                                                                            <!-- order details -->
         <q-markup-table>
           <thead>
             <tr>
@@ -58,11 +54,7 @@
       </div>
     </div>
 
-
-
-    <!-- if user has no orders -->
-    <div v-else>You haven't ordered anything</div>
-
+    <div v-else>You haven't ordered anything</div>                                            <!-- if user has no orders -->
   </q-card>
 </template>
 
@@ -80,9 +72,7 @@ export default {
     }
   },
   methods: {
-
-    // =================================== FUNCTIONS
-    async cancelOrder(orderId) {
+    async cancelOrder(orderId) {                                                              // cancel current order function
       this.$q.dialog({
         title: 'Confirm', message: `You are about to delete your order, continue?`, cancel: true, persistent: true
       }).onOk(async () => {
@@ -97,14 +87,11 @@ export default {
         }
       })
     },
-
-    // =================================== GET DATA
-    async getAllMyOrders() {
+    async getAllMyOrders() {                                                                   // get all my orders function
       const response = await OrderService.findAllMyOrders(this.userDetails._id)
       this.orders = response
     },
-
-    async getUserDetails() {
+    async getUserDetails() {                                                                  // get user by token function
       const id = await UserService.FindUserByToken()
       this.userTokenDetails = id
       const user = await UserService.findUserById(this.userTokenDetails._id)
@@ -113,10 +100,10 @@ export default {
       // reload orders
       this.getAllMyOrders()
     },
-    openDetails(order) {
+    openDetails(order) {                                                                      // open details panel
       this.selectedOrder = order
     },
-    closeDetails() {
+    closeDetails() {                                                                          // close details panel
       this.selectedOrder = null
     }
   },

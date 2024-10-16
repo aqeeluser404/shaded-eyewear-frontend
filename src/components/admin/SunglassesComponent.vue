@@ -1,11 +1,7 @@
 <template>
   <div class="row q-pa-md q-gutter-md justify-center">
-
-    <!-- =================================== ALL SUNGLASSES CARD -->
-    <q-card class="q-pa-md col-12 col-md-11">
-
-      <!-- view all card -->
-      <q-card v-if="openAddSunglasses === null">
+    <q-card class="q-pa-md col-12 col-md-11">                                                  <!---------------- SUNGLASSES COMPONENT ----------------->
+      <q-card v-if="openAddSunglasses === null">                                               <!-- view all card -->
         <q-card-section>
           <div class="text-h6">All Sunglasses</div>
         </q-card-section>
@@ -62,58 +58,33 @@
         </q-markup-table>
       </q-card>
 
-      <!-- add sunglasses card -->
-      <q-card v-else class=" column flex-center">
+      <q-card v-else class=" column flex-center">                                              <!-- add sunglasses card -->
         <q-card-section>
           <div class="text-h6">Add Sunglasses</div>
         </q-card-section>
         <q-form
-          @submit.prevent="addSunglasses"
-          @reset="onReset"
-          class="q-gutter-lg"
-          style="min-width: 100%;"
-          enctype="multipart/form-data"
+          @submit.prevent="addSunglasses" @reset="onReset" class="q-gutter-lg" style="min-width: 100%;" enctype="multipart/form-data"
         >
           <q-input filled v-model="sunglassesDetails.model" label="Model *" />
           <q-input filled v-model="sunglassesDetails.description" label="Description *" />
           <q-input filled v-model="sunglassesDetails.color" label="Color *" />
-          <q-input
-            filled
-            v-model="sunglassesDetails.price"
-            label="Price (ZAR) *"
-            type="number"
-            prefix="R"
-            :rules="[val => val > 0] || 'Price must be positive'"
-          />
-          <q-select
-            filled
-            v-model="sunglassesDetails.stock"
-            label="Stock *"
-            :options="[...Array(11).keys()].slice(1)"
-            emit-value
-            map-options
-          />
-          <q-file
-            filled
-            v-model="sunglassesDetails.images"
-            label="Image *"
-            accept="image/*"
-            name="images"
-          />
+          <q-input filled v-model="sunglassesDetails.price" label="Price (ZAR) *" type="number" prefix="R" :rules="[val => val > 0] || 'Price must be positive'" />
+          <q-select filled v-model="sunglassesDetails.stock" label="Stock *" :options="[...Array(11).keys()].slice(1)" emit-value map-options />
+          <q-file filled v-model="sunglassesDetails.images" label="Image *" accept="image/*" name="images" />
           <div>
             <q-btn label="Add Sunglasses" type="submit" color="primary" class="custom-button"/>
             <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm custom-button" />
           </div>
         </q-form>
       </q-card>
-
     </q-card>
-    <q-btn round class="round-btn" :label="buttonLabel" @click="toggleAddSunglasses" />
+    <q-btn round class="round-btn" :label="buttonLabel" @click="toggleAddSunglasses" />         <!-- toggle between cards -->
   </div>
 </template>
 
 <script>
 import SunglassesService from 'src/services/SunglassesService'
+import Helper from 'src/services/utils'
 
 export default {
   data() {
@@ -121,20 +92,23 @@ export default {
       sunglasses: [{}],
       editMode: null,
       openAddSunglasses: null,
-      sunglassesDetails: {
-        model: '',
-        description: '',
-        color: '',
-        price: '',
-        stock: '',
-        images: []
-      },
+      sunglassesDetails: { model: '', description: '', color: '', price: '', stock: '', images: [] },
     }
   },
   methods: {
-    async addSunglasses() {
-      const details = this.sunglassesDetails;
-      if (['model', 'description', 'color', 'price', 'stock', 'images'].every(key => details[key] !== '')) {
+    validateText: Helper.validateText,                                                              // Validation functions
+    validateFields() {
+      const details = this.sunglassesDetails
+      const requiredFields = ['model', 'description', 'color', 'price', 'stock', 'images']
+
+      if (requiredFields.every(key => details[key] === '')) {
+        this.$q.notify({ type: 'negative', message: 'Please fill in all the fields.' })
+        return false
+      }
+      return true
+    },
+    async addSunglasses() {                                                                         // Register function
+      if (this.validateFields()) {
         this.$q.dialog({
           title: 'Add sunglasses', color: 'primary', message: `You are about to add ${this.sunglassesDetails.model}, continue?`, cancel: true, persistent: true
         }).onOk(async () => {
@@ -147,20 +121,13 @@ export default {
             this.$q.notify({ type: 'negative', message: 'Addition failed. Please try again.' })
           }
         })
-      } else {
-        this.$q.notify({ type: 'negative', message: 'Please fill in all the fields.' })
       }
     },
-    toggleAddSunglasses() {
-      this.openAddSunglasses = this.openAddSunglasses === null ? true : null
-    },
-
-    async getAllSunglasses() {
+    async getAllSunglasses() {                                                                      // get all sunglasses
       const response = await SunglassesService.findAllSunglasses()
       this.sunglasses = response
     },
-    // updates only details - no images
-    async updateSunglasses(sunglasses) {
+    async updateSunglasses(sunglasses) {                                                            // updates only details - no images
       const updatedSunglasses = {
         model: sunglasses.model,
         description: sunglasses.description,
@@ -185,7 +152,7 @@ export default {
         return
       })
     },
-    async deleteSunglasses(sunglasses) {
+    async deleteSunglasses(sunglasses) {                                                            // deletes function
       this.$q.dialog({
         title: 'Delete sunglasses', message: `You are about to delete ${sunglasses.model}, continue?`, color: 'primary', cancel: true, persistent: true
       }).onOk(async () => {
@@ -198,21 +165,24 @@ export default {
         }
       })
     },
-    onReset() {
-        this.sunglassesDetails.model = '',
-        this.sunglassesDetails.description = '',
-        this.sunglassesDetails.color = '',
-        this.sunglassesDetails.price = '',
-        this.sunglassesDetails.stock = '',
-        this.sunglassesDetails.images = ''
-    }
+    onReset() {                                                                                     // Reset function
+      this.sunglassesDetails.model = '',
+      this.sunglassesDetails.description = '',
+      this.sunglassesDetails.color = '',
+      this.sunglassesDetails.price = '',
+      this.sunglassesDetails.stock = '',
+      this.sunglassesDetails.images = ''
+    },
+    toggleAddSunglasses() {                                                                         // toggle sunglasses button function
+      this.openAddSunglasses = this.openAddSunglasses === null ? true : null
+    },
   },
-  computed: {
+  computed: {                                                                                       // toggle sunglasses button computed
     buttonLabel() {
       return this.openAddSunglasses === null ? '+' : '-'
     }
   },
-  created() {
+  created() {                                                                                       // get all sunglasses
     this.getAllSunglasses()
   }
 }

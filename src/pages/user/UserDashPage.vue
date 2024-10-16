@@ -47,7 +47,7 @@ import Helper from '../../services/utils'
 
 export default {
 
-  beforeRouteEnter: Helper.beforeRouteEnter,
+  beforeRouteEnter: Helper.beforeRouteEnterUser,
 
   components: {
     ProfileComponent,
