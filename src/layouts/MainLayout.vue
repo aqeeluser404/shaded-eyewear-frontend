@@ -65,9 +65,11 @@
       </q-toolbar>
     </q-header>
 
-    <q-page-container style="transform: translateY(-50px);">                                                                                 <!------------ PAGES CONTAINER ------------->
-      <router-view />
-    </q-page-container>
+    <div style="background-color: black;">
+      <q-page-container style="transform: translateY(-50px); ">                                                                                 <!------------ PAGES CONTAINER ------------->
+        <router-view style="background-color: white;" />
+      </q-page-container>
+    </div>
 
     <q-footer class="bg-black text-white" style="transform: translateY(-50px);">                                                              <!------------ FOOTER ------------->
       <q-toolbar class=" constrain">
