@@ -1,29 +1,52 @@
 <template>
-  <q-page>                                                                                                        <!-- constrains -->
-    <div class="constrain window-height">
-      <q-card bordered flat class="column flex-center q-mb-md">                                                   <!---------------- HEADER ----------------->
-        <h4>Register</h4>
-      </q-card>
-      <q-card bordered flat class="column flex-center q-pa-md">
-        <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-lg" style="min-width: 400px;" >               <!------------- REGISTER FORM -------------->
-          <q-input filled v-model="user.firstName" label="Your first name *" />
-          <q-input filled v-model="user.lastName" label="Your last name *" />
-          <q-input filled v-model="user.email" label="Your email *" />
-          <q-input filled v-model="user.phone" label="Your phone number *" />
-          <q-input filled v-model="user.username" label="Your username *" />
-          <q-input filled v-model="user.password" label="Your password *" type="password" />
-          <div>                                                                                                   <!-- login instead -->
-            <router-link to="/auth/login" style="text-decoration: underline; font-size: 14px; color: #1976D2">
-              Already have an account?
-            </router-link>
+  <q-page>                                                                                                     <!-- constrains -->
+    <q-img src="~src/assets/abstract5.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
+
+      <div class="absolute-full row justify-center items-center text-black">
+        <q-card bordered flat class="column q-pa-lg q-mr-md" style="">
+          <div class="row justify-center">
+            <p class="font-size-responsive-xxxl anton-regular q-mb-md">CREATE A NEW ACCOUNT</p>
           </div>
-          <div>                                                                                                   <!-- buttons -->
-            <q-btn label="Submit" type="submit" color="primary" class="custom-button"/>
-            <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm custom-button" />
+          <br>
+          <div class="">
+            <q-form class="q-gutter-lg col-12 col-md-6" >               <!------------- REGISTER FORM -------------->
+              <q-input borderless filled v-model="user.firstName" label="Your first name *" />
+              <q-input borderless filled v-model="user.lastName" label="Your last name *" />
+              <q-input borderless filled v-model="user.email" label="Your email *" />
+              <q-input borderless filled v-model="user.phone" label="Your phone number *" />
+              <q-input borderless filled v-model="user.username" label="Your username *" />
+              <q-input borderless filled v-model="user.password" label="Your password *" type="password" />
+            </q-form>
           </div>
-        </q-form>
-      </q-card>
-    </div>
+        </q-card>
+
+        <div bordered flat class="column col-12 col-md-3 " style="">
+          <q-card>
+            <div class="q-pa-lg">
+              <p>
+                By signing up, you acknowledge and agree to Shaded Eyewear’s Terms of Service.
+              </p>
+
+
+              <div>                                                                                                   <!-- login instead -->
+                <router-link to="/auth/login" class="caveat font-size-responsive-lg" style="text-decoration: underline; color: black;">
+                  <b>Already a member, login instead?</b>
+                </router-link>
+              </div>
+
+            </div>
+          </q-card>
+          <br>
+
+            <div class="row q-mb-md">                                                                                                   <!-- buttons -->
+                <q-btn rounded dense label="Create your account" @click="onSubmit" color="white" text-color="black" class="q-px-md anton-regular q-mr-md font-size-responsive-md"/>
+              </div>
+
+          <!-- <q-separator vertical class="q-mx-lg" /> -->
+
+        </div>
+      </div>
+    </q-img>
   </q-page>
 </template>
 

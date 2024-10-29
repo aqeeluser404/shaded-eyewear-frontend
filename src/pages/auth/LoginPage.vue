@@ -1,28 +1,32 @@
 <template>
   <q-page>                                                                                            <!-- constrains -->
-    <div class="constrain window-height">
-      <q-card bordered flat class="column flex-center q-mb-md">                                       <!---------------- HEADER ----------------->
-        <h4>Login</h4>
-      </q-card>
-      <q-card bordered flat class="column flex-center q-pa-md">                                       <!-------------- LOGIN FORM --------------->
-        <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-lg" style="min-width: 400px;">
-          <q-input filled v-model="user.usernameOrEmail" label="Your username or email *" />
-          <q-input filled v-model="user.password" label="Your password *" type="password" />
-          <div class="column">                                                                                        <!-- register instead -->
-            <router-link to="/auth/register" style="text-decoration: underline; font-size: 14px; color: #1976D2">
-              Don't have an account?
-            </router-link>
-            <router-link to="/forgot-password" style="text-decoration: underline; font-size: 14px; color: #1976D2">
-              Forgot password?
-            </router-link>
+
+    <q-img src="~src/assets/abstract5.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
+      <div class="absolute-full column justify-center items-start text-black">
+        <q-card bordered flat class="column q-pa-lg constrain" style="">
+          <div class="row justify-center">
+            <p class="font-size-responsive-xxxl anton-regular q-mb-md">LOGIN TO YOUR ACCOUNT</p>
           </div>
-          <div>                                                                                                       <!-- buttons -->
-            <q-btn label="Submit" type="submit" color="primary" class="custom-button"/>
-            <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm custom-button" />
-          </div>
-        </q-form>
-      </q-card>
-    </div>
+          <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-lg" style="min-width: 300px;">
+            <q-input filled v-model="user.usernameOrEmail" label="Your username or email *" />
+            <q-input filled v-model="user.password" label="Your password *" type="password" />
+            <div class="column">                                                                                        <!-- register instead -->
+              <router-link to="/auth/register" style="text-decoration: underline; font-size: 14px; color: #1976D2">
+                Don't have an account?
+              </router-link>
+              <router-link to="/forgot-password" style="text-decoration: underline; font-size: 14px; color: #1976D2">
+                Forgot password?
+              </router-link>
+            </div>
+            <div>                                                                                                       <!-- buttons -->
+              <q-btn label="Submit" type="submit" color="primary" class="custom-button"/>
+              <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm custom-button" />
+            </div>
+          </q-form>
+        </q-card>
+      </div>
+    </q-img>
+
   </q-page>
 </template>
 

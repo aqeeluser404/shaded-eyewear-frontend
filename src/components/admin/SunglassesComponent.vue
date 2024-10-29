@@ -62,15 +62,15 @@
         <q-card-section>
           <div class="text-h6">Add Sunglasses</div>
         </q-card-section>
-        <q-form
-          @submit.prevent="addSunglasses" @reset="onReset" class="q-gutter-lg" style="min-width: 100%;" enctype="multipart/form-data"
-        >
-          <q-input filled v-model="sunglassesDetails.model" label="Model *" />
-          <q-input filled v-model="sunglassesDetails.description" label="Description *" />
-          <q-input filled v-model="sunglassesDetails.color" label="Color *" />
-          <q-input filled v-model="sunglassesDetails.price" label="Price (ZAR) *" type="number" prefix="R" :rules="[val => val > 0] || 'Price must be positive'" />
-          <q-select filled v-model="sunglassesDetails.stock" label="Stock *" :options="[...Array(11).keys()].slice(1)" emit-value map-options />
-          <q-file filled v-model="sunglassesDetails.images" label="Image *" accept="image/*" name="images" />
+        <q-form @submit.prevent="addSunglasses" @reset="onReset" class="q-gutter-lg" style="min-width: 100%;" enctype="multipart/form-data">
+          <q-input filled v-model="sunglassesDetails.model" label="Model (Format: SE0000 Square-Frame Sunglasses) *" id="model" name="model" />
+          <q-input filled v-model="sunglassesDetails.description" label="Description (max 50 words) *" id="description" name="description" />
+          <q-select filled v-model="sunglassesDetails.color" label="Color *" id="color" name="color" :options="colors" emit-value map-options />
+          <q-input filled v-model="sunglassesDetails.price" label="Price (ZAR) *" type="number" prefix="R" :rules="[val => val > 0] || 'Price must be positive'" id="price" name="price" />
+          <q-select filled v-model="sunglassesDetails.stock" label="Stock *" :options="[...Array(11).keys()].slice(1)" emit-value map-options id="stock" name="stock" />
+          <!-- <q-file filled v-model="sunglassesDetails.images" label="Image *" accept="image/*" name="images" id="images" /> -->
+          <q-file filled v-model="image1" label="image (Side View) * " accept="image/*" name="image1" id="image1" />
+          <q-file filled v-model="image2" label="image (Front View) * " accept="image/*" name="image2" id="image2" />
           <div>
             <q-btn label="Add Sunglasses" type="submit" color="primary" class="custom-button"/>
             <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm custom-button" />
@@ -92,30 +92,96 @@ export default {
       sunglasses: [{}],
       editMode: null,
       openAddSunglasses: null,
-      sunglassesDetails: { model: '', description: '', color: '', price: '', stock: '', images: [] },
+      colors: [
+        { label: 'Blue', value: 'blue' },
+        { label: 'Red', value: 'red' },
+        { label: 'Green', value: 'green' },
+        { label: 'Yellow', value: 'yellow' },
+        { label: 'Black', value: 'black' },
+        { label: 'White', value: 'white' },
+        { label: 'Purple', value: 'purple' },
+        { label: 'Orange', value: 'orange' },
+        { label: 'Pink', value: 'pink' },
+        { label: 'Brown', value: 'brown' },
+        { label: 'Gray', value: 'gray' },
+        { label: 'Cyan', value: 'cyan' },
+        { label: 'Magenta', value: 'magenta' },
+        { label: 'Lime', value: 'lime' },
+        { label: 'Teal', value: 'teal' },
+        { label: 'Navy', value: 'navy' },
+        { label: 'Olive', value: 'olive' },
+        { label: 'Maroon', value: 'maroon' },
+        { label: 'Gold', value: 'gold' },
+        { label: 'Silver', value: 'silver' }
+      ],
+      sunglassesDetails: {
+        model: '',
+        description: '',
+        color: '',
+        price: '',
+        stock: '',
+        images: []
+      },
+      image1: null, image2: null
     }
   },
   methods: {
     validateText: Helper.validateText,                                                              // Validation functions
     validateFields() {
-      const details = this.sunglassesDetails
-      const requiredFields = ['model', 'description', 'color', 'price', 'stock', 'images']
+      const details = this.sunglassesDetails;
+      const requiredFields = ['model', 'description', 'color', 'price', 'stock', 'image1', 'image2']
 
-      if (requiredFields.every(key => details[key] === '')) {
-        this.$q.notify({ type: 'negative', message: 'Please fill in all the fields.' })
-        return false
+      // Regular expression to match the model name format
+      const modelNamePattern = /^[A-Z]{2}\d{4}\s[A-Za-z]+-[A-Za-z]+\s[A-Za-z]+$/;
+
+      for (const field of requiredFields) {
+        if (!details[field] && !this[field]) {
+          this.$q.notify({ type: 'negative', message: `Please fill in the ${field} field.` });
+          return false;
+        }
       }
-      return true
+      // Validate the model name format
+      if (!modelNamePattern.test(details.model)) {
+        this.$q.notify({ type: 'negative', message: 'Model name must follow the format "SE3448 Square-Frame Sunglasses".' });
+        return false;
+      }
+      // Validate the description length by words
+      const words = details.description.trim().split(/\s+/).filter(word => word.length > 0);
+      const wordCount = words.length;
+      console.log(`Description: "${details.description}"`);
+      console.log(`Words:`, words);
+      console.log(`Word count: ${wordCount}`);
+      if (wordCount > 50) {
+        this.$q.notify({ type: 'negative', message: 'Description must be 50 words or less.' });
+        return false;
+      }
+
+
+      return true;
     },
     async addSunglasses() {                                                                         // Register function
       if (this.validateFields()) {
         this.$q.dialog({
-          title: 'Add sunglasses', color: 'primary', message: `You are about to add ${this.sunglassesDetails.model}, continue?`, cancel: true, persistent: true
+          title: 'Add sunglasses',
+          color: 'primary',
+          message: `You are about to add ${this.sunglassesDetails.model}, please ensure the front and side images are attached in the correct order, continue?`,
+          cancel: true,
+          persistent: true
         }).onOk(async () => {
-          const response = await SunglassesService.createSunglasses(this.sunglassesDetails)
+          const formData = new FormData()
+          for (const key in this.sunglassesDetails) {
+            if (key !== 'images') {
+              formData.append(key, this.sunglassesDetails[key])
+            }
+          }
+          if (this.image1) formData.append('images', this.image1)
+          if (this.image2) formData.append('images', this.image2)
+
+          const response = await SunglassesService.createSunglasses(formData)
           if (response) {
             this.$q.notify({ type: 'positive', color: 'primary', message: `Addition successful!` })
             this.onReset()
+            this.toggleAddSunglasses()
             this.getAllSunglasses()
           } else {
             this.$q.notify({ type: 'negative', message: 'Addition failed. Please try again.' })
@@ -166,12 +232,16 @@ export default {
       })
     },
     onReset() {                                                                                     // Reset function
-      this.sunglassesDetails.model = '',
-      this.sunglassesDetails.description = '',
-      this.sunglassesDetails.color = '',
-      this.sunglassesDetails.price = '',
-      this.sunglassesDetails.stock = '',
-      this.sunglassesDetails.images = ''
+      this.sunglassesDetails = {
+        model: '',
+        description: '',
+        color: '',
+        price: '',
+        stock: '',
+        images: []
+      }
+      this.image1 = null
+      this.image2 = null
     },
     toggleAddSunglasses() {                                                                         // toggle sunglasses button function
       this.openAddSunglasses = this.openAddSunglasses === null ? true : null

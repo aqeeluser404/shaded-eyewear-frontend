@@ -1,15 +1,14 @@
 <template>
   <q-layout view="hHh lpR fff">
     <div class="noise-overlay"></div>
-    <!-- <q-header class="bg-transparent text-white">    -->
-    <q-header class="bg-white text-black">                                                            <!---------------- HEADER ----------------->
+    <q-header :class="[headerClass, colorShiftClass]">                                                            <!---------------- HEADER ----------------->
       <q-toolbar class="q-px-lg row items-center">
 
         <q-toolbar-title class="row items-center col-4">
           <q-avatar size="50px" class="q-mr-md">                                                                   <!-- avatar -->
-            <img src="../assets/logo2.png"/>
+            <img :src="logoSrc"/>
           </q-avatar>
-          <router-link to="/" class="text-remove-decoration q-mr-md text-black">Shaded Eyewear ™ </router-link>       <!-- title -->
+          <router-link to="/" :class="colorShiftClass" class="text-remove-decoration q-mr-md" >Shaded Eyewear ™ </router-link>       <!-- title -->
           <span v-if="isLoggedIn" class="q-ml-lg font-size-responsive-lg caveat">                                  <!-- welcome message -->
             Hi, {{ userDetails.username }}
           </span>
@@ -66,23 +65,23 @@
       </q-toolbar>
     </q-header>
 
-    <q-page-container>                                                                                  <!------------ PAGES CONTAINER ------------->
+    <q-page-container style="transform: translateY(-50px);">                                                                                 <!------------ PAGES CONTAINER ------------->
       <router-view />
     </q-page-container>
 
-    <q-footer class="bg-white text-black">                                                              <!------------ FOOTER ------------->
+    <q-footer class="bg-black text-white" style="transform: translateY(-50px);">                                                              <!------------ FOOTER ------------->
       <q-toolbar class=" constrain">
         <q-toolbar-title>
-          <q-card flat class="q-pa-md">
+          <q-card flat class="q-pa-md bg-transparent">
 
             Follow Us
             <q-avatar size="50px" class="q-mr-md">                                                                   <!-- avatar -->
-              <img src="../assets/logo2.png"/>
+              <img src="src/assets/logos/logo-white.png"/>
             </q-avatar>
           </q-card>
           <q-separator class="q-mb-md" />
           <div class="row">
-            <q-card class="col-3 q-pa-md">
+            <q-card class="col-3 q-pa-md bg-transparent">
 
               Get in contact:
               <div>
@@ -107,9 +106,17 @@
 import OrderService from 'src/services/OrderService'
 import UserService from 'src/services/UserService'
 import Helper from 'src/services/utils'
+import logoWhite from 'src/assets/logos/logo-white.png'
+import logoBlack from 'src/assets/logos/logo-black.png'
 
 export default {
   name: "MainLayout",
+
+  computed: {
+    isSpecificPage() {
+      return this.$route.path.includes('/sunglasses/view/') || this.$route.path.includes('/user/dashboard')
+    }
+  },
 
   data() {
     return {
@@ -128,17 +135,45 @@ export default {
       },
       isLoggedIn: false,
       burgerMenuShown: false,
+
+      // css stuff
+      headerClass: 'header-transparent',
+      colorShiftClass: 'transparent-white',
+      logoSrc: logoWhite
     }
   },
   mounted() {
     this.getCurrentOrder()
     this.checkLoginStatus()
     this.changeTextAutomatically()
+    window.addEventListener('scroll', this.handleScroll);
+    this.handleScroll(); // Ensure the correct header state on initial load
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
   },
   watch: {
-    '$route': 'checkLoginStatus'
+    '$route'() {
+      this.checkLoginStatus();
+      this.handleScroll(); // Ensure the correct header state on route change
+    }
   },
   methods: {
+    handleScroll() {
+      if (this.isSpecificPage) {
+        this.headerClass = 'header-solid';
+        this.colorShiftClass = 'transparent-black';
+        this.logoSrc = logoBlack;
+      } else if (window.scrollY > 50) {
+        this.headerClass = 'header-solid';
+        this.colorShiftClass = 'transparent-black';
+        this.logoSrc = logoBlack;
+      } else {
+        this.headerClass = 'header-transparent';
+        this.colorShiftClass = 'transparent-white';
+        this.logoSrc = logoWhite;
+      }
+    },
     prevText() {
       this.currentIndex = (this.currentIndex - 1 + this.texts.length) % this.texts.length
     },
@@ -214,3 +249,6 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+</style>

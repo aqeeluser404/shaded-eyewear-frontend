@@ -1,73 +1,86 @@
 <template>
-  <!-- constrains -->
   <q-page>
-    <div class="constrain window-height">
 
-      <!-- =================================== SUNGLASSES DETAILS HEADER -->
-      <q-card bordered flat class="column flex-center">
-        <h4>Product Details</h4>
-      </q-card>
+    <div class="row justify-center flex-center" >
 
-      <!-- =================================== PRODUCT DETAILS -->
-      <div class="row q-pa-md q-gutter-md justify-center">
+    <q-card flat class="q-pa-md row justify-center items-center" style="width: 100%; height: 102vh;" >
 
-        <!-- image -->
-        <q-card bordered flat class="col-12 col-md-3 row justify-center full-height">
-          <q-img v-if="sunglasses.images && sunglasses.images.length > 0" :src="getImageUrl(sunglasses.images[0])" class="image" />
-        </q-card>
+      <q-card-section class="q-mr-lg col-md-4">
+        <div class="column">
+          <q-img
+            v-if="mainImage"
+            :src="getImageUrl(mainImage)"
+            class="product-image"
+          />
+        </div>
+        <div class="row justify-around" style="border: 1px solid grey;">
+          <q-img
+            v-if="sunglasses.images && sunglasses.images.length > 0"
+            :src="getImageUrl(sunglasses.images[0])"
+            class="product-image col-4 cursor-pointer"
+            @click="updateMainImage(sunglasses.images[0])"
+          />
+          <q-img
+            v-if="sunglasses.images && sunglasses.images.length > 1"
+            :src="getImageUrl(sunglasses.images[1])"
+            class="product-image col-4 cursor-pointer"
+            @click="updateMainImage(sunglasses.images[1])"
+          />
+        </div>
+      </q-card-section>
 
-        <!-- description info -->
-        <q-card bordered flat class="q-pa-md col-12 col-md-4">
-          <q-card-section>
-            <div class="text-h4">{{ sunglasses.model }}</div>
-          </q-card-section>
-          <q-card-section>
-            <q-separator class="q-mb-xs" />
-          </q-card-section>
-          <q-card-section>
-            <div class="text-h6">Product Details</div>
-          </q-card-section>
-          <q-card-section>
-            <div>
-              <b>Color</b>: {{ sunglasses.color }}
-              <br>
-              <b>Description</b>: {{ sunglasses.description }}
-            </div>
-          </q-card-section>
-        </q-card>
-
-        <!-- price and cart -->
-        <q-card bordered flat class="q-pa-md col-12 col-md-3 full-height" >
-          <q-card-section>
-            <div class="text-h4">R {{ sunglasses.price }}.00</div>
-          </q-card-section>
-
-          <q-card-section>
-            <p class="q-mb-md">Deliveries made in Cape Town</p>
-            <q-separator class="q-mb-md" />
-            <div class="q-mb-md"><b>ONLY {{ sunglasses.stock }} LEFT IN STOCK</b></div>
-            <q-btn
-              @click="addToCart"
-              size="12px"
-              icon="eva-plus-outline"
-              label="Add to cart"
-              bordered
-              style="width: 100%;"
-              class="q-mb-sm"
-            />
+      <q-card-section class="q-pa-lg col-md-3">
+        <p class="q-mb-md">Deliveries made in Cape Town</p>
+        <div class="text-h3"><b>{{ sunglasses.model }}</b></div>
+        <br>
+        <div class="text-h6">R {{ sunglasses.price }}.00</div>
+        <br>
+        <div class="row items-center">
+          <div class="q-mr-md">
             <q-btn
               v-if="currentOrderId && currentOrderId !== null"
-              to="/cart"
-              size="12px"
-              icon="eva-shopping-cart"
-              label="view cart"
-              bordered
-              style="width: 100%;"
+              to="/cart" label="view cart" rounded dense size="12px"
+              class=" q-py-sm q-px-lg"
             />
-          </q-card-section>
-        </q-card>
+            <q-btn
+              @click="addToCart" rounded dense label="Add to cart" size="12px"
+              class=" q-py-sm q-px-lg"
+            />
+          </div>
+          <div>
+            <div class="text-h7"><b>{{ sunglasses.stock }} in stock</b></div>
+          </div>
+        </div>
+        <br>
+        <!-- <q-separator class="q-mb-xs" /> -->
+        <div class="text-h6">Product Details</div>
+        <br>
+        <div>{{ sunglasses.description }}</div>
+      </q-card-section>
+    </q-card>
+    </div>
+
+    <div class="column constrain-sunglasses">
+      <div class="text-h4"><b>Related Products</b></div>
+      <div class="row q-pa-md justify-center items-center"  >
+        <q-btn flat icon="arrow_back" @click="prevSlide" class="q-mr-sm" />
+        <div class="row q-pa-md justify-center" style="width: 85%;">
+          <div v-for="(sunglass) in visibleSunglasses" :key="sunglass._id" class="carousel-container">
+            <q-card flat @click="viewSunglassesDetails(sunglass._id)" class="cursor-pointer">
+              <div>
+                <q-img style="border: 1px dotted grey;" v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="product-image" />
+              </div>
+              <q-item class="row justify-between">
+                <div class="model-text"><b>{{ sunglass.model }}</b></div>
+                <div>R {{ sunglass.price }}.00</div>
+              </q-item>
+            </q-card>
+          </div>
+        </div>
+        <q-btn flat icon="arrow_forward" @click="nextSlide" class="q-ml-sm" />
       </div>
     </div>
+
   </q-page>
 </template>
 
@@ -81,6 +94,7 @@ export default {
 
   data() {
     return {
+
       // ORDER DATA STRUCTURE
       orderData: {
         sunglasses: [{ _id: '', quantity: 1 }],
@@ -91,11 +105,90 @@ export default {
 
       // GET DATA
       sunglasses: {},
+      allSunglasses: [],
       userDetails: {},
-      userTokenDetails: { _id: '', username: '', userType: '' }
+      userTokenDetails: { _id: '', username: '', userType: '' },
+
+      // CAROUSEL
+      currentSlide: 0,
+      itemsPerPage: 3,
+
+      mainImage: ''
+    }
+  },
+  computed: {
+    visibleSunglasses() {
+      const start = this.currentSlide * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      const totalItems = this.allSunglasses.length;
+
+      if (totalItems <= this.itemsPerPage) {
+        return this.allSunglasses;
+      }
+
+      const visibleItems = [];
+      for (let i = start; i < end; i++) {
+        visibleItems.push(this.allSunglasses[i % totalItems]);
+      }
+      return visibleItems;
+    },
+  },
+  beforeMount() {
+    this.fetchSunglassesDetails()
+    this.fetchAllSunglasses()
+    this.updateItemsPerPage();
+    window.addEventListener('resize', this.updateItemsPerPage);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.updateItemsPerPage);
+  },
+  watch: {
+    '$route.params.id': 'fetchSunglassesDetails',
+    sunglasses: {
+      handler(newValue) {
+        if (newValue.images && newValue.images.length > 0) {
+          this.mainImage = newValue.images[0];
+        }
+      },
+      immediate: true,
+      deep: true
     }
   },
   methods: {
+    nextSlide() {
+      this.currentSlide = (this.currentSlide + 1) % Math.ceil(this.allSunglasses.length / this.itemsPerPage);
+    },
+    prevSlide() {
+      this.currentSlide = (this.currentSlide - 1 + Math.ceil(this.allSunglasses.length / this.itemsPerPage)) % Math.ceil(this.allSunglasses.length / this.itemsPerPage);
+    },
+    updateItemsPerPage() {
+      this.itemsPerPage = window.innerWidth <= 600 ? 1 : 3;
+    },
+
+    async fetchAllSunglasses() {
+      const response = await SunglassesService.findAllSunglasses()
+      this.allSunglasses = response
+    },
+    async fetchSunglassesDetails() {
+      const sunglassesId = this.$route.params.id;
+      const response = await SunglassesService.findSunglassesById(sunglassesId);
+      this.sunglasses = response;
+      console.log('Sunglasses Details:', this.sunglasses);
+    },
+    viewSunglassesDetails(id) {
+      if (!id) {
+        Logger.error("Invalid sunglasses ID")
+        return;
+      }
+      try {
+        this.$router.push(`/sunglasses/view/${id}`)
+        // this.$nextTick(() => {
+        //   this.$forceUpdate()
+        // })
+      } catch (error) {
+        Logger.error(error);
+      }
+    },
 
     // =================================== FUNCTIONS
     async addToCart() {
@@ -157,11 +250,6 @@ export default {
     },
 
     // =================================== GET DATA
-    async fetchSunglassesDetails() {
-      const sunglassesId = this.$route.params.id;
-      const response = await SunglassesService.findSunglassesById(sunglassesId);
-      this.sunglasses = response;
-    },
 
     async getUserDetails() {
       const id = await UserService.FindUserByToken();
@@ -171,16 +259,20 @@ export default {
     },
 
     getImageUrl(imagePath) {
-      const serverUrl = 'http://localhost:5000/uploads/';
-      // const localDir = 'C:\\Users\\TerrorX\\Downloads\\code\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
-      const localDir = 'D:\\Work\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
-      const relativePath = imagePath.replace(localDir, '');
-      return serverUrl + relativePath;
+      const serverUrl = 'http://localhost:5000/uploads/'
+      // const localDir = 'C:\\Users\\TerrorX\\Downloads\\code\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\'
+      // const localDir = 'D:\\Work\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\'
+      const localDir = 'C:\\Users\\TerrorX\\Downloads\\WLV\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\'
+      const relativePath = imagePath.replace(localDir, '')
+      return serverUrl + relativePath
+    },
+    updateMainImage(image) {
+      this.mainImage = image;
     }
   },
+
   created() {
-    this.getUserDetails();
-    this.fetchSunglassesDetails();
+    this.getUserDetails()
     console.log('Current Order ID on created:', this.currentOrderId);
     console.log('Stored Order ID in localStorage on created:', localStorage.getItem('currentOrderId'));
   }

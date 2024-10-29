@@ -1,16 +1,16 @@
 <template>
   <!-- constrains -->
   <q-page>
-    <div class="constrain window-height">
 
       <!-- =================================== ADMIN HEADER -->
-      <q-card bordered flat class="column flex-center q-mb-md">
+      <!-- <q-card bordered flat class="column flex-center q-mb-md">
         <h4>Admin Dasboard</h4>
-      </q-card>
+      </q-card> -->
 
       <!-- =================================== ADMIN CONTROLS -->
-      <div class="q-mt-md">
-        <q-layout view="lHh Lpr lff" container style="height: 65vh" class="shadow-2 rounded-borders">
+    <q-img src="~src/assets/abstract5.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
+      <div class="q-pa-md row text-black justify-center items-center" style="width: 100%; height: 102vh;">
+        <q-layout view="lHh Lpr lff" container style="height: 65vh;" class="shadow-2 bg-white">
 
           <!-- page header -->
           <q-header elevated class="bg-white text-black">
@@ -21,7 +21,7 @@
           </q-header>
 
           <!-- =================================== DRAWER PANEL -->
-          <q-drawer v-model="drawer" show-if-above :width="200" :breakpoint="400">
+          <q-drawer v-model="drawer" class="" show-if-above :width="200" :breakpoint="400">
             <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
               <q-list padding>
                 <!-- user tab -->
@@ -43,11 +43,11 @@
             </q-scroll-area>
 
             <!-- avatar header -->
-            <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+            <q-img class="absolute-top zoomed-image" src="~src/assets/theme/abstract-1-1.jpg" style="height: 150px; ">
               <div class="absolute-bottom bg-transparent">
                 <!-- profile img -->
-                <q-avatar size="56px" class="q-mb-sm">
-                  <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                <q-avatar size="60px" class="" style="transform: translateX(-10px);">
+                  <img src="~src/assets/logos/logo-white.png">
                 </q-avatar>
                 <!-- name and email -->
                 <div class="text-weight-bold">
@@ -76,7 +76,7 @@
           </q-page-container>
         </q-layout>
       </div>
-    </div>
+    </q-img>
   </q-page>
 </template>
 
@@ -129,4 +129,5 @@ export default {
 <style lang="sass" scoped>
 .my-card
   width: 100%
+
 </style>
