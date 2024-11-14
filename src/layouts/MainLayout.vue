@@ -109,8 +109,13 @@
                 <br>
                 <div>
                   <div class="font-size-responsive-sm">
-                    <div>Fast and reliable service</div>
-                    <div>Pickup at our doorstep available</div>
+                    <q-form class="text-white" @submit="submitContactForm" style="width: 75%;">
+                      <q-input filled v-model="userContact.firstName" label="Your Name" class="q-mb-xs " required  style="background-color: #121212;"/>
+                      <q-input filled v-model="userContact.email" label="Your Email" class="q-mb-xs" required  style="background-color: #121212;"/>
+                      <q-input filled v-model="message" label="Message" type="textarea" class="q-mb-xs" required  style="background-color: #121212;" />
+                      <q-btn type="submit" label="Send Message" style="background-color: #121212;" />
+                    </q-form>
+
                   </div>
                 </div>
               </q-card>
@@ -127,14 +132,19 @@
                   </span>
                   <br>
                 </div>
+                <br>
+                <div>
+                  <div class="font-size-responsive-xs">Fast and reliable service</div>
+                  <div class="font-size-responsive-xs">Terms and conditions apply</div>
+                </div>
               </q-card>
             </div>
           </div>
           <div class="row justify-center">
             <q-separator class="q-mb-md" style="background-color: #121212; width: 75%;"></q-separator>
           </div>
-          <div class="row justify-center font-size-responsive-xs">
-            © 2024 Shaded Eyewear | All Rights Reserved | Designed by <a href="https://aqeel-dev-portfolio.web.app" target="_blank" style="text-decoration: none; color: inherit; font-weight: bold;">Aqeel Hanslo</a>
+          <div class="row justify-center font-size-responsive-xs q-pa-md">
+            Shaded Eyewear ™ | Est. 2023 | Sunglasses and Eyewear Shop | Developed by <a href="https://aqeel-dev-portfolio.web.app" target="_blank" style="text-decoration: none; color: inherit; font-weight: bold;">Aqeel</a>
           </div>
         </q-toolbar-title>
       </q-toolbar>
@@ -148,6 +158,7 @@ import UserService from 'src/services/UserService'
 import Helper from 'src/services/utils'
 import logoWhite from 'src/assets/logos/logo-white.png'
 import logoBlack from 'src/assets/logos/logo-black.png'
+import EmailService from 'src/services/EmailService'
 
 export default {
   name: "MainLayout",
@@ -181,7 +192,13 @@ export default {
       // css stuff
       headerClass: 'header-transparent',
       colorShiftClass: 'transparent-white',
-      logoSrc: logoWhite
+      logoSrc: logoWhite,
+
+      // send message
+      userContact: {
+        firstName: '',
+        email: ''
+      }, message: ''
     }
   },
   mounted() {
@@ -198,6 +215,9 @@ export default {
     '$route'() {
       this.checkLoginStatus();
       this.handleScroll(); // Ensure the correct header state on route change
+    },
+    'userContact.firstName': function(newVal) {
+      this.userContact.firstName = newVal.toLowerCase();
     }
   },
   methods: {
@@ -293,6 +313,30 @@ export default {
         localStorage.removeItem('currentOrderId')
       }
     },
+
+
+      openInstagram() {
+        window.open('https://www.instagram.com/shadedeyewearza/', '_blank');
+      },
+      openFacebook() {
+        // window.open('https://www.facebook.com/yourprofile', '_blank');
+      },
+      openTwitter() {
+        // window.open('https://www.twitter.com/yourprofile', '_blank');
+      },
+
+    async submitContactForm() {
+      try {
+        const response = await EmailService.GetInContact(this.userContact, this.message)
+        if (response) {
+          this.$q.notify({ type: 'positive', message: 'Message sent successfully!' });
+        } else {
+          this.$q.notify({ type: 'negative', message: 'Error sending message.' });
+        }
+      } catch (error) {
+        this.$q.notify({ type: 'negative', message: 'Error sending message.' });
+      }
+    }
   }
 }
 </script>

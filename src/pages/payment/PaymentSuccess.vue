@@ -1,10 +1,17 @@
 <!-- PaymentSuccess.vue -->
 <template>
   <q-page>
-    <div class="constrain window-height">
-      <h1>Payment Successful!</h1>
-      <p>Thank you for your purchase.</p>
-    </div>
+    <q-img src="~src/assets/abstract5.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
+      <div class="absolute-full column justify-center items-center text-black">
+        <q-card bordered flat class="q-pa-lg">
+          <div class="column items-center">
+            <p class="font-size-responsive-xxxl anton-regular q-mb-md">Payment Successful!</p>
+            <p>Thank you for your purchase.</p>
+            <q-btn rounded dense to="/user/dashboard" icon="eva-shopping-bag-outline " label="Track your order" size="12px" class="q-py-sm q-px-lg" />
+          </div>
+        </q-card>
+      </div>
+    </q-img>
   </q-page>
 </template>
 

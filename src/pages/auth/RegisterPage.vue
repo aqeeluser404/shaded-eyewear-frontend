@@ -109,8 +109,8 @@
             this.$q.notify({ type: 'positive', color: 'primary', message: 'Please check your email to verify your account.' })
             this.$router.push('/auth/login')    // Testpass1
           } else {
-            this.$q.notify({ type: 'negative', message: 'Register failed. Please try again!' })
-            this.onReset()
+            this.$q.notify({ type: 'negative', message: 'Username or Email already exists. Please try again!' })
+            // this.onReset()
           }
         }
       },

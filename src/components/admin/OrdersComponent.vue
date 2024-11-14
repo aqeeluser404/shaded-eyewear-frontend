@@ -8,23 +8,33 @@
 
       <q-card v-for="order in ordersPickup" :key="order._id" class="q-mb-md">
         <div v-if="order.status && order.status === 'paid' && order.orderType && order.orderType === 'pickup'">
+
           <q-card-section>
-            <div class="text-subtitle1">Order <b>#{{ order._id }}</b> </div>
-            <div class="text-caption">ORDERED {{ formatDate(order.orderDate) }}</div>
+            <div class="text-subtitle2">ID <b>#{{ order._id }}</b> </div>
+            <div class="text-caption">ORDERED {{ formatDate(order.orderDate) }}
+              <span></span>
+            </div>
           </q-card-section>
+
           <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0">
             <div v-for="sunglass in order.sunglassesDetails" :key="sunglass._id" class="row items-start cursor-pointer" >
               <q-item-section class="col-3">
-                <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="q-mb-sm border" style="max-width: 100px; max-height: 100px;" />
+                <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="q-mb-sm border" style="max-width: 50px; max-height: 50px;" />
               </q-item-section>
-              <q-item-section>
-                <div class="text-caption">Model: {{ sunglass.model }} </div>
-                <div class="text-caption">Color: {{ capitalizeFirstLetter(sunglass.color) }}</div>
+              <q-item-section class="row items-center justify-center">
+                <div class="text-caption q-mb-sm">{{ sunglass.model }} </div>
+                <!-- <q-btn rounded dense icon="eva-shopping-bag-outline" label="Collected" @click="updatePickupOrder(order._id)" size="10px" class="q-py-sm q-px-md" /> -->
               </q-item-section>
             </div>
           </q-card-section>
-          <q-btn rounded dense icon="eva-shopping-bag-outline" label="Mark Pickup" @click="updatePickupOrder(order._id)" size="12px" class="q-py-sm q-px-lg" />
+          <q-separator class="q-mb-md" style="width: 100%;"></q-separator>
+          <div class="row justify-end">
+            <q-btn rounded dense icon="eva-shopping-bag-outline" label="Collected" @click="updatePickupOrder(order._id)" size="12px" class="q-py-sm q-px-md" />
+          </div>
+
+
         </div>
+
       </q-card>
     </q-card>
 
@@ -233,7 +243,7 @@ export default {
       const response = await OrderService.findAllOrders()
       this.orders = await Promise.all(response.map(async order => {
         // find user by id
-        const use8r = await UserService.findUserById(order.user)
+        const user = await UserService.findUserById(order.user)
         return {
           ...order,
           userFirstName: user.firstName,
@@ -284,7 +294,7 @@ export default {
     },
     async updatePickupOrder(id) {
       this.$q.dialog({
-        title: 'Update order', message: `You are about to update this order, continue?`, color: 'primary', cancel: true, persistent: true
+        title: 'Ordered Collected', message: `You are about to mark this order as collected. Do you want to continue?`, color: 'primary', cancel: true, persistent: true
       }).onOk(async () => {
         try {
           const response = await OrderService.updatePickupOrder(id);

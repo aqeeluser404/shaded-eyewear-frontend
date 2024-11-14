@@ -37,10 +37,20 @@ class EmailService {
   static async ResetPassword(token, password) {
     const ENDPOINT = '/reset-password'
     try {
-      const response = await axiosInstance.post(ENDPOINT, { token, password })
+      const response = await axiosInstance.post(ENDPOINT, { token, password } )
       return response.data
     } catch (error) {
       Logger.error('Error resetting password: ', error.message)
+      throw error
+    }
+  }
+  static async GetInContact(userContact, message) {
+    const ENDPOINT = '/contact'
+    try {
+      const response = await axiosInstance.post(ENDPOINT, { userContact, message } )
+      return response.data
+    } catch (error) {
+      Logger.error('Error sending message: ', error.message)
       throw error
     }
   }

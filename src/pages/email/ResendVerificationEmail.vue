@@ -1,7 +1,7 @@
 <template>
   <q-page>
-    <div class="constrain window-height">
 
+    <!-- <div>
       <q-card bordered flat class="column flex-center q-mb-md">
         <h4>Resend Verification Email</h4>
       </q-card>
@@ -16,7 +16,21 @@
         </q-card-section>
         <p v-if="message">{{ message }}</p>
       </q-card>
-    </div>
+    </div> -->
+
+    <q-img src="~src/assets/abstract5.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
+      <div class="absolute-full column justify-center items-center text-black">
+        <q-card bordered flat class="q-pa-lg">
+          <div class="column items-center">
+            <p class="font-size-responsive-xxxl anton-regular q-mb-md">Resend Verification Email</p>
+            <q-input filled v-model="email" label="Enter email for the verification code" style="width: 100%;" class="q-mb-md"/>
+            <q-btn rounded dense @click="resendVerificationEmail" icon="eva-email-outline " label="Send Verification" size="12px" class="q-py-sm q-px-lg" />
+          </div>
+          <p v-if="message">{{ message }}</p>
+        </q-card>
+      </div>
+    </q-img>
+
   </q-page>
 </template>
 
