@@ -67,9 +67,9 @@
         </div>
       </q-card>
 
-      <q-card flat v-else>                                                                                    <!---------------- ALL USERS CARD ----------------->
+      <q-card flat v-else class="full-height">                                                                                    <!---------------- ALL USERS CARD ----------------->
         <q-card-section>
-          <div class="text-h6">All Users</div>
+          <div class="text-h6">Registered Users</div>
         </q-card-section>
         <q-markup-table>
           <thead>

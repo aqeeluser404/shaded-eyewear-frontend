@@ -16,9 +16,12 @@
               <th class="text-left">Quick Tools</th>
             </tr>
           </thead>
-          <tbody v-for="(sunglass, index) in sunglasses" :key="sunglass._id">
+          <tbody v-for="(sunglass) in sunglasses" :key="sunglass._id">
             <tr>
-              <td class="text-left cursor-pointer">{{ index + 1 }}</td>
+              <!-- <td class="text-left cursor-pointer">{{ index + 1 }}</td> -->
+              <td class="text-left cursor-pointer">
+                <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="border"/>
+              </td>
               <td class="text-left cursor-pointer">
                 <q-input v-if="editMode === sunglass._id" v-model="sunglass.model" />
                 <div v-else>
@@ -89,7 +92,7 @@ import Helper from 'src/services/utils'
 export default {
   data() {
     return {
-      sunglasses: [{}],
+      sunglasses: [],
       editMode: null,
       openAddSunglasses: null,
       colors: [
@@ -127,6 +130,7 @@ export default {
   },
   methods: {
     validateText: Helper.validateText,                                                              // Validation functions
+    getImageUrl: Helper.getImageUrl,
     validateFields() {
       const details = this.sunglassesDetails;
       const requiredFields = ['model', 'description', 'color', 'price', 'stock', 'image1', 'image2']

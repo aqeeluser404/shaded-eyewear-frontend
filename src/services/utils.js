@@ -4,14 +4,30 @@ import { jwtDecode } from 'jwt-decode'
 class Helper {
 
   // Functions
+  // static formatDate(dateString) {
+  //   return new Date(dateString).toLocaleDateString('en-GB')
+  // }
   static formatDate(dateString) {
-    return new Date(dateString).toLocaleDateString('en-GB')
+    const date = new Date(dateString);
+    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+    return date.toLocaleDateString('en-GB', options).replace(/ /g, ' ');
   }
   static capitalizeFirstLetter(text) {
     if (!text) return '';
     const lowerCaseText = text.toLowerCase();
     return format.capitalize(lowerCaseText);
   }
+  static getImageUrl(imagePath) {
+    const serverUrl = 'http://localhost:5000/uploads/'
+    const localDir = 'C:\\Users\\TerrorX\\Downloads\\WLV\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\'
+    const relativePath = imagePath.replace(localDir, '')
+    return serverUrl + relativePath
+  }
+        // getImageUrl(imagePath) {
+      //   // replace this with hosted url
+      //   const serverUrl = 'http://localhost:5000/uploads/';
+      //   return serverUrl + imagePath;
+      // }
 
   // Validation Functions
   static validateText(text) {

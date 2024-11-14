@@ -1,7 +1,9 @@
 <template>
   <q-layout view="hHh lpR fff">
     <div class="noise-overlay"></div>
-    <q-header :class="[headerClass, colorShiftClass]">                                                            <!---------------- HEADER ----------------->
+
+     <!---------------- HEADER ----------------->
+    <q-header :class="[headerClass, colorShiftClass]">
       <q-toolbar class="q-px-lg row items-center">
 
         <q-toolbar-title class="row items-center col-4">
@@ -22,21 +24,23 @@
           </div>
         </div>
 
+        <!------------ DESKTOP NAV ------------->
         <div class="col-4">
-          <div class="row justify-end items-center">                                                    <!------------ DESKTOP NAV ------------->
-          <q-btn to="/" size="12px" class="custom-button large-screen-only " label="Home" flat />                                                    <!-- home -->
-          <q-btn to="/sunglasses" size="12px" class="custom-button large-screen-only" label="Catalogue" flat />                                     <!-- catalogue -->
+          <div class="row justify-end items-center">
+          <q-btn to="/" size="12px" class="custom-button large-screen-only " label="Home" flat />                                            <!-- home -->
+          <q-btn to="/sunglasses" size="12px" class="custom-button large-screen-only" label="Catalogue" flat />                              <!-- catalogue -->
           <q-btn v-if="!isLoggedIn"
-            to="/auth/login" size="12px" class="custom-button large-screen-only" label="Login" flat />                                              <!-- login -->
+            to="/auth/login" size="12px" class="custom-button large-screen-only" label="Login" flat />                                       <!-- login -->
           <q-btn v-else
             @click="logout" size="12px" class="custom-button large-screen-only" label="Logout" flat />
-          <q-btn @click="openDash" size="12px" icon="eva-person-outline" flat />                                                  <!-- logout -->
+          <q-btn @click="openDash" size="12px" icon="eva-person-outline" flat />                                                             <!-- logout -->
           <q-btn v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'"
-            to="/admin/dashboard" size="12px" icon="eva-pie-chart-outline" class="custom-button large-screen-only" flat/>         <!-- admin dash -->
-          <q-btn to="/cart" size="12px" icon="eva-shopping-bag-outline large-screen-only" flat />                                                          <!-- cart -->
+            to="/admin/dashboard" size="12px" icon="eva-pie-chart-outline" class="custom-button large-screen-only" flat/>                    <!-- admin dash -->
+          <q-btn to="/cart" size="12px" icon="eva-shopping-bag-outline large-screen-only" flat />                                            <!-- cart -->
         </div>
 
-        <q-btn-dropdown class="small-screen-only" icon="menu" flat>                                     <!------------ MOBILE NAV ------------->
+        <!------------ MOBILE NAV ------------->
+        <q-btn-dropdown class="small-screen-only" icon="menu" flat>
           <q-list style="width: 200px">
             <q-item clickable v-close-popup to="/">
               <q-item-section>Home</q-item-section>
@@ -65,38 +69,72 @@
       </q-toolbar>
     </q-header>
 
+    <!-- PAGES -->
     <div style="background-color: black;">
-      <q-page-container style="transform: translateY(-50px); ">                                                                                 <!------------ PAGES CONTAINER ------------->
+      <q-page-container style="transform: translateY(-50px); ">
         <router-view style="background-color: white;" />
       </q-page-container>
     </div>
 
-    <q-footer class="bg-black text-white" style="transform: translateY(-50px);">                                                              <!------------ FOOTER ------------->
-      <q-toolbar class=" constrain">
+    <!-- FOOTER -->
+    <q-footer class="bg-black text-white q-pa-md">
+      <q-toolbar class="constrain">
         <q-toolbar-title>
-          <q-card flat class="q-pa-md bg-transparent">
-
-            Follow Us
-            <q-avatar size="50px" class="q-mr-md">                                                                   <!-- avatar -->
-              <img src="src/assets/logos/logo-white.png"/>
-            </q-avatar>
-          </q-card>
-          <q-separator class="q-mb-md" />
           <div class="row">
-            <q-card class="col-3 q-pa-md bg-transparent">
-
-              Get in contact:
-              <div>
-                Email us
-              </div>
-              <div>
-
-              </div>
-
-            </q-card>
-            <!-- <q-card class="col-3 q-pa-md">Hi</q-card>
-            <q-card class="col-3 q-pa-md">Hi</q-card>
-            <q-card class="col-3 q-pa-md">Hi</q-card> -->
+            <!-- Developed By Section -->
+            <div class="col-12 col-md-4">
+              <q-card flat class="q-pa-md bg-transparent">
+                <div class="text-h5 anton-regular">SHORTCUT LINKS</div>
+                <br>
+                <div class="font-size-responsive-sm">
+                  <q-card class="q-mb-xs q-pa-sm" style="background-color: #121212; width: 75%;">
+                    <router-link to="/" class="text-remove-decoration text-white">Home</router-link>
+                  </q-card>
+                  <q-card class="q-mb-xs q-pa-sm" style="background-color: #121212; width: 75%;">
+                    <router-link to="/sunglasses" class="text-remove-decoration text-white">Catalogue</router-link>
+                  </q-card>
+                  <q-card class="q-mb-xs q-pa-sm" style="background-color: #121212; width: 75%;">
+                    <router-link to="/user/dashboard" class="text-remove-decoration text-white">Dashboard</router-link>
+                  </q-card>
+                  <q-card class="q-mb-xs q-pa-sm" style="background-color: #121212; width: 75%;">
+                    <router-link to="/cart" class="text-remove-decoration text-white">Cart</router-link>
+                  </q-card>
+                </div>
+              </q-card>
+            </div>
+            <!-- Contact Section -->
+            <div class="col-12 col-md-4">
+              <q-card flat class="q-pa-md bg-transparent">
+                <div class="text-h5 anton-regular">GET IN CONTACT</div>
+                <br>
+                <div>
+                  <div class="font-size-responsive-sm">
+                    <div>Fast and reliable service</div>
+                    <div>Pickup at our doorstep available</div>
+                  </div>
+                </div>
+              </q-card>
+            </div>
+            <!-- Follow Us Section -->
+            <div class="col-12 col-md-4">
+              <q-card flat class="q-pa-md bg-transparent">
+                <div class="text-h5 anton-regular">FOLLOW US
+                  <br>
+                  <span class="q-gutter-md">
+                    <q-btn flat round icon="mdi-instagram" style="border: 1px solid;" class="text-white" @click="openInstagram" />
+                    <q-btn flat round icon="mdi-facebook" style="border: 1px solid;" class="text-white" @click="openFacebook" />
+                    <q-btn flat round icon="mdi-twitter" style="border: 1px solid;" class="text-white" @click="openTwitter" />
+                  </span>
+                  <br>
+                </div>
+              </q-card>
+            </div>
+          </div>
+          <div class="row justify-center">
+            <q-separator class="q-mb-md" style="background-color: #121212; width: 75%;"></q-separator>
+          </div>
+          <div class="row justify-center font-size-responsive-xs">
+            © 2024 Shaded Eyewear | All Rights Reserved | Designed by <a href="https://aqeel-dev-portfolio.web.app" target="_blank" style="text-decoration: none; color: inherit; font-weight: bold;">Aqeel Hanslo</a>
           </div>
         </q-toolbar-title>
       </q-toolbar>
@@ -116,7 +154,9 @@ export default {
 
   computed: {
     isSpecificPage() {
-      return this.$route.path.includes('/sunglasses/view/') || this.$route.path.includes('/user/dashboard')
+      return this.$route.path.includes('/sunglasses/view/') ||
+      this.$route.path.includes('/cart') ||
+      this.$route.path.includes('/buy/review')
     }
   },
 
@@ -187,12 +227,16 @@ export default {
         this.nextText()
       }, 10000)
     },
-    checkLoginStatus() {                                        // 1. check if logged in
+    async checkLoginStatus() {                                        // 1. check if logged in
       const token = Helper.getCookie('token')
       this.isLoggedIn = !!token
 
-      if (this.isLoggedIn == true) {                           // 2. fetch user details to determine usertype
+      if (this.isLoggedIn === true) {                           // 2. fetch user details to determine usertype
         this.fetchUserDetails()
+      } else {
+        const orderId = localStorage.getItem('currentOrderId')
+        await this.cancelOrder(orderId)
+        window.location.reload()
       }
     },
     async fetchUserDetails() {                                // 2.1 fetch user details to determine usertype
@@ -228,6 +272,7 @@ export default {
 
         if (this.order.status === 'paid') {                   // automatically remove order once paid for
           localStorage.removeItem('currentOrderId')
+          // after removing , access through my-orders, filter with type of delivery
         }
       } else {
         console.log("No order has been placed")

@@ -1,16 +1,11 @@
 <template>
-  <!-- constrains -->
   <q-page>
+    <!-- =================================== ADMIN CONTROLS -->
+    <q-img src="~src/assets/abstract5.jpg" alt="Hero Image" style="width: 100%; height: 100%;" >
 
-      <!-- =================================== ADMIN HEADER -->
-      <!-- <q-card bordered flat class="column flex-center q-mb-md">
-        <h4>Admin Dasboard</h4>
-      </q-card> -->
-
-      <!-- =================================== ADMIN CONTROLS -->
-    <q-img src="~src/assets/abstract5.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
-      <div class="q-pa-md row text-black justify-center items-center" style="width: 100%; height: 102vh;">
-        <q-layout view="lHh Lpr lff" container style="height: 65vh;" class="shadow-2 bg-white">
+      <div class="text-black" style="width: 100%; height: 100%;">
+        <div style="height: 50px;"></div>
+        <q-layout view="lHh Lpr lff" container style="height: 90vh;" class="shadow-2 bg-white">
 
           <!-- page header -->
           <q-header elevated class="bg-white text-black">
@@ -129,5 +124,4 @@ export default {
 <style lang="sass" scoped>
 .my-card
   width: 100%
-
 </style>

@@ -1,6 +1,8 @@
 // app global css in Sass form
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap')
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap')
+@import url('https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css')
+
 
 // header code
 .header-transparent
@@ -16,15 +18,15 @@
 .transparent-black
   color: black
 
-.sunglass-card
+.list-container
   flex: 1 1 30%
-  max-width: 25%
+  max-width: 30%
   box-sizing: border-box
   margin: 1rem
 
 .carousel-container
   flex: 1 1 30%
-  max-width: 26%
+  max-width: 29%
   box-sizing: border-box
   margin: 1rem
 
@@ -150,6 +152,14 @@ p
   text-overflow: ellipsis
   white-space: nowrap
 
+.limit-text-2
+  display: -webkit-box
+  -webkit-box-orient: vertical
+  -webkit-line-clamp: 2
+  overflow: hidden
+  text-overflow: ellipsis
+  max-width: 99%
+
 .wrap-text
   overflow: hidden
   white-space: normal
@@ -207,3 +217,9 @@ p
   width: 300px
   height: 300px
   object-fit: cover
+
+.order-image
+  max-height: 120px
+
+.border
+  border: 1px solid lightgrey

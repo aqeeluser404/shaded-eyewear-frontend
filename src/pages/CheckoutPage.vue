@@ -1,33 +1,68 @@
 <template>
-  <!-- constrains -->
-   <q-page>
-    <div class="constrain">
+  <q-page>
+    <div class="q-pa-md" style="width: 100%; height: 100%;">
 
-      <!-- =================================== SUNGLASSES DETAILS HEADER -->
-      <q-card bordered flat class="column flex-center">
-        <h4>Review your order</h4>
-      </q-card>
+      <div style="height: 50px;"></div>
 
-      <div class="row q-pa-md q-gutter-md justify-center">
-        <!-- review -->
+      <div class="row q-gutter-md justify-center">
+
+        <!-- change and add address -->
         <div class="col-12 col-md-6">
-
           <!-- card to change delivery -->
-          <q-card class="row items-center justify-between q-pa-md q-mb-md" >
+          <q-card v-if="!deliveryPanel" flat bordered class="row items-center justify-between q-pa-md q-mb-md">
             <q-card-section>
-              Change Address
+              Collect
             </q-card-section>
             <q-card-section>
               <q-btn
                 size="12px"
-                label="Change"
+                label="Collect My Order"
+                @click="togglePickupPanel"
+              />
+            </q-card-section>
+          </q-card>
+          <q-card v-if="!pickupPanel" flat bordered class="row items-center justify-between q-pa-md q-mb-md">
+            <q-card-section>
+              Change Address (Coming soon)
+            </q-card-section>
+            <q-card-section>
+              <!-- <q-btn
+                size="12px"
+                label="Deliver My Order"
                 @click="toggleDeliveryPanel"
-              />
+              /> -->
             </q-card-section>
           </q-card>
 
-          <!-- Current Address Details -->
-          <q-card class="q-pa-md" v-if="addAddressPanel === false">
+          <!-- Pickup Panel -->
+          <q-card flat bordered class="q-pa-md" v-if="pickupPanel">
+            <q-card-section class="text-h6">
+              <q-item>
+                <q-item-section avatar>
+                  <q-icon name="eva-car-outline" />
+                </q-item-section>
+                <q-item-section>
+                  Cape Town
+                </q-item-section>
+              </q-item>
+            </q-card-section>
+            <q-card-section>
+              <div class="text-subtitle1 q-mb-md">Pickup Location</div>
+              <div class="q-md-md">
+                <q-radio>
+                  <span class="text-h6">Downtown Cape Town, Western Cape</span><br>
+                  <span>123 Main Street</span><br>
+                  <span>Downtown, Cape Town, 5247</span>
+                </q-radio>
+              </div>
+              <br>
+              <div class="text-subtitle1 q-mb-md">Pickup Instructions</div>
+              <p>Please bring a valid ID and your order confirmation email when you come to pick up your order. Our store is open from 9 AM to 6 PM, Monday to Saturday.</p>
+            </q-card-section>
+          </q-card>
+
+          <!-- Delivery Panel -->
+          <q-card flat bordered class="q-pa-md" v-if="deliveryPanel">
             <q-card-section class="text-h6">
               <q-item>
                 <q-item-section avatar>
@@ -39,89 +74,50 @@
               </q-item>
             </q-card-section>
             <q-card-section>
-              <!-- <div class="text-h5 q-mb-md">Order Summary</div> -->
-
-              <div v-if="userDetails && userDetails.location.streetAddress !== 'Not Provided' && userDetails.location.suburb !== 'Not Provided' && userDetails.location.city !== 'Not Provided' && userDetails.location.province !== 'Not Provided' && userDetails.location.postalCode !== 0">
-                <p>{{ userDetails.firstName }}</p>
-                <p>{{ userDetails.location.streetAddress }}</p>
-                <p>{{ userDetails.location.suburb }}</p>
-                <p>{{ userDetails.location.city }}</p>
-                <p>{{ userDetails.location.province }}</p>
-                <p>{{ userDetails.location.postalCode }}</p>
-              </div>
-              <div v-else>
-                <p>Please provide your complete address to proceed with your order.</p>
-              </div>
-              <!-- <p v-if="orderType.type === 'delivery'">Delivery: Free</p> -->
-              <!-- <p v-if="orderType.type === 'delivery'">Delivery: Free</p> -->
-            </q-card-section>
-          </q-card>
-
-          <!-- Add Address Details -->
-          <q-card class="q-pa-md q-mt-md" v-else >
-            <q-card-section class="text-h6">
-              <q-item>
-                <q-item-section avatar>
-                  <q-icon name="eva-car-outline" />
-                </q-item-section>
-                <q-item-section>
-                  Delivery Address
-                </q-item-section>
-              </q-item>
-            </q-card-section>
-
-            <q-card-section>
-              <q-form
-                @submit="addAddress"
-                class="q-gutter-lg"
-              >
-              <q-input
-                filled
-                v-model="userAddress.location.streetAddress"
-                label="Street Address *"
-              />
-              <q-input
-                filled
-                v-model="userAddress.location.suburb"
-                label="Suburb *"
-              />
-              <q-select
-                filled
-                v-model="userAddress.location.city"
-                :options="cityOptions"
-                emit-value
-                map-options
-                label="City *"
-              />
-              <q-input
-                filled
-                v-model="userAddress.location.province"
-                label="Province *"
-              />
-              <q-input
-                filled
-                v-model="userAddress.location.postalCode"
-                label="Postal Code *"
-              />
-              <div>
-                <q-btn label="Save Address" type="submit" color="primary" class="custom-button"/>
-              </div>
+              <q-form @submit="addAddress" class="q-gutter-lg">
+                <q-input
+                  filled
+                  v-model="userAddress.location.streetAddress"
+                  label="Street Address *"
+                />
+                <q-input
+                  filled
+                  v-model="userAddress.location.suburb"
+                  label="Suburb *"
+                />
+                <q-select
+                  filled
+                  v-model="userAddress.location.city"
+                  :options="cityOptions"
+                  emit-value
+                  map-options
+                  label="City *"
+                />
+                <q-input
+                  filled
+                  v-model="userAddress.location.province"
+                  label="Province *"
+                />
+                <q-input
+                  filled
+                  v-model="userAddress.location.postalCode"
+                  label="Postal Code *"
+                />
+                <div>
+                  <q-btn label="Save Address" type="submit" color="primary" class="custom-button"/>
+                </div>
               </q-form>
             </q-card-section>
-
           </q-card>
         </div>
 
-        <!-- =================================== ORDER SUMMARY -->
+        <!-- order summary -->
         <div class="col-12 col-md-3 full-height">
-          <q-card class="q-pa-md q-mb-md">
+          <q-card flat bordered class="q-pa-md q-mb-md">
             <q-card-section>
               <div class="text-h5 q-mb-md">Order Summary</div>
               <p>{{ order.sunglasses ? order.sunglasses.length : 0 }} item(s)</p>
               <p>Delivery info</p>
-
-              <!-- <p v-if="orderType.type === 'delivery'">Delivery: Free</p> -->
-              <!-- <p v-if="orderType.type === 'delivery'">Delivery: Free</p> -->
               <q-separator class="q-mb-md" />
               <p>To Pay: <span class="q-ml-lg text-h5">R{{ order.totalAmount }}.00</span></p>
               <q-btn
@@ -141,32 +137,39 @@
             </q-card-section>
           </q-card>
 
-          <q-card class="q-pa-md">
+          <q-card flat bordered class="q-pa-md">
             <q-card-section>
-              Items for Delivery
+              Review your items
             </q-card-section>
             <q-separator class="q-mb-md" />
-            <q-card-section>
-
+            <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0">
+              <div v-for="sunglass in order.sunglassesDetails" :key="sunglass._id" class="row items-center justify-center cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
+                <q-item-section class="col-3">
+                  <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="q-mb-sm border" style="max-width: 120px; max-height: 120px;" />
+                </q-item-section>
+                <q-item-section>
+                  <div class="text-caption">{{ sunglass.model }}</div>
+                  <div class="text-caption">Price: {{ sunglass.price }}</div>
+                </q-item-section>
+              </div>
             </q-card-section>
           </q-card>
         </div>
       </div>
     </div>
-   </q-page>
+  </q-page>
 </template>
+
 
 <script>
 import UserService from 'src/services/UserService'
 import OrderService from 'src/services/OrderService'
 import PayService from 'src/services/PayService'
+import SunglassesService from 'src/services/SunglassesService'
 import axios from 'axios'
-// import Helper from '../services/utils'
+import Helper from '../services/utils'
 
 export default {
-
-  // beforeRouteEnter: Helper.beforeRouteEnterUser,
-
   data() {
     return {
       order: {},
@@ -187,14 +190,25 @@ export default {
         // { label: 'Not provided', value: 'Not provided' }
       ],
       userTokenDetails: { _id : '', username: '', userType: '' },
-      addAddressPanel: false
+      orderType: null,
+      pickupPanel: false,
+      deliveryPanel: false
     }
   },
 
   methods: {
-
+    getImageUrl: Helper.getImageUrl,
+    capitalizeFirstLetter: Helper.capitalizeFirstLetter,
+    togglePickupPanel() {
+      this.pickupPanel = !this.pickupPanel;
+      this.deliveryPanel = false;
+      this.orderType = 'pickup'
+    },
     toggleDeliveryPanel() {
-      this.addAddressPanel = !this.addAddressPanel
+      this.$q.notify({ type: 'negative', color: 'red', message: 'Currently under development! We apologize for any inconvenience.' })
+      // this.deliveryPanel = !this.deliveryPanel;
+      // this.pickupPanel = false;
+      // this.orderType = 'delivery'
     },
     async addAddress() {
       const updatedUser = {
@@ -218,46 +232,104 @@ export default {
         return
       })
     },
+
+    // when i implement delivery, ensure that the ordertype is execute after a successful payment
     async initiatePayment() {
       try {
+        if (this.orderType === null) {
+          this.$q.notify({ type: 'negative', color: 'red', message: 'Please choose your order type!' })
+          return
+        }
+        if (this.orderType === 'pickup') {
+          await this.createPickup()
+        }
+        if (this.orderType === 'delivery') {
+          await this.createDelivery()
+        }
         const response = await PayService.initiatePayment(this.currentOrderId);
         const { checkout } = response;
         console.log('Checkout URL:', checkout.redirectUrl); // Add this line to log the checkout URL
         window.location.href = checkout.redirectUrl; // Redirect to Yoco checkout page
-
       } catch (error) {
         console.error('Payment initiation failed:', error);
       }
     },
-    async validateAddress() {
-        const address = `${this.userAddress.location.streetAddress}, ${this.userAddress.location.suburb}, ${this.userAddress.location.city}, ${this.userAddress.location.province}, ${this.userAddress.location.postalCode}`;
-        try {
-          const response = await axios.get(`https://api.1map.co.za/v1/validate?address=${encodeURIComponent(address)}`);
-          if (response.data.valid) {
-            this.$q.notify({ type: 'positive', message: 'Address is valid!' });
-          } else {
-            this.$q.notify({ type: 'negative', message: 'Address is invalid. Please check the details.' });
-          }
-        } catch (error) {
-          console.error('Address validation failed:', error);
-          if (error.response) {
-            // Server responded with a status other than 200 range
-            this.$q.notify({ type: 'negative', message: `Validation failed: ${error.response.data.message}` });
-          } else if (error.request) {
-            // Request was made but no response received
-            this.$q.notify({ type: 'negative', message: 'Network error. Please check your connection.' });
-          } else {
-            // Something else happened
-            this.$q.notify({ type: 'negative', message: `Error: ${error.message}` });
-          }
-        }
-      },
+    async createPickup() {
+      try {
+        await OrderService.createPickup(this.currentOrderId)
+      } catch (error) {
+        console.error('Creating pickup failed:', error)
+      }
+    },
+    // async createDelivery() {
+    //   try {
+    //     await OrderService.createDelivery(this.currentOrderId)
+    //   } catch (error) {
+    //     console.error('Creating delivery failed:', error)
+    //   }
+    // },
+
+    // async validateAddress() {
+    //     const address = `${this.userAddress.location.streetAddress}, ${this.userAddress.location.suburb}, ${this.userAddress.location.city}, ${this.userAddress.location.province}, ${this.userAddress.location.postalCode}`;
+    //     try {
+    //       const response = await axios.get(`https://api.1map.co.za/v1/validate?address=${encodeURIComponent(address)}`);
+    //       if (response.data.valid) {
+    //         this.$q.notify({ type: 'positive', message: 'Address is valid!' });
+    //       } else {
+    //         this.$q.notify({ type: 'negative', message: 'Address is invalid. Please check the details.' });
+    //       }
+    //     } catch (error) {
+    //       console.error('Address validation failed:', error);
+    //       if (error.response) {
+    //         // Server responded with a status other than 200 range
+    //         this.$q.notify({ type: 'negative', message: `Validation failed: ${error.response.data.message}` });
+    //       } else if (error.request) {
+    //         // Request was made but no response received
+    //         this.$q.notify({ type: 'negative', message: 'Network error. Please check your connection.' });
+    //       } else {
+    //         // Something else happened
+    //         this.$q.notify({ type: 'negative', message: `Error: ${error.message}` });
+    //       }
+    //     }
+    // },
 
     // =================================== GET DATA
     async getCurrentOrder() {
       const response = await OrderService.findOrderById(this.currentOrderId)
       this.order = response
+
+      await this.getSunglasses()
     },
+    async getSunglasses() {
+      if (this.order.sunglasses && this.order.sunglasses.length > 0) {
+        this.order.sunglassesDetails = []
+        for (const sunglass of this.order.sunglasses) {
+          try {
+            const response = await SunglassesService.findSunglassesById(sunglass._id)
+            if (response && response.images && response.images.length > 0) {
+              response.image = this.getImageUrl(response.images[0])
+              this.order.sunglassesDetails.push(response)
+            } else {
+              console.error(`No images found for sunglasses with id ${sunglass._id}`);
+            }
+          } catch (error) {
+            console.error(`Failed to fetch details for sunglasses with id ${sunglass._id}:`, error);
+          }
+        }
+      }
+    },
+    viewSunglassesDetails(id) {
+      if(!id) {
+        Logger.error("Invalid sunglasses ID")
+        return
+      }
+      try {
+        this.$router.push(`/sunglasses/view/${id}`)
+      } catch (error) {
+        Logger.error(error)
+      }
+    },
+
     async getUserDetails() {
       const id = await UserService.FindUserByToken()
       this.userTokenDetails = id
@@ -273,10 +345,4 @@ export default {
   }
 }
 </script>
-
-<!-- // if delivery type = delivery
-// delivery = free
-
-// if delivery type = pickup
-// delivery = must pay for delivery -->
 

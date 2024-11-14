@@ -31,6 +31,16 @@ class PayService {
       throw error
     }
   }
+  static async paymentSuccess(orderId) {
+    const ENDPOINT = `/payment-success?orderId=${orderId}`;
+    try {
+      const response = await axiosInstance.post(ENDPOINT);
+      return response.data;
+    } catch (error) {
+      Logger.error(error);
+      throw error;
+    }
+  }
 }
 
 export default PayService

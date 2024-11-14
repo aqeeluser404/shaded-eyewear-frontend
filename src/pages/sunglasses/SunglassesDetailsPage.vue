@@ -3,61 +3,62 @@
 
     <div class="row justify-center flex-center" >
 
-    <q-card flat class="q-pa-md row justify-center items-center" style="width: 100%; height: 102vh;" >
-
-      <q-card-section class="q-mr-lg col-md-4">
-        <div class="column">
-          <q-img
-            v-if="mainImage"
-            :src="getImageUrl(mainImage)"
-            class="product-image"
-          />
-        </div>
-        <div class="row justify-around" style="border: 1px solid grey;">
-          <q-img
-            v-if="sunglasses.images && sunglasses.images.length > 0"
-            :src="getImageUrl(sunglasses.images[0])"
-            class="product-image col-4 cursor-pointer"
-            @click="updateMainImage(sunglasses.images[0])"
-          />
-          <q-img
-            v-if="sunglasses.images && sunglasses.images.length > 1"
-            :src="getImageUrl(sunglasses.images[1])"
-            class="product-image col-4 cursor-pointer"
-            @click="updateMainImage(sunglasses.images[1])"
-          />
-        </div>
-      </q-card-section>
-
-      <q-card-section class="q-pa-lg col-md-3">
-        <p class="q-mb-md">Deliveries made in Cape Town</p>
-        <div class="text-h3"><b>{{ sunglasses.model }}</b></div>
-        <br>
-        <div class="text-h6">R {{ sunglasses.price }}.00</div>
-        <br>
-        <div class="row items-center">
-          <div class="q-mr-md">
-            <q-btn
-              v-if="currentOrderId && currentOrderId !== null"
-              to="/cart" label="view cart" rounded dense size="12px"
-              class=" q-py-sm q-px-lg"
-            />
-            <q-btn
-              @click="addToCart" rounded dense label="Add to cart" size="12px"
-              class=" q-py-sm q-px-lg"
+      <q-card flat class="q-pa-md row justify-center items-center" style="width: 100%; height: 100vh;" >
+        <q-card-section class="q-mr-lg col-md-4">
+          <div class="column">
+            <q-img
+              v-if="mainImage"
+              :src="getImageUrl(mainImage)"
+              class="product-image"
             />
           </div>
-          <div>
-            <div class="text-h7"><b>{{ sunglasses.stock }} in stock</b></div>
+          <div class="row justify-around" style="transform: translateY(-25px);">
+            <q-img
+              v-if="sunglasses.images && sunglasses.images.length > 0"
+              :src="getImageUrl(sunglasses.images[0])"
+              class="product-image col-3 cursor-pointer"
+              :class="{'active-image': mainImage === sunglasses.images[0]}"
+              @click="updateMainImage(sunglasses.images[0])"
+            />
+            <q-img
+              v-if="sunglasses.images && sunglasses.images.length > 1"
+              :src="getImageUrl(sunglasses.images[1])"
+              class="product-image col-3 cursor-pointer"
+              :class="{'active-image': mainImage === sunglasses.images[1]}"
+              @click="updateMainImage(sunglasses.images[1])"
+            />
           </div>
-        </div>
-        <br>
-        <!-- <q-separator class="q-mb-xs" /> -->
-        <div class="text-h6">Product Details</div>
-        <br>
-        <div>{{ sunglasses.description }}</div>
-      </q-card-section>
-    </q-card>
+        </q-card-section>
+
+        <q-card-section class="q-pa-lg col-md-3">
+          <p class="q-mb-md">Deliveries made in Cape Town</p>
+          <div class="text-h3"><b>{{ sunglasses.model }}</b></div>
+          <br>
+          <div class="text-h6">R {{ sunglasses.price }}.00</div>
+          <br>
+          <div class="row items-center">
+            <div class="q-mr-md">
+              <q-btn
+                @click="addToCart" rounded dense label="Add to cart" size="12px"
+                class="q-py-sm q-mr-sm q-px-lg"
+              />
+              <q-btn
+                v-if="currentOrderId && currentOrderId !== null"
+                to="/cart" label="view cart" rounded dense size="12px"
+                class=" q-py-sm q-px-lg"
+              />
+            </div>
+            <div>
+              <div class="text-h7"><b>{{ sunglasses.stock }} in stock</b></div>
+            </div>
+          </div>
+          <br>
+          <!-- <q-separator class="q-mb-xs" /> -->
+          <div class="text-h6">Product Details</div>
+          <br>
+          <div>{{ sunglasses.description }}</div>
+        </q-card-section>
+      </q-card>
     </div>
 
     <div class="column constrain-sunglasses">
@@ -68,7 +69,7 @@
           <div v-for="(sunglass) in visibleSunglasses" :key="sunglass._id" class="carousel-container">
             <q-card flat @click="viewSunglassesDetails(sunglass._id)" class="cursor-pointer">
               <div>
-                <q-img style="border: 1px dotted grey;" v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="product-image" />
+                <q-img style="" v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="product-image" />
               </div>
               <q-item class="row justify-between">
                 <div class="model-text"><b>{{ sunglass.model }}</b></div>
@@ -88,9 +89,11 @@
 import SunglassesService from 'src/services/SunglassesService';
 import UserService from 'src/services/UserService';
 import OrderService from 'src/services/OrderService';
+import Helper from 'src/services/utils';
 
 export default {
   name: "SunglassesDetailsPage",
+
 
   data() {
     return {
@@ -100,7 +103,6 @@ export default {
         sunglasses: [{ _id: '', quantity: 1 }],
         user: ''
       },
-      orderTypeData: { priceThreshold: 1200 },
       currentOrderId: localStorage.getItem('currentOrderId') || null,
 
       // GET DATA
@@ -155,6 +157,7 @@ export default {
     }
   },
   methods: {
+    getImageUrl: Helper.getImageUrl,
     nextSlide() {
       this.currentSlide = (this.currentSlide + 1) % Math.ceil(this.allSunglasses.length / this.itemsPerPage);
     },
@@ -229,7 +232,7 @@ export default {
       this.orderData.user = this.userDetails._id
       this.orderData.sunglasses[0]._id = this.sunglasses._id;
       try {
-        const response = await OrderService.createOrder(this.userDetails._id, this.orderData, this.orderTypeData)
+        const response = await OrderService.createOrder(this.userDetails._id, this.orderData)
         this.currentOrderId = response.order._id
         localStorage.setItem('currentOrderId', this.currentOrderId)
       }
@@ -242,7 +245,7 @@ export default {
       const orderId = this.currentOrderId;
       try {
         this.orderData.sunglasses[0]._id = this.sunglasses._id;
-        await OrderService.updateOrder(orderId, this.orderData, this.orderTypeData);
+        await OrderService.updateOrder(orderId, this.orderData);
       }
       catch (error) {
         console.error('Error updating order:', error);
@@ -258,14 +261,6 @@ export default {
       this.userDetails = user;
     },
 
-    getImageUrl(imagePath) {
-      const serverUrl = 'http://localhost:5000/uploads/'
-      // const localDir = 'C:\\Users\\TerrorX\\Downloads\\code\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\'
-      // const localDir = 'D:\\Work\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\'
-      const localDir = 'C:\\Users\\TerrorX\\Downloads\\WLV\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\'
-      const relativePath = imagePath.replace(localDir, '')
-      return serverUrl + relativePath
-    },
     updateMainImage(image) {
       this.mainImage = image;
     }
@@ -283,5 +278,9 @@ export default {
 <style lang="sass" scoped>
 .image
   width: 100%
+
+.active-image
+  border: 2px solid lightgrey
+
 </style>
 

@@ -24,7 +24,10 @@ const routes = [
       { path: "/buy/review", component: () => import("pages/CheckoutPage.vue"), },
 
       // PAYMENT STATUSES
-      { path: '/payment-success', component: () => import('pages/payment/PaymentSuccess.vue') },
+      {
+        path: '/payment-success',
+        component: () => import('pages/payment/PaymentSuccess.vue'),
+      },
       { path: '/payment-cancel', component: () => import('pages/payment/PaymentCancel.vue') },
       { path: '/payment-failure', component: () => import('pages/payment/PaymentFailure.vue') },
 

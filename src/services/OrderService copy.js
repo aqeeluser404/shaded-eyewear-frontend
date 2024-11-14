@@ -2,43 +2,23 @@ import axiosInstance from "./axiosInstance"
 import Logger from "./Logger"
 
 class OrderService {
-  static async createOrder(userId, orderData) {
+  static async createOrder(userId, orderData, orderTypeData) {
     const ENDPOINT = `/order/create/${userId}`
     try {
       // userId to be included in orderData
-      const response = await axiosInstance.post(ENDPOINT, { orderData })
+      const response = await axiosInstance.post(ENDPOINT, { orderData, orderTypeData })
       return response.data
     } catch (error) {
       Logger.error(error)
     }
   }
-  static async createPickup(orderId) {
-    const ENDPOINT = `/order/create-pickup/${orderId}`
-    try {
-      // userId to be included in orderData
-      const response = await axiosInstance.post(ENDPOINT, {})
-      return response.data
-    } catch (error) {
-      Logger.error(error)
-    }
-  }
-  static async updateOrder(orderId, orderData) {
+  static async updateOrder(orderId, orderData, orderTypeData) {
     const ENDPOINT = `/order/update/${orderId}`
     try {
-      const response = await axiosInstance.put(ENDPOINT, { orderData })
+      const response = await axiosInstance.put(ENDPOINT, { orderData, orderTypeData })
       return response.data
     } catch (error) {
       Logger.error(error)
-    }
-  }
-  static async updatePickupOrder(orderId) {
-    const ENDPOINT = `/order/update/status/${orderId}`
-    try {
-      const response = await axiosInstance.put(ENDPOINT, {})
-      return response.data
-    } catch (error) {
-      Logger.error(error)
-      throw error
     }
   }
   // Remove items from cart

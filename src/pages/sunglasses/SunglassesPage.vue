@@ -17,13 +17,13 @@
     </div>
 
     <div class="row q-pa-md justify-center constrain-sunglasses flex-wrap">                                                  <!---------------- FILTER SUNGLASSES ----------------->
-      <q-list v-for="sunglass in filteredSunglasses" :key="sunglass._id" class="sunglass-card">                                                               <!-- list -->
+      <q-list v-for="sunglass in filteredSunglasses" :key="sunglass._id" class="list-container">                                                               <!-- list -->
         <q-card flat
           @click="viewSunglassesDetails(sunglass._id)"
           class="cursor-pointer"
         >                                                                                                                               <!-- sunglass card -->
           <div>                                                                                                                         <!-- sunglass image -->
-            <q-img style="border: 1px dotted grey;" v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="product-image" />
+            <q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="product-image" />
           </div>
           <q-item class="row justify-between">                                                                                          <!-- sunglass details -->
             <div  class="model-text"><b>{{ sunglass.model }}</b></div>
@@ -38,6 +38,7 @@
 <script>
   import Logger from 'src/services/Logger';
   import SunglassesService from 'src/services/SunglassesService';
+  import Helper from 'src/services/utils';
 
   export default {
     name: "SunglassesPages",
@@ -63,6 +64,7 @@
       }
     },
     methods: {
+      getImageUrl: Helper.getImageUrl,
       async fetchSunglasses() {
         const response = await SunglassesService.findAllSunglasses()
         this.sunglasses = response
@@ -78,20 +80,7 @@
           Logger.error(error)
         }
       },
-      getImageUrl(imagePath) {
-        const serverUrl = 'http://localhost:5000/uploads/';
-        // const localDir = 'C:\\Users\\TerrorX\\Downloads\\code\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
-        // const localDir = 'D:\\Work\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
-        const localDir = 'C:\\Users\\TerrorX\\Downloads\\WLV\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
-        const relativePath = imagePath.replace(localDir, '');
-        return serverUrl + relativePath;
-      }
 
-      // getImageUrl(imagePath) {
-      //   // replace this with hosted url
-      //   const serverUrl = 'http://localhost:5000/uploads/';
-      //   return serverUrl + imagePath;
-      // }
     },
     created() {
       this.fetchSunglasses()
