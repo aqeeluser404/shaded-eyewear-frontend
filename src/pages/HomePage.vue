@@ -21,6 +21,29 @@
       </q-img>
     </div>
 
+    <!-- about us -->
+    <div class="constrain" style="height: 100%;">
+      <!-- <q-item class="font-size-responsive-hero anton-regular row">
+
+      </q-item> -->
+      <q-item>
+        <q-item-section class="q-pa-md" style="text-align: right;">
+          <span class="font-size-responsive-hero anton-regular">ABOUT US</span> <br>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+          Dicta tempora consequuntur accusamus sequi sit non architecto praesentium ab inventore tempore earum nam totam,
+          corrupti veniam perferendis reiciendis, esse, temporibus dolorem.
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+          <br><br>
+          <!-- Dicta tempora consequuntur accusamus sequi sit non architecto praesentium ab inventore tempore earum nam totam,
+          corrupti veniam perferendis reiciendis, esse, temporibus dolorem. -->
+        </q-item-section>
+        <q-item-section>
+        </q-item-section>
+      </q-item>
+      <br>
+    </div>
+
+    <!-- bottom images -->
     <div class="row flex-center" style="position: relative;">
       <div class="col-12 col-md-6">
         <q-img src="~src/assets/stock.jpg" style="height: 60vh;" />
@@ -33,6 +56,11 @@
           <p class="font-size-responsive-xxxl anton-regular q-mb-lg">FIND YOUR PERFECT FIT</p>
         </div>
       </div>
+    </div>
+
+    <!-- images from insta -->
+    <div>
+
     </div>
   </q-page>
 </template>

@@ -109,10 +109,13 @@
                 <br>
                 <div>
                   <div class="font-size-responsive-sm">
-                    <q-form class="text-white" @submit="submitContactForm" style="width: 75%;">
-                      <q-input filled v-model="userContact.firstName" label="Your Name" class="q-mb-xs " required  style="background-color: #121212;"/>
-                      <q-input filled v-model="userContact.email" label="Your Email" class="q-mb-xs" required  style="background-color: #121212;"/>
-                      <q-input filled v-model="message" label="Message" type="textarea" class="q-mb-xs" required  style="background-color: #121212;" />
+                    <q-form @submit="submitContactForm" style="width: 75%;">
+                      <q-input filled label-color=white color="white" v-model="userContact.firstName" label="Your Name" class="q-mb-xs" required
+                      style="background-color: #121212;" input-style="color: white;" />
+                      <q-input filled label-color=white color="white" v-model="userContact.email" label="Your Email" class="q-mb-xs" required
+                      style="background-color: #121212;" input-style="color: white;" />
+                      <q-input filled label-color=white color="white" v-model="message" label="Message" type="textarea" class="q-mb-xs" required
+                      style="background-color: #121212;" input-style="color: white;"  />
                       <q-btn type="submit" label="Send Message" style="background-color: #121212;" />
                     </q-form>
 
@@ -124,7 +127,7 @@
             <div class="col-12 col-md-4">
               <q-card flat class="q-pa-md bg-transparent">
                 <div class="text-h5 anton-regular">FOLLOW US
-                  <br>
+                  <br><br>
                   <span class="q-gutter-md">
                     <q-btn flat round icon="mdi-instagram" style="border: 1px solid;" class="text-white" @click="openInstagram" />
                     <q-btn flat round icon="mdi-facebook" style="border: 1px solid;" class="text-white" @click="openFacebook" />
@@ -143,7 +146,10 @@
           <div class="row justify-center">
             <q-separator class="q-mb-md" style="background-color: #121212; width: 75%;"></q-separator>
           </div>
-          <div class="row justify-center font-size-responsive-xs q-pa-md">
+          <div class="row justify-center items-center font-size-responsive-xs q-pa-md">
+            <q-avatar class="q-mr-md">                                                                   <!-- avatar -->
+              <img src="/src/assets/logos/logo-white.png"/>
+            </q-avatar>
             Shaded Eyewear ™ | Est. 2023 | Sunglasses and Eyewear Shop | Developed by <a href="https://aqeel-dev-portfolio.web.app" target="_blank" style="text-decoration: none; color: inherit; font-weight: bold;">Aqeel</a>
           </div>
         </q-toolbar-title>
@@ -174,10 +180,10 @@ export default {
   data() {
     return {
       texts: [
-        "Welcome, Please login to view your account",
+        "Sunglasses and Eyewear Shop",
         "Discover our latest collections",
-        "Enjoy exclusive member benefits",
-        "Stay updated with our newsletter"
+        "Follow us on Instagram for the newest arrivals",
+        "Established in 2023"
       ],
       currentIndex: 0,
       order: {},
