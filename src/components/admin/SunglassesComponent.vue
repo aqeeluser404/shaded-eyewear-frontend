@@ -66,7 +66,7 @@
           <div class="text-h6">Add Sunglasses</div>
         </q-card-section>
         <q-form @submit.prevent="addSunglasses" @reset="onReset" class="q-gutter-lg" style="min-width: 100%;" enctype="multipart/form-data">
-          <q-input filled v-model="sunglassesDetails.model" label="Model (Format: SE0000 Square-Frame Sunglasses) *" id="model" name="model" />
+          <q-input filled v-model="sunglassesDetails.model" label="Model Name *" id="model" name="model" />
           <q-input filled v-model="sunglassesDetails.description" label="Description (max 50 words) *" id="description" name="description" />
           <q-select filled v-model="sunglassesDetails.color" label="Color *" id="color" name="color" :options="colors" emit-value map-options />
           <q-input filled v-model="sunglassesDetails.price" label="Price (ZAR) *" type="number" prefix="R" :rules="[val => val > 0] || 'Price must be positive'" id="price" name="price" />
@@ -136,7 +136,8 @@ export default {
       const requiredFields = ['model', 'description', 'color', 'price', 'stock', 'image1', 'image2']
 
       // Regular expression to match the model name format
-      const modelNamePattern = /^[A-Z]{2}\d{4}\s[A-Za-z]+-[A-Za-z]+\s[A-Za-z]+$/;
+      // const modelMaxChar = /^[A-Z]{2}\d{4}\s[A-Za-z]+-[A-Za-z]+\s[A-Za-z]+$/;
+      const modelMaxChar = /^[A-Z][a-zA-Z ]{0,11}$/
 
       for (const field of requiredFields) {
         if (!details[field] && !this[field]) {
@@ -145,8 +146,8 @@ export default {
         }
       }
       // Validate the model name format
-      if (!modelNamePattern.test(details.model)) {
-        this.$q.notify({ type: 'negative', message: 'Model name must follow the format "SE3448 Square-Frame Sunglasses".' });
+      if (!modelMaxChar.test(details.model)) {
+        this.$q.notify({ type: 'negative', message: 'Model name cannot exceed 12 characters, no special characters, and must start with a uppercase.' });
         return false;
       }
       // Validate the description length by words

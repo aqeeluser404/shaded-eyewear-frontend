@@ -4,67 +4,79 @@
 
      <!---------------- HEADER ----------------->
     <q-header :class="[headerClass, colorShiftClass]">
-      <q-toolbar class="q-px-lg row items-center">
 
-        <q-toolbar-title class="row items-center col-4">
-          <q-avatar size="50px" class="q-mr-md">                                                                   <!-- avatar -->
+      <q-toolbar class="q-px-lg row items-center justify-between">
+
+        <!-- TITLE AND AVATAR -->
+        <q-toolbar-title class="col-md-6 row items-center ">
+
+          <q-avatar class="q-mr-sm responsive-avatar">
             <img :src="logoSrc"/>
           </q-avatar>
-          <router-link to="/" :class="colorShiftClass" class="text-remove-decoration q-mr-md" >Shaded Eyewear ™ </router-link>       <!-- title -->
-          <span v-if="isLoggedIn" class="q-ml-lg font-size-responsive-lg caveat">                                  <!-- welcome message -->
+          <router-link to="/" :class="colorShiftClass" class="text-remove-decoration font-size-responsive-lg q-mr-sm" >Shaded Eyewear ™ </router-link>
+          <span v-if="isLoggedIn" class="q-ml-md font-size-responsive-xl caveat ">
             Hi, {{ userDetails.username }}
+          </span>
+          <span v-else class="q-ml-md font-size-responsive-xl caveat ">
+            Hi valued customer
           </span>
         </q-toolbar-title>
 
-        <div class="col-4 row justify-center">                                                                    <!-- text carousel -->
+        <!-- TEXT CAROUSEL -->
+        <!-- <div class="col-md-0 row large-screen-only justify-center">
           <div class="text-carousel q-ml-lg font font-size-responsive-xs">
             <q-btn flat icon="eva-arrow-ios-back-outline" @click="prevText" />
             <span class="q-mx-sm">{{ texts[currentIndex] }}</span>
             <q-btn flat icon="eva-arrow-ios-forward-outline" @click="nextText" />
           </div>
-        </div>
+        </div> -->
 
-        <!------------ DESKTOP NAV ------------->
-        <div class="col-4">
+        <div class="col-md-6">
+
+          <!------------ DESKTOP NAV ------------->
           <div class="row justify-end items-center">
-          <q-btn to="/" size="12px" class="custom-button large-screen-only " label="Home" flat />                                            <!-- home -->
-          <q-btn to="/sunglasses" size="12px" class="custom-button large-screen-only" label="Catalogue" flat />                              <!-- catalogue -->
-          <q-btn v-if="!isLoggedIn"
-            to="/auth/login" size="12px" class="custom-button large-screen-only" label="Login" flat />                                       <!-- login -->
-          <q-btn v-else
-            @click="logout" size="12px" class="custom-button large-screen-only" label="Logout" flat />
-          <q-btn @click="openDash" size="12px" icon="eva-person-outline" flat />                                                             <!-- logout -->
-          <q-btn v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'"
-            to="/admin/dashboard" size="12px" icon="eva-pie-chart-outline" class="custom-button large-screen-only" flat/>                    <!-- admin dash -->
-          <q-btn to="/cart" size="12px" icon="eva-shopping-bag-outline large-screen-only" flat />                                            <!-- cart -->
-        </div>
+            <q-btn to="/" class="custom-button large-screen-only font-size-responsive-xs" label="Home" flat rounded />
+            <q-btn to="/sunglasses" class="custom-button large-screen-only font-size-responsive-xs" label="Catalogue" flat rounded />
+            <q-btn v-if="!isLoggedIn" to="/auth/login" class="custom-button large-screen-only font-size-responsive-xs" label="Login" flat rounded />
+            <q-btn v-else @click="logout" class="custom-button large-screen-only font-size-responsive-xs" label="Logout" flat rounded />
+            <q-btn @click="openDash" class="custom-button large-screen-only font-size-responsive-xs" icon="eva-person-outline" flat rounded />
+            <q-btn v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'" to="/admin/dashboard" icon="eva-pie-chart-outline" class="custom-button large-screen-only font-size-responsive-xs" flat rounded />
+            <q-btn to="/cart" icon="eva-shopping-bag-outline" class="large-screen-only font-size-responsive-xs" flat rounded />
+          </div>
 
-        <!------------ MOBILE NAV ------------->
-        <q-btn-dropdown class="small-screen-only" icon="menu" flat>
-          <q-list style="width: 200px">
-            <q-item clickable v-close-popup to="/">
-              <q-item-section>Home</q-item-section>
-            </q-item>
-            <q-item clickable v-close-popup to="/sunglasses">
-              <q-item-section>Catalogue</q-item-section>
-            </q-item>
-            <q-item clickable v-close-popup to="/auth/login" v-if="!isLoggedIn">
-              <q-item-section>Login</q-item-section>
-            </q-item>
-            <q-item clickable v-close-popup @click="logout" v-else>
-              <q-item-section>Logout</q-item-section>
-            </q-item>
-            <q-item clickable v-close-popup @click="openDash">
-              <q-item-section>User Profile</q-item-section>
-            </q-item>
-            <q-item clickable v-close-popup to="/admin/dashboard" v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'">
-              <q-item-section>Admin Panel</q-item-section>
-            </q-item>
-            <q-item clickable v-close-popup to="/cart">
-              <q-item-section>Cart</q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
+          <!------------ MOBILE NAV ------------->
+          <q-btn-dropdown class="small-screen-only" icon="menu" flat>
+            <q-list style="width: 200px">
+              <!-- <q-item>
+                <q-item-section>
+                  <span v-if="isLoggedIn" class="font-size-responsive-xxl caveat small-screen-only">
+                    Hi, {{ userDetails.username }}
+                  </span>
+                </q-item-section>
+              </q-item> -->
+              <q-item clickable v-close-popup to="/">
+                <q-item-section class="anton-regular font-size-responsive-xxl">Home</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup to="/sunglasses">
+                <q-item-section class="anton-regular font-size-responsive-xxl">Catalogue</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup to="/auth/login" v-if="!isLoggedIn">
+                <q-item-section class="anton-regular font-size-responsive-xxl">Login</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup @click="logout" v-else>
+                <q-item-section class="anton-regular font-size-responsive-xxl">Logout</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup @click="openDash">
+                <q-item-section class="anton-regular font-size-responsive-xxl">User Profile</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup to="/admin/dashboard" v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'">
+                <q-item-section class="anton-regular font-size-responsive-xxl">Admin Panel</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup to="/cart">
+                <q-item-section class="anton-regular font-size-responsive-xxl">Cart</q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
         </div>
       </q-toolbar>
     </q-header>
@@ -80,11 +92,11 @@
     <q-footer class="bg-black text-white q-pa-md">
       <q-toolbar class="constrain">
         <q-toolbar-title>
-          <div class="row">
+          <div class="row justify-center">
             <!-- Developed By Section -->
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-4 items-center">
               <q-card flat class="q-pa-md bg-transparent">
-                <div class="text-h5 anton-regular">SHORTCUT LINKS</div>
+                <div class="font-size-responsive-xxl anton-regular">SHORTCUT LINKS</div>
                 <br>
                 <div class="font-size-responsive-sm">
                   <q-card class="q-mb-xs q-pa-sm" style="background-color: #121212; width: 75%;">
@@ -105,12 +117,12 @@
             <!-- Contact Section -->
             <div class="col-12 col-md-4">
               <q-card flat class="q-pa-md bg-transparent">
-                <div class="text-h5 anton-regular">GET IN CONTACT</div>
+                <div class="font-size-responsive-xxl anton-regular">GET IN CONTACT</div>
                 <br>
                 <div>
                   <div class="font-size-responsive-sm">
                     <q-form @submit="submitContactForm" style="width: 75%;">
-                      <q-input filled label-color=white color="white" v-model="userContact.firstName" label="Your Name" class="q-mb-xs" required
+                      <q-input filled label-color=white color="white" v-model="userContact.firstName" label="Your Name" class="q-mb-xs font-size-responsive-sm" required
                       style="background-color: #121212;" input-style="color: white;" />
                       <q-input filled label-color=white color="white" v-model="userContact.email" label="Your Email" class="q-mb-xs" required
                       style="background-color: #121212;" input-style="color: white;" />
@@ -118,7 +130,6 @@
                       style="background-color: #121212;" input-style="color: white;"  />
                       <q-btn type="submit" label="Send Message" style="background-color: #121212;" />
                     </q-form>
-
                   </div>
                 </div>
               </q-card>
@@ -126,31 +137,29 @@
             <!-- Follow Us Section -->
             <div class="col-12 col-md-4">
               <q-card flat class="q-pa-md bg-transparent">
-                <div class="text-h5 anton-regular">FOLLOW US
-                  <br><br>
-                  <span class="q-gutter-md">
-                    <q-btn flat round icon="mdi-instagram" style="border: 1px solid;" class="text-white" @click="openInstagram" />
-                    <q-btn flat round icon="mdi-facebook" style="border: 1px solid;" class="text-white" @click="openFacebook" />
-                    <q-btn flat round icon="mdi-twitter" style="border: 1px solid;" class="text-white" @click="openTwitter" />
-                  </span>
-                  <br>
-                </div>
+                <div class="font-size-responsive-xxl anton-regular">FOLLOW US</div>
                 <br>
-                <div>
-                  <div class="font-size-responsive-xs">Fast and reliable service</div>
-                  <div class="font-size-responsive-xs">Terms and conditions apply</div>
+                <div class="row items-center q-gutter-md">
+                  <div>
+                    <span class=""><q-btn flat round icon="mdi-instagram" style="border: 1px solid;" class="text-white font-size-responsive-lg" @click="openInstagram" /></span>
+                  </div>
+                  <div>
+                    <div class="font-size-responsive-xs">Follow us on Instagram</div>
+                    <div class="font-size-responsive-xs">For the newest arrivals</div>
+                    <div class="font-size-responsive-xs">Sunglasses and Eyewear Shop</div>
+                  </div>
                 </div>
               </q-card>
             </div>
           </div>
           <div class="row justify-center">
-            <q-separator class="q-mb-md" style="background-color: #121212; width: 75%;"></q-separator>
+            <q-separator class="q-my-md" style="background-color: #121212; width: 75%;"></q-separator>
           </div>
           <div class="row justify-center items-center font-size-responsive-xs q-pa-md">
-            <q-avatar class="q-mr-md">                                                                   <!-- avatar -->
+            <q-avatar class="responsive-avatar-2">                                                                   <!-- avatar -->
               <img src="/src/assets/logos/logo-white.png"/>
             </q-avatar>
-            Shaded Eyewear ™ | Est. 2023 | Sunglasses and Eyewear Shop | Developed by <a href="https://aqeel-dev-portfolio.web.app" target="_blank" style="text-decoration: none; color: inherit; font-weight: bold;">Aqeel</a>
+            Shaded Eyewear ™ | Est. 2023 | Sunglasses & Eyewear Shop | <span class=" q-ml-xs caveat font-size-responsive-sm" > Developed by <a href="https://aqeel-dev-portfolio.web.app" target="_blank" style="text-decoration: none; color: inherit; font-weight: bold;">Aqeel</a></span>
           </div>
         </q-toolbar-title>
       </q-toolbar>
@@ -348,4 +357,24 @@ export default {
 </script>
 
 <style lang="sass">
+// .text-carousel-toolbar
+//   background-color: #f5f5f5
+//   padding: 10px 0
+// .font-size-responsive-xl
+//   @media (min-width: 1320px)
+//     font-size: 1.25rem
+//   @media (min-width: 1320px)
+//     font-size: 1rem
+
+// .font-size-responsive-xs
+//   @media (min-width: 1320)
+//     font-size: 0.75rem
+
+.responsive-avatar
+  width: clamp(1.975rem, 5vw, 3.125rem) // 30px to 50px
+  height: clamp(1.975rem, 5vw, 3.125rem) // 30px to 50px
+
+.responsive-avatar-2
+  width: clamp(1.2rem, 5vw, 3.125rem) // 30px to 50px
+  height: clamp(1.2rem, 5vw, 3.125rem) // 30px to 50px
 </style>

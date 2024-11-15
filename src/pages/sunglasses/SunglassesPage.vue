@@ -1,37 +1,37 @@
 <template>
   <q-page>
-    <div>                                                                                               <!---------------- SUNGLASSES DETAILS HEADER ----------------->
-      <q-img
-        src="~src/assets/stock6.jpg"
-        alt="Hero Image"
-        style="width: 100%; height: 75vh;"
-      >
+    <div>
+      <q-img src="~src/assets/stock6.jpg" alt="Hero Image" style="width: 100%; height: 75vh;" >
         <q-card class="absolute-full column justify-center items-center">
-          <!-- <div style="height: 25%;"></div> -->
-          <p class="font-size-responsive-hero anton-regular">OUR CATALOGUE</p>                                                                                   <!-- title -->
-          <div style="width: 50%;" class="">                                                                            <!-- search box -->
+          <div style="height: 25%;"></div>
+          <p class="font-size-responsive-hero anton-regular">OUR CATALOGUE</p>
+          <div style="width: 50%;" class="">
             <q-input borderless class="bg-white q-pa-xs q-px-md caveat font-size-responsive-xxl" v-model="search" placeholder="Search sunglasses" style="border-radius: 25px; border: 3px solid white; " />
           </div>
         </q-card>
       </q-img>
     </div>
-
-    <div class="row q-pa-md justify-center constrain-sunglasses flex-wrap">                                                  <!---------------- FILTER SUNGLASSES ----------------->
-      <q-list v-for="sunglass in filteredSunglasses" :key="sunglass._id" class="list-container">                                                               <!-- list -->
+    <div style="background-color: #f0f0f0;">
+      <div class="row q-pa-md justify-center constrain-sunglasses flex-wrap " >
+      <q-list v-for="sunglass in filteredSunglasses" :key="sunglass._id" class="list-container">
         <q-card flat
           @click="viewSunglassesDetails(sunglass._id)"
           class="cursor-pointer"
-        >                                                                                                                               <!-- sunglass card -->
-          <div>                                                                                                                         <!-- sunglass image -->
-            <q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="product-image" />
+          style="border-radius: 5px; "
+        >
+          <div>
+            <q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="product-image" style="border-radius: 25px;" />
           </div>
-          <q-item class="row justify-between">                                                                                          <!-- sunglass details -->
-            <div  class="model-text"><b>{{ sunglass.model }}</b></div>
-            <div>R {{ sunglass.price }}.00</div>
+          <q-item class="column" style="background-color: #f0f0f0;">
+            <div class="font-size-responsive-md"><b>{{ sunglass.model }} ™</b></div>
+            <!-- <div class="font-size-responsive-xs">{{ capitalizeFirstLetter(sunglass.color) }}</div> -->
+            <div class="font-size-responsive-sm caveat">R {{ sunglass.price }}.00</div>
           </q-item>
         </q-card>
       </q-list>
     </div>
+    </div>
+
   </q-page>
 </template>
 
@@ -65,6 +65,7 @@
     },
     methods: {
       getImageUrl: Helper.getImageUrl,
+      capitalizeFirstLetter: Helper.capitalizeFirstLetter,
       async fetchSunglasses() {
         const response = await SunglassesService.findAllSunglasses()
         this.sunglasses = response

@@ -37,17 +37,32 @@
     margin: 0rem
 
 // ================================================================= // LAYOUT
+// .small-screen-only
+//   @media (max-width: $breakpoint-xs-max)
+//     display: block
+//   @media (min-width: $breakpoint-sm-min)
+//     display: none
+
+// .large-screen-only
+//   @media (max-width: $breakpoint-xs-max)
+//     display: none
+//   @media (min-width: $breakpoint-sm-min)
+//     display: block
+
 .small-screen-only
-  @media (max-width: $breakpoint-xs-max)
+  @media (max-width: 1024px)
     display: block
-  @media (min-width: $breakpoint-sm-min)
+  @media (min-width: 1025px)
     display: none
 
 .large-screen-only
-  @media (max-width: $breakpoint-xs-max)
+  @media (max-width: 1024px)
     display: none
-  @media (min-width: $breakpoint-sm-min)
+
+  @media (min-width: 1025px)
     display: block
+
+
 
 .constrain
   max-width: 1280px
