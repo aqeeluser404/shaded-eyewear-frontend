@@ -3,8 +3,9 @@
 
     <div class="row justify-center flex-center" >
 
-      <q-card flat class="q-pa-md row justify-center items-center" style="width: 100%; height: 100vh;" >
-        <q-card-section class="q-mr-lg col-md-4">
+      <q-card flat class="q-pa-md row justify-center items-center responsive-height">
+        <q-card-section :class="['col-12 col-md-4', {'q-mr-lg': $q.screen.gt.sm}]">
+
           <div class="column">
             <q-img
               v-if="mainImage"
@@ -30,7 +31,7 @@
           </div>
         </q-card-section>
 
-        <q-card-section class="q-pa-lg col-md-3">
+        <q-card-section class="q-pa-lg col-12 col-md-4">
           <p class="q-mb-md">Deliveries made in Cape Town</p>
           <div class="text-h3"><b>{{ sunglasses.model }}</b></div>
           <br>
@@ -39,47 +40,52 @@
           <div class="row items-center">
             <div class="q-mr-md">
               <q-btn
-                @click="addToCart" rounded dense label="Add to cart" size="12px"
-                class="q-py-sm q-mr-sm q-px-lg"
+                @click="addToCart" color="white" text-color="black"
+                rounded dense label="Add to cart"
+                class="q-py-sm q-mr-sm q-px-lg custom-button font-size-responsive-sm"
               />
               <q-btn
                 v-if="currentOrderId && currentOrderId !== null"
-                to="/cart" label="view cart" rounded dense size="12px"
-                class=" q-py-sm q-px-lg"
+                to="/cart" label="View cart" rounded dense color="black" text-color="white"
+                class="q-py-sm q-mr-sm q-px-lg custom-button font-size-responsive-sm"
               />
             </div>
             <div>
               <div class="text-h7"><b>{{ sunglasses.stock }} in stock</b></div>
             </div>
           </div>
-          <br>
+          <br><br>
           <!-- <q-separator class="q-mb-xs" /> -->
-          <div class="text-h6">Product Details</div>
+          <div class="font-size-responsive-xxl"><b>Product Details</b></div>
           <br>
           <div>{{ sunglasses.description }}</div>
         </q-card-section>
       </q-card>
     </div>
 
-    <div class="column constrain-sunglasses">
-      <div class="text-h4"><b>Related Products</b></div>
-      <div class="row q-pa-md justify-center items-center"  >
-        <q-btn flat icon="arrow_back" @click="prevSlide" class="q-mr-sm" />
-        <div class="row q-pa-md justify-center" style="width: 85%;">
+    <div class="column constrain-sunglasses q-pa-xl responsive-height-2">
+      <div class="font-size-responsive-xxl"><b>Related Products</b></div>
+      <br>
+      <div class="row justify-center items-center" style="height: fit-content;">
+        <q-btn flat icon="arrow_back" @click="prevSlide" class="q-mr-none q-pr-sm" />
+
+        <div class="row justify-center" style="flex-grow: 1; max-width: 85%;">
           <div v-for="(sunglass) in visibleSunglasses" :key="sunglass._id" class="carousel-container">
             <q-card flat @click="viewSunglassesDetails(sunglass._id)" class="cursor-pointer">
               <div>
-                <q-img style="" v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="product-image" />
+                <q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="product-image" />
               </div>
-              <q-item class="row justify-between">
-                <div class="model-text"><b>{{ sunglass.model }}</b></div>
-                <div>R {{ sunglass.price }}.00</div>
+              <q-item class="column justify-between">
+                <div class="font-size-responsive-md"><b>{{ sunglass.model }} ™</b></div>
+                <div class="font-size-responsive-sm caveat">R {{ sunglass.price }}.00</div>
               </q-item>
             </q-card>
           </div>
         </div>
-        <q-btn flat icon="arrow_forward" @click="nextSlide" class="q-ml-sm" />
+
+        <q-btn flat icon="arrow_forward" @click="nextSlide" class="q-ml-none q-pl-sm" />
       </div>
+
     </div>
 
   </q-page>
@@ -165,7 +171,7 @@ export default {
       this.currentSlide = (this.currentSlide - 1 + Math.ceil(this.allSunglasses.length / this.itemsPerPage)) % Math.ceil(this.allSunglasses.length / this.itemsPerPage);
     },
     updateItemsPerPage() {
-      this.itemsPerPage = window.innerWidth <= 600 ? 1 : 3;
+      this.itemsPerPage = window.innerWidth <= 1024 ? 1 : 3;
     },
 
     async fetchAllSunglasses() {
@@ -281,6 +287,24 @@ export default {
 
 .active-image
   border: 2px solid lightgrey
+
+.responsive-height
+  width: 100%
+  height: 100vh
+  @media (max-width: 1024px)
+    height: auto
+
+.responsive-height-2
+  width: 100%
+  height: 100%
+  @media (max-width: 1024px)
+    height: 62vh
+  @media (max-width: 750px)
+    height: 50vh
+  @media (max-width: 600px)
+    height: 40vh
+  @media (max-width: 500px)
+    height: 32vh
 
 </style>
 

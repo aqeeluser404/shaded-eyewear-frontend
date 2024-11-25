@@ -1,7 +1,7 @@
 <!-- PaymentSuccess.vue -->
 <template>
   <q-page>
-    <q-img src="~src/assets/abstract5.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
+    <q-img src="~src/assets/theme/abstract1.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
       <div class="absolute-full column justify-center items-center text-black">
         <q-card bordered flat class="q-pa-lg">
           <div class="column items-center">

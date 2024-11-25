@@ -1,14 +1,14 @@
 <template>
   <q-card-section>
-    <div class="text-h6 text-white">Your previous orders</div>
+    <div class="text-h6 text-black">Your previous orders</div>
   </q-card-section>
 
-  <q-card>
+  <q-card flat bordered >
 
     <!-- view order details -->
     <div v-if="orders && orders !== null">
       <div v-if="selectedOrder">
-        <q-card class="q-mb-md">
+        <q-card flat class="">
           <q-card-section>
             <div class="text-subtitle1">Order <b>#{{ selectedOrder._id }}</b> </div>
             <div class="text-caption">ORDERED {{ formatDate(selectedOrder.orderDate) }}</div>
@@ -17,37 +17,91 @@
             <div class="text-caption">Total Amount: R {{ selectedOrder.totalAmount }}.00</div>
             <div class="text-caption">Total Items: {{ selectedOrder.totalItems }} item(s)</div>
           </q-card-section>
-          <q-separator class="" />
+          <q-separator />
           <q-card-section v-if="selectedOrder.sunglassesDetails && selectedOrder.sunglassesDetails.length > 0">
             <div v-for="sunglass in selectedOrder.sunglassesDetails" :key="sunglass._id" class="row items-start cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
               <q-item-section class="col-3">
-                <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="q-mb-sm border" style="max-width: 100px; max-height: 100px;" />
+                <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="border" style="max-width: 100px; max-height: 100px;" />
               </q-item-section>
               <q-item-section>
-                <div class="text-caption">Model: {{ sunglass.model }}</div>
+                <div class="font-size-responsive-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b></div>
                 <div class="text-caption">Color: {{ capitalizeFirstLetter(sunglass.color) }}</div>
-                <div class="text-caption">Price: {{ sunglass.price }}</div>
+                <div class="text-caption">Price: R {{ sunglass.price }}.00</div>
               </q-item-section>
             </div>
           </q-card-section>
           <q-separator />
+
+
           <q-card-section v-if="selectedOrder.orderType === 'pickup'">
-            <div class="text-h6 q-mb-md">
-              <q-icon name="store" class="q-mr-md" />Pickup Location</div>
-            <div class="q-md-md " >
-              <p>Downtown Cape Town, Western Cape<br>
-              123 Main Street<br>
-              Downtown, Cape Town, 5247</p>
-            </div>
-            <br>
-            <div class="text-h6 q-mb-md">Pickup Instructions</div>
-            <p>Please bring a valid ID and your order confirmation email when you come to pick up your order. Our store is open from 9 AM to 6 PM, Monday to Saturday.</p>
+            <q-card-section class="row items-center font-size-responsive-md">
+              <q-icon name="local_shipping" class="q-mr-md" />
+              <div class="">Pickup Location</div>
+            </q-card-section>
+
+            <q-card-section>
+              <span class="font-size-responsive-md"><b>Downtown Cape Town, Western Cape</b></span><br>
+              <span class="font-size-responsive-sm">123 Main Street</span><br>
+              <span class="font-size-responsive-sm">Downtown, Cape Town, 5247</span>
+            </q-card-section>
+
+            <q-card-section>
+              <div class="font-size-responsive-md q-mb-md">Pickup Instructions</div>
+              <div class="font-size-responsive-sm">
+                For a smooth pickup experience, please remember to bring a valid ID and your order confirmation email.
+                <br>
+                <ul>
+                  <li><strong>Store Hours:</strong>
+                    <ul>
+                      <li>Monday to Friday: 8 AM - 5 PM</li>
+                    </ul>
+                  </li>
+                  <br>
+                  <li><strong>Verification at counter:</strong>
+                    <ul>
+                      <li>Please bring your valid email Order ID to verify your purchase.</li>
+                    </ul>
+                  </li>
+                </ul>
+                <br>
+                If you have any questions or need assistance, feel free to contact us. <br>Thank you for shopping with us!
+              </div>
+            </q-card-section>
           </q-card-section>
-          <q-separator />
+
+          <!-- <q-separator /> -->
+
           <div class="q-pa-md q-gutter-md">
-            <q-btn rounded dense @click="closeDetails" label="Back" size="12px" class="q-py-sm q-px-lg" />
-            <q-btn rounded dense icon="eva-trash-outline" @click="cancelOrder(selectedOrder._id)" v-if="selectedOrder.status === 'pending'" label="Cancel Order" size="12px" class="q-py-sm q-px-lg" />
-            <q-btn rounded dense to="/cart" v-if="selectedOrder.status === 'pending'" label="Proceed to checkout" size="12px" class="q-py-sm q-px-lg" />
+            <q-btn
+              rounded
+              dense
+              color="white"
+              text-color="black"
+              @click="closeDetails"
+              label="Back"
+              class="q-px-lg custom-button font-size-responsive-sm"
+            />
+            <q-btn
+              rounded
+              dense
+              color="white"
+              text-color="black"
+              icon="eva-trash-2-outline"
+              @click="cancelOrder(selectedOrder._id)"
+              v-if="selectedOrder.status === 'pending'"
+              label="Cancel Order"
+              class="q-px-lg custom-button font-size-responsive-sm"
+            />
+            <q-btn
+              rounded
+              dense
+              color="black"
+              text-color="white"
+              to="/cart"
+              v-if="selectedOrder.status === 'pending'"
+              label="Proceed to checkout"
+              class="q-px-lg custom-button font-size-responsive-sm"
+            />
           </div>
         </q-card>
       </div>
@@ -78,7 +132,9 @@
     </div>
 
     <!-- if user has no orders -->
-    <div v-else>You haven't ordered anything</div>
+    <div v-else>
+      <q-card-section>You haven't ordered anything</q-card-section>
+    </div>
   </q-card>
 </template>
 
@@ -129,11 +185,12 @@ export default {
         }
       })
     },
-    async getAllMyOrders() {                                                                   // get all my orders function
-      const response = await OrderService.findAllMyOrders(this.userDetails._id)
-      this.orders = response
-      await this.getSunglasses()
+    async getAllMyOrders() {
+      const response = await OrderService.findAllMyOrders(this.userDetails._id);
+      this.orders = response.filter(order => order.returns !== 'returned item');
+      await this.getSunglasses();
     },
+
     async getUserDetails() {                                                                  // get user by token function
       const id = await UserService.FindUserByToken()
       this.userTokenDetails = id

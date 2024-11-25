@@ -1,54 +1,51 @@
 <template>
-  <q-page>                                                                                                     <!-- constrains -->
-    <q-img src="~src/assets/abstract5.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
-
+  <q-page>
+    <q-img src="~src/assets/theme/abstract1.jpg" alt="Hero Image" style="width: 100%; height: 100vh;">
       <div class="absolute-full row justify-center items-center text-black">
-        <q-card bordered flat class="column q-pa-lg q-mr-md" style="">
-          <div class="row justify-center">
+
+        <div class="column q-pa-lg bg-white">
+          <div class="row justify-start">
             <p class="font-size-responsive-xxxl anton-regular q-mb-md">CREATE A NEW ACCOUNT</p>
           </div>
           <br>
-          <div class="">
-            <q-form class="q-gutter-lg col-12 col-md-6" >               <!------------- REGISTER FORM -------------->
-              <q-input borderless filled v-model="user.firstName" label="Your first name *" />
-              <q-input borderless filled v-model="user.lastName" label="Your last name *" />
-              <q-input borderless filled v-model="user.email" label="Your email *" />
-              <q-input borderless filled v-model="user.phone" label="Your phone number *" />
-              <q-input borderless filled v-model="user.username" label="Your username *" />
-              <q-input borderless filled v-model="user.password" label="Your password *" type="password" />
-            </q-form>
-          </div>
-        </q-card>
-
-        <div bordered flat class="column col-12 col-md-3 " style="">
-          <q-card>
-            <div class="q-pa-lg">
-              <p>
-                By signing up, you acknowledge and agree to Shaded Eyewear’s Terms of Service.
-              </p>
-
-
-              <div>                                                                                                   <!-- login instead -->
-                <router-link to="/auth/login" class="caveat font-size-responsive-lg" style="text-decoration: underline; color: black;">
-                  <b>Already a member, login instead?</b>
-                </router-link>
-              </div>
-
+          <div class="q-gutter-lg q-mb-md">
+            <div style="display: flex;" class="justify-start ">
+              <q-input filled label-color="black" color="black" v-model="user.firstName" label="First Name *" class="q-mr-md" />
+              <q-input filled label-color="black" color="black" v-model="user.lastName" label="Last Name *" class="" />
             </div>
-          </q-card>
-          <br>
+            <div style="display: flex;" class="justify-start ">
+              <q-input filled label-color="black" color="black" v-model="user.username" label="Username *" class="q-mr-md" />
+              <q-input filled label-color="black" color="black" v-model="user.email" label="Email *" class="" />
+            </div>
 
-            <div class="row q-mb-md">                                                                                                   <!-- buttons -->
-                <q-btn rounded dense label="Create your account" @click="onSubmit" color="white" text-color="black" class="q-px-md anton-regular q-mr-md font-size-responsive-md"/>
-              </div>
+            <div class="row justify-start">
+              <q-input filled label-color="black" color="black" v-model="user.phone" label="Phone Number *" class="col-12" />
+            </div>
 
-          <!-- <q-separator vertical class="q-mx-lg" /> -->
+            <div class="row justify-start">
+              <q-input filled label-color="black" color="black" v-model="user.password" label="Password *" type="password" class="col-12" />
+            </div>
+          </div>
+
+          <div class="column col-12 col-md-4">
+            <div class="q-mb-sm">
+              <router-link to="/auth/login" class="font-size-responsive-xs" style="text-decoration: underline; color: black;">
+                <b>Already a member, login instead?</b>
+              </router-link>
+            </div>
+            <div>
+              <p class="font-size-responsive-xs">By signing up, you acknowledge and agree  to Shaded Eyewear’s <br> Terms of Service.</p>
+              <q-btn rounded dense label="Create your account" @click="onSubmit" color="black" text-color="white" class="q-px-lg anton-regular font-size-responsive-md" style="width: 100%;" />
+            </div>
+          </div>
 
         </div>
+
       </div>
     </q-img>
   </q-page>
 </template>
+
 
 <script>
   import UserService from 'src/services/UserService'

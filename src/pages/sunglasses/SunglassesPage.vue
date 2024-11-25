@@ -1,16 +1,17 @@
 <template>
   <q-page>
-    <div>
-      <q-img src="~src/assets/stock6.jpg" alt="Hero Image" style="width: 100%; height: 75vh;" >
-        <q-card class="absolute-full column justify-center items-center">
-          <div style="height: 25%;"></div>
-          <p class="font-size-responsive-hero anton-regular">OUR CATALOGUE</p>
-          <div style="width: 50%;" class="">
-            <q-input borderless class="bg-white q-pa-xs q-px-md caveat font-size-responsive-xxl" v-model="search" placeholder="Search sunglasses" style="border-radius: 25px; border: 3px solid white; " />
-          </div>
-        </q-card>
-      </q-img>
-    </div>
+
+    <q-img src="~src/assets/cataloguepage/stock3.jpg" alt="Hero Image" class="hero-img" style="" >
+      <q-card class="absolute-full column justify-center items-center">
+        <div style="height: 25%;"></div>
+        <p class="font-size-responsive-hero anton-regular">OUR CATALOGUE</p>
+        <div style="" class="search-box">
+          <q-input borderless class="bg-white q-pa-xs q-px-md caveat font-size-responsive-xxl"
+          v-model="search" placeholder="Search sunglasses" style="border-radius: 40px; border: 3px solid white; " />
+        </div>
+      </q-card>
+    </q-img>
+
     <div style="background-color: #f0f0f0;">
       <div class="row q-pa-md justify-center constrain-sunglasses flex-wrap " >
       <q-list v-for="sunglass in filteredSunglasses" :key="sunglass._id" class="list-container">
@@ -20,7 +21,8 @@
           style="border-radius: 5px; "
         >
           <div>
-            <q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])" class="product-image" style="border-radius: 25px;" />
+            <q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])"
+              class="product-image" style="border-radius: 25px;" />
           </div>
           <q-item class="column" style="background-color: #f0f0f0;">
             <div class="font-size-responsive-md"><b>{{ sunglass.model }} ™</b></div>
@@ -90,5 +92,15 @@
 </script>
 
 <style lang="sass">
+.search-box
+  width: 50%
+  @media (max-width: 1024px)
+    width: 100%
+
+.hero-img
+  width: 100%
+  height: 75vh
+  @media (max-width: 1024px)
+    height: 40vh
 
 </style>

@@ -1,5 +1,13 @@
 <template>
   <q-layout view="hHh lpR fff">
+
+    <div v-if="!cookieAccepted" class="cookie-consent-banner">
+      <div class="q-pa-lg bg-black text-white q-mb-sm">
+        <span class="font-size-responsive-xs">This website uses cookies to ensure you get the best experience.</span>
+        <q-btn rounded dense @click="acceptCookies" label="Accept" color="white" class="q-px-md q-py-sm q-ml-lg font-size-responsive-xs" flat ></q-btn>
+      </div>
+    </div>
+
     <div class="noise-overlay"></div>
 
      <!---------------- HEADER ----------------->
@@ -17,9 +25,9 @@
           <span v-if="isLoggedIn" class="q-ml-md font-size-responsive-xl caveat ">
             Hi, {{ userDetails.username }}
           </span>
-          <span v-else class="q-ml-md font-size-responsive-xl caveat ">
+          <!-- <span v-else class="q-ml-md font-size-responsive-xl caveat ">
             Hi valued customer
-          </span>
+          </span> -->
         </q-toolbar-title>
 
         <!-- TEXT CAROUSEL -->
@@ -55,25 +63,25 @@
                 </q-item-section>
               </q-item> -->
               <q-item clickable v-close-popup to="/">
-                <q-item-section class="anton-regular font-size-responsive-xxl">Home</q-item-section>
+                <q-item-section class="">Home</q-item-section>
               </q-item>
               <q-item clickable v-close-popup to="/sunglasses">
-                <q-item-section class="anton-regular font-size-responsive-xxl">Catalogue</q-item-section>
+                <q-item-section class="">Catalogue</q-item-section>
               </q-item>
               <q-item clickable v-close-popup to="/auth/login" v-if="!isLoggedIn">
-                <q-item-section class="anton-regular font-size-responsive-xxl">Login</q-item-section>
+                <q-item-section class="">Login</q-item-section>
               </q-item>
               <q-item clickable v-close-popup @click="logout" v-else>
-                <q-item-section class="anton-regular font-size-responsive-xxl">Logout</q-item-section>
+                <q-item-section class="">Logout</q-item-section>
               </q-item>
               <q-item clickable v-close-popup @click="openDash">
-                <q-item-section class="anton-regular font-size-responsive-xxl">User Profile</q-item-section>
+                <q-item-section class="">User Profile</q-item-section>
               </q-item>
               <q-item clickable v-close-popup to="/admin/dashboard" v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'">
-                <q-item-section class="anton-regular font-size-responsive-xxl">Admin Panel</q-item-section>
+                <q-item-section class="">Admin Panel</q-item-section>
               </q-item>
               <q-item clickable v-close-popup to="/cart">
-                <q-item-section class="anton-regular font-size-responsive-xxl">Cart</q-item-section>
+                <q-item-section class="">Cart</q-item-section>
               </q-item>
             </q-list>
           </q-btn-dropdown>
@@ -144,9 +152,9 @@
                     <span class=""><q-btn flat round icon="mdi-instagram" style="border: 1px solid;" class="text-white font-size-responsive-lg" @click="openInstagram" /></span>
                   </div>
                   <div>
-                    <div class="font-size-responsive-xs">Follow us on Instagram</div>
-                    <div class="font-size-responsive-xs">For the newest arrivals</div>
-                    <div class="font-size-responsive-xs">Sunglasses and Eyewear Shop</div>
+                    <div class="font-size-responsive-sm">Follow us on Instagram</div>
+                    <div class="font-size-responsive-sm">For the newest arrivals</div>
+                    <div class="font-size-responsive-sm">Sunglasses and Eyewear Shop</div>
                   </div>
                 </div>
               </q-card>
@@ -159,7 +167,7 @@
             <q-avatar class="responsive-avatar-2">                                                                   <!-- avatar -->
               <img src="/src/assets/logos/logo-white.png"/>
             </q-avatar>
-            Shaded Eyewear ™ | Est. 2023 | Sunglasses & Eyewear Shop | <span class=" q-ml-xs caveat font-size-responsive-sm" > Developed by <a href="https://aqeel-dev-portfolio.web.app" target="_blank" style="text-decoration: none; color: inherit; font-weight: bold;">Aqeel</a></span>
+            Shaded Eyewear ™ | Est. 2023 | Sunglasses & Eyewear Shop | <span class=" q-ml-xs font-size-responsive-xs" > Developed by <a href="https://aqeel-dev-portfolio.web.app" target="_blank" style="text-decoration: none; color: inherit; font-weight: bold;" class="caveat font-size-responsive-sm">Aqeel</a></span>
           </div>
         </q-toolbar-title>
       </q-toolbar>
@@ -182,7 +190,9 @@ export default {
     isSpecificPage() {
       return this.$route.path.includes('/sunglasses/view/') ||
       this.$route.path.includes('/cart') ||
-      this.$route.path.includes('/buy/review')
+      this.$route.path.includes('/buy/review') ||
+      this.$route.path.includes('/user/dashboard') ||
+      this.$route.path.includes('/admin/dashboard')
     }
   },
 
@@ -209,11 +219,16 @@ export default {
       colorShiftClass: 'transparent-white',
       logoSrc: logoWhite,
 
+      // cookies
+      cookieAccepted: false,
+
       // send message
       userContact: {
         firstName: '',
         email: ''
-      }, message: ''
+      }, message: '',
+
+
     }
   },
   mounted() {
@@ -222,6 +237,9 @@ export default {
     this.changeTextAutomatically()
     window.addEventListener('scroll', this.handleScroll);
     this.handleScroll(); // Ensure the correct header state on initial load
+    if (localStorage.getItem('cookieAccepted') === 'true') {
+      this.cookieAccepted = true
+    }
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
@@ -236,6 +254,10 @@ export default {
     }
   },
   methods: {
+    acceptCookies() {
+      this.cookieAccepted = true,
+      localStorage.setItem('cookieAccepted', true)
+    },
     handleScroll() {
       if (this.isSpecificPage) {
         this.headerClass = 'header-solid';
@@ -328,18 +350,9 @@ export default {
         localStorage.removeItem('currentOrderId')
       }
     },
-
-
-      openInstagram() {
-        window.open('https://www.instagram.com/shadedeyewearza/', '_blank');
-      },
-      openFacebook() {
-        // window.open('https://www.facebook.com/yourprofile', '_blank');
-      },
-      openTwitter() {
-        // window.open('https://www.twitter.com/yourprofile', '_blank');
-      },
-
+    openInstagram() {
+      window.open('https://www.instagram.com/shadedeyewearza/', '_blank');
+    },
     async submitContactForm() {
       try {
         const response = await EmailService.GetInContact(this.userContact, this.message)
@@ -357,6 +370,26 @@ export default {
 </script>
 
 <style lang="sass">
+
+
+.cookie-consent-banner
+  position: fixed
+  bottom: 0
+  left: 0
+  right: 0
+  z-index: 9999
+  width: 100%
+  display: flex
+  justify-content: center
+  align-items: center
+  transform: translateY(100%)
+  animation: slideIn 0.5s ease-out forwards
+
+@keyframes slideIn
+  from
+    transform: translateY(100%)
+  to
+    transform: translateY(0)
 // .text-carousel-toolbar
 //   background-color: #f5f5f5
 //   padding: 10px 0

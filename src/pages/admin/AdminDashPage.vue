@@ -1,9 +1,9 @@
 <template>
   <q-page>
     <!-- =================================== ADMIN CONTROLS -->
-    <q-img src="~src/assets/abstract5.jpg" alt="Hero Image" style="width: 100%; height: 100%;" >
+    <!-- <q-img src="~src/assets/abstract5.jpg" alt="Hero Image" style="width: 100%; height: 100%;" > -->
 
-      <div class="text-black" style="width: 100%; height: 100%;">
+      <div class="text-black q-pa-md" style="width: 100%; height: 100%; background-color: #f0f0f0;">
         <div style="height: 50px;"></div>
         <q-layout view="lHh Lpr lff" container style="height: 90vh;" class="shadow-2 bg-white">
 
@@ -34,11 +34,15 @@
                   <q-item-section avatar><q-icon name="eva-clipboard-outline" /></q-item-section>
                   <q-item-section>Orders</q-item-section>
                 </q-item>
+                <q-item clickable v-ripple @click="changePage('Return Panel', 'ReturnsComponent')">
+                  <q-item-section avatar><q-icon name="eva-calendar-outline" /></q-item-section>
+                  <q-item-section>Returns</q-item-section>
+                </q-item>
               </q-list>
             </q-scroll-area>
 
             <!-- avatar header -->
-            <q-img class="absolute-top zoomed-image" src="~src/assets/theme/abstract-1-1.jpg" style="height: 150px; ">
+            <q-img class="absolute-top zoomed-image" src="~src/assets/theme/dark-background.jpg" style="height: 150px; ">
               <div class="absolute-bottom bg-transparent">
                 <!-- profile img -->
                 <q-avatar size="60px" class="" style="transform: translateX(-10px);">
@@ -71,7 +75,7 @@
           </q-page-container>
         </q-layout>
       </div>
-    </q-img>
+    <!-- </q-img> -->
   </q-page>
 </template>
 
@@ -80,6 +84,7 @@ import UserService from 'src/services/UserService'
 import UserComponent from '../../components/admin/UserComponent.vue'
 import SunglassesComponent from '../../components/admin/SunglassesComponent.vue'
 import OrdersComponent from '../../components/admin/OrdersComponent.vue'
+import ReturnsComponent from '../../components/admin/ReturnsComponent.vue'
 import Helper from '../../services/utils.js'
 
 export default {
@@ -88,7 +93,8 @@ export default {
   components: {
     UserComponent,
     SunglassesComponent,
-    OrdersComponent
+    OrdersComponent,
+    ReturnsComponent
   },
   data() {
     return {

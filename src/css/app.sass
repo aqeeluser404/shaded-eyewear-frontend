@@ -30,24 +30,14 @@
   box-sizing: border-box
   margin: 1rem
 
-@media (max-width: 600px)
+@media (max-width: 1024px)
   .carousel-container
     flex: 1 1 90%
-    max-width: 90%
+    max-width: 50%
     margin: 0rem
 
 // ================================================================= // LAYOUT
-// .small-screen-only
-//   @media (max-width: $breakpoint-xs-max)
-//     display: block
-//   @media (min-width: $breakpoint-sm-min)
-//     display: none
 
-// .large-screen-only
-//   @media (max-width: $breakpoint-xs-max)
-//     display: none
-//   @media (min-width: $breakpoint-sm-min)
-//     display: block
 
 .small-screen-only
   @media (max-width: 1024px)
@@ -61,7 +51,6 @@
 
   @media (min-width: 1025px)
     display: block
-
 
 
 .constrain
@@ -91,7 +80,7 @@ p
   width: 100%
   height: 100%
   pointer-events: none
-  background: url('../src/assets/noise.gif') repeat
+  background: url('../src/assets/theme/noise.gif') repeat
   opacity: 0.02
   z-index: 999
 
@@ -140,6 +129,10 @@ p
   display: inline-block
 
 .admin-user
+  color: black
+  font-weight: bold
+
+.refunded
   color: black
   font-weight: bold
 

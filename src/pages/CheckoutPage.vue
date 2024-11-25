@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div class="q-pa-md" style="width: 100%; height: 100%;">
+    <div class="q-pa-md" style="width: 100%; height: 100%; background-color: #f0f0f0;">
 
       <div style="height: 50px;"></div>
 
@@ -10,19 +10,22 @@
         <div class="col-12 col-md-6">
           <!-- card to change delivery -->
           <q-card v-if="!deliveryPanel" flat bordered class="row items-center justify-between q-pa-md q-mb-md">
-            <q-card-section>
+            <q-card-section class="font-size-responsive-sm">
               Collect
             </q-card-section>
             <q-card-section>
               <q-btn
-                size="12px"
+                rounded dense
+                color="white"
+                text-color="black"
+                class="q-px-lg custom-button font-size-responsive-sm"
                 label="Collect My Order"
                 @click="togglePickupPanel"
               />
             </q-card-section>
           </q-card>
-          <q-card v-if="!pickupPanel" flat bordered class="row items-center justify-between q-pa-md q-mb-md">
-            <q-card-section>
+          <q-card v-if="!pickupPanel" flat bordered class="row items-center justify-between q-pa-md">
+            <q-card-section class="font-size-responsive-sm">
               Change Address (Coming soon)
             </q-card-section>
             <q-card-section>
@@ -36,28 +39,50 @@
 
           <!-- Pickup Panel -->
           <q-card flat bordered class="q-pa-md" v-if="pickupPanel">
-            <q-card-section class="text-h6">
-              <q-item>
-                <q-item-section avatar>
-                  <q-icon name="eva-car-outline" />
-                </q-item-section>
-                <q-item-section>
-                  Cape Town
-                </q-item-section>
-              </q-item>
+
+            <q-card-section class="row items-center font-size-responsive-md">
+              <q-icon name="local_shipping" class="q-mr-md" />
+              <div class="">Cape Town</div>
             </q-card-section>
+
+            <q-separator />
+
             <q-card-section>
-              <div class="text-subtitle1 q-mb-md">Pickup Location</div>
-              <div class="q-md-md">
-                <q-radio>
-                  <span class="text-h6">Downtown Cape Town, Western Cape</span><br>
-                  <span>123 Main Street</span><br>
-                  <span>Downtown, Cape Town, 5247</span>
+              <div class="">
+                <div class="font-size-responsive-sm q-mb-md">Available Pickup Location(s)</div>
+                <q-radio class="">
+                  <span class="font-size-responsive-md"><b>Downtown Cape Town, Western Cape</b></span><br>
+                  <span class="font-size-responsive-sm">123 Main Street</span><br>
+                  <span class="font-size-responsive-sm">Downtown, Cape Town, 5247</span>
                 </q-radio>
               </div>
+            </q-card-section>
+
+            <q-separator />
+
+            <q-card-section>
               <br>
-              <div class="text-subtitle1 q-mb-md">Pickup Instructions</div>
-              <p>Please bring a valid ID and your order confirmation email when you come to pick up your order. Our store is open from 9 AM to 6 PM, Monday to Saturday.</p>
+              <div class="font-size-responsive-sm q-mb-md"><b>Pickup Instructions</b></div>
+              <div class="font-size-responsive-sm">
+                For a smooth pickup experience, please remember to bring a valid ID and your order confirmation email.
+                <br>
+                <ul>
+                  <li><strong>Store Hours:</strong>
+                    <ul>
+                      <li>Monday to Friday: 8 AM - 5 PM</li>
+                    </ul>
+                  </li>
+                  <br>
+                  <li><strong>Verification at counter:</strong>
+                    <ul>
+                      <li>Please bring your valid email Order ID to verify your purchase.</li>
+                    </ul>
+                  </li>
+                </ul>
+                <br>
+                If you have any questions or need assistance, feel free to contact us. <br>Thank you for shopping with us!
+              </div>
+
             </q-card-section>
           </q-card>
 
@@ -116,40 +141,49 @@
           <q-card flat bordered class="q-pa-md q-mb-md">
             <q-card-section>
               <div class="text-h5 q-mb-md">Order Summary</div>
-              <p>{{ order.sunglasses ? order.sunglasses.length : 0 }} item(s)</p>
-              <p>Delivery info</p>
               <q-separator class="q-mb-md" />
-              <p>To Pay: <span class="q-ml-lg text-h5">R{{ order.totalAmount }}.00</span></p>
-              <q-btn
-                size="12px"
-                label="Pay with Yoco"
-                style="width: 100%; height: 50px;"
-                class="q-mb-md"
-                @click="initiatePayment"
-              />
-              <q-btn
-                size="12px"
-                icon="eva-lock-outline"
-                label="Secure Checkout"
-                flat
-                style="width: 100%;"
-              />
+              <div class="text-caption ">
+                <b>TOTAL:</b> {{ order.sunglasses ? order.sunglasses.length : 0 }} item(s)
+                <span class="q-ml-lg font-size-responsive-lg">R {{ order.totalAmount }}.00</span>
+              </div>
+              <div class="q-mt-md">
+                <q-btn
+                  rounded dense
+                  color="black"
+                  text-color="white"
+                  label="Pay with Yoco"
+                  style="width: 100%;"
+                  class="q-px-lg custom-button font-size-responsive-sm q-mb-md"
+                  @click="initiatePayment"
+                />
+                <q-btn
+                  rounded dense
+                  icon="eva-lock-outline"
+                  label="Secure Checkout"
+                  flat
+                  class="font-size-responsive-xs"
+                  style="width: 100%;"
+                />
+              </div>
+
             </q-card-section>
           </q-card>
 
-          <q-card flat bordered class="q-pa-md">
-            <q-card-section>
+          <q-card flat bordered class="">
+            <q-card-section class="font-size-responsive-sm q-pa-lg" >
               Review your items
+              <!-- <p class="text-caption"><b>Order Type: </b><span v-if="pickupPanel">Pickup at counter</span></p> -->
             </q-card-section>
             <q-separator class="q-mb-md" />
             <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0">
-              <div v-for="sunglass in order.sunglassesDetails" :key="sunglass._id" class="row items-center justify-center cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
-                <q-item-section class="col-3">
+              <div v-for="sunglass in order.sunglassesDetails" :key="sunglass._id" class="row items-start  cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
+                <q-item-section class="col-md-5">
                   <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="q-mb-sm border" style="max-width: 120px; max-height: 120px;" />
                 </q-item-section>
-                <q-item-section>
-                  <div class="text-caption">{{ sunglass.model }}</div>
-                  <div class="text-caption">Price: {{ sunglass.price }}</div>
+                <q-item-section class="col-md-5 row justify-start">
+                  <div class="font-size-responsive-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b></div>
+                  <div class="text-caption">Color: {{ capitalizeFirstLetter(sunglass.color) }}</div>
+                  <div class="text-caption">Price: R {{ sunglass.price }}.00</div>
                 </q-item-section>
               </div>
             </q-card-section>

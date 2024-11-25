@@ -88,6 +88,15 @@ class OrderService {
       Logger.error(error)
     }
   }
+  static async refundOrder(orderId, sunglassesToRefund) {
+    const ENDPOINT = `/order/refund`
+    try {
+      const response = await axiosInstance.post(ENDPOINT, { orderId, sunglassesToRefund })
+      return response
+    } catch(error) {
+      Logger.error(error)
+    }
+  }
 }
 
 export default OrderService

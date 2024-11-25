@@ -1,26 +1,27 @@
 <template>
   <q-page>                                                                                            <!-- constrains -->
 
-    <q-img src="~src/assets/abstract5.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
+    <q-img src="~src/assets/theme/abstract1.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
       <div class="absolute-full column justify-center items-start text-black">
         <q-card bordered flat class="column q-pa-lg constrain" style="">
-          <div class="row justify-center">
-            <p class="font-size-responsive-xxxl anton-regular q-mb-md">LOGIN TO YOUR ACCOUNT</p>
+          <div class="row justify-start">
+            <p class="font-size-responsive-xxxl anton-regular q-mb-md">RETURNING <br> CUSTOMER</p>
           </div>
-          <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-lg" style="min-width: 300px;">
-            <q-input filled v-model="user.usernameOrEmail" label="Your username or email *" />
-            <q-input filled v-model="user.password" label="Your password *" type="password" />
-            <div class="column">                                                                                        <!-- register instead -->
-              <router-link to="/auth/register" style="text-decoration: underline; font-size: 14px; color: #1976D2">
-                Don't have an account?
+          <br>
+          <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-lg" style="min-width: 280px;">
+            <q-input filled label-color=black color="black" v-model="user.usernameOrEmail" label="Username or Email *" />
+            <q-input filled label-color=black color="black" v-model="user.password" label="Password *" type="password" />
+
+            <div class="column">
+              <router-link to="/forgot-password" class="font-size-responsive-xs" style="text-decoration: underline; color: black;">
+                <b>Forgot password?</b>
               </router-link>
-              <router-link to="/forgot-password" style="text-decoration: underline; font-size: 14px; color: #1976D2">
-                Forgot password?
+              <router-link to="/auth/register" class="font-size-responsive-xs" style="text-decoration: underline; color: black;">
+                <b>Don't have an account?</b>
               </router-link>
             </div>
-            <div>                                                                                                       <!-- buttons -->
-              <q-btn label="Submit" type="submit" color="primary" class="custom-button"/>
-              <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm custom-button" />
+            <div>
+              <q-btn rounded dense label="Sign In" color="black" text-color="white" type="submit" class="q-px-lg anton-regular font-size-responsive-md" style="width: 100%;"/>
             </div>
           </q-form>
         </q-card>

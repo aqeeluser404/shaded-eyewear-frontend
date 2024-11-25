@@ -1,18 +1,18 @@
 <template>
   <div class="row q-pa-md q-gutter-md justify-center">
-    <q-card class="q-pa-md col-12 col-md-11">                                                  <!---------------- SUNGLASSES COMPONENT ----------------->
+    <q-card flat bordered class="q-pa-md col-12 col-md-11">                                                  <!---------------- SUNGLASSES COMPONENT ----------------->
       <q-card v-if="openAddSunglasses === null">                                               <!-- view all card -->
-        <q-card-section>
-          <div class="text-h6">All Sunglasses</div>
+        <q-card-section class="column flex-start">
+          <div class="font-size-responsive-lg">All Sunglasses</div>
         </q-card-section>
         <q-markup-table>
           <thead>
             <tr>
-              <th></th>
+              <th class="text-left">Image</th>
               <th class="text-left">Model</th>
               <th class="text-left">Description</th>
               <th class="text-left">Price</th>
-              <th class="text-left">Stock</th>
+              <th class="text-center">Stock</th>
               <th class="text-left">Quick Tools</th>
             </tr>
           </thead>
@@ -20,7 +20,7 @@
             <tr>
               <!-- <td class="text-left cursor-pointer">{{ index + 1 }}</td> -->
               <td class="text-left cursor-pointer">
-                <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="border"/>
+                <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" style="width: 50px;"/>
               </td>
               <td class="text-left cursor-pointer">
                 <q-input v-if="editMode === sunglass._id" v-model="sunglass.model" />
@@ -40,7 +40,7 @@
                   {{ sunglass.price }}
                 </div>
               </td>
-              <td class="text-left cursor-pointer">
+              <td class="text-center cursor-pointer">
                 <q-input v-if="editMode === sunglass._id" v-model="sunglass.stock" />
                 <div v-else>
                   {{ sunglass.stock }}
@@ -48,35 +48,43 @@
               </td>
               <td class="text-left cursor-pointer">
                 <!-- edit mode -->
-                <q-btn dense flat icon="eva-edit-outline" color="primary" v-if="editMode !== sunglass._id" @click="editMode = sunglass._id" />
+                <q-btn rounded dense icon="eva-edit-outline" color="primary" class="q-pa-xs font-size-responsive-sm q-mr-sm" v-if="editMode !== sunglass._id" @click="editMode = sunglass._id" />
                 <!-- update mode -->
-                <q-btn dense flat icon="eva-edit-outline" color="primary"  v-if="editMode === sunglass._id" @click="updateSunglasses(sunglass)" />
+                <q-btn rounded dense icon="eva-edit-outline" label="Save" class="custom-button q-px-md q-py-xs custom-button font-size-responsive-sm q-mr-sm" color="primary"  v-if="editMode === sunglass._id" @click="updateSunglasses(sunglass)" />
                 <!-- cancel/save -->
-                <q-btn dense flat icon="eva-checkmark-square-outline" color="secondary" v-if="editMode === sunglass._id" @click="editMode = null" />
+                <q-btn rounded dense label="Close" class="custom-button q-px-md q-py-xs custom-button font-size-responsive-sm q-mr-sm" v-if="editMode === sunglass._id" @click="editMode = null" />
                 <!-- delete -->
-                <q-btn dense flat icon="eva-trash-2-outline" color="negative" @click="deleteSunglasses(sunglass)" />
+                <q-btn rounded dense icon="eva-trash-2-outline" class="custom-button q-pa-xs custom-button font-size-responsive-sm" color="negative" @click="deleteSunglasses(sunglass)" />
               </td>
             </tr>
           </tbody>
         </q-markup-table>
       </q-card>
 
-      <q-card v-else class=" column flex-center">                                              <!-- add sunglasses card -->
+      <q-card v-else class="column flex-start">                                              <!-- add sunglasses card -->
         <q-card-section>
-          <div class="text-h6">Add Sunglasses</div>
+          <div class="font-size-responsive-lg">Add Sunglasses</div>
         </q-card-section>
         <q-form @submit.prevent="addSunglasses" @reset="onReset" class="q-gutter-lg" style="min-width: 100%;" enctype="multipart/form-data">
           <q-input filled v-model="sunglassesDetails.model" label="Model Name *" id="model" name="model" />
           <q-input filled v-model="sunglassesDetails.description" label="Description (max 50 words) *" id="description" name="description" />
           <q-select filled v-model="sunglassesDetails.color" label="Color *" id="color" name="color" :options="colors" emit-value map-options />
-          <q-input filled v-model="sunglassesDetails.price" label="Price (ZAR) *" type="number" prefix="R" :rules="[val => val > 0] || 'Price must be positive'" id="price" name="price" />
+          <q-input class="q-pa-none" filled v-model="sunglassesDetails.price" label="Price (ZAR) *" type="number" prefix="R" :rules="[val => val > 0] || 'Price must be positive'" id="price" name="price" />
           <q-select filled v-model="sunglassesDetails.stock" label="Stock *" :options="[...Array(11).keys()].slice(1)" emit-value map-options id="stock" name="stock" />
           <!-- <q-file filled v-model="sunglassesDetails.images" label="Image *" accept="image/*" name="images" id="images" /> -->
           <q-file filled v-model="image1" label="image (Side View) * " accept="image/*" name="image1" id="image1" />
           <q-file filled v-model="image2" label="image (Front View) * " accept="image/*" name="image2" id="image2" />
           <div>
-            <q-btn label="Add Sunglasses" type="submit" color="primary" class="custom-button"/>
-            <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm custom-button" />
+            <q-btn
+              rounded
+              dense
+              label="Add Sunglasses"
+              type="submit"
+              color="primary"
+              icon="eva-cloud-upload-outline"
+              class="q-px-md custom-button font-size-responsive-sm"
+            />
+            <q-btn rounded dense flat label="Reset" type="reset" color="primary" class="q-ml-md q-px-md custom-button font-size-responsive-sm" />
           </div>
         </q-form>
       </q-card>

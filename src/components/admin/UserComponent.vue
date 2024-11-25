@@ -1,75 +1,65 @@
 <template>
-  <div class="row q-pa-md q-gutter-md justify-center">                                                        <!-- constrains -->
-    <q-card class="q-pa-sm col-12 col-md-5">                                                                  <!---------------- USER STAT CARD ----------------->
+  <div class="row q-pa-md q-gutter-md justify-center">
+    <q-card flat bordered class="q-pa-sm col-12 col-md-5 full-height">
       <q-card-section>
-        <div class="text-h6">Frequent Users Statistics</div>
+        <div class="font-size-responsive-lg">Frequent Users Statistics</div>
       </q-card-section>
-      <q-card-section>
+      <q-card-section class="full-height">
         <canvas ref="canvas"></canvas>
       </q-card-section>
     </q-card>
 
-    <q-card class="q-pa-sm col-12 col-md-6">                                                                  <!---------------- USER DETAILS CARD ----------------->
-      <q-card v-if="selectedUser">                                                                            <!-- details -->
+
+      <q-card flat bordered class="col-12 col-md-4 q-pa-md" v-if="selectedUser">
         <q-card-section>
-          <div class="text-h6">{{ selectedUser.firstName }} Details</div>
+          <div class="font-size-responsive-lg">{{ selectedUser.firstName }} Details</div>
         </q-card-section>
+        <q-separator class="q-my-md" />
         <q-markup-table>
           <tbody>
             <tr>
-              <td class="text-left cursor-pointer">First Name: </td>
-              <td class="text-left cursor-pointer">{{ selectedUser.firstName }}</td>
+              <td style="border: none;" class="text-left cursor-pointer"><b>First Name :</b></td>
+              <td style="border: none;" class="text-left cursor-pointer">{{ selectedUser.firstName }}</td>
             </tr>
             <tr>
-              <td class="text-left cursor-pointer">Last Name: </td>
-              <td class="text-left cursor-pointer">{{ selectedUser.lastName }}</td>
+              <td style="border: none;" class="text-left cursor-pointer"><b>Last Name : </b></td>
+              <td style="border: none;" class="text-left cursor-pointer">{{ selectedUser.lastName }}</td>
             </tr>
             <tr>
-              <td class="text-left cursor-pointer">Email: </td>
-              <td class="text-left cursor-pointer">{{ selectedUser.email }}</td>
+              <td style="border: none;" class="text-left cursor-pointer"><b>Email : </b></td>
+              <td style="border: none;" class="text-left cursor-pointer">{{ selectedUser.email }}</td>
             </tr>
             <tr>
-              <td class="text-left cursor-pointer">Phone: </td>
-              <td class="text-left cursor-pointer">{{ selectedUser.phone }}</td>
+              <td style="border: none;" class="text-left cursor-pointer"><b>Phone : </b></td>
+              <td style="border: none;" class="text-left cursor-pointer">{{ selectedUser.phone }}</td>
             </tr>
             <tr>
-              <td class="text-left cursor-pointer">User Type: </td>
-              <td class="text-left cursor-pointer">
+              <td style="border: none;" class="text-left cursor-pointer"><b>User Type : </b></td>
+              <td style="border: none;" class="text-left cursor-pointer">
                 <q-select v-if="editMode === selectedUser._id" v-model="selectedUser.userType" :options="userTypeOptions" emit-value map-options />
                 <div v-else>
                   {{ selectedUser.userType }}
                 </div>
               </td>
             </tr>
-            <tr></tr>
           </tbody>
         </q-markup-table>
-        <br>
-        <div class="row justify-center">                                                                                            <!---------------- USER DETAILS BUTTONS ----------------->
-          <q-card-actions>                                                                                                          <!-- close card -->
-            <q-btn dense flat label="Close" color="primary" @click="closeDetails" />
-          </q-card-actions>
-          <q-card-actions v-if="editMode !== selectedUser._id">                                                                     <!-- edit mode -->
-            <q-btn dense flat icon="eva-edit-outline" color="primary" @click="editMode = selectedUser._id" />
-          </q-card-actions>
-          <q-card-actions v-if="editMode === selectedUser._id" >                                                                    <!-- update user type -->
-            <q-btn dense flat icon="eva-edit-outline" color="primary" @click="updateUserType(selectedUser)" />
-          </q-card-actions>
-          <q-card-actions v-if="editMode === selectedUser._id">                                                                     <!-- cancel edit mode -->
-            <q-btn dense flat label="Cancel" color="secondary" @click="editMode = null" />
-          </q-card-actions>
-          <q-card-actions>                                                                                                          <!-- delete user -->
-            <q-btn dense flat label="Delete" color="negative" @click="deleteUser(selectedUser._id, selectedUser.username)" />
-          </q-card-actions>
-          <q-card-actions>                                                                                                          <!-- logout user -->
-            <q-btn dense flat label="Logout" color="warning" v-if="selectedUser.loginInfo && selectedUser.loginInfo.isLoggedIn === true " @click="logoutUser(selectedUser._id, selectedUser.username)" />
-          </q-card-actions>
+        <q-separator class="q-my-md" />
+        <div class="row justify-between">
+          <div>
+            <q-btn rounded dense v-if="editMode !== selectedUser._id" class="q-px-md q-py-md custom-button font-size-responsive-sm q-mr-sm" icon="eva-edit-outline" color="primary" @click="editMode = selectedUser._id" style="height: 100%;" />
+            <q-btn rounded dense v-if="editMode === selectedUser._id" class="q-px-md q-py-xs custom-button font-size-responsive-sm q-mr-sm" icon="eva-edit-outline" color="primary" label="Save" @click="updateUserType(selectedUser)" style="height: 100%;" />
+            <q-btn rounded dense v-if="editMode === selectedUser._id" class="q-px-md q-py-xs custom-button font-size-responsive-sm q-mr-sm" label="Cancel" @click="editMode = null" style="height: 100%;" />
+            <q-btn rounded dense class="q-px-md q-py-md q-mr-sm font-size-responsive-xs" icon="eva-trash-2-outline" color="negative" @click="deleteUser(selectedUser._id, selectedUser.username)" />
+            <q-btn rounded dense v-if="selectedUser.loginInfo && selectedUser.loginInfo.isLoggedIn === true" class="q-px-md q-py-md custom-button font-size-responsive-xs" icon="eva-log-out-outline" color="warning" @click="logoutUser(selectedUser._id, selectedUser.username)" />
+          </div>
+          <q-btn rounded dense class="q-px-md q-py-xs custom-button font-size-responsive-sm q-mt-md" label="Close" color="primary" @click="closeDetails" style="width: 100%;" />
         </div>
       </q-card>
 
-      <q-card flat v-else class="full-height">                                                                                    <!---------------- ALL USERS CARD ----------------->
+      <q-card flat bordered class="q-pa-md full-height col-12 col-md-6" v-else>                                                                                    <!---------------- ALL USERS CARD ----------------->
         <q-card-section>
-          <div class="text-h6">Registered Users</div>
+          <div class="font-size-responsive-lg">Registered Users</div>
         </q-card-section>
         <q-markup-table>
           <thead>
@@ -99,14 +89,14 @@
           </tbody>
         </q-markup-table>
       </q-card>
-    </q-card>
+
   </div>
 </template>
 
 <script>
 import UserService from 'src/services/UserService';
-import { Chart, LinearScale, BarController, BarElement, CategoryScale } from 'chart.js';
-Chart.register(LinearScale, BarController, BarElement, CategoryScale);
+import { Chart, LinearScale, BarController, BarElement, CategoryScale, registerables } from 'chart.js';
+Chart.register(LinearScale, BarController, BarElement, CategoryScale, ...registerables);
 
 export default {
   data() {
@@ -132,40 +122,67 @@ export default {
       selectedUser: null
     }
   },
+
+  created() {
+    this.getAllUsers()
+  },
+  mounted() {
+    this.getFrequentlyLoggedInUsers()
+  },
+  beforeUnmount() {
+    if (this.chart) this.chart.destroy();
+  },
+
   methods: {
-    async getFrequentlyLoggedInUsers() {                                                                // get frequent users function
-      const response = await UserService.findUsersFrequentlyLoggedIn()
-      this.frequentUsers = response
-      this.createChart()
+    async getFrequentlyLoggedInUsers() {
+      const response = await UserService.findUsersFrequentlyLoggedIn();
+      this.frequentUsers = response;
+      this.createChart();
     },
-    createChart() {                                                                                     // chart function
+
+    createChart() {
       const ctx = this.$refs.canvas.getContext('2d');
-      this.chart = new Chart(ctx, {
+      if (this.chart) {
+        this.chart.destroy(); // Destroy any existing chart before creating a new one
+      }
+      this.chart = new Chart(ctx, this.getChartConfig());
+    },
+
+    getChartConfig() {
+      return {
         type: 'bar',
         data: {
           labels: this.frequentUsers.map(user => user.firstName),
-          datasets: [{
-            label: '# of Logins',
-            data: this.frequentUsers.map(user => user.loginInfo.loginCount),
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          }]
+          datasets: [
+            {
+              label: '# of Logins',
+              data: this.frequentUsers.map(user => user.loginInfo.loginCount),
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1,
+            },
+          ],
         },
         options: {
+          indexAxis: 'y', // Make it a horizontal bar chart
           scales: {
+            x: {
+              beginAtZero: true,
+            },
             y: {
-              beginAtZero: true
-            }
+              beginAtZero: true,
+            },
           },
           plugins: {
-            tooltip: {
-              enabled: true
-            }
-          }
-        }
-      });
+            tooltip: { enabled: true },
+          },
+        },
+      };
     },
+
+
+
+
     async getAllUsers() {                                                                               // get all users function
       const response = await UserService.findAllUsers()
       this.users = response
@@ -209,7 +226,7 @@ export default {
     async deleteUser(userId, username) {                                                              // delete user
       const currentUser = await UserService.FindUserByToken()
       if (currentUser._id === userId) {
-        this.$q.notify({ type: 'negative', message: 'You cannot change your usertype!' })
+        this.$q.notify({ type: 'negative', message: 'You cannot delete yourself!' })
       } else {
         this.$q.dialog({
           title: 'Delete user',
@@ -250,11 +267,22 @@ export default {
       this.selectedUser = null
     }
   },
-  created() {
-    this.getAllUsers()
-  },
-  mounted() {
-    this.getFrequentlyLoggedInUsers()
-  }
 }
 </script>
+
+<style lang=sass>
+.canvas-container
+  position: relative
+  width: 100%
+  height: 50vh
+
+.canvas
+  width: 100% !important
+  height: 100% !important
+
+.button-group
+  display: flex
+  align-items: center
+  gap: 8px
+
+</style>

@@ -1,32 +1,32 @@
 <template>
   <q-card-section>                                                                                   <!---------------- USER DETAILS COMPONENET ----------------->
-    <div class="text-h6 text-white">Personal Details</div>
+    <div class="text-h6 text-black">Personal Details</div>
   </q-card-section>
 
-    <q-card class="q-mb-md">
-      <q-card-section>
+    <q-card flat bordered class="q-mb-md">
+
         <q-item>
           <q-item-section class="text-left">First Name</q-item-section>
           <q-item-section class="text-left">
             <q-input v-model="userDetails.firstName" />
           </q-item-section>
         </q-item>
-      </q-card-section>
+
     </q-card>
 
-    <q-card class="q-mb-md">
-      <q-card-section>
+    <q-card flat bordered class="q-mb-md">
+
         <q-item>
           <q-item-section class="text-left">Last Name</q-item-section>
           <q-item-section class="text-left">
             <q-input v-model="userDetails.lastName" />
           </q-item-section>
         </q-item>
-      </q-card-section>
+
     </q-card>
 
-    <q-card class="q-mb-md">
-      <q-card-section>
+    <q-card flat bordered class="q-mb-md">
+
         <q-item>
           <q-item-section class="text-left">
             <span>Email
@@ -40,29 +40,27 @@
             <q-input v-model="userDetails.email" />
           </q-item-section>
         </q-item>
-      </q-card-section>
+
     </q-card>
 
-    <q-card class="q-mb-md">
-      <q-card-section>
-        <q-item>
-          <q-item-section class="text-left">Phone</q-item-section>
-          <q-item-section class="text-left">
-            <q-input v-model="userDetails.phone" />
-          </q-item-section>
-        </q-item>
-      </q-card-section>
+    <q-card flat bordered class="q-mb-md">
+      <q-item>
+        <q-item-section class="text-left">Phone</q-item-section>
+        <q-item-section class="text-left">
+          <q-input v-model="userDetails.phone" />
+        </q-item-section>
+      </q-item>
     </q-card>
 
-    <q-card class="q-mb-md">
-      <q-card-section>
+    <q-card flat bordered class="q-mb-md">
+
         <q-item>
           <q-item-section class="text-left">Username</q-item-section>
           <q-item-section class="text-left">
             <q-input v-model="userDetails.username" />
           </q-item-section>
         </q-item>
-      </q-card-section>
+
     </q-card>
 
 
