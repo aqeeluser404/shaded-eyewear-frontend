@@ -16,14 +16,14 @@
               <q-item-section avatar><q-icon name="eva-clipboard-outline" /></q-item-section>
               <q-item-section>Orders</q-item-section>
             </q-item>
-            <q-item clickable @click="changePage('InvoiceComponent')" >
+            <q-item clickable @click="changePage('ReturnsComponent')" >
               <q-item-section avatar><q-icon name="eva-credit-card-outline" /></q-item-section>
-              <q-item-section>Invoices</q-item-section>
+              <q-item-section>Returns</q-item-section>
             </q-item>
-            <q-item clickable @click="changePage('AddressComponent')" >
+            <!-- <q-item clickable @click="changePage('AddressComponent')" >
               <q-item-section avatar><q-icon name="eva-navigation-2-outline" /></q-item-section>
               <q-item-section>Address Book</q-item-section>
-            </q-item>
+            </q-item> -->
           </q-card>
 
           <!-- personal details -->
@@ -41,6 +41,8 @@
 <script>
 import ProfileComponent from 'src/components/user/ProfileComponent.vue'
 import OrdersComponent from 'src/components/user/OrdersComponent.vue'
+import ReturnsComponent from 'src/components/user/ReturnsComponent.vue'
+
 import Helper from '../../services/utils'
 
 export default {
@@ -50,6 +52,7 @@ export default {
   components: {
     ProfileComponent,
     OrdersComponent,
+    ReturnsComponent
   },
   data() {
     return {
@@ -59,14 +62,14 @@ export default {
   methods: {
     changePage(componentName) {
 
-      if (componentName === 'InvoiceComponent') {
-        this.$q.notify({ type: 'negative', color: 'red', message: 'Currently under development! We apologize for any inconvenience.' })
-        return
-      }
-      if (componentName === 'AddressComponent') {
-        this.$q.notify({ type: 'negative', color: 'red', message: 'Currently under development! We apologize for any inconvenience.' })
-        return
-      }
+      // if (componentName === 'InvoiceComponent') {
+      //   this.$q.notify({ type: 'negative', color: 'red', message: 'Currently under development! We apologize for any inconvenience.' })
+      //   return
+      // }
+      // if (componentName === 'AddressComponent') {
+      //   this.$q.notify({ type: 'negative', color: 'red', message: 'Currently under development! We apologize for any inconvenience.' })
+      //   return
+      // }
       this.currentPageComponent = componentName;
     }
   }

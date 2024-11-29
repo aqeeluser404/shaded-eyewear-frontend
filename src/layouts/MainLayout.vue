@@ -246,8 +246,9 @@ export default {
   },
   watch: {
     '$route'() {
-      this.checkLoginStatus();
-      this.handleScroll(); // Ensure the correct header state on route change
+      this.checkLoginStatus()
+      this.handleScroll() // Ensure the correct header state on route change
+      this.getCurrentOrder()
     },
     'userContact.firstName': function(newVal) {
       this.userContact.firstName = newVal.toLowerCase();

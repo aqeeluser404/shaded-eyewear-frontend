@@ -38,51 +38,40 @@
           </q-card>
 
           <!-- Pickup Panel -->
-          <q-card flat bordered class="q-pa-md" v-if="pickupPanel">
+          <q-card flat bordered class="" v-if="pickupPanel">
 
             <q-card-section class="row items-center font-size-responsive-md">
-              <q-icon name="local_shipping" class="q-mr-md" />
-              <div class="">Cape Town</div>
+              <div class="text-subtitle1 q-mr-md"><b>Pickup Location</b></div>
+              <q-icon name="local_shipping" class="font-size-responsive-md" />
             </q-card-section>
 
             <q-separator />
 
             <q-card-section>
               <div class="">
-                <div class="font-size-responsive-sm q-mb-md">Available Pickup Location(s)</div>
-                <q-radio class="">
-                  <span class="font-size-responsive-md"><b>Downtown Cape Town, Western Cape</b></span><br>
-                  <span class="font-size-responsive-sm">123 Main Street</span><br>
-                  <span class="font-size-responsive-sm">Downtown, Cape Town, 5247</span>
+                <div class="text-subtitle1 q-mb-md">Available Pickup Location(s)</div>
+                <q-radio class="q-pa-sm">
+                  <span class="q-ml-md"><b>332 Klip Road</b></span><br>
+                  <span class="q-ml-md">Lotus River</span><br>
+                  <span class="q-ml-md">Cape Town</span><br>
+                  <span class="q-ml-md">7941</span>
+                  <!-- <span class="q-ml-md">Western Cape</span><br> -->
                 </q-radio>
-              </div>
+
+              </div><br>
+              <div><b>Our store is open from 8:00 AM to 5:00 PM</b></div>
             </q-card-section>
 
             <q-separator />
 
             <q-card-section>
-              <br>
-              <div class="font-size-responsive-sm q-mb-md"><b>Pickup Instructions</b></div>
-              <div class="font-size-responsive-sm">
+              <div class="text-subtitle1 q-mb-md"><b>Pickup Instructions</b></div>
+              <div>
                 For a smooth pickup experience, please remember to bring a valid ID and your order confirmation email.
-                <br>
-                <ul>
-                  <li><strong>Store Hours:</strong>
-                    <ul>
-                      <li>Monday to Friday: 8 AM - 5 PM</li>
-                    </ul>
-                  </li>
-                  <br>
-                  <li><strong>Verification at counter:</strong>
-                    <ul>
-                      <li>Please bring your valid email Order ID to verify your purchase.</li>
-                    </ul>
-                  </li>
-                </ul>
-                <br>
+              </div><br>
+              <div>
                 If you have any questions or need assistance, feel free to contact us. <br>Thank you for shopping with us!
               </div>
-
             </q-card-section>
           </q-card>
 
@@ -137,23 +126,31 @@
         </div>
 
         <!-- order summary -->
-        <div class="col-12 col-md-3 full-height">
-          <q-card flat bordered class="q-pa-md q-mb-md">
-            <q-card-section>
-              <div class="text-h5 q-mb-md">Order Summary</div>
-              <q-separator class="q-mb-md" />
-              <div class="text-caption ">
-                <b>TOTAL:</b> {{ order.sunglasses ? order.sunglasses.length : 0 }} item(s)
-                <span class="q-ml-lg font-size-responsive-lg">R {{ order.totalAmount }}.00</span>
+        <div class="col-12 col-md-3">
+          <div class="q-gutter-md">
+
+            <q-card flat bordered>
+              <q-card-section>
+                <div class="font-size-responsive-xl">Order Summary</div>
+              </q-card-section>
+
+              <q-separator />
+
+              <div class="q-px-md">
+                <q-card-section class="row items-center q-gutter-md justify-start">
+                  <div class="text-caption"><b>TOTAL:</b> {{ order.totalItems }} item(s)</div>
+                  <div class="font-size-responsive-lg">R {{ order.totalAmount }}.00</div>
+                </q-card-section>
               </div>
-              <div class="q-mt-md">
+
+              <q-card-section class="q-pa-none q-px-md q-pb-md">
                 <q-btn
                   rounded dense
                   color="black"
                   text-color="white"
                   label="Pay with Yoco"
                   style="width: 100%;"
-                  class="q-px-lg custom-button font-size-responsive-sm q-mb-md"
+                  class="q-px-lg custom-button font-size-responsive-md q-mb-md"
                   @click="initiatePayment"
                 />
                 <q-btn
@@ -161,33 +158,36 @@
                   icon="eva-lock-outline"
                   label="Secure Checkout"
                   flat
-                  class="font-size-responsive-xs"
-                  style="width: 100%;"
+                  class="custom-button font-size-responsive-sm"
+                  style="width: 100%; opacity: 0.9"
                 />
-              </div>
+              </q-card-section>
 
-            </q-card-section>
-          </q-card>
 
-          <q-card flat bordered class="">
-            <q-card-section class="font-size-responsive-sm q-pa-lg" >
-              Review your items
-              <!-- <p class="text-caption"><b>Order Type: </b><span v-if="pickupPanel">Pickup at counter</span></p> -->
-            </q-card-section>
-            <q-separator class="q-mb-md" />
-            <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0">
-              <div v-for="sunglass in order.sunglassesDetails" :key="sunglass._id" class="row items-start  cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
-                <q-item-section class="col-md-5">
-                  <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="q-mb-sm border" style="max-width: 120px; max-height: 120px;" />
-                </q-item-section>
-                <q-item-section class="col-md-5 row justify-start">
-                  <div class="font-size-responsive-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b></div>
-                  <div class="text-caption">Color: {{ capitalizeFirstLetter(sunglass.color) }}</div>
-                  <div class="text-caption">Price: R {{ sunglass.price }}.00</div>
-                </q-item-section>
-              </div>
-            </q-card-section>
-          </q-card>
+            </q-card>
+
+            <q-card flat bordered class="">
+              <q-card-section class="font-size-responsive-sm" >
+                Review your items
+              </q-card-section>
+
+              <q-separator />
+
+              <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0" class="q-gutter-md">
+                <div v-for="sunglass in order.sunglassesDetails" :key="sunglass._id" class="row items-center cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
+                  <q-item-section class="col-4">
+                    <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="border" style="max-width: 100px; max-height: 100px;" />
+                  </q-item-section>
+                  <q-item-section class="col-7" style="height: 100%;">
+                    <div class="font-size-responsive-sm q-mb-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b> </div>
+                    <div class="text-caption">Item(s): 1</div>
+                    <div class="text-caption"><b>Price:</b> R {{ sunglass.price }}.00</div>
+                  </q-item-section>
+                </div>
+              </q-card-section>
+            </q-card>
+          </div>
+
         </div>
       </div>
     </div>

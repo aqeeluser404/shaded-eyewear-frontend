@@ -35,13 +35,14 @@ const routes = [
       { path: '/verify-email', component: () => import('src/pages/email/VerifyEmail.vue')},
       { path: '/resend-verification', component: () => import('src/pages/email/ResendVerificationEmail.vue') },
       { path: '/forgot-password', component: () => import('src/pages/email/ForgotPasswordPage.vue') },
-      { path: '/reset-password', component: () => import('src/pages/email/ResetPasswordPage.vue')}
+      { path: '/reset-password', component: () => import('src/pages/email/ResetPasswordPage.vue')},
     ],
   },
   {
     path: "/:catchAll(.*)*",
     component: () => import("pages/ErrorNotFound.vue"),
   },
+
 ];
 
 export default routes;

@@ -70,6 +70,15 @@ class OrderService {
       Logger.error(error)
     }
   }
+  static async findAllMyReturns(userId) {
+    const ENDPOINT = `/order/my-returns/${userId}`
+    try {
+      const response = await axiosInstance.get(ENDPOINT)
+      return response.data
+    } catch (error) {
+      Logger.error(error)
+    }
+  }
   static async findAllOrders() {
     const ENDPOINT = "/admin/order/all"
     try {

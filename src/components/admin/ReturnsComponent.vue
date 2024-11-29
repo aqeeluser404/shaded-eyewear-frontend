@@ -4,20 +4,11 @@
     <!-- view all orders card -->
     <q-card flat bordered class="q-pa-md col-12 col-md-6 full-height" v-if="selectedOrder === null">
       <q-card-section>
-        <div class="font-size-responsive-lg">Order History</div>
+        <div class="font-size-responsive-lg"><b>Order History</b></div>
       </q-card-section>
 
-      <!-- filter -->
-      <q-card class="q-pa-md row justify-start">
-        <q-select
-          filled
-          v-model="selectedOrderStatus"
-          :options="orderStatus"
-          label="Order Status"
-          @update:model-value="filterByOrderStatus"
-          class="col-12 col-md-3 q-mr-md"
-        />
-        <q-input filled v-model="search" placeholder="Search" @update:model-value="filterBySearch" class="col-12 col-md-8" />
+      <q-card class="q-pa-md row justify-between">
+        <q-input filled v-model="search" placeholder="Search" @update:model-value="filterBySearch" class="col-12 col-md-12" />
       </q-card>
 
       <q-markup-table>
@@ -25,72 +16,78 @@
           <tr>
             <th></th>
             <th class="text-left">ORDER ID</th>
+            <th class="text-left">Customer Username</th>
+            <th class="text-left">Amount</th>
             <th class="text-left">Returns</th>
-            <th class="text-left">Customer Name</th>
-            <!-- <th class="text-left">Order Type</th> -->
-            <th class="text-left">Order Status</th>
-            <!-- <th class="text-left">Order Date</th> -->
           </tr>
         </thead>
-        <tbody v-for="(order, index) in filteredList" :key="order._id">
-          <tr @click="openDetails(order)" :class="{ 'refunded': order.status === 'refunded' }">
+        <tbody v-for="(order, index) in filteredOrders" :key="order._id">
+          <tr @click="openDetails(order)" :class="{ 'refunded': order.returns == 'returned item(s)' }">
             <td class="text-left cursor-pointer">{{ index + 1 }}</td>
             <td class="text-left cursor-pointer">{{ order._id }}</td>
-            <td class="text-left cursor-pointer">{{ capitalizeFirstLetter(order.returns) }}</td>
             <td class="text-left cursor-pointer">{{ order.userFirstName }}</td>
-            <!-- <td class="text-left cursor-pointer">{{ capitalizeFirstLetter(order.orderType) }}</td> -->
-            <td class="text-left cursor-pointer">{{ capitalizeFirstLetter(order.status) }}</td>
-            <!-- <td class="text-left cursor-pointer">{{ formatDate(order.orderDate) }}</td> -->
+            <td class="text-left cursor-pointer">R {{ order.totalAmount }}.00</td>
+            <td class="text-left cursor-pointer">
+              <div v-if="order.returns">
+                {{ capitalizeFirstLetter(order.returns) }}
+              </div>
+              <div v-else>
+                No Returned item(s)
+              </div>
+            </td>
           </tr>
         </tbody>
       </q-markup-table>
     </q-card>
 
     <!-- log return -->
-    <q-card flat bordered class="q-pa-md col-12 col-md-6 full-height" v-if="selectedOrder">
-      <q-card-section>
-        <div class="font-size-responsive-lg">Log Return</div>
-      </q-card-section>
+    <q-card flat bordered class="col-12 col-md-6 full-height" v-if="selectedOrder">
+      <div class="q-pa-md">
+        <q-card-section>
+          <div class="font-size-responsive-lg"><b>Log Return</b></div>
+        </q-card-section>
+      </div>
 
-      <q-separator class="q-my-md" />
+      <q-separator />
 
-      <!-- filter Sunglasses -->
-      <q-card-section>
-        <div class="font-size-responsive-sm">Order to be refunded: {{ selectedOrder._id }}</div>
-        <br>
-        <div v-for="(sunglass, index) in selectedOrder.sunglassesDetails" :key="index" class="q-my-sm">
-          <q-checkbox
-            v-model="selectedSunglasses"
-            :val="getUniqueIdentifier(sunglass._id, index)"
-            :label="`${sunglass.model} (ID: ${sunglass._id}, Index: ${index})`"
-            color="primary"
-            @change="toggleSunglassSelection(sunglass._id, index)"
-          />
-        </div>
-      </q-card-section>
+      <div class="q-pa-md">
+        <q-card-section>
+          <div class="font-size-responsive-sm q-mb-md">Order to be refunded: <b>#{{ selectedOrder._id }}</b></div>
+          <div v-for="(sunglass, index) in selectedOrder.sunglassesDetails" :key="index">
+            <q-checkbox
+              v-model="selectedSunglasses"
+              :val="getUniqueIdentifier(sunglass._id, index)"
+              :label="`${sunglass.model}`"
+              color="primary"
+              @change="toggleSunglassSelection(sunglass._id, index)"
+            />
+          </div>
+          <br>
+          <div>
+            Please note that once a refund has been processed for an order, further refunds for the same order cannot be issued unless a new order is placed.
+          </div>
+        </q-card-section>
 
-      <q-separator class="q-my-md" />
-
-      <div>
-        <q-btn rounded dense class="q-px-md q-py-sm custom-button font-size-responsive-sm q-mr-sm" label="Close" color="primary" @click="closeDetails" style="height: 100%;" />
-        <q-btn rounded dense class="q-px-md q-py-sm custom-button font-size-responsive-sm q-mr-sm" label="Log Return" @click="logReturn" style="height: 100%;" />
+        <q-card-section>
+          <q-btn rounded dense class="q-px-md q-py-sm custom-button font-size-responsive-sm q-mr-sm" label="Close" color="primary" @click="closeDetails" style="height: 100%;" />
+          <q-btn rounded dense class="q-px-md q-py-sm custom-button font-size-responsive-sm q-mr-sm" icon="eva-shopping-bag-outline" label="Log Return" @click="logReturn(selectedOrder.userFirstName)" style="height: 100%;" />
+        </q-card-section>
       </div>
     </q-card>
 
     <!-- return history -->
     <q-card flat bordered class="q-pa-md col-12 col-md-5 full-height" v-if="selectedReturn === null">
       <q-card-section>
-        <div class="font-size-responsive-lg">Return History</div>
+        <div class="font-size-responsive-lg"><b>Return History</b></div>
       </q-card-section>
 
-      <q-markup-table>
+      <q-markup-table flat v-if="ordersRefunded.length > 0">
         <thead>
           <tr>
             <th></th>
             <th class="text-left">REFUND ID</th>
             <th class="text-left">REFERENCE ORDER</th>
-            <th class="text-left">Customer Name</th>
-            <!-- <th class="text-left">Order Status</th> -->
+            <th class="text-left">Amount</th>
           </tr>
         </thead>
         <tbody v-for="(order, index) in ordersRefunded" :key="order._id">
@@ -98,26 +95,67 @@
             <td class="text-left cursor-pointer">{{ index + 1 }}</td>
             <td class="text-left cursor-pointer">{{ order._id }}</td>
             <td class="text-left cursor-pointer">{{ order.originalOrder }}</td>
-            <td class="text-left cursor-pointer">{{ order.userFirstName }}</td>
-            <!-- <td class="text-left cursor-pointer">{{ capitalizeFirstLetter(order.status) }}</td> -->
+            <td class="text-left cursor-pointer">R {{ order.totalAmount }}.00</td>
           </tr>
         </tbody>
       </q-markup-table>
-    </q-card>
 
-    <q-card flat bordered class="q-pa-md col-12 col-md-5 full-height" v-if="selectedReturn">
-      <q-card-section>
-        <div class="font-size-responsive-lg">Return Details</div>
-      </q-card-section>
+      <q-separator v-if="ordersRefunded.length === 0" />
 
-      <q-separator class="q-my-md" />
-
-      <div>
-        <q-btn rounded dense class="q-px-md q-py-sm custom-button font-size-responsive-sm q-mr-sm" label="Close" color="primary" @click="closeReturnDetails" style="height: 100%;" />
-        <!-- <q-btn rounded dense class="q-px-md q-py-sm custom-button font-size-responsive-sm q-mr-sm" label="Log Return" @click="logReturn" style="height: 100%;" /> -->
+      <div class="q-pa-md" v-if="ordersRefunded.length === 0">
+        <q-card-section  >
+          No returns were made.
+        </q-card-section>
       </div>
     </q-card>
 
+    <!-- return panel -->
+    <q-card flat bordered class=" col-12 col-md-5 full-height" v-if="selectedReturn">
+
+      <div class="q-pa-md">
+        <q-card-section class="row justify-between flex-center q-gutter-md">
+          <div>
+            <div class="text-subtitle1"><b>Returned by {{ capitalizeFirstLetter(selectedReturn.userFirstName) }}</b></div>
+          </div>
+          <div>
+            <div class="text-caption">Refund ID: #{{ selectedReturn._id }}</div>
+            <div class="text-caption"><b>Returned on: {{ formatDate(selectedReturn.orderDate) }}</b></div>
+          </div>
+        </q-card-section>
+      </div>
+
+      <q-separator />
+
+      <div class="q-pa-md">
+        <q-card-section>
+          <div class="text-subtitle1"><b>Reference Order:</b> #{{ selectedReturn.originalOrder }}</div><br>
+          <div class="text-caption">Total items: {{ selectedReturn.totalItems }} item(s)</div>
+          <div class="text-caption">Total amount: R {{ selectedReturn.totalAmount }}.00</div>
+        </q-card-section>
+      </div>
+      <q-separator />
+
+      <div class="q-px-md">
+        <q-card-section v-if="selectedReturn.sunglassesDetails && selectedReturn.sunglassesDetails.length > 0" class="q-gutter-md">
+          <div v-for="sunglass in selectedReturn.sunglassesDetails" :key="sunglass._id" class="row items-center cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
+            <q-item-section class="col-3">
+              <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="border" style="max-width: 100px; max-height: 100px;" />
+            </q-item-section>
+            <q-item-section class="col-6">
+              <div class="font-size-responsive-sm q-mb-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b> </div>
+              <div class="text-caption">Item(s): 1</div>
+              <div class="text-caption"><b>Price:</b> R {{ sunglass.price }}.00</div>
+            </q-item-section>
+          </div>
+        </q-card-section>
+      </div>
+
+      <q-separator />
+
+      <q-card-section>
+        <q-btn rounded dense class="q-px-md q-py-sm custom-button font-size-responsive-sm" label="Close" color="primary" @click="closeReturnDetails" style="width: 100%; height: 100%;" />
+      </q-card-section>
+    </q-card>
   </div>
 </template>
 
@@ -135,18 +173,11 @@ export default {
 
       selectedOrder: null,
       selectedReturn: null,
-
       selectedSunglasses: [],
-
-      ordersPaid: [],
-      ordersPaidAndPickedup: [],
       ordersRefunded: [],
-
-      combinedList: [],
-      filteredList: [],
-
+      currentOrders: [],
+      filteredOrders: [], // Define filteredOrders to hold search results
       selectedOrderStatus: 'All',
-      orderStatus: ['All', 'Paid', 'Paid & picked up']
     }
   },
   async mounted() {
@@ -158,22 +189,33 @@ export default {
     getImageUrl: Helper.getImageUrl,
 
     async getAllOrders() {
-      const response = await OrderService.findAllOrders()
-      this.orders = await Promise.all(response.map(async order => {
-        const user = await UserService.findUserById(order.user)
-        return {
-          ...order,
-          userFirstName: user.firstName,
-        }
-      }))
-      await this.getSunglasses()
-      this.ordersPaid = this.orders.filter(order => order.status === 'paid')
-      this.ordersPaidAndPickedup = this.orders.filter(order => order.status === 'paid & picked up')
-      this.ordersRefunded = this.orders.filter(order => order.status === 'refunded')
+      try {
+        const response = await OrderService.findAllOrders();
 
-      this.combinedList = [...this.ordersPaid, ...this.ordersPaidAndPickedup]
-      this.filteredList = this.combinedList
+        // Add user details to all orders
+        this.orders = await Promise.all(response.map(async order => {
+          const user = await UserService.findUserById(order.user);
+          return {
+            ...order,
+            userFirstName: user.username,
+          };
+        }));
+
+        await this.getSunglasses();
+
+        // Filter orders based on status and return criteria
+        const filteredOrders = this.orders.filter(order => order.status === 'paid & picked up' || order.status === 'refunded')
+        this.currentOrders = filteredOrders.filter(order => order.status === 'paid & picked up' || order.returns === 'returned item(s)' )
+        this.ordersRefunded = filteredOrders.filter(order => order.status === 'refunded');
+
+        // Initialize filteredOrders to currentOrders
+        this.filteredOrders = this.currentOrders;
+
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
     },
+
     async getSunglasses() {
       for (const order of this.orders) {
         if (order.sunglasses && order.sunglasses.length > 0) {
@@ -189,44 +231,37 @@ export default {
         }
       }
     },
-    filterByOrderStatus() {
-      if (this.selectedOrderStatus === 'All') {
-        this.filteredList = this.combinedList
-      } else if (this.selectedOrderStatus === 'Pending') {
-        this.filteredList = this.ordersPending
-      } else if (this.selectedOrderStatus === 'Paid') {
-        this.filteredList = this.ordersPaid
-      } else if (this.selectedOrderStatus === 'Paid & picked up') {
-        this.filteredList = this.ordersPaidAndPickedup
-      } else if (this.selectedOrderStatus === 'Refunded') {
-        this.filteredList = this.ordersRefunded
-      }
-    },
     filterBySearch() {
       if (this.search === '') {
-        this.selectedOrderStatus = 'All'
-        this.filterByOrderStatus()
+        this.filteredOrders = this.currentOrders
         return
       }
-      const searchTerm = this.search.toLowerCase()
-      this.filteredList = this.filteredList.filter(order =>
+
+      const searchTerm = this.search.toLowerCase();
+
+      // Reset filteredList to combinedList before applying the search filter
+      this.filteredOrders = this.currentOrders.filter(order =>
         order.userFirstName.toLowerCase().includes(searchTerm) ||
-        order._id.toLowerCase().includes(searchTerm)
-      )
+        order._id.toLowerCase().includes(searchTerm) ||
+        order.totalAmount.toString().includes(searchTerm)
+      );
     },
+
     getUniqueIdentifier(id, index) {
       return `${id}_${index}`
     },
-    async logReturn() {
+    async logReturn(firstName) {
       try {
         const sunglassesToRefund = this.selectedSunglasses.map(identifier => {
           const [id] = identifier.split('_')
           return { _id: id, quantity: 1 }
         })
         // console.log(sunglassesToRefund)
-        if (sunglassesToRefund) {
+        if (this.selectedSunglasses == '') {
+          this.$q.notify({ type: 'negative', message: 'Choose a pair of sunglasses to refund.' })
+        } else {
           this.$q.dialog({
-            title: 'Refund Order', message: `You are about to refund ${sunglassesToRefund.userFirstName}'s order, continue?`, color: 'primary', cancel: true, persistent: true
+            title: 'Refund Order', message: `You are about to refund ${firstName}'s order, continue?`, color: 'primary', cancel: true, persistent: true
           }).onOk(async () => {
             const response = await OrderService.refundOrder(this.selectedOrder._id, sunglassesToRefund)
             if (response) {
@@ -250,7 +285,9 @@ export default {
         this.$q.notify({ type: 'negative', message: 'This order has already been issued a refund.' });
         return
       }
+
       this.selectedOrder = order
+      this.selectedReturn = null
       this.selectedSunglasses = [] // Reset selected sunglasses when a new order is selected
     },
     toggleSunglassSelection(id, index) {
@@ -266,8 +303,21 @@ export default {
       this.selectedOrder = null
     },
 
+    viewSunglassesDetails(id) {
+      if(!id) {
+        Logger.error("Invalid sunglasses ID")
+        return
+      }
+      try {
+        this.$router.push(`/sunglasses/view/${id}`)
+      } catch (error) {
+        Logger.error(error)
+      }
+    },
+
     openReturnDetails(order) {
       this.selectedReturn = order
+      this.selectedOrder = null,
       this.selectedSunglasses = []
     },
     closeReturnDetails() {

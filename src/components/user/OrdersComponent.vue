@@ -1,82 +1,81 @@
 <template>
   <q-card-section>
-    <div class="text-h6 text-black">Your previous orders</div>
+    <div class="text-h6 text-black">Order History</div>
   </q-card-section>
 
-  <q-card flat bordered >
-
     <!-- view order details -->
-    <div v-if="orders && orders !== null">
+    <div v-if="orders.length > 0">
       <div v-if="selectedOrder">
-        <q-card flat class="">
-          <q-card-section>
-            <div class="text-subtitle1">Order <b>#{{ selectedOrder._id }}</b> </div>
-            <div class="text-caption">ORDERED {{ formatDate(selectedOrder.orderDate) }}</div>
+        <q-card flat bordered>
+          <q-card-section class="row justify-between flex-center q-gutter-md">
+            <div>
+              <div class="text-subtitle1" v-if="selectedOrder.status==='paid'"><b>{{ capitalizeFirstLetter(selectedOrder.status) }} on {{ formatDate(selectedOrder.orderDate) }}</b></div>
+              <div class="text-subtitle1" v-if="selectedOrder.status==='pending'"><b>{{ capitalizeFirstLetter(selectedOrder.status) }} payment, {{ formatDate(selectedOrder.orderDate) }}</b></div>
+              <div class="text-subtitle1" v-if="selectedOrder.status==='paid & picked up'"><b>Collected by {{ selectedOrder.userFirstName }}</b></div>
+            </div>
+            <div>
+              <div class="text-caption">Order ID: #{{ selectedOrder._id }}</div>
+              <div class="text-caption"><b>ORDERED {{ formatDate(selectedOrder.orderDate) }}</b></div>
+            </div>
           </q-card-section>
-          <q-card-section>
-            <div class="text-caption">Total Amount: R {{ selectedOrder.totalAmount }}.00</div>
-            <div class="text-caption">Total Items: {{ selectedOrder.totalItems }} item(s)</div>
-          </q-card-section>
+
           <q-separator />
-          <q-card-section v-if="selectedOrder.sunglassesDetails && selectedOrder.sunglassesDetails.length > 0">
-            <div v-for="sunglass in selectedOrder.sunglassesDetails" :key="sunglass._id" class="row items-start cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
+
+          <q-card-section>
+            <div class="text-caption">Total Items: {{ selectedOrder.totalItems }} item(s)</div>
+            <div class="text-caption">Total Amount: R {{ selectedOrder.totalAmount }}.00</div>
+          </q-card-section>
+
+          <q-card-section v-if="selectedOrder.sunglassesDetails && selectedOrder.sunglassesDetails.length > 0" class="q-gutter-md">
+            <div v-for="sunglass in selectedOrder.sunglassesDetails" :key="sunglass._id" class="row items-center cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
               <q-item-section class="col-3">
                 <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="border" style="max-width: 100px; max-height: 100px;" />
               </q-item-section>
-              <q-item-section>
-                <div class="font-size-responsive-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b></div>
-                <div class="text-caption">Color: {{ capitalizeFirstLetter(sunglass.color) }}</div>
-                <div class="text-caption">Price: R {{ sunglass.price }}.00</div>
+              <q-item-section class="col-6">
+                <div class="font-size-responsive-sm q-mb-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b> </div>
+                <div class="text-caption">Item(s): 1</div>
+                <div class="text-caption"><b>Price:</b> R {{ sunglass.price }}.00</div>
               </q-item-section>
             </div>
           </q-card-section>
-          <q-separator />
 
+          <q-separator v-if="selectedOrder.orderType === 'pickup'" />
 
-          <q-card-section v-if="selectedOrder.orderType === 'pickup'">
-            <q-card-section class="row items-center font-size-responsive-md">
-              <q-icon name="local_shipping" class="q-mr-md" />
-              <div class="">Pickup Location</div>
+          <div v-if="selectedOrder.orderType === 'pickup'">
+            <q-card-section >
+              <div class="row items-center">
+                <div class="text-subtitle1 q-mr-md"><b>Pickup Location</b></div>
+                <q-icon name="local_shipping" class="font-size-responsive-md" />
+              </div>
+              <br>
+              <div>332 Klip Road</div>
+              <div>Lotus River</div>
+              <div>Cape Town </div>
+              <div>7941</div><br>
+
+              <div><b>Our store is open from 8:00 AM to 5:00 PM</b></div>
+              <!-- <div>Western Cape</div><br> -->
             </q-card-section>
 
-            <q-card-section>
-              <span class="font-size-responsive-md"><b>Downtown Cape Town, Western Cape</b></span><br>
-              <span class="font-size-responsive-sm">123 Main Street</span><br>
-              <span class="font-size-responsive-sm">Downtown, Cape Town, 5247</span>
-            </q-card-section>
+            <q-separator />
 
             <q-card-section>
-              <div class="font-size-responsive-md q-mb-md">Pickup Instructions</div>
-              <div class="font-size-responsive-sm">
+              <div class="text-subtitle1 q-mb-md"><b>Pickup Instructions</b></div>
+              <div>
                 For a smooth pickup experience, please remember to bring a valid ID and your order confirmation email.
-                <br>
-                <ul>
-                  <li><strong>Store Hours:</strong>
-                    <ul>
-                      <li>Monday to Friday: 8 AM - 5 PM</li>
-                    </ul>
-                  </li>
-                  <br>
-                  <li><strong>Verification at counter:</strong>
-                    <ul>
-                      <li>Please bring your valid email Order ID to verify your purchase.</li>
-                    </ul>
-                  </li>
-                </ul>
-                <br>
+              </div><br>
+              <div>
                 If you have any questions or need assistance, feel free to contact us. <br>Thank you for shopping with us!
               </div>
             </q-card-section>
-          </q-card-section>
+          </div>
 
-          <!-- <q-separator /> -->
-
-          <div class="q-pa-md q-gutter-md">
+          <q-card-section class="q-gutter-sm">
             <q-btn
               rounded
               dense
-              color="white"
-              text-color="black"
+              color="black"
+              text-color="white"
               @click="closeDetails"
               label="Back"
               class="q-px-lg custom-button font-size-responsive-sm"
@@ -86,7 +85,6 @@
               dense
               color="white"
               text-color="black"
-              icon="eva-trash-2-outline"
               @click="cancelOrder(selectedOrder._id)"
               v-if="selectedOrder.status === 'pending'"
               label="Cancel Order"
@@ -95,47 +93,65 @@
             <q-btn
               rounded
               dense
-              color="black"
-              text-color="white"
+              color="white"
+              text-color="black"
               to="/cart"
               v-if="selectedOrder.status === 'pending'"
               label="Proceed to checkout"
               class="q-px-lg custom-button font-size-responsive-sm"
             />
-          </div>
+          </q-card-section>
         </q-card>
+
+
       </div>
 
       <!-- all my orders in order -->
-      <div v-else>
-        <q-card flat @click="openDetails(order)" v-for="order in sortedOrders" :key="order._id" class="q-mb-md cursor-pointer">
-          <q-card-section >
-            <div class="text-subtitle1" v-if="order.status==='paid'"><b>{{ capitalizeFirstLetter(order.status) }} on {{ formatDate(order.orderDate) }}</b></div>
-            <div class="text-subtitle1" v-if="order.status==='pending'"><b>{{ capitalizeFirstLetter(order.status) }} payment, {{ formatDate(order.orderDate) }}</b></div>
-            <div class="text-subtitle1" v-if="order.status==='paid & picked up'"><b>Picked up on {{ formatDate(order.orderDate) }}</b></div>
-            <q-separator class="q-my-sm" />
-            <div class="text-caption">Total Amount: R {{ order.totalAmount }}.00</div>
-            <div class="text-caption">Total Items: {{ order.totalItems }} item(s)</div>
-          </q-card-section>
-          <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0">
-            <q-img
-              v-for="sunglass in order.sunglassesDetails"
-              :key="sunglass._id"
-              :src="getImageUrl(sunglass.images[0])"
-              alt="Sunglass Image"
-              class="q-mr-md border"
-              style="max-width: 100px; max-height: 100px;"
-            />
-          </q-card-section>
-        </q-card>
+      <div v-else class="q-gutter-md">
+        <div @click="openDetails(order)" v-for="order in sortedOrders" :key="order._id" class="cursor-pointer">
+          <q-card flat bordered>
+            <q-card-section class="row justify-between flex-center q-gutter-md">
+              <div>
+                <div class="text-subtitle1" v-if="order.status==='paid'"><b>{{ capitalizeFirstLetter(order.status) }} on {{ formatDate(order.orderDate) }}</b></div>
+                <div class="text-subtitle1" v-if="order.status==='pending'"><b>{{ capitalizeFirstLetter(order.status) }} payment, {{ formatDate(order.orderDate) }}</b></div>
+                <div class="text-subtitle1" v-if="order.status==='paid & picked up'"><b>Collected by {{ order.userFirstName }}</b></div>
+              </div>
+              <div>
+                <div class="text-caption">Order ID: #{{ order._id }}</div>
+                <div class="text-caption"><b>ORDERED {{ formatDate(order.orderDate) }}</b></div>
+              </div>
+            </q-card-section>
+
+            <q-separator  />
+
+            <q-card-section>
+              <div class="text-caption">Total Items: {{ order.totalItems }} item(s)</div>
+              <div class="text-caption">Total Amount: R {{ order.totalAmount }}.00</div>
+            </q-card-section>
+
+            <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0">
+              <q-img
+                v-for="sunglass in order.sunglassesDetails"
+                :key="sunglass._id"
+                :src="getImageUrl(sunglass.images[0])"
+                alt="Sunglass Image"
+                class="border q-mr-md"
+                style="max-width: 100px; max-height: 100px;"
+              />
+            </q-card-section>
+          </q-card>
+        </div>
       </div>
     </div>
 
-    <!-- if user has no orders -->
-    <div v-else>
-      <q-card-section>You haven't ordered anything</q-card-section>
-    </div>
-  </q-card>
+  <!-- if user has no orders -->
+  <div v-else>
+    <q-card flat bordered class="q-py-xl">
+      <q-card-section>
+        You haven't ordered anything
+      </q-card-section>
+    </q-card>
+  </div>
 </template>
 
 <script>
@@ -187,7 +203,16 @@ export default {
     },
     async getAllMyOrders() {
       const response = await OrderService.findAllMyOrders(this.userDetails._id);
-      this.orders = response.filter(order => order.returns !== 'returned item');
+      this.orders = response
+      this.orders = await Promise.all(response.map(async order => {
+        // find user by id
+        const user = await UserService.findUserById(order.user)
+        return {
+          ...order,
+          userFirstName: user.firstName,
+        }
+      }))
+      // this.orders = response.filter(order => order.returns !== 'returned item');
       await this.getSunglasses();
     },
 

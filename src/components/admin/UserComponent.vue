@@ -1,8 +1,8 @@
 <template>
   <div class="row q-pa-md q-gutter-md justify-center">
-    <q-card flat bordered class="q-pa-sm col-12 col-md-5 full-height">
+    <q-card flat bordered class="q-pa-md col-12 col-md-5 full-height">
       <q-card-section>
-        <div class="font-size-responsive-lg">Frequent Users Statistics</div>
+        <div class="font-size-responsive-lg"><b>Frequent Users Statistics</b></div>
       </q-card-section>
       <q-card-section class="full-height">
         <canvas ref="canvas"></canvas>
@@ -10,57 +10,89 @@
     </q-card>
 
 
-      <q-card flat bordered class="col-12 col-md-4 q-pa-md" v-if="selectedUser">
-        <q-card-section>
-          <div class="font-size-responsive-lg">{{ selectedUser.firstName }} Details</div>
-        </q-card-section>
-        <q-separator class="q-my-md" />
-        <q-markup-table>
-          <tbody>
-            <tr>
-              <td style="border: none;" class="text-left cursor-pointer"><b>First Name :</b></td>
-              <td style="border: none;" class="text-left cursor-pointer">{{ selectedUser.firstName }}</td>
-            </tr>
-            <tr>
-              <td style="border: none;" class="text-left cursor-pointer"><b>Last Name : </b></td>
-              <td style="border: none;" class="text-left cursor-pointer">{{ selectedUser.lastName }}</td>
-            </tr>
-            <tr>
-              <td style="border: none;" class="text-left cursor-pointer"><b>Email : </b></td>
-              <td style="border: none;" class="text-left cursor-pointer">{{ selectedUser.email }}</td>
-            </tr>
-            <tr>
-              <td style="border: none;" class="text-left cursor-pointer"><b>Phone : </b></td>
-              <td style="border: none;" class="text-left cursor-pointer">{{ selectedUser.phone }}</td>
-            </tr>
-            <tr>
-              <td style="border: none;" class="text-left cursor-pointer"><b>User Type : </b></td>
-              <td style="border: none;" class="text-left cursor-pointer">
-                <q-select v-if="editMode === selectedUser._id" v-model="selectedUser.userType" :options="userTypeOptions" emit-value map-options />
-                <div v-else>
-                  {{ selectedUser.userType }}
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </q-markup-table>
-        <q-separator class="q-my-md" />
-        <div class="row justify-between">
-          <div>
-            <q-btn rounded dense v-if="editMode !== selectedUser._id" class="q-px-md q-py-md custom-button font-size-responsive-sm q-mr-sm" icon="eva-edit-outline" color="primary" @click="editMode = selectedUser._id" style="height: 100%;" />
-            <q-btn rounded dense v-if="editMode === selectedUser._id" class="q-px-md q-py-xs custom-button font-size-responsive-sm q-mr-sm" icon="eva-edit-outline" color="primary" label="Save" @click="updateUserType(selectedUser)" style="height: 100%;" />
-            <q-btn rounded dense v-if="editMode === selectedUser._id" class="q-px-md q-py-xs custom-button font-size-responsive-sm q-mr-sm" label="Cancel" @click="editMode = null" style="height: 100%;" />
-            <q-btn rounded dense class="q-px-md q-py-md q-mr-sm font-size-responsive-xs" icon="eva-trash-2-outline" color="negative" @click="deleteUser(selectedUser._id, selectedUser.username)" />
-            <q-btn rounded dense v-if="selectedUser.loginInfo && selectedUser.loginInfo.isLoggedIn === true" class="q-px-md q-py-md custom-button font-size-responsive-xs" icon="eva-log-out-outline" color="warning" @click="logoutUser(selectedUser._id, selectedUser.username)" />
-          </div>
-          <q-btn rounded dense class="q-px-md q-py-xs custom-button font-size-responsive-sm q-mt-md" label="Close" color="primary" @click="closeDetails" style="width: 100%;" />
+      <q-card flat bordered class="col-12 col-md-6" v-if="selectedUser">
+        <div class="q-pa-md">
+          <q-card-section>
+            <div class="font-size-responsive-lg"><b>{{ selectedUser.firstName }} Details</b></div>
+          </q-card-section>
         </div>
+
+        <q-separator />
+
+        <div class="q-pa-md">
+          <q-markup-table flat>
+            <tbody>
+
+              <tr>
+                <td style="border: none;" class="text-left cursor-pointer"><b>Username :</b></td>
+                <td style="border: none;" class="text-left cursor-pointer">{{ selectedUser.username }}</td>
+              </tr>
+              <tr>
+                <td style="border: none;" class="text-left cursor-pointer"><b>First Name :</b></td>
+                <td style="border: none;" class="text-left cursor-pointer">{{ selectedUser.firstName }}</td>
+              </tr>
+              <tr>
+                <td style="border: none;" class="text-left cursor-pointer"><b>Last Name : </b></td>
+                <td style="border: none;" class="text-left cursor-pointer">{{ selectedUser.lastName }}</td>
+              </tr>
+              <tr>
+                <td style="border: none;" class="text-left cursor-pointer"><b>Email : </b></td>
+                <td style="border: none;" class="text-left cursor-pointer">{{ selectedUser.email }}</td>
+              </tr>
+              <tr>
+                <td style="border: none;" class="text-left cursor-pointer"><b>Phone : </b></td>
+                <td style="border: none;" class="text-left cursor-pointer">{{ selectedUser.phone }}</td>
+              </tr>
+              <tr>
+                <td style="border: none;" class="text-left cursor-pointer"><b>User Type : </b></td>
+                <td style="border: none;" class="text-left cursor-pointer">
+                  <q-select v-if="editMode === selectedUser._id" v-model="selectedUser.userType" :options="userTypeOptions" emit-value map-options />
+                  <div v-else>
+                    {{ selectedUser.userType }}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="border: none;" class="text-left cursor-pointer"><b>USER IDENTIFIER :</b></td>
+                <td style="border: none;" class="text-left cursor-pointer">#{{ selectedUser._id }}</td>
+              </tr>
+            </tbody>
+          </q-markup-table>
+        </div>
+
+        <div class="q-pa-md">
+          <q-card-section class="row justify-between">
+            <div>
+              <q-btn rounded dense v-if="editMode !== selectedUser._id" class="q-px-md q-py-md custom-button font-size-responsive-sm q-mr-sm" icon="eva-edit-outline" color="primary" @click="editMode = selectedUser._id" style="height: 100%;" />
+              <q-btn rounded dense v-if="editMode === selectedUser._id" class="q-px-md q-py-xs custom-button font-size-responsive-sm q-mr-sm" icon="eva-edit-outline" color="primary" label="Save" @click="updateUserType(selectedUser)" style="height: 100%;" />
+              <q-btn rounded dense v-if="editMode === selectedUser._id" class="q-px-md q-py-xs custom-button font-size-responsive-sm q-mr-sm" label="Cancel" @click="editMode = null" style="height: 100%;" />
+              <q-btn rounded dense class="q-px-md q-py-md q-mr-sm font-size-responsive-xs" icon="eva-trash-2-outline" color="negative" @click="deleteUser(selectedUser._id, selectedUser.username)" />
+              <q-btn rounded dense v-if="selectedUser.loginInfo && selectedUser.loginInfo.isLoggedIn === true" class="q-px-md q-py-md custom-button font-size-responsive-xs" icon="eva-log-out-outline" color="warning" @click="logoutUser(selectedUser._id, selectedUser.username)" />
+            </div>
+            <q-btn rounded dense class="q-px-md q-py-xs custom-button font-size-responsive-sm q-mt-md" label="Close" color="primary" @click="closeDetails" style="width: 100%;" />
+          </q-card-section>
+        </div>
+
       </q-card>
 
       <q-card flat bordered class="q-pa-md full-height col-12 col-md-6" v-else>                                                                                    <!---------------- ALL USERS CARD ----------------->
         <q-card-section>
-          <div class="font-size-responsive-lg">Registered Users</div>
+          <div class="font-size-responsive-lg"><b>Registered Users</b></div>
         </q-card-section>
+
+        <!-- filter -->
+        <q-card class="q-pa-md row justify-between">
+          <q-select
+            filled
+            v-model="selectedLoginStatus"
+            :options="loginStatus"
+            label="Login Status"
+            @update:model-value="filterByLoginStatus"
+            class="col-12 col-md-3 q-mr-md"
+          />
+          <q-input filled v-model="search" placeholder="Search" @update:model-value="filterBySearch" class="col-12 col-md-8" />
+        </q-card>
+
         <q-markup-table>
           <thead>
             <tr>
@@ -72,7 +104,7 @@
               <th class="text-left">Login Status</th>
             </tr>
           </thead>
-          <tbody v-for="(user, index) in users" :key="user._id">
+          <tbody v-for="(user, index) in filteredList" :key="user._id">
             <tr @click="openDetails(user)" :class="{ 'admin-user': user.userType === 'admin' }">
               <td class="text-left cursor-pointer">{{ index + 1 }}</td>
               <td class="text-left cursor-pointer">{{ user.username }}</td>
@@ -119,7 +151,17 @@ export default {
         }
       ],
       frequentUsers: [],
-      selectedUser: null
+      selectedUser: null,
+
+      search: '',
+      selectedLoginStatus: 'All',
+      loginStatus: ['All', 'Online', 'Offline'],
+
+      filteredList: [],
+      combinedList: [],
+      online: [],
+      offline: []
+
     }
   },
 
@@ -138,6 +180,33 @@ export default {
       const response = await UserService.findUsersFrequentlyLoggedIn();
       this.frequentUsers = response;
       this.createChart();
+    },
+
+    filterByLoginStatus() {
+      if (this.selectedLoginStatus === 'All') {
+        this.filteredList = this.combinedList
+      } else if (this.selectedLoginStatus === 'Online') {
+        this.filteredList = this.online
+      } else if (this.selectedLoginStatus === 'Offline') {
+        this.filteredList = this.offline
+      }
+    },
+    filterBySearch() {
+      if (this.search === '') {
+        this.selectedLoginStatus = 'All'
+        this.filterByLoginStatus()
+        return
+      }
+      const searchTerm = this.search.toLowerCase()
+      this.filteredList = this.filteredList.filter(user =>
+        user.firstName.toLowerCase().includes(searchTerm) ||
+        user.firstName.toUpperCase().includes(searchTerm) ||
+        user.lastName.toLowerCase().includes(searchTerm) ||
+        user.lastName.toUpperCase().includes(searchTerm) ||
+        user.username.toLowerCase().includes(searchTerm) ||
+        user.username.toUpperCase().includes(searchTerm) ||
+        user._id.toLowerCase().includes(searchTerm)
+      )
     },
 
     createChart() {
@@ -180,12 +249,13 @@ export default {
       };
     },
 
-
-
-
     async getAllUsers() {                                                                               // get all users function
       const response = await UserService.findAllUsers()
       this.users = response
+      this.online = this.users.filter(user => user.loginInfo.isLoggedIn === true)
+      this.offline = this.users.filter(user => user.loginInfo.isLoggedIn === false)
+      this.combinedList = [...this.online, ...this.offline]
+      this.filteredList = this.combinedList
     },
     async updateUserType(selectedUser) {                                                                // update usertype function
       const currentUser = await UserService.FindUserByToken()

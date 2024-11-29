@@ -1,107 +1,126 @@
 <template>
   <div class="row q-pa-md justify-center q-gutter-md">
 
-    <q-card flat bordered class="q-pa-md col-12 col-md-3 full-height">
+    <q-card flat bordered class="q-pa-md col-12 col-md-3 full-height ">
       <q-card-section>
-        <div class="font-size-responsive-lg">Upcoming Pickups</div>
+        <div class="font-size-responsive-lg"><b>Upcoming Pickups</b></div>
       </q-card-section>
 
-      <q-card v-for="order in ordersPickup" :key="order._id" class="q-mb-md">
-        <div v-if="order.status && order.status === 'paid' && order.orderType && order.orderType === 'pickup'">
+      <div v-for="order in ordersPickup" :key="order._id">
 
-          <q-card-section>
-            <div class="text-subtitle2">ID <b>#{{ order._id }}</b> </div>
-            <div class="text-caption">ORDERED {{ formatDate(order.orderDate) }}
-              <span></span>
+        <q-card flat bordered v-if="order.status && order.status === 'paid' && order.orderType && order.orderType === 'pickup'" class="q-mb-md">
+          <q-card-section class="row justify-between flex-center">
+            <div>
+              <div class="text-caption">Order ID: #{{ order._id }}</div>
+              <div class="text-caption"><b>ORDERED {{ formatDate(order.orderDate) }}</b></div>
             </div>
           </q-card-section>
 
-          <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0">
-            <div v-for="sunglass in order.sunglassesDetails" :key="sunglass._id" class="row items-start cursor-pointer" >
-              <q-item-section class="col-3">
-                <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="q-mb-sm border" style="max-width: 50px; max-height: 50px;" />
-              </q-item-section>
-              <q-item-section class="row items-center justify-center">
-                <div class="text-caption q-mb-sm">{{ sunglass.model }} </div>
-                <!-- <q-btn rounded dense icon="eva-shopping-bag-outline" label="Collected" @click="updatePickupOrder(order._id)" size="10px" class="q-py-sm q-px-md" /> -->
-              </q-item-section>
-            </div>
+          <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0" class="q-gutter-sm">
+            <q-img
+                v-for="sunglass in order.sunglassesDetails"
+                :key="sunglass._id"
+                :src="getImageUrl(sunglass.images[0])"
+                alt="Sunglass Image"
+                class="border"
+                style="max-width: 75px; max-height: 100px;"
+              />
           </q-card-section>
-          <q-separator class="q-mb-md" style="width: 100%;"></q-separator>
-          <div class="row justify-end">
-            <q-btn rounded dense icon="eva-shopping-bag-outline" label="Collected" @click="updatePickupOrder(order._id)" size="12px" class="q-py-sm q-px-md" />
-          </div>
-        </div>
-      </q-card>
 
+          <q-separator />
 
+          <q-card-section class="">
+            <div><b>To Pay:</b> R {{ order.totalAmount }}.00</div>
+            <br>
+            <q-btn
+              rounded
+              dense
+              color="black"
+              text-color="white"
+              icon="eva-shopping-bag-outline"
+              label="Collected"
+              @click="updatePickupOrder(order._id)"
+              class="q-px-lg custom-button font-size-responsive-sm"
+              style="width: 100%;"
+            />
+          </q-card-section>
+        </q-card>
+
+      </div>
 
     </q-card>
 
     <!-- view all card -->
-    <q-card flat bordered class="q-pa-md col-12 col-md-8 full-height">
-      <q-card-section>
-        <div class="font-size-responsive-lg">Orders Over Time</div>
-      </q-card-section>
-      <q-card-section class="row">
-        <q-select
-          filled
-          v-model="selectedTimePeriod"
-          :options="timePeriods"
-          label="Select Time Period"
-          class="col-12 col-md-3"
-          @update:model-value="filterOrders"
+    <q-card flat bordered class=" col-12 col-md-8 full-height">
+      <div class="q-pa-md">
+        <q-card-section>
+          <div class="font-size-responsive-lg"><b>Orders Over Time</b></div>
+        </q-card-section>
+        <q-card-section class="row">
+          <q-select
+            filled
+            v-model="selectedTimePeriod"
+            :options="timePeriods"
+            label="Select Time Period"
+            class="col-12 col-md-3"
+            @update:model-value="filterOrders"
+          />
+        </q-card-section>
+        <q-card-section class="canvas-container">
+          <canvas ref="canvas"></canvas>
+        </q-card-section>
+      </div>
 
-        />
-      </q-card-section>
+      <q-separator />
 
-      <q-card-section class="canvas-container">
-        <canvas ref="canvas"></canvas>
-      </q-card-section>
 
-      <q-card-section>
-        <div class="font-size-responsive-lg">All Orders</div>
-      </q-card-section>
+      <div class="q-pa-md">
+        <q-card-section>
+          <div class="font-size-responsive-lg"><b>All Orders</b></div>
+        </q-card-section>
 
-      <!-- filter -->
-      <q-card class="q-pa-md row justify-start">
-        <q-select
-          filled
-          v-model="selectedOrderType"
-          :options="orderTypes"
-          label="Order Type"
-          @update:model-value="filterByOrderType"
-          class="col-12 col-md-3 q-mr-md"
-        />
-        <q-input filled v-model="search" placeholder="Search" @update:model-value="filterBySearch" class="col-12 col-md-8" />
-      </q-card>
+        <div class="q-pa-md row justify-between">
+          <q-select
+            filled
+            v-model="selectedOrderType"
+            :options="orderTypes"
+            label="Order Type"
+            @update:model-value="filterByOrderType"
+            class="col-12 col-md-3 q-mr-md"
+          />
+          <q-input filled v-model="search" placeholder="Search" @update:model-value="filterBySearch" class="col-12 col-md-8" />
+        </div>
 
-      <q-markup-table>
-        <thead>
-          <tr>
-            <th></th>
-            <th class="text-left">ORDER ID</th>
-            <th class="text-left">Customer Name</th>
-            <th class="text-left">Order Type</th>
-            <th class="text-left">Order Status</th>
-            <th class="text-left">Order Date</th>
-          </tr>
+        <q-markup-table flat>
+          <thead>
+            <tr>
+              <th></th>
+              <th class="text-left">ORDER ID</th>
+              <th class="text-left">Customer Username</th>
+              <th class="text-left">Order Type</th>
+              <th class="text-left">Order Status</th>
+              <th class="text-left">Order Date</th>
+              <th class="text-left">Quick Tools</th>
+            </tr>
           </thead>
-        <tbody v-for="(order, index) in filteredList" :key="order._id">
-          <tr>
-            <td class="text-left cursor-pointer">{{ index + 1 }}</td>
-            <td class="text-left cursor-pointer">{{ order._id }}</td>
-            <td class="text-left cursor-pointer">{{ order.userFirstName }}</td>
-            <td class="text-left cursor-pointer">{{ capitalizeFirstLetter(order.orderType) }}</td>
-            <td class="text-left cursor-pointer">{{ capitalizeFirstLetter(order.status) }}</td>
-            <td class="text-left cursor-pointer">{{ formatDate(order.orderDate) }}</td>
-              <!-- <td class="text-left cursor-pointer">
-                <q-btn dense flat icon="eva-trash-2-outline" color="negative" v-if="order.status === 'cancelled'" @click="deleteOrder(order._id)" />
-              </td> -->
-          </tr>
-        </tbody>
-      </q-markup-table>
-
+          <tbody v-for="(order, index) in filteredList" :key="order._id">
+            <tr :class="{ 'refunded': order.returns == 'returned item(s)' }">
+              <td class="text-left cursor-pointer">{{ index + 1 }}</td>
+              <td class="text-left cursor-pointer">#{{ order._id }}</td>
+              <td class="text-left cursor-pointer">{{ order.userFirstName }}</td>
+              <td class="text-left cursor-pointer">{{ capitalizeFirstLetter(order.orderType) }}</td>
+              <td class="text-left cursor-pointer">{{ capitalizeFirstLetter(order.status) }}</td>
+              <td class="text-left cursor-pointer">{{ formatDate(order.orderDate) }}</td>
+              <td class="text-left cursor-pointer">
+                <q-btn rounded dense icon="eva-trash-2-outline" class="custom-button q-pa-xs custom-button font-size-responsive-sm" color="negative" @click="deleteOrder(order._id)" />
+              </td>
+                <!-- <td class="text-left cursor-pointer">
+                  <q-btn dense flat icon="eva-trash-2-outline" color="negative" v-if="order.status === 'cancelled'" @click="deleteOrder(order._id)" />
+                </td> -->
+            </tr>
+          </tbody>
+        </q-markup-table>
+      </div>
     </q-card>
   </div>
 </template>
@@ -132,8 +151,8 @@ export default {
       orderTypes: ['All', 'Pickup', 'Delivery']
     }
   },
-  async mounted() {
-    await this.getAllOrders()
+  mounted() {
+    this.getAllOrders()
   },
   beforeUnmount() {
     // Cleanup: destroy chart
@@ -149,13 +168,12 @@ export default {
 
     createChart(filteredOrders) {
       const canvas = this.$refs.canvas
-      console.log(canvas)
+
       if (!canvas) {
         console.error('Canvas element not found!');
         return;
       }
       const ctx = canvas.getContext('2d');
-      console.log(ctx)
       if (!ctx) {
         console.error('Failed to get canvas context!');
         return;
@@ -220,10 +238,7 @@ export default {
 
     filterOrders() {
       const now = new Date();
-
-      let filteredOrders = [...this.ordersDelivery, ...this.ordersPickup].filter(order =>
-        order.status !== 'refunded'
-      );
+      let filteredOrders = [...this.ordersDelivery, ...this.ordersPickup]
 
       switch (this.selectedTimePeriod) {
         case 'Today':
@@ -262,13 +277,11 @@ export default {
           break;
         case 'All Time':
         default:
-          // No need to filter further, use initial filteredOrders
           break;
       }
 
       this.createChart(filteredOrders);
     },
-
 
     async getAllOrders() {                                                               // Get all orders
       const response = await OrderService.findAllOrders()
@@ -277,7 +290,7 @@ export default {
         const user = await UserService.findUserById(order.user)
         return {
           ...order,
-          userFirstName: user.firstName,
+          userFirstName: user.username,
         }
       }))
       await this.getSunglasses()
@@ -340,17 +353,37 @@ export default {
         }
       })
     },
-    async deleteOrder(id) {                                                              // Delete order
+    async deleteOrder(id) {
       this.$q.dialog({
-        title: 'Delete order', message: `You are about to delete this order, continue?`, color: 'primary', cancel: true, persistent: true
+        title: 'Delete order', message: `Warning: Deleting this order will remove all records of existing payments associated with it, continue?`, color: 'negative', cancel: true, persistent: true
       }).onOk(async () => {
-        const response = await OrderService.deleteOrder(id)
-        if(response) {
-          this.$q.notify({ type: 'positive', color: 'primary', message: 'Delete successful!' })
-          this.getAllOrders()
+        const order = await OrderService.findOrderById(id)
+        if (order.returns || order.returns === 'returned item(s)') {
+          this.$q.dialog({
+            title: 'Delete order', message: `This order has a refund associated with it. Deleting this order will also delete that refund, continue?`, color: 'primary', cancel: true, persistent: true
+          }).onOk(async () => {
+            const response = await OrderService.deleteOrder(order._id)
+            if(response) {
+              this.$q.notify({ type: 'positive', color: 'primary', message: 'Delete successful!' })
+              this.getAllOrders()
+            } else {
+              this.$q.notify({ type: 'negative', message: 'Delete failed. Please try again.' })
+              this.getAllOrders()
+            }
+          })
         } else {
-          this.$q.notify({ type: 'negative', message: 'Delete failed. Please try again.' })
-          this.getAllOrders()
+          this.$q.dialog({
+            title: 'Delete order', message: `You are about to delete this order, continue?`, color: 'primary', cancel: true, persistent: true
+          }).onOk(async () => {
+            const response = await OrderService.deleteOrder(order._id)
+            if(response) {
+              this.$q.notify({ type: 'positive', color: 'primary', message: 'Delete successful!' })
+              this.getAllOrders()
+            } else {
+              this.$q.notify({ type: 'negative', message: 'Delete failed. Please try again.' })
+              this.getAllOrders()
+            }
+          })
         }
       })
     }

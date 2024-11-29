@@ -1,5 +1,6 @@
 <template>
-  <q-page style="background-color: #f0f0f0;">
+  <q-page>
+    <!-- <div style="position: absolute; z-index: -999; width: 100vw; height: 100vh; background-color: #f0f0f0;"></div> -->
     <div class="q-pa-md" style="width: 100%; height: 100%; background-color: #f0f0f0;">
 
       <div style="height: 50px;"></div>
@@ -7,79 +8,85 @@
       <!-- if user has any orders -->
       <div v-if="currentOrderId !== null" class="row q-gutter-md justify-center">
         <q-card flat bordered class="col-12 col-md-6 full-height">
-          <q-card-section class="q-gutter-md ">
+
+          <q-card-section class="q-gutter-md">
             <div class="font-size-responsive-xl">Order Details</div>
           </q-card-section>
-          <q-separator class="q-mb-xs" />
-          <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0">
-            <div v-for="sunglass in order.sunglassesDetails" :key="sunglass._id" class="row items-center justify-center cursor-pointer" @click="viewSunglassesDetails(sunglass._id)" >
-              <q-item-section class="col-12 col-md-3">
-                <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="q-mb-sm border" style="max-width: 120px; max-height: 120px;" />
+
+          <q-separator  />
+
+          <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0" class="q-gutter-md">
+            <div v-for="sunglass in order.sunglassesDetails" :key="sunglass._id" class="row justify-start items-center cursor-pointer" @click="viewSunglassesDetails(sunglass._id)" >
+
+              <q-item-section class="col-3 q-mr-md">
+                <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="border" style="max-width: 130px; max-height: 130px;" />
               </q-item-section>
-              <q-item-section class="col-12 col-md-8">
-                <q-separator class="small-screen-only q-my-md" />
-                <div class="font-size-responsive-lg"><b>{{ sunglass.model }}</b></div><br>
-                <div class="text-caption limit-text-2">Product Details: {{ sunglass.description }}</div>
-                <br>
-                <div class="font-size-responsive-xs">
-                  <b>
-                    Color: {{ capitalizeFirstLetter(sunglass.color) }} <span class="q-ml-lg">Price: R {{ sunglass.price }}.00</span>
-                  </b>
-                </div>
-                <q-separator class="q-my-md" />
+
+              <q-item-section class="col-8">
+                <div class="font-size-responsive-md q-my-md"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b></div>
+                <div class="font-size-responsive-sm limit-text-2 q-mb-sm">{{ capitalizeFirstLetter(sunglass.description) }}</div>
+                <!-- <div class="row justify-start">
+                  <div class="font-size-responsive-sm q-mr-md"><b>Color: </b>{{ capitalizeFirstLetter(sunglass.color) }}</div>
+                  <div class="font-size-responsive-sm">R {{ sunglass.price }}.00</div>
+                </div> -->
               </q-item-section>
             </div>
           </q-card-section>
-          <q-card-section>
-            <q-btn flat icon="eva-trash-outline" @click="cancelOrder(order._id)" class="custom-button  font-size-responsive-xs" ><b class="q-ml-sm">Clear Cart</b></q-btn>
-            <q-btn flat icon="eva-shopping-bag-outline" to="/sunglasses" class="custom-button  font-size-responsive-xs" ><b class="q-ml-sm">Continue Shopping</b></q-btn>
+
+          <!-- <q-separator /> -->
+
+          <q-card-section class="q-gutter-md">
+            <q-btn rounded color="black" text-color="white" dense @click="cancelOrder(order._id)" class="q-px-lg custom-button font-size-responsive-sm" label="Clear Cart" style="opacity: 1" />
+            <q-btn rounded dense flat to="/sunglasses" class="q-px-lg custom-button font-size-responsive-sm" label="Continue Shopping" style="opacity: 0.9" />
           </q-card-section>
         </q-card>
 
-        <div class=" col-12 col-md-3 full-height">
-          <q-card flat bordered class="q-pa-md q-mb-md">
-            <q-card-section>
-              <div class="text-h5 q-mb-md">Cart Summary</div>
-              <q-separator class="q-mb-md" />
-              <div class="text-caption">
-                <b>TOTAL:</b> {{ order.totalItems }} item(s)
-                <span class="q-ml-lg font-size-responsive-lg ">R {{ order.totalAmount }}.00</span>
-              </div>
-              <div class="q-mt-md">
-                <q-btn
-                  rounded dense
-                  color="black"
-                  text-color="white"
-                  to="/buy/review"
-                  label="Proceed to checkout"
-                  class="q-px-lg custom-button font-size-responsive-sm"
-                  style="width: 100%;"
-                />
-              </div>
-            </q-card-section>
-          </q-card>
 
 
-          <q-card flat bordered class="q-pa-md">
-            <q-card-section class="row items-center font-size-responsive-xs">
-              <q-icon name="credit_card" class="q-mr-sm" />
-              <div class="">Payments made with Yoco</div>
-            </q-card-section>
-            <q-card-section class="row items-center font-size-responsive-xs">
-              <q-icon name="local_shipping" class="q-mr-sm" />
-              <div class="">Fast and reliable</div>
-            </q-card-section>
-            <q-card-section class="row items-center font-size-responsive-xs">
-              <q-icon name="store" class="q-mr-sm" />
-              <div class="">Pickup at our doorstep available</div>
-            </q-card-section>
-          </q-card>
+        <div class="col-12 col-md-3">
+          <div class="q-gutter-md">
+
+            <q-card flat bordered>
+              <q-card-section>
+                <div class="font-size-responsive-xl">Cart Summary</div>
+              </q-card-section>
+
+              <q-separator />
+
+              <div class="q-px-md">
+                <q-card-section class="row items-center q-gutter-md justify-start">
+                  <div class="text-caption"><b>TOTAL:</b> {{ order.totalItems }} item(s)</div>
+                  <div class="font-size-responsive-lg">R {{ order.totalAmount }}.00</div>
+                </q-card-section>
+              </div>
+
+              <q-card-section class="q-pa-none q-px-md q-pb-md">
+                <q-btn rounded dense color="black" text-color="white" to="/buy/review" label="Proceed to checkout" class="q-px-lg custom-button font-size-responsive-md" style="width: 100%;" />
+              </q-card-section>
+            </q-card>
+
+            <q-card flat bordered class="q-pa-md">
+              <q-card-section class="row items-center font-size-responsive-sm">
+                <q-icon name="credit_card" class="q-mr-md" />
+                <div class="">Payments made with Yoco</div>
+              </q-card-section>
+              <q-card-section class="row items-center font-size-responsive-sm">
+                <q-icon name="local_shipping" class="q-mr-md" />
+                <div class="">Fast and reliable</div>
+              </q-card-section>
+              <q-card-section class="row items-center font-size-responsive-sm">
+                <q-icon name="store" class="q-mr-md" />
+                <div class="">Pickup at our doorstep available</div>
+              </q-card-section>
+            </q-card>
+          </div>
         </div>
       </div>
 
       <!-- if user has no orders -->
-      <div v-else class="row q-pa-md q-gutter-md justify-center">
-        <q-card flat bordered class="column flex-center">
+      <div v-else class="row q-py-xl justify-center full-height">
+
+        <q-card flat bordered class="column flex-center" style="width: 300px;">
           <q-card-section>
             <div class="text-h5">Your cart is empty </div>
           </q-card-section>
@@ -95,7 +102,6 @@
           </q-card-section>
         </q-card>
       </div>
-      <div style="height: 100%px;"></div>
     </div>
   </q-page>
 </template>

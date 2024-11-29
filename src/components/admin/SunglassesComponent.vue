@@ -1,15 +1,17 @@
 <template>
   <div class="row q-pa-md q-gutter-md justify-center">
-    <q-card flat bordered class="q-pa-md col-12 col-md-11">                                                  <!---------------- SUNGLASSES COMPONENT ----------------->
-      <q-card v-if="openAddSunglasses === null">                                               <!-- view all card -->
+    <q-card flat bordered class="col-12 col-md-11">
+
+      <q-card v-if="openAddSunglasses === null" class="q-pa-md ">
         <q-card-section class="column flex-start">
-          <div class="font-size-responsive-lg">All Sunglasses</div>
+          <div class="font-size-responsive-lg"><b>All Sunglasses</b></div>
         </q-card-section>
         <q-markup-table>
           <thead>
             <tr>
               <th class="text-left">Image</th>
               <th class="text-left">Model</th>
+              <th class="text-left">Sunglasses ID</th>
               <th class="text-left">Description</th>
               <th class="text-left">Price</th>
               <th class="text-center">Stock</th>
@@ -26,6 +28,11 @@
                 <q-input v-if="editMode === sunglass._id" v-model="sunglass.model" />
                 <div v-else>
                   {{ sunglass.model }}
+                </div>
+              </td>
+              <td class="text-left cursor-pointer">
+                <div>
+                  #{{ sunglass._id }}
                 </div>
               </td>
               <td class="text-left cursor-pointer">
@@ -61,34 +68,39 @@
         </q-markup-table>
       </q-card>
 
-      <q-card v-else class="column flex-start">                                              <!-- add sunglasses card -->
+      <q-card v-else class="q-pa-md column flex-start">                                              <!-- add sunglasses card -->
         <q-card-section>
-          <div class="font-size-responsive-lg">Add Sunglasses</div>
+          <div class="font-size-responsive-lg"><b>Add Sunglasses</b></div>
         </q-card-section>
-        <q-form @submit.prevent="addSunglasses" @reset="onReset" class="q-gutter-lg" style="min-width: 100%;" enctype="multipart/form-data">
-          <q-input filled v-model="sunglassesDetails.model" label="Model Name *" id="model" name="model" />
-          <q-input filled v-model="sunglassesDetails.description" label="Description (max 50 words) *" id="description" name="description" />
-          <q-select filled v-model="sunglassesDetails.color" label="Color *" id="color" name="color" :options="colors" emit-value map-options />
-          <q-input class="q-pa-none" filled v-model="sunglassesDetails.price" label="Price (ZAR) *" type="number" prefix="R" :rules="[val => val > 0] || 'Price must be positive'" id="price" name="price" />
-          <q-select filled v-model="sunglassesDetails.stock" label="Stock *" :options="[...Array(11).keys()].slice(1)" emit-value map-options id="stock" name="stock" />
-          <!-- <q-file filled v-model="sunglassesDetails.images" label="Image *" accept="image/*" name="images" id="images" /> -->
-          <q-file filled v-model="image1" label="image (Side View) * " accept="image/*" name="image1" id="image1" />
-          <q-file filled v-model="image2" label="image (Front View) * " accept="image/*" name="image2" id="image2" />
-          <div>
-            <q-btn
-              rounded
-              dense
-              label="Add Sunglasses"
-              type="submit"
-              color="primary"
-              icon="eva-cloud-upload-outline"
-              class="q-px-md custom-button font-size-responsive-sm"
-            />
-            <q-btn rounded dense flat label="Reset" type="reset" color="primary" class="q-ml-md q-px-md custom-button font-size-responsive-sm" />
-          </div>
-        </q-form>
+        <q-card-section>
+          <q-form @submit.prevent="addSunglasses" @reset="onReset" class="q-gutter-lg" style="min-width: 100%;" enctype="multipart/form-data">
+            <q-input filled v-model="sunglassesDetails.model" label="Model Name *" id="model" name="model" />
+            <q-input filled v-model="sunglassesDetails.description" label="Description (max 50 words) *" id="description" name="description" />
+            <q-select filled v-model="sunglassesDetails.color" label="Color *" id="color" name="color" :options="colors" emit-value map-options />
+            <q-input class="q-pa-none" filled v-model="sunglassesDetails.price" label="Price (ZAR) *" type="number" prefix="R" :rules="[val => val > 0] || 'Price must be positive'" id="price" name="price" />
+            <q-select filled v-model="sunglassesDetails.stock" label="Stock *" :options="[...Array(11).keys()].slice(1)" emit-value map-options id="stock" name="stock" />
+            <!-- <q-file filled v-model="sunglassesDetails.images" label="Image *" accept="image/*" name="images" id="images" /> -->
+            <q-file filled v-model="image1" label="image (Side View) * " accept="image/*" name="image1" id="image1" />
+            <q-file filled v-model="image2" label="image (Front View) * " accept="image/*" name="image2" id="image2" />
+          </q-form>
+        </q-card-section>
+        <q-card-section>
+          <q-btn
+            rounded
+            dense
+            label="Add Sunglasses"
+            type="submit"
+            color="primary"
+            icon="eva-cloud-upload-outline"
+            class="q-px-md custom-button font-size-responsive-sm"
+          />
+          <q-btn rounded dense flat label="Reset" type="reset" color="primary" class="q-ml-md q-px-md custom-button font-size-responsive-sm" />
+
+        </q-card-section>
       </q-card>
     </q-card>
+
+
     <q-btn round class="round-btn" :label="buttonLabel" @click="toggleAddSunglasses" />         <!-- toggle between cards -->
   </div>
 </template>
