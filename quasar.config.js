@@ -49,6 +49,7 @@ export default configure(function (/* ctx */) {
       env: {
         API_BASE_URL: env.API_BASE_URL,
         PRICE_THRESHOLD: env.PRICE_THRESHOLD,
+        NODE_ENV: env.NODE_ENV
         // other environment variables
       },
       target: {
