@@ -3,8 +3,9 @@ import { createRouter, createMemoryHistory, createWebHistory, createWebHashHisto
 import routes from './routes'
 import axios from 'axios'
 import Helper from 'src/services/utils'
+import axiosInstance from 'src/services/axiosInstance'
 
-const API_BASE_URL = process.env.API_BASE_URL
+const API_BASE_URL = process.env.VUE_APP_API_BASE_URL
 
 /*
  * If not building with SSR mode, you can
@@ -34,7 +35,7 @@ export default route(function (/* { store, ssrContext } */) {
   Router.beforeEach(async (to, from, next) => {
     try {
       // Send a health check request to the server
-      const response = await axios.get(`${API_BASE_URL}/health`);
+      const response = await axiosInstance.get(`/health`);
 
       // If the server is healthy
       if (response.status === 200) {

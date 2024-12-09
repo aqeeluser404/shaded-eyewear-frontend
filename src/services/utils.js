@@ -68,6 +68,7 @@ class Helper {
         return cookie.substring(name.length + 1)
       }
     }
+    console.log(`Cookie ${name} not found`);
     return null
   }
   static removeCookie(name) {
