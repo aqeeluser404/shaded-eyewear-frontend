@@ -11,7 +11,7 @@
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "build": "quasar build",
-    "start": "npx serve -s dist/spa --history"
+    "start": "quasar serve --history"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
