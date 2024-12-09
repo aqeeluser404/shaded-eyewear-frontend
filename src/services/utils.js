@@ -1,7 +1,7 @@
 import { format } from 'quasar'
 import { jwtDecode } from 'jwt-decode'
 import CryptoJS from 'crypto-js';
-import axiosInstance from './axiosInstance'
+import axios from 'axios';
 
 class Helper {
   static formatDate(dateString) {
@@ -47,39 +47,48 @@ class Helper {
 
   // AUTHENTICATION FUNCTIONS
   static async getCookie(name) {
-    // const cookies = document.cookie.split(';')
-    // for (let i = 0; i < cookies.length; i++) {
-    //   const cookie = cookies[i].trim()
-    //   if (cookie.startsWith(`${name}=`)) {
-    //     return cookie.substring(name.length + 1)
-    //   }
-    // }
-    // console.log(`Cookie ${name} not found`);
-    // return null
     try {
-      const response = await axiosInstance.get('/get-token', { withCredentials: true });
-
-      if (response.data.token) {
-        return response.data.token;
+      // Check if the requested cookie is the token
+      if (name === 'token') {
+        // Make a request to the backend to get the token
+        // const response = await axios.get('http://localhost:5000/get-token', { withCredentials: true });
+        const response = await axios.get(`${process.env.API_BASE_URL}/get-token`, { withCredentials: true });
+        if (response.data.token) {
+          console.log(`Token found: ${response.data.token}`);
+          return response.data.token;  // Return the token
+        } else {
+          console.log(`Token not found`);
+          return null;  // No token available
+        }
+      } else {
+        // If it's not the token, return null or handle other cookies if needed
+        console.log(`Cookie ${name} not found`);
+        return null;
       }
-
-      console.log(`Cookie ${name} not found in backend`);
-      return null;
     } catch (error) {
       console.error('Error fetching token from backend:', error);
       return null;
     }
+      //   // const cookies = document.cookie.split(';')
+      //   // for (let i = 0; i < cookies.length; i++) {
+      //   //   const cookie = cookies[i].trim()
+      //   //   if (cookie.startsWith(`${name}=`)) {
+      //   //     return cookie.substring(name.length + 1)
+      //   //   }
+      //   // }
+      //   // console.log(`Cookie ${name} not found`);
+      //   // return null
   }
   static async removeCookie(name) {
-    // Set the cookie with the same name and expiration date in the past
-    // document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
-
     try {
-      await axiosInstance.post('/remove-token', {}, { withCredentials: true });
+      await axios.post(`${process.env.API_BASE_URL}/remove-token`, {}, { withCredentials: true });
       console.log(`${name} removed from backend cookies.`);
     } catch (error) {
       console.error(`Error removing cookie ${name}:`, error);
     }
+
+    // Set the cookie with the same name and expiration date in the past
+    // document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
   }
   static beforeRouteEnter(to, from, next) {
     // const token = localStorage.getItem('auth-token');
