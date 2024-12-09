@@ -45,20 +45,40 @@ class Helper {
   }
 
   // AUTHENTICATION FUNCTIONS
-  static getCookie(name) {
-    const cookies = document.cookie.split(';')
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim()
-      if (cookie.startsWith(`${name}=`)) {
-        return cookie.substring(name.length + 1)
+  static async getCookie(name) {
+    // const cookies = document.cookie.split(';')
+    // for (let i = 0; i < cookies.length; i++) {
+    //   const cookie = cookies[i].trim()
+    //   if (cookie.startsWith(`${name}=`)) {
+    //     return cookie.substring(name.length + 1)
+    //   }
+    // }
+    // console.log(`Cookie ${name} not found`);
+    // return null
+    try {
+      const response = await axiosInstance.get('/get-token', { withCredentials: true });
+
+      if (response.data.token) {
+        return response.data.token;
       }
+
+      console.log(`Cookie ${name} not found in backend`);
+      return null;
+    } catch (error) {
+      console.error('Error fetching token from backend:', error);
+      return null;
     }
-    console.log(`Cookie ${name} not found`);
-    return null
   }
-  static removeCookie(name) {
+  static async removeCookie(name) {
     // Set the cookie with the same name and expiration date in the past
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+    // document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+
+    try {
+      await axiosInstance.post('/remove-token', {}, { withCredentials: true });
+      console.log(`${name} removed from backend cookies.`);
+    } catch (error) {
+      console.error(`Error removing cookie ${name}:`, error);
+    }
   }
   static beforeRouteEnter(to, from, next) {
     // const token = localStorage.getItem('auth-token');
