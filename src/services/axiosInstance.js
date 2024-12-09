@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_BASE_URL = process.env.VUE_APP_API_BASE_URL
+const API_BASE_URL = process.env.API_BASE_URL
 
 // ensures cookies & tokens are validated
 const axiosInstance = axios.create({

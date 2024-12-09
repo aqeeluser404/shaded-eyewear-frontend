@@ -4,7 +4,7 @@ import routes from './routes'
 import axios from 'axios'
 import Helper from 'src/services/utils'
 
-const API_BASE_URL = process.env.VUE_APP_API_BASE_URL
+const API_BASE_URL = process.env.API_BASE_URL
 
 /*
  * If not building with SSR mode, you can
