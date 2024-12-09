@@ -3,28 +3,17 @@
     <q-img src="~src/assets/theme/abstract1.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
       <div class="absolute-full column justify-center items-center text-black">
         <q-card bordered flat class="q-pa-lg">
-          <div class="column items-center">
+          <div class="column text-center">
             <p class="font-size-responsive-xxxl anton-regular q-mb-md">Verify Email</p>
-            <p v-if="message">{{ message }}</p>
-            <q-btn rounded dense v-if="success" to="/auth/login" icon="eva-log-in-outline" label="Go to Login" size="12px" class="q-py-sm q-px-lg" />
-            <q-btn rounded dense v-if="!success" to="/resend-verification" icon="eva-email-outline" label="Resend Verification Email" class="q-px-lg anton-regular font-size-responsive-md" />
+            <br>
+            <p v-if="message" class="text-h6 caveat">{{ message }}</p>
+            <q-btn rounded v-if="success" to="/" color="black" text-color="white" label="Home" class="q-py-sm q-px-lg custom-button font-size-responsive-md" />
+            <q-btn rounded v-if="!success" to="/resend-verification" color="black" text-color="white" icon="eva-email-outline" label="Resend Verification Email" class="q-py-sm q-px-lg custom-button font-size-responsive-md" />
           </div>
         </q-card>
       </div>
     </q-img>
   </q-page>
-    <!-- <div class="">
-      <q-card bordered flat class="column flex-center q-mb-md">
-        <h4>Verify Email</h4>
-      </q-card>
-      <q-card bordered flat class="column flex-center q-pa-md">
-        <q-card-section>
-          <p v-if="message">{{ message }}</p>
-          <router-link v-if="success" to="/auth/login">Go to Login</router-link>
-          <router-link v-if="!success" to="/resend-verification">Resend Verification Email</router-link>
-        </q-card-section>
-      </q-card>
-    </div> -->
 </template>
 
 <script>

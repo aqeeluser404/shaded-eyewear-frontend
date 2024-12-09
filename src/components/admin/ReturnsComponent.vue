@@ -1,16 +1,16 @@
 <template>
   <div class="row q-pa-md justify-center q-gutter-md">
 
-    <!-- view all orders card -->
+    <!--------------------------------------------------------------------- UPCOMING PICKUPS SECTION -------------------------------------------------->
     <q-card flat bordered class="q-pa-md col-12 col-md-6 full-height" v-if="selectedOrder === null">
+
+      <!-- view all orders card -->
       <q-card-section>
         <div class="font-size-responsive-lg"><b>Order History</b></div>
       </q-card-section>
-
       <q-card class="q-pa-md row justify-between">
         <q-input filled v-model="search" placeholder="Search" @update:model-value="filterBySearch" class="col-12 col-md-12" />
       </q-card>
-
       <q-markup-table>
         <thead>
           <tr>
@@ -47,12 +47,10 @@
           <div class="font-size-responsive-lg"><b>Log Return</b></div>
         </q-card-section>
       </div>
-
       <q-separator />
-
       <div class="q-pa-md">
         <q-card-section>
-          <div class="font-size-responsive-sm q-mb-md">Order to be refunded: <b>#{{ selectedOrder._id }}</b></div>
+          <div class="text-subtitle1 q-mb-md">Order to be refunded: <b>#{{ selectedOrder._id }}</b></div>
           <div v-for="(sunglass, index) in selectedOrder.sunglassesDetails" :key="index">
             <q-checkbox
               v-model="selectedSunglasses"
@@ -63,24 +61,24 @@
             />
           </div>
           <br>
-          <div>
+          <div class="text-subtitle1">
             Please note that once a refund has been processed for an order, further refunds for the same order cannot be issued unless a new order is placed.
           </div>
         </q-card-section>
-
         <q-card-section>
-          <q-btn rounded dense class="q-px-md q-py-sm custom-button font-size-responsive-sm q-mr-sm" label="Close" color="primary" @click="closeDetails" style="height: 100%;" />
-          <q-btn rounded dense class="q-px-md q-py-sm custom-button font-size-responsive-sm q-mr-sm" icon="eva-shopping-bag-outline" label="Log Return" @click="logReturn(selectedOrder.userFirstName)" style="height: 100%;" />
+          <q-btn rounded dense class="q-px-lg q-py-sm custom-button font-size-responsive-md q-mr-sm" label="Close" color="primary" @click="closeDetails" style="height: 100%;" />
+          <q-btn rounded dense class="q-px-lg q-py-sm custom-button font-size-responsive-md q-mr-sm" icon="eva-shopping-bag-outline" label="Log Return" @click="logReturn(selectedOrder.userFirstName)" style="height: 100%;" />
         </q-card-section>
       </div>
     </q-card>
 
-    <!-- return history -->
+    <!--------------------------------------------------------------------- UPCOMING PICKUPS SECTION -------------------------------------------------->
     <q-card flat bordered class="q-pa-md col-12 col-md-5 full-height" v-if="selectedReturn === null">
+
+      <!-- return history -->
       <q-card-section>
         <div class="font-size-responsive-lg"><b>Return History</b></div>
       </q-card-section>
-
       <q-markup-table flat v-if="ordersRefunded.length > 0">
         <thead>
           <tr>
@@ -99,9 +97,7 @@
           </tr>
         </tbody>
       </q-markup-table>
-
       <q-separator v-if="ordersRefunded.length === 0" />
-
       <div class="q-pa-md" v-if="ordersRefunded.length === 0">
         <q-card-section  >
           No returns were made.
@@ -109,9 +105,8 @@
       </div>
     </q-card>
 
-    <!-- return panel -->
+    <!-- return details panel -->
     <q-card flat bordered class=" col-12 col-md-5 full-height" v-if="selectedReturn">
-
       <div class="q-pa-md">
         <q-card-section class="row justify-between flex-center q-gutter-md">
           <div>
@@ -119,13 +114,11 @@
           </div>
           <div>
             <div class="text-caption">Refund ID: #{{ selectedReturn._id }}</div>
-            <div class="text-caption"><b>Returned on: {{ formatDate(selectedReturn.orderDate) }}</b></div>
+            <div class="text-caption"><b>RETURNED {{ formatDate(selectedReturn.orderDate) }}</b></div>
           </div>
         </q-card-section>
       </div>
-
       <q-separator />
-
       <div class="q-pa-md">
         <q-card-section>
           <div class="text-subtitle1"><b>Reference Order:</b> #{{ selectedReturn.originalOrder }}</div><br>
@@ -134,7 +127,6 @@
         </q-card-section>
       </div>
       <q-separator />
-
       <div class="q-px-md">
         <q-card-section v-if="selectedReturn.sunglassesDetails && selectedReturn.sunglassesDetails.length > 0" class="q-gutter-md">
           <div v-for="sunglass in selectedReturn.sunglassesDetails" :key="sunglass._id" class="row items-center cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
@@ -142,18 +134,16 @@
               <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="border" style="max-width: 100px; max-height: 100px;" />
             </q-item-section>
             <q-item-section class="col-6">
-              <div class="font-size-responsive-sm q-mb-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b> </div>
+              <div class="font-size-responsive-md q-mb-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b> </div>
               <div class="text-caption">Item(s): 1</div>
               <div class="text-caption"><b>Price:</b> R {{ sunglass.price }}.00</div>
             </q-item-section>
           </div>
         </q-card-section>
       </div>
-
       <q-separator />
-
       <q-card-section>
-        <q-btn rounded dense class="q-px-md q-py-sm custom-button font-size-responsive-sm" label="Close" color="primary" @click="closeReturnDetails" style="width: 100%; height: 100%;" />
+        <q-btn rounded dense class="q-px-md q-py-sm custom-button font-size-responsive-md" label="Close" color="primary" @click="closeReturnDetails" style="width: 100%; height: 100%;" />
       </q-card-section>
     </q-card>
   </div>
@@ -187,7 +177,9 @@ export default {
     formatDate: Helper.formatDate,
     capitalizeFirstLetter: Helper.capitalizeFirstLetter,
     getImageUrl: Helper.getImageUrl,
-
+    viewSunglassesDetails(id) {
+      Helper.viewSunglassesDetails(id, this.$router);
+    },
     async getAllOrders() {
       try {
         const response = await OrderService.findAllOrders();
@@ -198,8 +190,8 @@ export default {
           return {
             ...order,
             userFirstName: user.username,
-          };
-        }));
+          }
+        }))
 
         await this.getSunglasses();
 
@@ -215,7 +207,6 @@ export default {
         console.error('Error fetching orders:', error);
       }
     },
-
     async getSunglasses() {
       for (const order of this.orders) {
         if (order.sunglasses && order.sunglasses.length > 0) {
@@ -236,7 +227,6 @@ export default {
         this.filteredOrders = this.currentOrders
         return
       }
-
       const searchTerm = this.search.toLowerCase();
 
       // Reset filteredList to combinedList before applying the search filter
@@ -273,9 +263,7 @@ export default {
               this.$q.notify({ type: 'negative', message: 'Refund failed. Please try again.' })
             }
           })
-
         }
-
       } catch (error) {
         console.error('Refund failed:', error)
       }
@@ -285,36 +273,22 @@ export default {
         this.$q.notify({ type: 'negative', message: 'This order has already been issued a refund.' });
         return
       }
-
       this.selectedOrder = order
       this.selectedReturn = null
-      this.selectedSunglasses = [] // Reset selected sunglasses when a new order is selected
+      this.selectedSunglasses = []
     },
     toggleSunglassSelection(id, index) {
       const uniqueIdentifier = this.getUniqueIdentifier(id, index)
       const indexInArray = this.selectedSunglasses.indexOf(uniqueIdentifier)
       if (indexInArray > -1) {
-        this.selectedSunglasses.splice(indexInArray, 1) // Deselect if already selected
+        this.selectedSunglasses.splice(indexInArray, 1)
       } else {
-        this.selectedSunglasses.push(uniqueIdentifier) // Select if not already selected
+        this.selectedSunglasses.push(uniqueIdentifier)
       }
     },
     closeDetails() {
       this.selectedOrder = null
     },
-
-    viewSunglassesDetails(id) {
-      if(!id) {
-        Logger.error("Invalid sunglasses ID")
-        return
-      }
-      try {
-        this.$router.push(`/sunglasses/view/${id}`)
-      } catch (error) {
-        Logger.error(error)
-      }
-    },
-
     openReturnDetails(order) {
       this.selectedReturn = order
       this.selectedOrder = null,
@@ -326,7 +300,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-/* Add any custom styles you need here */
-</style>

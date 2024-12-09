@@ -2,6 +2,7 @@ import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
 import axios from 'axios'
+import Helper from 'src/services/utils'
 
 const API_BASE_URL = process.env.API_BASE_URL
 
@@ -38,7 +39,46 @@ export default route(function (/* { store, ssrContext } */) {
       // If the server is healthy
       if (response.status === 200) {
         // Redirect to the home page only if navigating to /server-offline
-        if (to.path === '/404') {
+        if (to.path === '/verify-email') {
+          const token = to.query.token
+          if (token) {
+            next()
+          } else {
+            next(({ path: '/404'}))
+          }
+        }
+        else if (to.path === '/resend-verification') {
+          if (from.path === '/verify-email') {                         //  check if previous route is verify-email
+            next()
+          } else {
+            next(({ path: '/404'}))
+          }
+        }
+        else if (to.path === '/payment-success') {
+          const orderId = to.query.orderId
+          if (orderId) {
+            next()                        // proceed if theres no token
+          } else {
+            next(({ path: '/404'}))
+          }
+        }
+        else if (to.path === '/forgot-password') {
+          const token = Helper.getCookie('token')
+          if (!token) {
+            next()                        // proceed if theres no token
+          } else {
+            next(({ path: '/404'}))
+          }
+        }
+        else if (to.path === '/reset-password') {
+          const token = to.query.token
+          if (token) {
+            next()
+          } else {
+            next(({ path: '/404'}))
+          }
+        }
+        else if (to.path === '/404') {
           next('/');
         } else {
           next();

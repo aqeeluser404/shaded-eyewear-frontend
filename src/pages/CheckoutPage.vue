@@ -1,81 +1,65 @@
 <template>
   <q-page>
+    <!-- constraints -->
     <div class="q-pa-md" style="width: 100%; height: 100%; background-color: #f0f0f0;">
-
       <div style="height: 50px;"></div>
-
       <div class="row q-gutter-md justify-center">
 
-        <!-- change and add address -->
-        <div class="col-12 col-md-6">
-          <!-- card to change delivery -->
-          <q-card v-if="!deliveryPanel" flat bordered class="row items-center justify-between q-pa-md q-mb-md">
-            <q-card-section class="font-size-responsive-sm">
-              Collect
-            </q-card-section>
+        <!--------------------------------------------------------------------- SHIPPING OPTIONS PANEL --------------------------------------------->
+        <div class="col-12 col-md-6 ">
+          <!-- collect card -->
+          <q-card v-if="!deliveryPanel" flat bordered class="row items-center justify-between q-mb-md">
+
             <q-card-section>
-              <q-btn
-                rounded dense
-                color="white"
-                text-color="black"
-                class="q-px-lg custom-button font-size-responsive-sm"
-                label="Collect My Order"
-                @click="togglePickupPanel"
-              />
+              <div class="font-size-responsive-lg">Collect</div>
             </q-card-section>
+
+            <q-card-section>
+              <q-btn rounded dense color="white" text-color="black" class="q-px-lg q-py-sm custom-button font-size-responsive-md" label="Collect My Order" @click="togglePickupPanel" />
+            </q-card-section>
+
           </q-card>
-          <q-card v-if="!pickupPanel" flat bordered class="row items-center justify-between q-pa-md">
-            <q-card-section class="font-size-responsive-sm">
-              Change Address (Coming soon)
-            </q-card-section>
+
+          <!-- delivery card -->
+          <q-card v-if="!pickupPanel" flat bordered class="row items-center justify-between">
+
             <q-card-section>
-              <!-- <q-btn
-                size="12px"
-                label="Deliver My Order"
-                @click="toggleDeliveryPanel"
-              /> -->
+              <div class="text-subtitle1">Delivery (Coming soon)</div>
+            </q-card-section>
+
+            <q-card-section>
+              <!-- <q-btn size="12px" label="Deliver My Order" @click="toggleDeliveryPanel" /> -->
             </q-card-section>
           </q-card>
 
-          <!-- Pickup Panel -->
+          <!----------------------------------------------------------------------- PICKUP PANEL -------------------------------------------------->
           <q-card flat bordered class="" v-if="pickupPanel">
-
-            <q-card-section class="row items-center font-size-responsive-md">
+            <q-card-section class="row items-center">
               <div class="text-subtitle1 q-mr-md"><b>Pickup Location</b></div>
-              <q-icon name="local_shipping" class="font-size-responsive-md" />
+              <q-icon name="local_shipping" class="font-size-responsive-lg" />
             </q-card-section>
-
             <q-separator />
-
             <q-card-section>
               <div class="">
                 <div class="text-subtitle1 q-mb-md">Available Pickup Location(s)</div>
-                <q-radio class="q-pa-sm">
-                  <span class="q-ml-md"><b>332 Klip Road</b></span><br>
-                  <span class="q-ml-md">Lotus River</span><br>
-                  <span class="q-ml-md">Cape Town</span><br>
-                  <span class="q-ml-md">7941</span>
-                  <!-- <span class="q-ml-md">Western Cape</span><br> -->
+                <q-radio modelValue="" val="" class="q-pa-sm">
+                  <span class="text-subtitle1 q-ml-md"><b>65 Stockley Road</b></span><br>
+                  <span class="text-subtitle1 q-ml-md">Kenwyn</span><br>
+                  <span class="text-subtitle1 q-ml-md">Cape Town</span><br>
+                  <span class="text-subtitle1 q-ml-md">7779</span>
                 </q-radio>
-
               </div><br>
-              <div><b>Our store is open from 8:00 AM to 5:00 PM</b></div>
+              <div class="text-subtitle1"><b>Our store is open from 8:00 AM to 5:00 PM</b></div>
             </q-card-section>
-
             <q-separator />
-
             <q-card-section>
               <div class="text-subtitle1 q-mb-md"><b>Pickup Instructions</b></div>
-              <div>
-                For a smooth pickup experience, please remember to bring a valid ID and your order confirmation email.
-              </div><br>
-              <div>
-                If you have any questions or need assistance, feel free to contact us. <br>Thank you for shopping with us!
-              </div>
+              <div class="text-subtitle1">For a smooth pickup experience, please remember to bring the order ID included in your order confirmation email. If you have any questions or need assistance, feel free to contact us. </div><br>
+              <div class="text-subtitle1">Thank you for shopping with us!</div>
             </q-card-section>
           </q-card>
 
-          <!-- Delivery Panel -->
+          <!---------------------------------------------------------------------- DELIVERY PANEL -------------------------------------------------->
           <q-card flat bordered class="q-pa-md" v-if="deliveryPanel">
             <q-card-section class="text-h6">
               <q-item>
@@ -89,34 +73,11 @@
             </q-card-section>
             <q-card-section>
               <q-form @submit="addAddress" class="q-gutter-lg">
-                <q-input
-                  filled
-                  v-model="userAddress.location.streetAddress"
-                  label="Street Address *"
-                />
-                <q-input
-                  filled
-                  v-model="userAddress.location.suburb"
-                  label="Suburb *"
-                />
-                <q-select
-                  filled
-                  v-model="userAddress.location.city"
-                  :options="cityOptions"
-                  emit-value
-                  map-options
-                  label="City *"
-                />
-                <q-input
-                  filled
-                  v-model="userAddress.location.province"
-                  label="Province *"
-                />
-                <q-input
-                  filled
-                  v-model="userAddress.location.postalCode"
-                  label="Postal Code *"
-                />
+                <q-input filled v-model="userAddress.location.streetAddress" label="Street Address *" />
+                <q-input filled v-model="userAddress.location.suburb" label="Suburb *" />
+                <q-select filled v-model="userAddress.location.city" :options="cityOptions" emit-value map-options label="City *" />
+                <q-input filled v-model="userAddress.location.province" label="Province *" />
+                <q-input filled v-model="userAddress.location.postalCode" label="Postal Code *" />
                 <div>
                   <q-btn label="Save Address" type="submit" color="primary" class="custom-button"/>
                 </div>
@@ -125,61 +86,39 @@
           </q-card>
         </div>
 
-        <!-- order summary -->
+        <!---------------------------------------------------------------------- ORDER SUMMARY PANEL -------------------------------------------------->
+        <!-- summary card -->
         <div class="col-12 col-md-3">
           <div class="q-gutter-md">
-
             <q-card flat bordered>
               <q-card-section>
-                <div class="font-size-responsive-xl">Order Summary</div>
+                <div class="font-size-responsive-lg">Order Summary</div>
               </q-card-section>
-
               <q-separator />
-
               <div class="q-px-md">
                 <q-card-section class="row items-center q-gutter-md justify-start">
                   <div class="text-caption"><b>TOTAL:</b> {{ order.totalItems }} item(s)</div>
-                  <div class="font-size-responsive-lg">R {{ order.totalAmount }}.00</div>
+                  <div class="text-h5">R {{ order.totalAmount }}.00</div>
                 </q-card-section>
               </div>
-
               <q-card-section class="q-pa-none q-px-md q-pb-md">
-                <q-btn
-                  rounded dense
-                  color="black"
-                  text-color="white"
-                  label="Pay with Yoco"
-                  style="width: 100%;"
-                  class="q-px-lg custom-button font-size-responsive-md q-mb-md"
-                  @click="initiatePayment"
-                />
-                <q-btn
-                  rounded dense
-                  icon="eva-lock-outline"
-                  label="Secure Checkout"
-                  flat
-                  class="custom-button font-size-responsive-sm"
-                  style="width: 100%; opacity: 0.9"
-                />
+                <q-btn rounded dense color="black" text-color="white" label="Pay with Yoco" style="width: 100%;" class="q-px-lg q-py-sm custom-button font-size-responsive-md q-mb-md" @click="initiatePayment" />
+                <q-btn rounded dense icon="eva-lock-outline" label="Secure Checkout" flat class="q-px-lg q-py-sm custom-button font-size-responsive-md" style="width: 100%; opacity: 0.9" />
               </q-card-section>
-
-
             </q-card>
-
+            <!-- review items card -->
             <q-card flat bordered class="">
-              <q-card-section class="font-size-responsive-sm" >
-                Review your items
+              <q-card-section>
+                <div class="font-size-responsive-lg">Review your items</div>
               </q-card-section>
-
               <q-separator />
-
               <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0" class="q-gutter-md">
                 <div v-for="sunglass in order.sunglassesDetails" :key="sunglass._id" class="row items-center cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
-                  <q-item-section class="col-4">
+                  <q-item-section class="col-3 q-mr-md">
                     <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="border" style="max-width: 100px; max-height: 100px;" />
                   </q-item-section>
-                  <q-item-section class="col-7" style="height: 100%;">
-                    <div class="font-size-responsive-sm q-mb-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b> </div>
+                  <q-item-section class="col-6" style="height: 100%;">
+                    <div class="font-size-responsive-md q-mb-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b> </div>
                     <div class="text-caption">Item(s): 1</div>
                     <div class="text-caption"><b>Price:</b> R {{ sunglass.price }}.00</div>
                   </q-item-section>
@@ -187,23 +126,21 @@
               </q-card-section>
             </q-card>
           </div>
-
         </div>
       </div>
     </div>
   </q-page>
 </template>
 
-
 <script>
 import UserService from 'src/services/UserService'
 import OrderService from 'src/services/OrderService'
 import PayService from 'src/services/PayService'
 import SunglassesService from 'src/services/SunglassesService'
-import axios from 'axios'
 import Helper from '../services/utils'
 
 export default {
+  beforeRouteEnter: Helper.beforeRouteEnterUser,
   data() {
     return {
       order: {},
@@ -221,7 +158,6 @@ export default {
       cityOptions: [
         { label: 'Cape Town', value: 'Cape Town' },
         { label: 'johannesburg', value: 'johannesburg' },
-        // { label: 'Not provided', value: 'Not provided' }
       ],
       userTokenDetails: { _id : '', username: '', userType: '' },
       orderType: null,
@@ -229,10 +165,15 @@ export default {
       deliveryPanel: false
     }
   },
-
+  created() {
+    this.getUserDetails()
+  },
   methods: {
     getImageUrl: Helper.getImageUrl,
     capitalizeFirstLetter: Helper.capitalizeFirstLetter,
+    viewSunglassesDetails(id) {
+      Helper.viewSunglassesDetails(id, this.$router);
+    },
     togglePickupPanel() {
       this.pickupPanel = !this.pickupPanel;
       this.deliveryPanel = false;
@@ -254,7 +195,6 @@ export default {
         const isValid = await this.validateAddress()
         if (isValid) {
           await UserService.updateUserDetails(this.userDetails._id, updatedUser)
-
           this.$q.notify({ type: 'positive', color: 'primary', message: 'Update successful!' })
           this.getUserDetails()
           this.addAddressPanel = false
@@ -266,7 +206,6 @@ export default {
         return
       })
     },
-
     // when i implement delivery, ensure that the ordertype is execute after a successful payment
     async initiatePayment() {
       try {
@@ -282,7 +221,7 @@ export default {
         }
         const response = await PayService.initiatePayment(this.currentOrderId);
         const { checkout } = response;
-        console.log('Checkout URL:', checkout.redirectUrl); // Add this line to log the checkout URL
+        // console.log('Checkout URL:', checkout.redirectUrl); // Add this line to log the checkout URL
         window.location.href = checkout.redirectUrl; // Redirect to Yoco checkout page
       } catch (error) {
         console.error('Payment initiation failed:', error);
@@ -302,7 +241,6 @@ export default {
     //     console.error('Creating delivery failed:', error)
     //   }
     // },
-
     // async validateAddress() {
     //     const address = `${this.userAddress.location.streetAddress}, ${this.userAddress.location.suburb}, ${this.userAddress.location.city}, ${this.userAddress.location.province}, ${this.userAddress.location.postalCode}`;
     //     try {
@@ -326,12 +264,9 @@ export default {
     //       }
     //     }
     // },
-
-    // =================================== GET DATA
     async getCurrentOrder() {
       const response = await OrderService.findOrderById(this.currentOrderId)
       this.order = response
-
       await this.getSunglasses()
     },
     async getSunglasses() {
@@ -352,30 +287,14 @@ export default {
         }
       }
     },
-    viewSunglassesDetails(id) {
-      if(!id) {
-        Logger.error("Invalid sunglasses ID")
-        return
-      }
-      try {
-        this.$router.push(`/sunglasses/view/${id}`)
-      } catch (error) {
-        Logger.error(error)
-      }
-    },
-
     async getUserDetails() {
       const id = await UserService.FindUserByToken()
       this.userTokenDetails = id
       const user = await UserService.findUserById(this.userTokenDetails._id)
       this.userDetails = user
 
-      // reload orders
       this.getCurrentOrder()
     }
-  },
-  created() {
-    this.getUserDetails()
   }
 }
 </script>

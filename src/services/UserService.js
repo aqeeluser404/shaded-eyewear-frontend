@@ -62,7 +62,8 @@ class UserService {
       const response = await axiosInstance.get(ENDPOINT)
       return response.data
     } catch (error) {
-      Logger.error(error)
+      // Logger.error(error)
+      throw error
     }
   }
   static async findUserById(userId) {
@@ -71,7 +72,8 @@ class UserService {
       const response = await axiosInstance.get(ENDPOINT)
       return response.data
     } catch (error) {
-      Logger.error(error)
+      // Logger.error(error)
+      throw error
     }
   }
   static async updateUserDetails(userId, user) {

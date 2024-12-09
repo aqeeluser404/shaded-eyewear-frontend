@@ -1,25 +1,14 @@
 <template>
   <q-page>
-    <!-- <div class="constrain window-height">
-      <q-card bordered flat class="column flex-center q-mb-md">
-        <h4>Forgot Password</h4>
-      </q-card>
-      <q-card bordered flat class="column flex-center q-pa-md">
-        <q-card-section>
-          <q-input filled v-model="email" label="Your email *" />
-          <br>
-          <q-btn label="Send Verification" @click="ForgotPassword" color="primary" style="width: 100%;" class="custom-button"/>
-        </q-card-section>
-      </q-card>
-    </div> -->
-
     <q-img src="~src/assets/theme/abstract1.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
       <div class="absolute-full column justify-center items-center text-black">
         <q-card bordered flat class="q-pa-lg">
-          <div class="column items-center">
+          <div class="column">
             <p class="font-size-responsive-xxxl anton-regular q-mb-md">Forgot Password</p>
+            <br>
             <q-input filled label-color=black color="black" v-model="email" label="Email to reset your password" style="width: 100%;" class="q-mb-md" />
-            <q-btn rounded dense @click="ForgotPassword" icon="eva-email-outline " label="Forgot Password" class="q-px-lg anton-regular font-size-responsive-md" />
+            <q-btn rounded @click="ForgotPassword" icon="eva-email-outline" color="black" text-color="white" label="Send Code" class="custom-button q-py-sm q-px-lg font-size-responsive-md q-mb-md" />
+            <q-btn rounded to='auth/login' color="white" text-color="black" label="Return to Login" class="custom-button q-py-sm q-px-lg font-size-responsive-md" />
           </div>
         </q-card>
       </div>
@@ -40,13 +29,17 @@ export default {
   },
   methods: {
     async ForgotPassword() {
-      const response = await EmailService.ForgotPassword(this.email)
-      if (response) {
-        this.$q.notify({ type: 'positive', color: 'primary', message: 'An email has been sent to reset your password!' })
-        this.$router.push('/')
+      if (this.email === '' || null) {
+        this.$q.notify({ type: 'negative', message: 'Please fill in the email field.' })
       } else {
-        this.$q.notify({ type: 'negative', message: 'Sending email failed. Please try again.' })
-        this.onReset()
+        const response = await EmailService.ForgotPassword(this.email)
+        if (response) {
+          this.$q.notify({ type: 'positive', color: 'primary', message: 'An email has been sent to reset your password!' })
+          this.$router.push('/')
+        } else {
+          this.$q.notify({ type: 'negative', message: 'Sending email failed. Please try again.' })
+          this.onReset()
+        }
       }
     },
     onReset() {

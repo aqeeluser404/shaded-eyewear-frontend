@@ -7,32 +7,27 @@
         <q-btn rounded dense @click="acceptCookies" label="Accept" color="white" class="q-px-md q-py-sm q-ml-lg font-size-responsive-xs" flat ></q-btn>
       </div>
     </div>
-
     <div class="noise-overlay"></div>
 
-     <!---------------- HEADER ----------------->
-    <q-header :class="[headerClass, colorShiftClass]">
+    <!----------------------------------------------------------- HEADER SECTION -------------------------------------------------->
+    <q-header v-if="!isPaymentSuccessPage" :class="[headerClass, colorShiftClass]">
 
       <q-toolbar class="q-px-lg row items-center justify-between">
 
-        <!-- TITLE AND AVATAR -->
+        <!-- title and avatar -->
         <q-toolbar-title class="col-md-6 row items-center ">
-
           <q-avatar class="q-mr-sm responsive-avatar">
             <img :src="logoSrc"/>
           </q-avatar>
-          <router-link to="/" :class="colorShiftClass" class="text-remove-decoration font-size-responsive-lg q-mr-sm" >Shaded Eyewear ™ </router-link>
-          <span v-if="isLoggedIn" class="q-ml-md font-size-responsive-xl caveat ">
+          <router-link to="/" :class="colorShiftClass" class="text-remove-decoration font-size-responsive-lg" >Shaded Eyewear ™ </router-link>
+          <span v-if="isLoggedIn" class="q-ml-sm font-size-responsive-xxl caveat ">
             Hi, {{ userDetails.username }}
           </span>
-          <!-- <span v-else class="q-ml-md font-size-responsive-xl caveat ">
-            Hi valued customer
-          </span> -->
         </q-toolbar-title>
 
         <!-- TEXT CAROUSEL -->
-        <!-- <div class="col-md-0 row large-screen-only justify-center">
-          <div class="text-carousel q-ml-lg font font-size-responsive-xs">
+        <!-- <div class="col-md-4 row large-screen-only justify-center">
+          <div class="text-carousel font-size-responsive-xs row flex-center justify-center">
             <q-btn flat icon="eva-arrow-ios-back-outline" @click="prevText" />
             <span class="q-mx-sm">{{ texts[currentIndex] }}</span>
             <q-btn flat icon="eva-arrow-ios-forward-outline" @click="nextText" />
@@ -41,47 +36,41 @@
 
         <div class="col-md-6">
 
-          <!------------ DESKTOP NAV ------------->
+          <!----------------------------------------------------------- NAV SECTION -------------------------------------------------->
+          <!-- Desktop nav -->
           <div class="row justify-end items-center">
-            <q-btn to="/" class="custom-button large-screen-only font-size-responsive-xs" label="Home" flat rounded />
-            <q-btn to="/sunglasses" class="custom-button large-screen-only font-size-responsive-xs" label="Catalogue" flat rounded />
-            <q-btn v-if="!isLoggedIn" to="/auth/login" class="custom-button large-screen-only font-size-responsive-xs" label="Login" flat rounded />
-            <q-btn v-else @click="logout" class="custom-button large-screen-only font-size-responsive-xs" label="Logout" flat rounded />
-            <q-btn @click="openDash" class="custom-button large-screen-only font-size-responsive-xs" icon="eva-person-outline" flat rounded />
-            <q-btn v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'" to="/admin/dashboard" icon="eva-pie-chart-outline" class="custom-button large-screen-only font-size-responsive-xs" flat rounded />
-            <q-btn to="/cart" icon="eva-shopping-bag-outline" class="large-screen-only font-size-responsive-xs" flat rounded />
+            <q-btn to="/" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Home" flat rounded />
+            <q-btn to="/sunglasses" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Catalogue" flat rounded />
+            <q-btn v-if="!isLoggedIn" to="/auth/login" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Login" flat rounded />
+            <q-btn v-else @click="logout" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Logout" flat rounded />
+            <q-btn @click="openDash" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" icon="eva-person-outline" flat rounded />
+            <q-btn v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'" to="/admin/dashboard" icon="eva-pie-chart-outline" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" flat rounded />
+            <q-btn to="/cart" icon="eva-shopping-bag-outline" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" flat rounded />
           </div>
 
-          <!------------ MOBILE NAV ------------->
+          <!-- Mobile nav -->
           <q-btn-dropdown class="small-screen-only" icon="menu" flat>
             <q-list style="width: 200px">
-              <!-- <q-item>
-                <q-item-section>
-                  <span v-if="isLoggedIn" class="font-size-responsive-xxl caveat small-screen-only">
-                    Hi, {{ userDetails.username }}
-                  </span>
-                </q-item-section>
-              </q-item> -->
               <q-item clickable v-close-popup to="/">
-                <q-item-section class="">Home</q-item-section>
+                <q-item-section class="font-size-responsive-md">Home</q-item-section>
               </q-item>
               <q-item clickable v-close-popup to="/sunglasses">
-                <q-item-section class="">Catalogue</q-item-section>
+                <q-item-section class="font-size-responsive-md">Catalogue</q-item-section>
               </q-item>
               <q-item clickable v-close-popup to="/auth/login" v-if="!isLoggedIn">
-                <q-item-section class="">Login</q-item-section>
+                <q-item-section class="font-size-responsive-md">Login</q-item-section>
               </q-item>
               <q-item clickable v-close-popup @click="logout" v-else>
-                <q-item-section class="">Logout</q-item-section>
+                <q-item-section class="font-size-responsive-md">Logout</q-item-section>
               </q-item>
               <q-item clickable v-close-popup @click="openDash">
-                <q-item-section class="">User Profile</q-item-section>
+                <q-item-section class="font-size-responsive-md">User Profile</q-item-section>
               </q-item>
               <q-item clickable v-close-popup to="/admin/dashboard" v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'">
-                <q-item-section class="">Admin Panel</q-item-section>
+                <q-item-section class="font-size-responsive-md">Admin Panel</q-item-section>
               </q-item>
               <q-item clickable v-close-popup to="/cart">
-                <q-item-section class="">Cart</q-item-section>
+                <q-item-section class="font-size-responsive-md">Cart</q-item-section>
               </q-item>
             </q-list>
           </q-btn-dropdown>
@@ -89,24 +78,25 @@
       </q-toolbar>
     </q-header>
 
-    <!-- PAGES -->
+    <!----------------------------------------------------------- PAGES SECTION -------------------------------------------------->
     <div style="background-color: black;">
-      <q-page-container style="transform: translateY(-50px); ">
+      <q-page-container :style="pageContainerStyle">
         <router-view style="background-color: white;" />
       </q-page-container>
     </div>
 
-    <!-- FOOTER -->
+    <!----------------------------------------------------------- FOOTER SECTION -------------------------------------------------->
     <q-footer class="bg-black text-white q-pa-md">
       <q-toolbar class="constrain">
         <q-toolbar-title>
-          <div class="row justify-center">
+          <div v-if="!isPaymentSuccessPage"  class="row justify-center">
+
             <!-- Developed By Section -->
-            <div class="col-12 col-md-4 items-center">
+            <div  class="col-12 col-md-4 items-center">
               <q-card flat class="q-pa-md bg-transparent">
                 <div class="font-size-responsive-xxl anton-regular">SHORTCUT LINKS</div>
                 <br>
-                <div class="font-size-responsive-sm">
+                <div class="font-size-responsive-md">
                   <q-card class="q-mb-xs q-pa-sm" style="background-color: #121212; width: 75%;">
                     <router-link to="/" class="text-remove-decoration text-white">Home</router-link>
                   </q-card>
@@ -120,54 +110,70 @@
                     <router-link to="/cart" class="text-remove-decoration text-white">Cart</router-link>
                   </q-card>
                 </div>
+                <br>
+                <div class="text-caption" style="opacity: 0.9;">
+                  Shaded Eyewear founded by <span style="text-decoration: underline;" class="text-subtitle1 caveat cursor-pointer"> Amaan Ebrahim</span>
+                </div>
+                <div class="text-caption" style="opacity: 0.9;">
+                  Website developed by
+                  <a href="https://aqeel-dev-portfolio.web.app" target="_blank" style="text-decoration: none; color: inherit; text-decoration: underline;" class="text-subtitle1 caveat">Aqeel Hanslo</a>
+                </div>
               </q-card>
             </div>
+
             <!-- Contact Section -->
-            <div class="col-12 col-md-4">
+            <div  class="col-12 col-md-4">
               <q-card flat class="q-pa-md bg-transparent">
                 <div class="font-size-responsive-xxl anton-regular">GET IN CONTACT</div>
                 <br>
                 <div>
                   <div class="font-size-responsive-sm">
                     <q-form @submit="submitContactForm" style="width: 75%;">
-                      <q-input filled label-color=white color="white" v-model="userContact.firstName" label="Your Name" class="q-mb-xs font-size-responsive-sm" required
+                      <q-input filled label-color=white color="white" v-model="userContact.firstName" label="Your Name" stack-label class="q-mb-xs font-size-responsive-sm" required
                       style="background-color: #121212;" input-style="color: white;" />
-                      <q-input filled label-color=white color="white" v-model="userContact.email" label="Your Email" class="q-mb-xs" required
+                      <q-input filled label-color=white color="white" v-model="userContact.email" label="Your Email" stack-label class="q-mb-xs" required
                       style="background-color: #121212;" input-style="color: white;" />
-                      <q-input filled label-color=white color="white" v-model="message" label="Message" type="textarea" class="q-mb-xs" required
+                      <q-input filled label-color=white color="white" v-model="message" label="Message" type="textarea" stack-label class="q-mb-xs" required
                       style="background-color: #121212;" input-style="color: white;"  />
-                      <q-btn type="submit" label="Send Message" style="background-color: #121212;" />
+                      <q-btn rounded type="submit" label="Send Message" class="q-px-lg q-py-sm custom-button font-size-responsive-md" style="background-color: #121212;" />
                     </q-form>
                   </div>
                 </div>
               </q-card>
             </div>
+
             <!-- Follow Us Section -->
-            <div class="col-12 col-md-4">
+            <div  class="col-12 col-md-4">
               <q-card flat class="q-pa-md bg-transparent">
                 <div class="font-size-responsive-xxl anton-regular">FOLLOW US</div>
                 <br>
                 <div class="row items-center q-gutter-md">
                   <div>
-                    <span class=""><q-btn flat round icon="mdi-instagram" style="border: 1px solid;" class="text-white font-size-responsive-lg" @click="openInstagram" /></span>
+                    <q-btn flat round icon="mdi-instagram" style="border: 1px solid;" class="text-white q-pa-sm font-size-responsive-lg" @click="openInstagram" />
                   </div>
                   <div>
-                    <div class="font-size-responsive-sm">Follow us on Instagram</div>
-                    <div class="font-size-responsive-sm">For the newest arrivals</div>
-                    <div class="font-size-responsive-sm">Sunglasses and Eyewear Shop</div>
+                    <div class="font-size-responsive-md" style="opacity: 1;">Follow us on Instagram</div>
+                    <div class="font-size-responsive-md" style="opacity: 1;">For the newest arrivals</div>
+                    <div class="font-size-responsive-md" style="opacity: 1;">Sunglasses and Eyewear Shop</div>
                   </div>
                 </div>
               </q-card>
             </div>
           </div>
-          <div class="row justify-center">
+
+          <!-- bottom footer -->
+          <div v-if="!isPaymentSuccessPage"   class="row justify-center">
             <q-separator class="q-my-md" style="background-color: #121212; width: 75%;"></q-separator>
           </div>
-          <div class="row justify-center items-center font-size-responsive-xs q-pa-md">
-            <q-avatar class="responsive-avatar-2">                                                                   <!-- avatar -->
+          <div class="row justify-center items-center font-size-responsive-sm q-pa-md">
+            <q-avatar class="responsive-avatar-2">
               <img src="/src/assets/logos/logo-white.png"/>
             </q-avatar>
-            Shaded Eyewear ™ | Est. 2023 | Sunglasses & Eyewear Shop | <span class=" q-ml-xs font-size-responsive-xs" > Developed by <a href="https://aqeel-dev-portfolio.web.app" target="_blank" style="text-decoration: none; color: inherit; font-weight: bold;" class="caveat font-size-responsive-sm">Aqeel</a></span>
+            Shaded Eyewear ™ | Est. 2023 | Sunglasses & Eyewear Shop
+             <!-- | -->
+            <!-- <span class="q-ml-xs">
+              Developed by <a href="https://aqeel-dev-portfolio.web.app" target="_blank" style="text-decoration: none; color: inherit; font-weight: bold;" class="caveat font-size-responsive-md">Aqeel</a>
+            </span> -->
           </div>
         </q-toolbar-title>
       </q-toolbar>
@@ -193,6 +199,14 @@ export default {
       this.$route.path.includes('/buy/review') ||
       this.$route.path.includes('/user/dashboard') ||
       this.$route.path.includes('/admin/dashboard')
+    },
+    isPaymentSuccessPage() {
+      return this.$route.path === '/payment-success';
+    },
+    pageContainerStyle() {
+      return {
+        transform: this.isPaymentSuccessPage ? 'translateY(0px)' : 'translateY(-50px)'
+      };
     }
   },
 
@@ -227,9 +241,8 @@ export default {
         firstName: '',
         email: ''
       }, message: '',
-
-
     }
+
   },
   mounted() {
     this.getCurrentOrder()
@@ -242,7 +255,7 @@ export default {
     }
   },
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll)
   },
   watch: {
     '$route'() {
@@ -285,17 +298,30 @@ export default {
         this.nextText()
       }, 10000)
     },
-    async checkLoginStatus() {                                        // 1. check if logged in
+    async checkLoginStatus() {
       const token = Helper.getCookie('token')
-      this.isLoggedIn = !!token
 
-      if (this.isLoggedIn === true) {                           // 2. fetch user details to determine usertype
-        this.fetchUserDetails()
+      if (token) {
+        const user = await UserService.FindUserByToken()
+        const userDetails = await UserService.findUserById(user._id)
+
+        // Check if the token is the same as the one in the backend
+        // Token mismatch, which indicates the user logged in from another browser
+        if (token === userDetails.loginInfo.loginToken) {
+          this.isLoggedIn = true
+          this.fetchUserDetails()
+        } else {
+          this.isLoggedIn = false
+          this.handleLogout()
+        }
       } else {
-        const orderId = localStorage.getItem('currentOrderId')
-        await this.cancelOrder(orderId)
-        window.location.reload()
+        this.isLoggedIn = false
+        this.handleLogout()
       }
+    },
+    handleLogout() {
+      Helper.removeCookie('token')
+      this.cancelOrder()
     },
     async fetchUserDetails() {                                // 2.1 fetch user details to determine usertype
       const response = await UserService.FindUserByToken()
@@ -307,10 +333,8 @@ export default {
       }).onOk(async () => {
 
         if (this.order._id) {
-          await this.getCurrentOrder()                          // get order in local store
-          await this.cancelOrder(this.order._id)                // cancel order function
+          this.cancelOrder()
         }
-
         const response = await UserService.logout(this.userDetails._id)
         if (response) {
           this.$q.notify({ type: 'positive', color: 'primary', message: 'You have successfully logged out!' })
@@ -323,19 +347,34 @@ export default {
       })
     },
     async getCurrentOrder() {
-      const orderId = localStorage.getItem('currentOrderId')
+      // console.log(this.userDetails._id)
+      let orderId = localStorage.getItem('currentOrderId')
+      if (!orderId) {
+        if (this.userDetails._id) {
+          const findAllOrders = await OrderService.findAllMyOrders(this.userDetails._id);
+          for (const order of findAllOrders) {
+              const detailedOrder = await OrderService.findOrderById(order._id);
+
+              if (detailedOrder.status === 'pending') {
+                orderId = detailedOrder._id;
+                localStorage.setItem('currentOrderId', orderId)
+                // console.log(detailedOrder);
+                break;
+              }
+          }
+        }
+      }
       if (orderId) {
         const response = await OrderService.findOrderById(orderId)
         this.order = response
-
-        if (this.order.status === 'paid') {                   // automatically remove order once paid for
+        if (this.order.status === 'paid') {
           localStorage.removeItem('currentOrderId')
-          // after removing , access through my-orders, filter with type of delivery
         }
-      } else {
-        console.log("No order has been placed")
       }
-      console.log( "current orderId: ", this.order._id)
+      // else {
+      //   console.log("No order has been placed")
+      // }
+      // console.log( "current orderId: ", this.order._id)
     },
     async openDash() {
       if (this.isLoggedIn == true) {
@@ -344,12 +383,8 @@ export default {
         this.$q.notify({ type: 'negative', message: 'Please login to continue.' })
       }
     },
-    async cancelOrder(orderId) {
-      const response = await OrderService.cancelOrder(orderId)
-      if (response) {
-        await OrderService.deleteOrder(orderId)
-        localStorage.removeItem('currentOrderId')
-      }
+    async cancelOrder() {
+      localStorage.removeItem('currentOrderId')
     },
     openInstagram() {
       window.open('https://www.instagram.com/shadedeyewearza/', '_blank');
@@ -358,7 +393,10 @@ export default {
       try {
         const response = await EmailService.GetInContact(this.userContact, this.message)
         if (response) {
-          this.$q.notify({ type: 'positive', message: 'Message sent successfully!' });
+          this.$q.notify({ type: 'positive', color: 'primary', message: 'Message sent successfully!' });
+          this.userContact.firstName = ''
+          this.userContact.email = ''
+          this.message = ''
         } else {
           this.$q.notify({ type: 'negative', message: 'Error sending message.' });
         }
@@ -370,8 +408,12 @@ export default {
 }
 </script>
 
-<style lang="sass">
-
+<style lang="sass" scoped>
+.text-subtitle1
+  line-height: 1
+.custom-label
+  font-size: 0.1rem
+  color: white
 
 .cookie-consent-banner
   position: fixed
@@ -391,18 +433,18 @@ export default {
     transform: translateY(100%)
   to
     transform: translateY(0)
-// .text-carousel-toolbar
-//   background-color: #f5f5f5
-//   padding: 10px 0
-// .font-size-responsive-xl
-//   @media (min-width: 1320px)
-//     font-size: 1.25rem
-//   @media (min-width: 1320px)
-//     font-size: 1rem
+.text-carousel-toolbar
+  background-color: #f5f5f5
+  padding: 10px 0
+.font-size-responsive-xl
+  @media (min-width: 1320px)
+    font-size: 1.25rem
+  @media (min-width: 1320px)
+    font-size: 1rem
 
-// .font-size-responsive-xs
-//   @media (min-width: 1320)
-//     font-size: 0.75rem
+.font-size-responsive-xs
+  @media (min-width: 1320)
+    font-size: 0.75rem
 
 .responsive-avatar
   width: clamp(1.975rem, 5vw, 3.125rem) // 30px to 50px
@@ -411,4 +453,18 @@ export default {
 .responsive-avatar-2
   width: clamp(1.2rem, 5vw, 3.125rem) // 30px to 50px
   height: clamp(1.2rem, 5vw, 3.125rem) // 30px to 50px
+
+.custom-input
+  background-color: #121212
+  color: white !important
+
+.custom-label
+  color: white
+  font-size: clamp(0.75rem, 2.5vw, 1.25rem)
+
+.custom-textarea
+  background-color: #121212
+  color: white !important
+  font-size: clamp(0.75rem, 2.5vw, 1.25rem)
+
 </style>

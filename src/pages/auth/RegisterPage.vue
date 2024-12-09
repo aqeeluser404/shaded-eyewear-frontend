@@ -3,8 +3,8 @@
     <q-img src="~src/assets/theme/abstract1.jpg" alt="Hero Image" style="width: 100%; height: 100vh;">
       <div class="absolute-full row justify-center items-center text-black">
 
-        <div class="column q-pa-lg bg-white">
-          <div class="row justify-start">
+        <q-card class="column q-pa-lg bg-white" style="max-width: 430px;">
+          <div class="row justify-center">
             <p class="font-size-responsive-xxxl anton-regular q-mb-md">CREATE A NEW ACCOUNT</p>
           </div>
           <br>
@@ -27,20 +27,18 @@
             </div>
           </div>
 
-          <div class="column col-12 col-md-4">
+          <div class="column col-12 col-md-4 text-center">
             <div class="q-mb-sm">
-              <router-link to="/auth/login" class="font-size-responsive-xs" style="text-decoration: underline; color: black;">
-                <b>Already a member, login instead?</b>
+              <router-link to="/auth/login" class="text-h6 caveat" style="text-decoration: underline; color: black;">
+                Already a member, login instead?
               </router-link>
             </div>
             <div>
-              <p class="font-size-responsive-xs">By signing up, you acknowledge and agree  to Shaded Eyewear’s <br> Terms of Service.</p>
-              <q-btn rounded dense label="Create your account" @click="onSubmit" color="black" text-color="white" class="q-px-lg anton-regular font-size-responsive-md" style="width: 100%;" />
+              <p class="text-caption">By signing up, you acknowledge and agree to Shaded Eyewear’s Terms of Service.</p>
+              <q-btn rounded label="Create your account" @click="onSubmit" color="black" text-color="white" class="q-px-lg q-py-sm custom-button font-size-responsive-md" style="width: 100%;" />
             </div>
           </div>
-
-        </div>
-
+        </q-card>
       </div>
     </q-img>
   </q-page>
@@ -59,7 +57,7 @@
         user: { firstName: '', lastName: '', email: '', phone: '', username: '', password: '' }
       }
     },
-    methods: {                                                                         // Validation functions
+    methods: {
       validateText: Helper.validateText,
       validateEmail: Helper.validateEmail,
       validatePhone: Helper.validatePhone,
@@ -99,19 +97,19 @@
         }
         return true;
       },
-      async onSubmit() {                                                              // Register function
+      async onSubmit() {
         if (this.validateFields()) {
           const response = await UserService.register(this.user)
           if (response) {
             this.$q.notify({ type: 'positive', color: 'primary', message: 'Please check your email to verify your account.' })
-            this.$router.push('/auth/login')    // Testpass1
+            this.$router.push('/auth/login')
           } else {
             this.$q.notify({ type: 'negative', message: 'Username or Email already exists. Please try again!' })
             // this.onReset()
           }
         }
       },
-      onReset() {                                                                     // Reset function
+      onReset() {
         this.user.firstName = '',
         this.user.lastName = '',
         this.user.email = '',

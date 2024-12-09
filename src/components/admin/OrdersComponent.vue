@@ -1,13 +1,13 @@
 <template>
   <div class="row q-pa-md justify-center q-gutter-md">
 
+    <!--------------------------------------------------------------------- UPCOMING PICKUPS SECTION -------------------------------------------------->
     <q-card flat bordered class="q-pa-md col-12 col-md-3 full-height ">
       <q-card-section>
         <div class="font-size-responsive-lg"><b>Upcoming Pickups</b></div>
       </q-card-section>
 
       <div v-for="order in ordersPickup" :key="order._id">
-
         <q-card flat bordered v-if="order.status && order.status === 'paid' && order.orderType && order.orderType === 'pickup'" class="q-mb-md">
           <q-card-section class="row justify-between flex-center">
             <div>
@@ -15,44 +15,34 @@
               <div class="text-caption"><b>ORDERED {{ formatDate(order.orderDate) }}</b></div>
             </div>
           </q-card-section>
-
           <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0" class="q-gutter-sm">
-            <q-img
-                v-for="sunglass in order.sunglassesDetails"
-                :key="sunglass._id"
-                :src="getImageUrl(sunglass.images[0])"
-                alt="Sunglass Image"
-                class="border"
-                style="max-width: 75px; max-height: 100px;"
-              />
+            <div v-for="sunglass in order.sunglassesDetails" :key="sunglass._id" class="row items-center cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
+              <q-item-section class="col-3 q-mr-md">
+                <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="border" style="max-width: 100px; max-height: 100px;" />
+              </q-item-section>
+              <q-item-section class="col-6">
+                <div class="font-size-responsive-md q-mb-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b> </div>
+                <div class="text-caption">Item(s): 1</div>
+                <div class="text-caption"><b>Price:</b> R {{ sunglass.price }}.00</div>
+              </q-item-section>
+            </div>
           </q-card-section>
-
           <q-separator />
 
-          <q-card-section class="">
-            <div><b>To Pay:</b> R {{ order.totalAmount }}.00</div>
-            <br>
-            <q-btn
-              rounded
-              dense
-              color="black"
-              text-color="white"
-              icon="eva-shopping-bag-outline"
-              label="Collected"
-              @click="updatePickupOrder(order._id)"
-              class="q-px-lg custom-button font-size-responsive-sm"
-              style="width: 100%;"
-            />
+          <q-card-section>
+            <div class="text-caption">RECEIVE PAYMENT OF <span style="text-decoration: underline; color: black;">R {{ order.totalAmount }}.00</span></div>
+            <div class="text-caption q-mb-md">ORDER FOR <span style="text-decoration: underline; color: black;">{{ order.userFirstName }}</span></div>
+            <q-btn rounded dense color="black" text-color="white" icon="eva-shopping-bag-outline" label="Collected" @click="updatePickupOrder(order._id)" class="q-px-lg q-py-sm custom-button font-size-responsive-md" style="width: 100%;" />
           </q-card-section>
         </q-card>
-
       </div>
-
     </q-card>
 
-    <!-- view all card -->
+    <!--------------------------------------------------------------------- ORDERS SECTION SECTION -------------------------------------------------->
     <q-card flat bordered class=" col-12 col-md-8 full-height">
       <div class="q-pa-md">
+
+        <!-- chart for orders over time -->
         <q-card-section>
           <div class="font-size-responsive-lg"><b>Orders Over Time</b></div>
         </q-card-section>
@@ -66,31 +56,28 @@
             @update:model-value="filterOrders"
           />
         </q-card-section>
-        <q-card-section class="canvas-container">
+        <q-card-section class="canvas-container" >
           <canvas ref="canvas"></canvas>
         </q-card-section>
       </div>
-
       <q-separator />
 
-
+      <!-- all orders table -->
       <div class="q-pa-md">
         <q-card-section>
           <div class="font-size-responsive-lg"><b>All Orders</b></div>
         </q-card-section>
-
-        <div class="q-pa-md row justify-between">
+        <div class="q-pa-md row justify-center q-gutter-md">
           <q-select
             filled
             v-model="selectedOrderType"
             :options="orderTypes"
             label="Order Type"
             @update:model-value="filterByOrderType"
-            class="col-12 col-md-3 q-mr-md"
+            class="col-12 col-md-3"
           />
           <q-input filled v-model="search" placeholder="Search" @update:model-value="filterBySearch" class="col-12 col-md-8" />
         </div>
-
         <q-markup-table flat>
           <thead>
             <tr>
@@ -112,11 +99,8 @@
               <td class="text-left cursor-pointer">{{ capitalizeFirstLetter(order.status) }}</td>
               <td class="text-left cursor-pointer">{{ formatDate(order.orderDate) }}</td>
               <td class="text-left cursor-pointer">
-                <q-btn rounded dense icon="eva-trash-2-outline" class="custom-button q-pa-xs custom-button font-size-responsive-sm" color="negative" @click="deleteOrder(order._id)" />
+                <q-btn rounded dense icon="eva-trash-2-outline" class="custom-button q-pa-sm custom-button font-size-responsive-sm" color="negative" @click="deleteOrder(order._id)" />
               </td>
-                <!-- <td class="text-left cursor-pointer">
-                  <q-btn dense flat icon="eva-trash-2-outline" color="negative" v-if="order.status === 'cancelled'" @click="deleteOrder(order._id)" />
-                </td> -->
             </tr>
           </tbody>
         </q-markup-table>
@@ -130,8 +114,8 @@ import OrderService from 'src/services/OrderService'
 import UserService from 'src/services/UserService'
 import Helper from 'src/services/utils'
 import SunglassesService from 'src/services/SunglassesService'
-import { Chart, LinearScale, BarController, BarElement, CategoryScale, TimeScale, TimeSeriesScale, registerables } from 'chart.js'
-Chart.register(LinearScale, BarController, BarElement, CategoryScale, TimeScale, TimeSeriesScale, ...registerables)
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables)
 import 'chartjs-adapter-date-fns'
 
 export default {
@@ -144,7 +128,7 @@ export default {
       orders: [],
       ordersPickup: [],
       ordersDelivery: [],
-
+      filteredOrders: [],
       combinedList: [],
       filteredList: [],
       selectedOrderType: 'All',
@@ -155,41 +139,47 @@ export default {
     this.getAllOrders()
   },
   beforeUnmount() {
-    // Cleanup: destroy chart
-    if (this.chart) {
-      this.chart.destroy()
-      this.chart = null
+    this.destroyChart(); // Destroy the chart on unmount
+  },
+  watch: {
+    filterOrders() {
+      this.renderChart()
     }
   },
   methods: {
-    formatDate: Helper.formatDate,                                                        // Validation functions
+    formatDate: Helper.formatDate,
     capitalizeFirstLetter: Helper.capitalizeFirstLetter,
     getImageUrl: Helper.getImageUrl,
-
-    createChart(filteredOrders) {
-      const canvas = this.$refs.canvas
-
-      if (!canvas) {
-        console.error('Canvas element not found!');
-        return;
-      }
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        console.error('Failed to get canvas context!');
-        return;
-      }
-
-      // Destroy the chart if it exists
+    viewSunglassesDetails(id) {
+      Helper.viewSunglassesDetails(id, this.$router);
+    },
+    destroyChart() {
       if (this.chart) {
         this.chart.destroy();
         this.chart = null;
       }
+    },
+    // Create or update the chart with filteredOrders
+    renderChart() {
+      const canvas = this.$refs.canvas;
+      if (!canvas) {
+        console.error("Canvas element not found!");
+        return;
+      }
 
-      // Count the number of orders on each date
-      const orderCounts = filteredOrders.reduce((acc, order) => {
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        console.error("Failed to get canvas context!");
+        return;
+      }
+
+      // Destroy existing chart
+      this.destroyChart();
+
+      // Prepare chart data
+      const orderCounts = this.filteredOrders.reduce((acc, order) => {
         const date = new Date(order.orderDate)
-          .toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-          .replace(/ /g, ' ');
+          .toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
         acc[date] = (acc[date] || 0) + 1;
         return acc;
       }, {});
@@ -197,22 +187,25 @@ export default {
       const dates = Object.keys(orderCounts);
       const counts = Object.values(orderCounts);
 
-      const config = {
-        type: 'bar',
+      // Create the chart
+      this.chart = new Chart(ctx, {
+        type: "bar",
         data: {
           labels: dates,
-          datasets: [{
-            label: '# of Orders',
-            data: counts,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          }]
+          datasets: [
+            {
+              label: "# of Orders",
+              data: counts,
+              backgroundColor: "rgba(75, 192, 192, 0.2)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              borderWidth: 1,
+            },
+          ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          indexAxis: 'y',  // Always horizontal bars
+          indexAxis: "y",
           scales: {
             x: {
               beginAtZero: true,
@@ -221,69 +214,58 @@ export default {
                 precision: 0
               }
             },
-            y: {
-              beginAtZero: true,
-              ticks: {
-                stepSize: 1,
-                precision: 0
-              }
-            },
           },
-        }
-      };
-
-      // Create the chart instance
-      this.chart = new Chart(ctx, config);
+        },
+      });
     },
-
+    // Filter orders and update the chart
     filterOrders() {
       const now = new Date();
-      let filteredOrders = [...this.ordersDelivery, ...this.ordersPickup]
-
       switch (this.selectedTimePeriod) {
-        case 'Today':
-          filteredOrders = filteredOrders.filter(order => {
+        case "Today":
+          this.filteredOrders = this.combinedList.filter(order => {
             const orderDate = new Date(order.orderDate);
             return orderDate.toDateString() === now.toDateString();
           });
           break;
-        case 'Yesterday':
-          filteredOrders = filteredOrders.filter(order => {
+        case "Yesterday":
+          this.filteredOrders = this.combinedList.filter(order => {
             const orderDate = new Date(order.orderDate);
             const yesterday = new Date(now);
             yesterday.setDate(now.getDate() - 1);
             return orderDate.toDateString() === yesterday.toDateString();
           });
           break;
-        case 'This Week':
-          filteredOrders = filteredOrders.filter(order => {
+        case "This Week":
+          this.filteredOrders = this.combinedList.filter(order => {
             const orderDate = new Date(order.orderDate);
             const startOfWeek = new Date(now);
             startOfWeek.setDate(now.getDate() - now.getDay());
             return orderDate >= startOfWeek && orderDate <= now;
           });
           break;
-        case 'This Month':
-          filteredOrders = filteredOrders.filter(order => {
+        case "This Month":
+          this.filteredOrders = this.combinedList.filter(order => {
             const orderDate = new Date(order.orderDate);
             return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
           });
           break;
-        case 'This Year':
-          filteredOrders = filteredOrders.filter(order => {
+        case "This Year":
+          this.filteredOrders = this.combinedList.filter(order => {
             const orderDate = new Date(order.orderDate);
             return orderDate.getFullYear() === now.getFullYear();
           });
           break;
-        case 'All Time':
+        case "All Time":
         default:
+          this.filteredOrders = [...this.combinedList];
           break;
       }
 
-      this.createChart(filteredOrders);
+      // Render the chart with the new filteredOrders
+      this.renderChart();
     },
-
-    async getAllOrders() {                                                               // Get all orders
+    async getAllOrders() {
       const response = await OrderService.findAllOrders()
       this.orders = await Promise.all(response.map(async order => {
         // find user by id

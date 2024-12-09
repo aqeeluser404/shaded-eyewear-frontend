@@ -1,5 +1,6 @@
 import { format } from 'quasar'
 import { jwtDecode } from 'jwt-decode'
+import CryptoJS from 'crypto-js';
 
 class Helper {
 
@@ -62,16 +63,20 @@ class Helper {
     }
     return null
   }
+  static removeCookie(name) {
+    // Set the cookie with the same name and expiration date in the past
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+  }
   static beforeRouteEnter(to, from, next) {
     // const token = localStorage.getItem('auth-token');
     const token = Helper.getCookie('token')
-    console.log('Token on route enter:', token)
+    // console.log('Token on route enter:', token)
     if (!token) {
       next({ path: '/' }) // Redirect to home if authenticated
     } else {
       const decodedToken = jwtDecode(token)
       const userType = decodedToken.userType
-      console.log(userType)
+      // console.log(userType)
       if (userType === 'admin') {
         next() // proceed if admin
       } else {
@@ -82,7 +87,7 @@ class Helper {
   static beforeRouteEnterUser(to, from, next) {
     // const token = localStorage.getItem('auth-token')
     const token = Helper.getCookie('token')
-    console.log('Token on route enter:', token)
+    // console.log('Token on route enter:', token)
     if (!token) {
       next({ path: '/' })
     } else {
@@ -92,11 +97,24 @@ class Helper {
   static beforeRouteLeave(to, from, next) {
     // const token = localStorage.getItem('auth-token')
     const token = Helper.getCookie('token')
-    console.log('Token on route enter:', token)
+    // console.log('Token on route enter:', token)
     if (!token) {
       next(false);
     } else {
       next();
+    }
+  }
+  // New Method for encrypting ID and navigating
+  static viewSunglassesDetails(id, router) {
+    if (!id) {
+      Logger.error("Invalid sunglasses ID");
+      return;
+    }
+    try {
+      const encryptedId = CryptoJS.AES.encrypt(id.toString(), 'secret-key').toString();
+      router.push(`/sunglasses/view/${encodeURIComponent(encryptedId)}`);
+    } catch (error) {
+      Logger.error(error);
     }
   }
 }

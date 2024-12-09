@@ -7,12 +7,13 @@
 
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
-const dotenv = require('dotenv');
-const env = dotenv.config().parsed;
-const { configure } = require('quasar/wrappers');
+import dotenv from 'dotenv'; // Use import instead of require
+import { configure } from 'quasar/wrappers';
 
+dotenv.config();
+const env = process.env;
 
-module.exports = configure(function (/* ctx */) {
+export default configure(function (/* ctx */) {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -21,7 +22,6 @@ module.exports = configure(function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
-
       'axios',
     ],
 
@@ -52,7 +52,7 @@ module.exports = configure(function (/* ctx */) {
         // other environment variables
       },
       target: {
-        browser: [ 'es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1' ],
+        browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
         node: 'node20'
       },
 

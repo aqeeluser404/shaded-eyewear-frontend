@@ -1,7 +1,8 @@
 <template>
   <div class="row q-pa-md q-gutter-md justify-center">
-    <q-card flat bordered class="col-12 col-md-11">
 
+    <!--------------------------------------------------------------------- ADD SUNGLASSES SECTION -------------------------------------------------->
+    <q-card flat bordered class="col-12 col-md-11">
       <q-card v-if="openAddSunglasses === null" class="q-pa-md ">
         <q-card-section class="column flex-start">
           <div class="font-size-responsive-lg"><b>All Sunglasses</b></div>
@@ -20,7 +21,6 @@
           </thead>
           <tbody v-for="(sunglass) in sunglasses" :key="sunglass._id">
             <tr>
-              <!-- <td class="text-left cursor-pointer">{{ index + 1 }}</td> -->
               <td class="text-left cursor-pointer">
                 <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" style="width: 50px;"/>
               </td>
@@ -44,7 +44,7 @@
               <td class="text-left cursor-pointer">
                 <q-input v-if="editMode === sunglass._id" v-model="sunglass.price" />
                 <div v-else>
-                  {{ sunglass.price }}
+                  R {{ sunglass.price }}.00
                 </div>
               </td>
               <td class="text-center cursor-pointer">
@@ -55,20 +55,21 @@
               </td>
               <td class="text-left cursor-pointer">
                 <!-- edit mode -->
-                <q-btn rounded dense icon="eva-edit-outline" color="primary" class="q-pa-xs font-size-responsive-sm q-mr-sm" v-if="editMode !== sunglass._id" @click="editMode = sunglass._id" />
+                <q-btn rounded dense icon="eva-edit-outline" color="primary" class="q-pa-sm font-size-responsive-sm q-mr-sm" v-if="editMode !== sunglass._id" @click="editMode = sunglass._id" />
                 <!-- update mode -->
-                <q-btn rounded dense icon="eva-edit-outline" label="Save" class="custom-button q-px-md q-py-xs custom-button font-size-responsive-sm q-mr-sm" color="primary"  v-if="editMode === sunglass._id" @click="updateSunglasses(sunglass)" />
+                <q-btn rounded dense icon="eva-edit-outline" label="Save" class="custom-button q-px-md q-py-sm custom-button font-size-responsive-sm q-mr-sm" color="primary"  v-if="editMode === sunglass._id" @click="updateSunglasses(sunglass)" />
                 <!-- cancel/save -->
-                <q-btn rounded dense label="Close" class="custom-button q-px-md q-py-xs custom-button font-size-responsive-sm q-mr-sm" v-if="editMode === sunglass._id" @click="editMode = null" />
+                <q-btn rounded dense label="Close" class="custom-button q-px-md q-py-sm custom-button font-size-responsive-sm q-mr-sm" v-if="editMode === sunglass._id" @click="editMode = null" />
                 <!-- delete -->
-                <q-btn rounded dense icon="eva-trash-2-outline" class="custom-button q-pa-xs custom-button font-size-responsive-sm" color="negative" @click="deleteSunglasses(sunglass)" />
+                <q-btn rounded dense icon="eva-trash-2-outline" class="custom-button q-pa-sm custom-button font-size-responsive-sm" color="negative" @click="deleteSunglasses(sunglass)" />
               </td>
             </tr>
           </tbody>
         </q-markup-table>
       </q-card>
 
-      <q-card v-else class="q-pa-md column flex-start">                                              <!-- add sunglasses card -->
+      <!--------------------------------------------------------------------- ADD SUNGLASSES SECTION -------------------------------------------------->
+      <q-card v-else class="q-pa-md column flex-start">
         <q-card-section>
           <div class="font-size-responsive-lg"><b>Add Sunglasses</b></div>
         </q-card-section>
@@ -79,29 +80,19 @@
             <q-select filled v-model="sunglassesDetails.color" label="Color *" id="color" name="color" :options="colors" emit-value map-options />
             <q-input class="q-pa-none" filled v-model="sunglassesDetails.price" label="Price (ZAR) *" type="number" prefix="R" :rules="[val => val > 0] || 'Price must be positive'" id="price" name="price" />
             <q-select filled v-model="sunglassesDetails.stock" label="Stock *" :options="[...Array(11).keys()].slice(1)" emit-value map-options id="stock" name="stock" />
-            <!-- <q-file filled v-model="sunglassesDetails.images" label="Image *" accept="image/*" name="images" id="images" /> -->
             <q-file filled v-model="image1" label="image (Side View) * " accept="image/*" name="image1" id="image1" />
             <q-file filled v-model="image2" label="image (Front View) * " accept="image/*" name="image2" id="image2" />
           </q-form>
         </q-card-section>
-        <q-card-section>
-          <q-btn
-            rounded
-            dense
-            label="Add Sunglasses"
-            type="submit"
-            color="primary"
-            icon="eva-cloud-upload-outline"
-            class="q-px-md custom-button font-size-responsive-sm"
-          />
-          <q-btn rounded dense flat label="Reset" type="reset" color="primary" class="q-ml-md q-px-md custom-button font-size-responsive-sm" />
-
+        <q-card-section class="q-gutter-md">
+          <q-btn rounded dense label="Add Sunglasses" type="submit" color="primary" icon="eva-cloud-upload-outline" class="q-px-lg q-py-sm custom-button font-size-responsive-md" />
+          <q-btn rounded dense flat label="Reset" type="reset" color="primary" class="q-px-lg q-py-sm custom-button font-size-responsive-md" />
         </q-card-section>
       </q-card>
     </q-card>
 
-
-    <q-btn round class="round-btn" :label="buttonLabel" @click="toggleAddSunglasses" />         <!-- toggle between cards -->
+    <!-- button to toggle add sunglasses -->
+    <q-btn round class="round-btn" :label="buttonLabel" @click="toggleAddSunglasses" />
   </div>
 </template>
 
@@ -154,9 +145,6 @@ export default {
     validateFields() {
       const details = this.sunglassesDetails;
       const requiredFields = ['model', 'description', 'color', 'price', 'stock', 'image1', 'image2']
-
-      // Regular expression to match the model name format
-      // const modelMaxChar = /^[A-Z]{2}\d{4}\s[A-Za-z]+-[A-Za-z]+\s[A-Za-z]+$/;
       const modelMaxChar = /^[A-Z][a-zA-Z ]{0,11}$/
 
       for (const field of requiredFields) {
@@ -180,8 +168,6 @@ export default {
         this.$q.notify({ type: 'negative', message: 'Description must be 50 words or less.' });
         return false;
       }
-
-
       return true;
     },
     async addSunglasses() {                                                                         // Register function
