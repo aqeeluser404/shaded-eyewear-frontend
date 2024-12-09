@@ -46,6 +46,7 @@ export default configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
+      distDir: 'dist/spa',
       env: {
         API_BASE_URL: env.API_BASE_URL,
         PRICE_THRESHOLD: env.PRICE_THRESHOLD,
