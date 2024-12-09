@@ -1,6 +1,7 @@
 import { format } from 'quasar'
 import { jwtDecode } from 'jwt-decode'
 import CryptoJS from 'crypto-js';
+import axiosInstance from './axiosInstance'
 
 class Helper {
   static formatDate(dateString) {
