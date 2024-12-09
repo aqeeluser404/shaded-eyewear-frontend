@@ -15,13 +15,20 @@ class Helper {
     return format.capitalize(lowerCaseText);
   }
   static getImageUrl(imagePath) {
-    const isProduction = process.env.NODE_ENV === 'production';
-    const serverUrl = isProduction
-      ? 'https://shaded-eyewear-backend.onrender.com/uploads/'
-      : 'http://localhost:5000/uploads/';
-    const localDir = 'C:\\Users\\TerrorX\\Downloads\\WLV\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
-    const relativePath = imagePath.replace(localDir, '');
-    return serverUrl + relativePath;
+    try {
+      const isProduction = process.env.NODE_ENV === 'production';
+      const serverUrl = isProduction
+        ? 'https://shaded-eyewear-backend.onrender.com/uploads/'
+        : 'http://localhost:5000/uploads/';
+      const localDir = isProduction
+        ? '/app/uploads/' // Example path for production
+        : 'C:\\Users\\TerrorX\\Downloads\\WLV\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
+      const relativePath = imagePath.replace(localDir, '');
+      return serverUrl + relativePath;
+    } catch (error) {
+      console.error('Error generating image URL:', error);
+      return ''; // Return a default value or handle the error appropriately
+    }
   }
   // Validation Functions
   static validateText(text) {
