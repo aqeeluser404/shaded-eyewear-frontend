@@ -34,7 +34,7 @@ export default route(function (/* { store, ssrContext } */) {
   Router.beforeEach(async (to, from, next) => {
     try {
       // Send a health check request to the server
-      const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/health`);
+      const response = await axios.get(`/health`);
 
       // If the server is healthy
       if (response.status === 200) {
