@@ -1,5 +1,6 @@
 import axiosInstance from "./axiosInstance"
 import Logger from "./Logger"
+import Helper from "./utils"
 
 class UserService {
   static async register(user) {
@@ -16,6 +17,9 @@ class UserService {
     try {
       const response = await axiosInstance.post(ENDPOINT, { username: usernameOrEmail, email: usernameOrEmail, password })
       console.log('Login successful:', response.data)
+      console.log('Document cookies:', document.cookie); // Check cookies
+      const token = Helper.getCookie('token')
+      console.log('Retrieved token:', token)
       return response.data
     } catch (error) {
       Logger.error(error)
