@@ -18,12 +18,19 @@ class Helper {
     const lowerCaseText = text.toLowerCase();
     return format.capitalize(lowerCaseText);
   }
+  // static getImageUrl(imagePath) {
+  //   const serverUrl = 'http://localhost:5000/uploads/'
+  //   const localDir = 'C:\\Users\\TerrorX\\Downloads\\WLV\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\'
+  //   const relativePath = imagePath.replace(localDir, '')
+  //   return serverUrl + relativePath
+  // }
   static getImageUrl(imagePath) {
-    const serverUrl = 'http://localhost:5000/uploads/'
-    const localDir = 'C:\\Users\\TerrorX\\Downloads\\WLV\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\'
-    const relativePath = imagePath.replace(localDir, '')
-    return serverUrl + relativePath
+    const serverUrl = 'https://shaded-eyewear-backend.onrender.com/uploads/';
+    const localDir = 'C:\\Users\\TerrorX\\Downloads\\WLV\\Projects\\Sunglasses\\Shaded Eyewear\\server\\uploads\\';
+    const relativePath = imagePath.replace(localDir, '');
+    return serverUrl + relativePath;
   }
+
         // getImageUrl(imagePath) {
       //   // replace this with hosted url
       //   const serverUrl = 'http://localhost:5000/uploads/';

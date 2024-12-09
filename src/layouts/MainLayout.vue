@@ -300,7 +300,7 @@ export default {
     },
     async checkLoginStatus() {
       const token = Helper.getCookie('token')
-
+      console.log('Token:', token);
       if (token) {
         const user = await UserService.FindUserByToken()
         const userDetails = await UserService.findUserById(user._id)

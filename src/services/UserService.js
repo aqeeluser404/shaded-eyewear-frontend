@@ -15,6 +15,7 @@ class UserService {
     const ENDPOINT = "/auth/login";
     try {
       const response = await axiosInstance.post(ENDPOINT, { username: usernameOrEmail, email: usernameOrEmail, password })
+      console.log('Login successful:', response.data)
       return response.data
     } catch (error) {
       Logger.error(error)
