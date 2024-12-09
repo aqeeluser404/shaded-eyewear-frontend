@@ -48,20 +48,11 @@ class Helper {
   // AUTHENTICATION FUNCTIONS
   static async getCookie(name) {
     try {
-      // Check if the requested cookie is the token
       if (name === 'token') {
-        // Make a request to the backend to get the token
         // const response = await axios.get('http://localhost:5000/get-token', { withCredentials: true });
         const response = await axios.get(`${process.env.API_BASE_URL}/get-token`, { withCredentials: true });
-        if (response.data.token) {
-          console.log(`Token found: ${response.data.token}`);
-          return response.data.token;  // Return the token
-        } else {
-          console.log(`Token not found`);
-          return null;  // No token available
-        }
+        return response.data || null
       } else {
-        // If it's not the token, return null or handle other cookies if needed
         console.log(`Cookie ${name} not found`);
         return null;
       }
@@ -82,7 +73,6 @@ class Helper {
   static async removeCookie(name) {
     try {
       await axios.post(`${process.env.API_BASE_URL}/remove-token`, {}, { withCredentials: true });
-      console.log(`${name} removed from backend cookies.`);
     } catch (error) {
       console.error(`Error removing cookie ${name}:`, error);
     }
@@ -91,42 +81,44 @@ class Helper {
     // document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
   }
   static beforeRouteEnter(to, from, next) {
-    // const token = localStorage.getItem('auth-token');
-    const token = Helper.getCookie('token')
-    // console.log('Token on route enter:', token)
-    if (!token) {
-      next({ path: '/' }) // Redirect to home if authenticated
-    } else {
-      const decodedToken = jwtDecode(token)
-      const userType = decodedToken.userType
-      // console.log(userType)
-      if (userType === 'admin') {
-        next() // proceed if admin
+    Helper.getCookie('token').then((token) => {
+      if (!token) {
+        next({ path: '/' }); // Redirect to home if no token
       } else {
-        next({ path: '/' }) // Go home if not admin
+        next(); // Proceed to the requested route
       }
-    }
+    }).catch((error) => {
+      console.error('Error fetching token:', error);
+      next({ path: '/' }); // Handle the error case
+    });
   }
   static beforeRouteEnterUser(to, from, next) {
-    // const token = localStorage.getItem('auth-token')
-    const token = Helper.getCookie('token')
-    // console.log('Token on route enter:', token)
-    if (!token) {
-      next({ path: '/' })
-    } else {
-      next();
-    }
+    Helper.getCookie('token').then((token) => {
+      // Check if token exists
+      if (!token) {
+        next({ path: '/' }); // Redirect to home if no token
+      } else {
+        next(); // Proceed to the requested route
+      }
+    }).catch((error) => {
+      console.error('Error fetching token:', error);
+      next({ path: '/' }); // Redirect in case of error
+    });
   }
   static beforeRouteLeave(to, from, next) {
-    // const token = localStorage.getItem('auth-token')
-    const token = Helper.getCookie('token')
-    // console.log('Token on route enter:', token)
-    if (!token) {
-      next(false);
-    } else {
-      next();
-    }
+    Helper.getCookie('token').then((token) => {
+      // Check if token exists
+      if (!token) {
+        next(false); // Prevent navigation if no token
+      } else {
+        next(); // Allow navigation
+      }
+    }).catch((error) => {
+      console.error('Error fetching token:', error);
+      next(false); // Prevent navigation in case of error
+    });
   }
+
   // New Method for encrypting ID and navigating
   static viewSunglassesDetails(id, router) {
     if (!id) {

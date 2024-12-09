@@ -299,8 +299,7 @@ export default {
       }, 10000)
     },
     async checkLoginStatus() {
-      const token = await Helper.getCookie('token');  // Get token from the backend
-      console.log('Token:', token);
+      const token = await Helper.getCookie('token')
 
       if (token) {
         try {
