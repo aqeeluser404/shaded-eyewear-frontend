@@ -159,9 +159,9 @@ export default {
       // Validate the description length by words
       const words = details.description.trim().split(/\s+/).filter(word => word.length > 0);
       const wordCount = words.length;
-      console.log(`Description: "${details.description}"`);
-      console.log(`Words:`, words);
-      console.log(`Word count: ${wordCount}`);
+      // console.log(`Description: "${details.description}"`);
+      // console.log(`Words:`, words);
+      // console.log(`Word count: ${wordCount}`);
       if (wordCount > 50) {
         this.$q.notify({ type: 'negative', message: 'Description must be 50 words or less.' });
         return false;

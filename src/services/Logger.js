@@ -2,7 +2,8 @@
 class Logger {
   static error(error) {
     // Send error to your logging service here
-    console.error(error);
+    // console.error(error);
+    throw error
   }
 }
 

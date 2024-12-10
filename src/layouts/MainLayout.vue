@@ -79,10 +79,10 @@
     </q-header>
 
     <!-- Loading Spinner -->
-    <div v-if="isLoading" class="loading-overlay">
+    <!-- <div v-if="isLoading" class="loading-overlay">
       <q-spinner-ball color="primary" size="80px" />
       <div>Loading...</div>
-    </div>
+    </div> -->
 
     <!----------------------------------------------------------- PAGES SECTION -------------------------------------------------->
     <div v-else style="background-color: black;">
@@ -218,7 +218,7 @@ export default {
 
   data() {
     return {
-      isLoading: false,
+      // isLoading: false,
       texts: [
         "Sunglasses and Eyewear Shop",
         "Discover our latest collections",
@@ -252,15 +252,15 @@ export default {
     }
 
   },
-  created() {
-    this.$router.beforeEach((to, from, next) => {
-      this.isLoading = true; // Show spinner before navigating
-      next();
-    });
-    this.$router.afterEach(() => {
-      this.isLoading = false; // Hide spinner after navigation
-    });
-  },
+  // created() {
+  //   this.$router.beforeEach((to, from, next) => {
+  //     this.isLoading = true; // Show spinner before navigating
+  //     next();
+  //   });
+  //   this.$router.afterEach(() => {
+  //     this.isLoading = false; // Hide spinner after navigation
+  //   });
+  // },
   mounted() {
     this.getCurrentOrder()
     this.checkLoginStatus()
@@ -431,24 +431,24 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.loading-overlay
-  display: flex
-  flex-direction: column
-  align-items: center
-  justify-content: center
-  height: 100vh
-  background-color: rgba(255, 255, 255, 0.9)
-  position: fixed
-  top: 0
-  left: 0
-  width: 100%
-  z-index: 9999
+// .loading-overlay
+//   display: flex
+//   flex-direction: column
+//   align-items: center
+//   justify-content: center
+//   height: 100vh
+//   background-color: rgba(255, 255, 255, 0.9)
+//   position: fixed
+//   top: 0
+//   left: 0
+//   width: 100%
+//   z-index: 9999
 
 
-.loading-overlay div
-  margin-top: 10px
-  font-size: 1.2em
-  color: #555
+// .loading-overlay div
+//   margin-top: 10px
+//   font-size: 1.2em
+//   color: #555
 
 
 .text-subtitle1
