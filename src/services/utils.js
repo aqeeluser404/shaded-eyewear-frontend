@@ -42,20 +42,36 @@ class Helper {
   //   }
   // }
 
+  // static getImageUrl(imagePath) {
+  //   try {
+  //     // If the imagePath is already a valid Imgur URL, return it directly
+  //     if (imagePath && imagePath.startsWith('https://i.imgur.com')) {
+  //       return imagePath;
+  //     }
+  //     // If imagePath is invalid, handle error or provide a default image URL
+  //     console.error('Invalid image path:', imagePath);
+  //     return 'https://i.imgur.com/default.jpg'; // Fallback image
+  //   } catch (error) {
+  //     console.error('Error generating image URL:', error);
+  //     return 'https://i.imgur.com/default.jpg'; // Default fallback image
+  //   }
+  // }
+
   static getImageUrl(imagePath) {
     try {
-      // If the imagePath is already a valid Imgur URL, return it directly
-      if (imagePath && imagePath.startsWith('https://i.imgur.com')) {
-        return imagePath;
-      }
-      // If imagePath is invalid, handle error or provide a default image URL
-      console.error('Invalid image path:', imagePath);
-      return 'https://i.imgur.com/default.jpg'; // Fallback image
+        // If the imagePath is already a valid ImgBB URL, return it directly
+        if (imagePath && imagePath.startsWith('https://i.ibb.co')) {
+            return imagePath;
+        }
+        // If imagePath is invalid, handle error or provide a default image URL
+        console.error('Invalid image path:', imagePath);
+        return 'https://i.ibb.co/default.jpg'; // Fallback image
     } catch (error) {
-      console.error('Error generating image URL:', error);
-      return 'https://i.imgur.com/default.jpg'; // Default fallback image
+        console.error('Error generating image URL:', error);
+        return 'https://i.ibb.co/default.jpg'; // Default fallback image
     }
-  }
+  } 
+
 
   // Validation Functions
   static validateText(text) {
