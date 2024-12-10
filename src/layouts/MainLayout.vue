@@ -85,7 +85,7 @@
     </div> -->
 
     <!----------------------------------------------------------- PAGES SECTION -------------------------------------------------->
-    <div v-else style="background-color: black;">
+    <div style="background-color: black;">
       <q-page-container :style="pageContainerStyle">
         <router-view style="background-color: white;" />
       </q-page-container>
