@@ -78,8 +78,14 @@
       </q-toolbar>
     </q-header>
 
+    <!-- Loading Spinner -->
+    <div v-if="isLoading" class="loading-overlay">
+      <q-spinner-ball color="primary" size="80px" />
+      <div>Loading...</div>
+    </div>
+
     <!----------------------------------------------------------- PAGES SECTION -------------------------------------------------->
-    <div style="background-color: black;">
+    <div v-else style="background-color: black;">
       <q-page-container :style="pageContainerStyle">
         <router-view style="background-color: white;" />
       </q-page-container>
@@ -212,6 +218,7 @@ export default {
 
   data() {
     return {
+      isLoading: false,
       texts: [
         "Sunglasses and Eyewear Shop",
         "Discover our latest collections",
@@ -244,6 +251,15 @@ export default {
       }, message: '',
     }
 
+  },
+  created() {
+    this.$router.beforeEach((to, from, next) => {
+      this.isLoading = true; // Show spinner before navigating
+      next();
+    });
+    this.$router.afterEach(() => {
+      this.isLoading = false; // Hide spinner after navigation
+    });
   },
   mounted() {
     this.getCurrentOrder()
@@ -415,6 +431,26 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.loading-overlay
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  height: 100vh
+  background-color: rgba(255, 255, 255, 0.9)
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  z-index: 9999
+
+
+.loading-overlay div
+  margin-top: 10px
+  font-size: 1.2em
+  color: #555
+
+
 .text-subtitle1
   line-height: 1
 .custom-label
