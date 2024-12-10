@@ -43,7 +43,7 @@
             <div class="absolute-bottom bg-transparent">
               <!-- profile img -->
               <q-avatar size="60px" class="" style="transform: translateX(-10px);">
-                <img src="~src/assets/logos/logo-white.png">
+                <img src="~src/assets/resources/logos/logo-white.png">
               </q-avatar>
               <!-- name and email -->
               <div class="text-weight-bold text-subtitle1">

@@ -167,7 +167,7 @@
           </div>
           <div class="row justify-center items-center font-size-responsive-sm q-pa-md">
             <q-avatar class="responsive-avatar-2">
-              <img src="/src/assets/logos/logo-white.png"/>
+              <img src="../assets/resources/logos/logo-white.png" alt="Logo"/>
             </q-avatar>
             Shaded Eyewear ™ | Est. 2023 | Sunglasses & Eyewear Shop
              <!-- | -->
@@ -185,8 +185,8 @@
 import OrderService from 'src/services/OrderService'
 import UserService from 'src/services/UserService'
 import Helper from 'src/services/utils'
-import logoWhite from 'src/assets/logos/logo-white.png'
-import logoBlack from 'src/assets/logos/logo-black.png'
+import logoWhite from '../assets/resources/logos/logo-white.png'
+import logoBlack from '../assets/resources/logos/logo-black.png'
 import EmailService from 'src/services/EmailService'
 
 export default {
@@ -231,6 +231,7 @@ export default {
       // css stuff
       headerClass: 'header-transparent',
       colorShiftClass: 'transparent-white',
+      logoWhite, logoBlack,
       logoSrc: logoWhite,
 
       // cookies
@@ -327,15 +328,14 @@ export default {
       }
     },
     handleLogout() {
-      console.log('Logging out...');
-      Helper.removeCookie('token');  // Only remove the cookie after confirming logout
+      Helper.removeCookie('token')
       this.cancelOrder();
     },
-    async fetchUserDetails() {                                // 2.1 fetch user details to determine usertype
+    async fetchUserDetails() {
       const response = await UserService.FindUserByToken()
       this.userDetails = response
     },
-    async logout() {                                          // 3. logout and clear local storage
+    async logout() {
       this.$q.dialog({
         title: 'Logout', message: `You are about to logout, continue?`, color: 'primary', cancel: true, persistent: true
       }).onOk(async () => {
@@ -355,7 +355,6 @@ export default {
       })
     },
     async getCurrentOrder() {
-      // console.log(this.userDetails._id)
       let orderId = localStorage.getItem('currentOrderId')
       if (!orderId) {
         if (this.userDetails._id) {
@@ -366,7 +365,6 @@ export default {
               if (detailedOrder.status === 'pending') {
                 orderId = detailedOrder._id;
                 localStorage.setItem('currentOrderId', orderId)
-                // console.log(detailedOrder);
                 break;
               }
           }
