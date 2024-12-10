@@ -62,14 +62,14 @@ export default route(function (/* { store, ssrContext } */) {
             next(({ path: '/404'}))
           }
         }
-        else if (to.path === '/forgot-password') {
-          const token = Helper.getCookie('token')
-          if (!token) {
-            next()                        // proceed if theres no token
-          } else {
-            next(({ path: '/404'}))
-          }
-        }
+        //else if (to.path === '/forgot-password') {
+          //const token = Helper.getCookie('token')
+          //if (!token) {
+            //next()                        // proceed if theres no token
+          //} else {
+            //next(({ path: '/404'}))
+          //}
+        //}
         else if (to.path === '/reset-password') {
           const token = to.query.token
           if (token) {
