@@ -82,11 +82,9 @@
             <q-select filled v-model="sunglassesDetails.stock" label="Stock *" :options="[...Array(11).keys()].slice(1)" emit-value map-options id="stock" name="stock" />
             <q-file filled v-model="image1" label="image (Side View) * " accept="image/*" name="image1" id="image1" />
             <q-file filled v-model="image2" label="image (Front View) * " accept="image/*" name="image2" id="image2" />
+            <q-btn rounded dense label="Add Sunglasses" type="submit" color="primary" icon="eva-cloud-upload-outline" class="q-px-lg q-py-sm custom-button font-size-responsive-md" />
+            <q-btn rounded dense flat label="Reset" type="reset" color="primary" class="q-px-lg q-py-sm custom-button font-size-responsive-md" />
           </q-form>
-        </q-card-section>
-        <q-card-section class="q-gutter-md">
-          <q-btn rounded dense label="Add Sunglasses" type="submit" color="primary" icon="eva-cloud-upload-outline" class="q-px-lg q-py-sm custom-button font-size-responsive-md" />
-          <q-btn rounded dense flat label="Reset" type="reset" color="primary" class="q-px-lg q-py-sm custom-button font-size-responsive-md" />
         </q-card-section>
       </q-card>
     </q-card>

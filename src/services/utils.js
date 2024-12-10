@@ -30,15 +30,30 @@ class Helper {
   //     return ''; // Return a default value or handle the error appropriately
   //   }
   // }
+  // static getImageUrl(imagePath) {
+  //   try {
+  //     const serverUrl = 'https://shaded-eyewear-backend.onrender.com/uploads/';
+  //     const localDir = '/app/uploads/'; // Example path for production
+  //     const relativePath = imagePath.replace(localDir, '');
+  //     return serverUrl + relativePath;
+  //   } catch (error) {
+  //     console.error('Error generating image URL:', error);
+  //     return ''; // Return a default value or handle the error appropriately
+  //   }
+  // }
+
   static getImageUrl(imagePath) {
     try {
-      const serverUrl = 'https://shaded-eyewear-backend.onrender.com/uploads/';
-      const localDir = '/app/uploads/'; // Example path for production
-      const relativePath = imagePath.replace(localDir, '');
-      return serverUrl + relativePath;
+      // If the imagePath is already a valid Imgur URL, return it directly
+      if (imagePath && imagePath.startsWith('https://i.imgur.com')) {
+        return imagePath;
+      }
+      // If imagePath is invalid, handle error or provide a default image URL
+      console.error('Invalid image path:', imagePath);
+      return 'https://i.imgur.com/default.jpg'; // Fallback image
     } catch (error) {
       console.error('Error generating image URL:', error);
-      return ''; // Return a default value or handle the error appropriately
+      return 'https://i.imgur.com/default.jpg'; // Default fallback image
     }
   }
 
