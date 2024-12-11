@@ -19,7 +19,7 @@
           <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0" class="q-gutter-md">
             <div v-for="sunglass in order.sunglassesDetails" :key="sunglass._id" class="row justify-start items-center cursor-pointer" @click="viewSunglassesDetails(sunglass._id)" >
               <q-item-section class="col-3 q-mr-md">
-                <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="border" style="max-width: 130px; max-height: 130px;" />
+                <q-img :src="getImageUrl(sunglass.images[0].imageUrl)" alt="Sunglass Image" class="border" style="max-width: 130px; max-height: 130px;" />
               </q-item-section>
               <q-item-section class="col-8">
                 <div class="font-size-responsive-md q-my-md"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b></div>
@@ -161,15 +161,16 @@ export default {
       }
     },
     async getUserDetails() {
-      const token = Helper.getCookie('token')
-      if (token) {
-        const id = await UserService.FindUserByToken()
-        this.userTokenDetails = id
-        const user = await UserService.findUserById(this.userTokenDetails._id)
-        this.userDetails = user
+        const token = await Helper.getCookie('token');
+        if (token) {
 
-        await this.getCurrentOrder()
-      }
+          const id = await UserService.FindUserByToken()
+          this.userTokenDetails = id
+          const user = await UserService.findUserById(this.userTokenDetails._id)
+          this.userDetails = user
+
+          await this.getCurrentOrder()
+        }
     }
   },
   created() {

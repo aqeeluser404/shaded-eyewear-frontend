@@ -14,6 +14,7 @@ class Helper {
     const lowerCaseText = text.toLowerCase();
     return format.capitalize(lowerCaseText);
   }
+
   // static getImageUrl(imagePath) {
   //   try {
   //     const isProduction = process.env.NODE_ENV === 'production';
@@ -42,48 +43,23 @@ class Helper {
   //   }
   // }
 
-  // static getImageUrl(imagePath) {
-  //   try {
-  //     // If the imagePath is already a valid Imgur URL, return it directly
-  //     if (imagePath && imagePath.startsWith('https://i.imgur.com')) {
-  //       return imagePath;
-  //     }
-  //     // If imagePath is invalid, handle error or provide a default image URL
-  //     console.error('Invalid image path:', imagePath);
-  //     return 'https://i.imgur.com/default.jpg'; // Fallback image
-  //   } catch (error) {
-  //     console.error('Error generating image URL:', error);
-  //     return 'https://i.imgur.com/default.jpg'; // Default fallback image
-  //   }
-  // }
-
   static getImageUrl(imagePath) {
     try {
-        // If the imagePath is already a valid ImgBB URL, return it directly
-        if (imagePath && imagePath.startsWith('https://i.ibb.co')) {
+        // Check if imagePath is an object and extract imageUrl
+        if (imagePath && typeof imagePath === 'object' && typeof imagePath.imageUrl === 'string' && imagePath.imageUrl.startsWith('https://ik.imagekit.io')) {
+            return imagePath.imageUrl;
+        }
+        // Check if imagePath is a valid URL string directly
+        if (typeof imagePath === 'string' && imagePath.startsWith('https://ik.imagekit.io')) {
             return imagePath;
         }
-        // If imagePath is invalid, handle error or provide a default image URL
+        // Handle invalid imagePath or non-string values
         console.error('Invalid image path:', imagePath);
-        return 'https://i.ibb.co/default.jpg'; // Fallback image
+        return 'https://ik.imagekit.io/default.jpg'; // Fallback image
     } catch (error) {
         console.error('Error generating image URL:', error);
-        return 'https://i.ibb.co/default.jpg'; // Default fallback image
+        return 'https://ik.imagekit.io/default.jpg'; // Default fallback image
     }
-  } 
-  static getImageUrl(imagePath) {
-      try {
-          // If the imagePath is already a valid ImageKit URL, return it directly
-          if (imagePath && imagePath.startsWith('https://ik.imagekit.io')) {
-              return imagePath;
-          }
-          // If imagePath is invalid, handle error or provide a default image URL
-          console.error('Invalid image path:', imagePath);
-          return 'https://ik.imagekit.io/default.jpg'; // Fallback image
-      } catch (error) {
-          console.error('Error generating image URL:', error);
-          return 'https://ik.imagekit.io/default.jpg'; // Default fallback image
-      }
   }
 
   // Validation Functions
@@ -112,34 +88,32 @@ class Helper {
   static async getCookie(name) {
     try {
       if (name === 'token') {
-        // const response = await axios.get('http://localhost:5000/get-token', { withCredentials: true });
         const response = await axios.get(`${process.env.API_BASE_URL}/get-token`, { withCredentials: true });
-        return response.data || null
+        return response.data || null;
       } else {
-        console.log(`Cookie ${name} not found`);
         return null;
       }
     } catch (error) {
-      console.error('Error fetching token from backend:', error);
       return null;
     }
-      //   // const cookies = document.cookie.split(';')
-      //   // for (let i = 0; i < cookies.length; i++) {
-      //   //   const cookie = cookies[i].trim()
-      //   //   if (cookie.startsWith(`${name}=`)) {
-      //   //     return cookie.substring(name.length + 1)
-      //   //   }
-      //   // }
-      //   // console.log(`Cookie ${name} not found`);
-      //   // return null
   }
+
+    //   // const cookies = document.cookie.split(';')
+    //   // for (let i = 0; i < cookies.length; i++) {
+    //   //   const cookie = cookies[i].trim()
+    //   //   if (cookie.startsWith(`${name}=`)) {
+    //   //     return cookie.substring(name.length + 1)
+    //   //   }
+    //   // }
+    //   // console.log(`Cookie ${name} not found`);
+    //   // return null
+
   static async removeCookie(name) {
     try {
       await axios.post(`${process.env.API_BASE_URL}/remove-token`, {}, { withCredentials: true });
     } catch (error) {
       console.error(`Error removing cookie ${name}:`, error);
     }
-
     // Set the cookie with the same name and expiration date in the past
     // document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
   }

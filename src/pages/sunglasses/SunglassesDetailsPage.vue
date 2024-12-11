@@ -14,17 +14,17 @@
           <div class="row justify-around" style="transform: translateY(-25px);">
             <q-img
               v-if="sunglasses.images && sunglasses.images.length > 0"
-              :src="getImageUrl(sunglasses.images[0])"
+              :src="getImageUrl(sunglasses.images[0].imageUrl)"
               class="product-image col-3 cursor-pointer"
-              :class="{'active-image': mainImage === sunglasses.images[0]}"
-              @click="updateMainImage(sunglasses.images[0])"
+              :class="{'active-image': mainImage === sunglasses.images[0].imageUrl}"
+              @click="updateMainImage(sunglasses.images[0].imageUrl)"
             />
             <q-img
               v-if="sunglasses.images && sunglasses.images.length > 1"
-              :src="getImageUrl(sunglasses.images[1])"
+              :src="getImageUrl(sunglasses.images[1].imageUrl)"
               class="product-image col-3 cursor-pointer"
-              :class="{'active-image': mainImage === sunglasses.images[1]}"
-              @click="updateMainImage(sunglasses.images[1])"
+              :class="{'active-image': mainImage === sunglasses.images[1].imageUrl}"
+              @click="updateMainImage(sunglasses.images[1].imageUrl)"
             />
           </div>
         </q-card-section>
@@ -81,7 +81,7 @@
 
             <q-card flat @click="viewSunglassesDetails(sunglass._id)" class="cursor-pointer">
               <div>
-                <q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])"
+                <q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0].imageUrl)"
                   class="product-image" />
               </div>
               <q-item class="column justify-between">
@@ -162,7 +162,7 @@ export default {
     sunglasses: {
       handler(newValue) {
         if (newValue.images && newValue.images.length > 0) {
-          this.mainImage = newValue.images[0];
+          this.mainImage = newValue.images[0].imageUrl;
         }
       },
       immediate: true,
@@ -250,8 +250,9 @@ export default {
       }
     },
     async getUserDetails() {
-      const token = Helper.getCookie('token')
-      if(token) {
+      const token = await Helper.getCookie('token');
+      
+      if (token) {
         const id = await UserService.FindUserByToken();
         this.userTokenDetails = id;
         const user = await UserService.findUserById(this.userTokenDetails._id);

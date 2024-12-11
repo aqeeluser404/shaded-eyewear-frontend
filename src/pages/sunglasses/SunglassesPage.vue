@@ -22,7 +22,7 @@
             style="border-radius: 5px; "
           >
             <div>
-              <q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0])"
+              <q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0].imageUrl)"
                 class="product-image" style="border-radius: 25px;" />
             </div>
             <q-item class="column" style="background-color: #f0f0f0;">

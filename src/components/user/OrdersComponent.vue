@@ -28,7 +28,7 @@
         <q-card-section v-if="selectedOrder.sunglassesDetails && selectedOrder.sunglassesDetails.length > 0" class="q-gutter-md">
           <div v-for="sunglass in selectedOrder.sunglassesDetails" :key="sunglass._id" class="row items-center cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
             <q-item-section class="col-3 q-mr-md">
-              <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" class="border" style="max-width: 100px; max-height: 100px;" />
+              <q-img :src="getImageUrl(sunglass.images[0].imageUrl)" alt="Sunglass Image" class="border" style="max-width: 100px; max-height: 100px;" />
             </q-item-section>
             <q-item-section class="col-6">
               <div class="font-size-responsive-md q-mb-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b> </div>
@@ -37,7 +37,7 @@
             </q-item-section>
           </div>
         </q-card-section>
-        <q-separator v-if="selectedOrder.orderType === 'pickup'" />
+        <q-separator v-if="selectedOrder.orderType === 'pickup'" /> 
         <div v-if="selectedOrder.orderType === 'pickup'">
           <q-card-section >
             <div class="row items-center">
@@ -90,7 +90,7 @@
             <q-img
               v-for="sunglass in order.sunglassesDetails"
               :key="sunglass._id"
-              :src="getImageUrl(sunglass.images[0])"
+              :src="getImageUrl(sunglass.images[0].imageUrl)"
               alt="Sunglass Image"
               class="border q-mr-md"
               style="max-width: 100px; max-height: 100px;"
