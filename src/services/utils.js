@@ -83,19 +83,33 @@ class Helper {
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return passwordPattern.test(password);
   }
+  // Function to check if the cookie exists on the server-side
+  static async checkCookie() {
+    try {
+        const response = await axios.get(`${process.env.API_BASE_URL}/check-token`, { withCredentials: true });
+        return response.data.exists; // Assuming the server returns { exists: true/false }
+    } catch (error) {
+        console.error('Error checking token existence:', error);
+        return false;
+    }
+  }
+
+  // Function to get the cookie from the backend
   static async getCookie(name) {
     try {
         if (name === 'token') {
             const response = await axios.get(`${process.env.API_BASE_URL}/get-token`, { withCredentials: true });
-            return response.data.token || null;
+            return response.data || null;
         } else {
+            console.log(`Cookie ${name} not found`);
             return null;
         }
     } catch (error) {
-        console.error('Error retrieving cookie:', error);
+        console.error('Error fetching token from backend:', error);
         return null;
     }
   }
+
   static async removeCookie(name) {
     try {
       await axios.post(`${process.env.API_BASE_URL}/remove-token`, {}, { withCredentials: true });

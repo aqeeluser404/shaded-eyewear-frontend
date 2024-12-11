@@ -65,7 +65,7 @@
             <q-btn rounded dense v-if="editMode === selectedUser._id" class="q-pa-md custom-button font-size-responsive-sm q-mr-sm" icon="eva-edit-outline" color="primary" label="Save" @click="updateUserType(selectedUser)" style="height: 100%;" />
             <q-btn rounded dense v-if="editMode === selectedUser._id" class="q-px-lg q-py-sm custom-button font-size-responsive-sm q-mr-sm" label="Cancel" @click="editMode = null" style="height: 100%;" />
             <q-btn rounded dense class="q-pa-md q-mr-sm custom-button font-size-responsive-sm" icon="eva-trash-2-outline" color="negative" @click="deleteUser(selectedUser._id, selectedUser.username)" />
-            <q-btn rounded dense v-if="selectedUser.loginInfo && selectedUser.loginInfo.isLoggedIn === true" color="warning" label="Logout " class="q-pa-md custom-button font-size-responsive-sm" @click="logoutUser(selectedUser._id, selectedUser.username)" />
+            <!-- <q-btn rounded dense v-if="selectedUser.loginInfo && selectedUser.loginInfo.isLoggedIn === true" color="warning" label="Logout " class="q-pa-md custom-button font-size-responsive-sm" @click="logoutUser(selectedUser._id, selectedUser.username)" /> -->
           </div>
           <q-btn rounded dense class="q-px-lg q-py-sm custom-button font-size-responsive-md q-mt-md" label="Close" color="primary" @click="closeDetails" style="width: 100%;" />
         </q-card-section>
@@ -315,24 +315,25 @@ export default {
         })
       }
     },
-    async logoutUser(userId, username) {
-      const currentUser = await UserService.FindUserByToken()
-      if (currentUser._id === userId) {
-        this.$q.notify({ type: 'negative', message: 'You are currently logged in!' })
-      } else {
-        this.$q.dialog({
-          title: 'Logout User', message: `You are about to logout ${username}, continue?`, color: 'primary', cancel: true, persistent: true
-        }).onOk(async () => {
-          const response = await UserService.logoutUser(userId)
-          if (response) {
-            this.$q.notify({ type: 'positive', color: 'primary', message: 'Logout successful!' })
-            this.getAllUsers()
-          } else {
-            this.$q.notify({ type: 'negative', message: 'Logout failed. Please try again.' })
-          }
-        })
-      }
-    },
+    // async logoutUser(userId, username) {
+    //   const currentUser = await UserService.FindUserByToken()
+    //   if (currentUser._id === userId) {
+    //     this.$q.notify({ type: 'negative', message: 'You are currently logged in!' })
+    //   } else {
+    //     this.$q.dialog({
+    //       title: 'Logout User', message: `You are about to logout ${username}, continue?`, color: 'primary', cancel: true, persistent: true
+    //     }).onOk(async () => {
+    //       console.log(userId)
+    //       const response = await UserService.logout(userId)
+    //       if (response) {
+    //         this.$q.notify({ type: 'positive', color: 'primary', message: 'Logout successful!' })
+    //         this.getAllUsers()
+    //       } else {
+    //         this.$q.notify({ type: 'negative', message: 'Logout failed. Please try again.' })
+    //       }
+    //     })
+    //   }
+    // },
     openDetails(user) {
       this.selectedUser = user
     },
