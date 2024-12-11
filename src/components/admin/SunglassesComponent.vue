@@ -22,7 +22,7 @@
           <tbody v-for="(sunglass) in sunglasses" :key="sunglass._id">
             <tr>
               <td class="text-left cursor-pointer">
-                <q-img :src="getImageUrl(sunglass.images[0])" alt="Sunglass Image" style="width: 50px;"/>
+                <q-img :src="getImageUrl(sunglass.images[0].imageUrl)" alt="Sunglass Image" style="width: 50px;"/>
               </td>
               <td class="text-left cursor-pointer">
                 <q-input v-if="editMode === sunglass._id" v-model="sunglass.model" />
