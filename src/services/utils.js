@@ -83,76 +83,104 @@ class Helper {
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return passwordPattern.test(password);
   }
-  static async getCookie(name) {
-    try {
-        if (name === 'token') {
-            const response = await axios.get(`${process.env.API_BASE_URL}/get-token`, { withCredentials: true });
-            return response.data.token || null;
-        } else {
-            return null;
-        }
-    } catch (error) {
-        console.error('Error retrieving cookie:', error);
-        return null;
-    }
-  }
+  // static async getCookie(name) {
+  //   try {
+  //       if (name === 'token') {
+  //           const response = await axios.get(`${process.env.API_BASE_URL}/get-token`, { withCredentials: true });
+  //           return response.data.token || null;
+  //       } else {
+  //           return null;
+  //       }
+  //   } catch (error) {
+  //       console.error('Error retrieving cookie:', error);
+  //       return null;
+  //   }
+  // }
+      // try {
+    //   await axios.post(`${process.env.API_BASE_URL}/remove-token`, {}, { withCredentials: true });
+    // } catch (error) {
+    //   console.error(`Error removing cookie ${name}:`, error);
+    // }
 
-    //   // const cookies = document.cookie.split(';')
-    //   // for (let i = 0; i < cookies.length; i++) {
-    //   //   const cookie = cookies[i].trim()
-    //   //   if (cookie.startsWith(`${name}=`)) {
-    //   //     return cookie.substring(name.length + 1)
-    //   //   }
-    //   // }
-    //   // console.log(`Cookie ${name} not found`);
-    //   // return null
+
+  static getCookie(name) {
+      const cookies = document.cookie.split(';')
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim()
+        if (cookie.startsWith(`${name}=`)) {
+          return cookie.substring(name.length + 1)
+        }
+      }
+      // console.log(`Cookie ${name} not found`);
+      return null
+  }
 
   static async removeCookie(name) {
-    try {
-      await axios.post(`${process.env.API_BASE_URL}/remove-token`, {}, { withCredentials: true });
-    } catch (error) {
-      console.error(`Error removing cookie ${name}:`, error);
-    }
     // Set the cookie with the same name and expiration date in the past
-    // document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
   }
   static beforeRouteEnter(to, from, next) {
-    Helper.getCookie('token').then((token) => {
-      if (!token) {
-        next({ path: '/' }); // Redirect to home if no token
-      } else {
-        next(); // Proceed to the requested route
-      }
-    }).catch((error) => {
-      console.error('Error fetching token:', error);
-      next({ path: '/' }); // Handle the error case
-    });
+    // Helper.getCookie('token').then((token) => {
+    //   if (!token) {
+    //     next({ path: '/' }); // Redirect to home if no token
+    //   } else {
+    //     next(); // Proceed to the requested route
+    //   }
+    // }).catch((error) => {
+    //   console.error('Error fetching token:', error);
+    //   next({ path: '/' }); // Handle the error case
+    // });
+
+        const token = Helper.getCookie('token')
+        if (!token) {
+          next({ path: '/' })
+        } else {
+          const decodedToken = jwtDecode(token)
+          const userType = decodedToken.userType
+          if (userType === 'admin') {
+            next()
+          } else {
+            next({ path: '/' })
+          }
+        }
   }
   static beforeRouteEnterUser(to, from, next) {
-    Helper.getCookie('token').then((token) => {
-      // Check if token exists
-      if (!token) {
-        next({ path: '/' }); // Redirect to home if no token
-      } else {
-        next(); // Proceed to the requested route
-      }
-    }).catch((error) => {
-      console.error('Error fetching token:', error);
-      next({ path: '/' }); // Redirect in case of error
-    });
+    // Helper.getCookie('token').then((token) => {
+    //   // Check if token exists
+    //   if (!token) {
+    //     next({ path: '/' }); // Redirect to home if no token
+    //   } else {
+    //     next(); // Proceed to the requested route
+    //   }
+    // }).catch((error) => {
+    //   console.error('Error fetching token:', error);
+    //   next({ path: '/' }); // Redirect in case of error
+    // });
+    const token = Helper.getCookie('token')
+    if (!token) {
+      next({ path: '/' })
+    } else {
+      next();
+    }
   }
   static beforeRouteLeave(to, from, next) {
-    Helper.getCookie('token').then((token) => {
-      // Check if token exists
-      if (!token) {
-        next(false); // Prevent navigation if no token
-      } else {
-        next(); // Allow navigation
-      }
-    }).catch((error) => {
-      console.error('Error fetching token:', error);
-      next(false); // Prevent navigation in case of error
-    });
+    // Helper.getCookie('token').then((token) => {
+    //   // Check if token exists
+    //   if (!token) {
+    //     next(false); // Prevent navigation if no token
+    //   } else {
+    //     next(); // Allow navigation
+    //   }
+    // }).catch((error) => {
+    //   console.error('Error fetching token:', error);
+    //   next(false); // Prevent navigation in case of error
+    // });
+    const token = Helper.getCookie('token')
+    if (!token) {
+      next(false);
+    } else {
+      next();
+    }
   }
 
   // New Method for encrypting ID and navigating
