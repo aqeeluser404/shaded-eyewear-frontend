@@ -317,11 +317,12 @@ export default {
     },
     async checkLoginStatus() {
       const token = Helper.getCookie('token')
-
+      console.log('Retrieved token:', token); // Debugging
       if (token) {
         try {
           // Check if the token is still valid and fetch user details
           const user = await UserService.FindUserByToken();
+          console.log('User found by token:', user);
           const userDetails = await UserService.findUserById(user._id);
 
           // Compare tokens to detect if the user logged in from another browser
@@ -338,6 +339,7 @@ export default {
           this.handleLogout();
         }
       } else {
+        console.log('Token not found or invalid');
         this.isLoggedIn = false;
         this.handleLogout();
       }

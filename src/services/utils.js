@@ -111,11 +111,11 @@ class Helper {
           return cookie.substring(name.length + 1)
         }
       }
-      // console.log(`Cookie ${name} not found`);
+      console.log(`Cookie ${name} not found`);
       return null
   }
 
-  static async removeCookie(name) {
+  static removeCookie(name) {
     // Set the cookie with the same name and expiration date in the past
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
   }
