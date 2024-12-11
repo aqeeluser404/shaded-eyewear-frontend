@@ -316,33 +316,31 @@ export default {
       }, 10000)
     },
     async checkLoginStatus() {
-      const token = await Helper.getCookie('token')
+    const token = await Helper.getCookie('token');
 
-      if (token) {
+    if (token) {
         try {
-          // Check if the token is still valid and fetch user details
-          const user = await UserService.FindUserByToken();
-          const userDetails = await UserService.findUserById(user._id);
+            const user = await UserService.FindUserByToken();
+            const userDetails = await UserService.findUserById(user._id);
 
-          // Compare tokens to detect if the user logged in from another browser
-          if (token === userDetails.loginInfo.loginToken) {
-            this.isLoggedIn = true;
-            this.fetchUserDetails();
-          } else {
-            // If tokens do not match, handle logout
+            if (token === userDetails.loginInfo.loginToken) {
+                this.isLoggedIn = true;
+                this.fetchUserDetails();
+            } else {
+                this.isLoggedIn = false;
+                this.handleLogout();
+            }
+        } catch (error) {
+            console.error('Error checking login status:', error);
             this.isLoggedIn = false;
             this.handleLogout();
-          }
-        } catch (error) {
-          console.error('Error checking login status:', error);
-          this.isLoggedIn = false;
-          this.handleLogout();
         }
-      } else {
+    } else {
         this.isLoggedIn = false;
         this.handleLogout();
-      }
-    },
+    }
+},
+
     handleLogout() {
       Helper.removeCookie('token')
       this.cancelOrder();

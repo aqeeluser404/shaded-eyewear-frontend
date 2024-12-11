@@ -83,18 +83,17 @@ class Helper {
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return passwordPattern.test(password);
   }
-
-  // AUTHENTICATION FUNCTIONS
   static async getCookie(name) {
     try {
-      if (name === 'token') {
-        const response = await axios.get(`${process.env.API_BASE_URL}/get-token`, { withCredentials: true });
-        return response.data || null;
-      } else {
-        return null;
-      }
+        if (name === 'token') {
+            const response = await axios.get(`${process.env.API_BASE_URL}/get-token`, { withCredentials: true });
+            return response.data.token || null;
+        } else {
+            return null;
+        }
     } catch (error) {
-      return null;
+        console.error('Error retrieving cookie:', error);
+        return null;
     }
   }
 
