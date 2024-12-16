@@ -47,7 +47,7 @@
         if (response.status === 200) {
           this.$q.notify({ type: 'positive', color: 'primary', message: 'Login successful!' });
           this.$router.push('/');
-        } else if (response.status === 401) {
+        } else if (response.status === 401 || response.status === 400) {
           this.$q.notify({ type: 'negative', color: 'red', message: 'Login failed. Incorrect username or password.' });
           this.onReset();
         } else {
