@@ -43,19 +43,26 @@
     },
     methods: {
       async onSubmit() {
-        const response = await UserService.login(this.user.usernameOrEmail, this.user.password)
-        if (response.status === 200) {
-          this.$q.notify({ type: 'positive', color: 'primary', message: 'Login successful!' });
-          this.$router.push('/');
-        } else if (response.status === 401 || response.status === 400) {
-          this.$q.notify({ type: 'negative', color: 'red', message: 'Login failed. Incorrect username or password.' });
-          this.onReset();
-        } else {
-          this.$q.notify({ type: 'negative', color: 'red', message: 'Login failed. Please try again!' });
+        try {
+          const response = await UserService.login(this.user.usernameOrEmail, this.user.password);
+          if (response.status === 200) {
+            this.$q.notify({ type: 'positive', color: 'primary', message: 'Login successful!' });
+            this.$router.push('/');
+          } else {
+            // Handle unexpected status codes
+            this.$q.notify({ type: 'negative', color: 'red', message: 'Login failed. Please try again!' });
+            this.onReset();
+          }
+        } catch (error) {
+          if (error.response && (error.response.status === 401 || error.response.status === 400)) {
+            this.$q.notify({ type: 'negative', color: 'red', message: 'Login failed. Incorrect username or password.' });
+          } else {
+            this.$q.notify({ type: 'negative', color: 'red', message: 'Login failed. Please try again!' });
+          }
           this.onReset();
         }
-
       },
+
       onReset() {
         this.user.usernameOrEmail = '',
         this.user.password = ''
