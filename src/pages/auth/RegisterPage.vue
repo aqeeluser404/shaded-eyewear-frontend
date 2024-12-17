@@ -98,16 +98,27 @@
         return true;
       },
       async onSubmit() {
-        if (this.validateFields()) {
-          const response = await UserService.register(this.user)
-          if (response) {
-            this.$q.notify({ type: 'positive', color: 'primary', message: 'Please check your email to verify your account.' })
-            this.$router.push('/auth/login')
+
+        try {
+          if (this.validateFields()) {
+            const response = await UserService.register(this.user)
+            if (response) {
+              this.$q.notify({ type: 'positive', color: 'primary', message: 'Please check your email to verify your account.' })
+              this.$router.push('/auth/login')
+            } else {
+              // Handle unexpected status codes
+              this.$q.notify({ type: 'negative', message: 'Registration failed. Please try again!' })
+              this.onReset()
+            }
+          }
+        } catch (error) {
+          if (error.response && (error.response.status === 401 || error.response.status === 400)) {
+            this.$q.notify({ type: 'negative', color: 'red', message: 'Username or Email already exists. Please try again!' });
           } else {
-            this.$q.notify({ type: 'negative', message: 'Username or Email already exists. Please try again!' })
-            // this.onReset()
+            this.$q.notify({ type: 'negative', color: 'red', message: 'Registration failed. Please try again!' });
           }
         }
+
       },
       onReset() {
         this.user.firstName = '',
