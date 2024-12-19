@@ -99,13 +99,6 @@ export default {
 </script>
 
 <style lang="sass">
-.about-us-bg
-  background-image: url('src/assets/homepage/design.png')
-  background-size: cover
-  background-position: center
-  width: 100%
-  height: 100%
-
 .hero-image
   width: 100%
   height: 100vh
