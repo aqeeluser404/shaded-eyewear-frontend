@@ -20,7 +20,7 @@
             <img :src="logoSrc"/>
           </q-avatar>
           <router-link to="/" :class="colorShiftClass" class="text-remove-decoration font-size-responsive-lg" >Shaded Eyewear ™ </router-link>
-          <span v-if="isLoggedIn" class="q-ml-sm font-size-responsive-xxl caveat ">
+          <span v-if="isLoggedIn" :class="[ 'q-ml-sm', $q.screen.lt.md ? 'font-size-responsive-md' : 'font-size-responsive-xxl', 'caveat' ]">
             Hi, {{ userDetails.username }}
           </span>
         </q-toolbar-title>
@@ -49,7 +49,7 @@
           </div>
 
           <!-- Mobile nav -->
-          <q-btn-dropdown class="small-screen-only" icon="menu" flat>
+          <q-btn-dropdown class="small-screen-only" dropdown-icon="menu" flat>
             <q-list style="width: 200px">
               <q-item clickable v-close-popup to="/">
                 <q-item-section class="font-size-responsive-md">Home</q-item-section>

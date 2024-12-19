@@ -30,8 +30,9 @@
               <p class="font-size-responsive-xxl caveat q-mb-lg">Protecting your eyes and elevating your style.</p>
             </div>
             <div>
-              <q-btn rounded dense label="shop our catalogue" to="/sunglasses" color="white" text-color="accent" class="q-px-lg q-py-sm q-mr-md anton-regular font-size-responsive-xl" />
-              <q-btn rounded dense outlined label="Read more" @click="scrollToAboutUs" text-color="white" class="q-px-lg q-py-sm anton-regular font-size-responsive-xl" style="border: 2px solid white;" />
+              <q-btn rounded dense label="shop our catalogue" to="/sunglasses" color="white" text-color="accent" class="q-px-md q-py-sm q-mr-md anton-regular font-size-responsive-lg" 
+              />
+              <q-btn rounded dense outlined label="Read more" @click="scrollToAboutUs" text-color="white" class="q-px-md q-py-sm anton-regular font-size-responsive-lg" style="border: 2px solid white;" />
             </div>
           </q-card-section>
         </q-card>
