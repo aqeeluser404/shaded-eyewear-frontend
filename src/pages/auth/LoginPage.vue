@@ -45,10 +45,12 @@
       async onSubmit() {
         try {
           const response = await UserService.login(this.user.usernameOrEmail, this.user.password);
-          if (response.status === 200) {
+          // if (response.status === 200) {
+          if (response) {
             this.$q.notify({ type: 'positive', color: 'primary', message: 'Login successful!' });
             this.$router.push('/');
-          } else {
+          } 
+          else {
             // Handle unexpected status codes
             this.$q.notify({ type: 'negative', color: 'red', message: 'Login failed. Please try again!' });
             this.onReset();
