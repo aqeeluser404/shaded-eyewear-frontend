@@ -210,7 +210,11 @@ export default {
     async initiatePayment() {
       try {
         if (this.orderType === null) {
-          this.$q.notify({ type: 'negative', color: 'red', message: 'Please choose your order type!' })
+          this.$q.notify({ type: 'negative', color: 'red', message: 'Please choose your order type.' })
+          return
+        }
+        if (this.userDetails.verification.isVerified === false) {
+          this.$q.notify({ type: 'negative', color: 'red', message: 'Please verify your email before continuing.' })
           return
         }
         if (this.orderType === 'pickup') {
