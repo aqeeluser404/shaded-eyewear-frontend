@@ -49,7 +49,7 @@ class UserService {
     }
   }
   static async findUsersFrequentlyLoggedIn() {
-    const ENDPOINT = "/admin/user/logged-in"
+    const ENDPOINT = "/admin/user/frequent-users"
     try {
       const response = await axiosInstance.get(ENDPOINT)
       return response.data
