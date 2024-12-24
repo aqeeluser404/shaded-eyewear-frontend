@@ -79,10 +79,10 @@
     </q-header>
 
     <!-- Loading Spinner -->
-    <!-- <div v-if="isLoading" class="loading-overlay">
+    <div v-if="isLoading" class="loading-overlay">
       <q-spinner-ball color="primary" size="80px" />
-      <div>Loading...</div>
-    </div> -->
+      <div>{{ serverStatus }}</div>
+    </div>
 
     <!----------------------------------------------------------- PAGES SECTION -------------------------------------------------->
     <div style="background-color: black;">
@@ -194,6 +194,7 @@ import Helper from 'src/services/utils'
 import logoWhite from '../assets/resources/logos/logo-white.png'
 import logoBlack from '../assets/resources/logos/logo-black.png'
 import EmailService from 'src/services/EmailService'
+import axiosInstance from 'src/services/axiosInstance'
 
 export default {
   name: "MainLayout",
@@ -218,7 +219,7 @@ export default {
 
   data() {
     return {
-      // isLoading: false,
+      isLoading: false,
       texts: [
         "Sunglasses and Eyewear Shop",
         "Discover our latest collections",
@@ -262,6 +263,7 @@ export default {
   //   });
   // },
   mounted() {
+    this.getServerHeath()
     this.getCurrentOrder()
     this.checkLoginStatus()
     this.changeTextAutomatically()
@@ -430,31 +432,49 @@ export default {
       } catch (error) {
         this.$q.notify({ type: 'negative', message: 'Error sending message.' });
       }
+    },
+    async getServerHealth() {
+      try {
+        const startTime = Date.now()
+        const response = await axiosInstance.get('/health')
+        if (response.status === 200) {
+          this.isLoading = false
+          this.serverStatus = 'Server is up and running.'
+        } else {
+          this.isLoading = true
+          this.serverStatus = 'Please wait while we get the server running.'
+        }
+      } catch (error) {
+        console.error(error)
+      } finally {
+        if (Date.now() - startTime > 30000) { // 30 seconds
+          this.isLoading = false
+          this.serverStatus = 'Server is taking a while to start up. Please try again later.'
+        }
+      }
     }
   }
 }
 </script>
 
 <style lang="sass" scoped>
-// .loading-overlay
-//   display: flex
-//   flex-direction: column
-//   align-items: center
-//   justify-content: center
-//   height: 100vh
-//   background-color: rgba(255, 255, 255, 0.9)
-//   position: fixed
-//   top: 0
-//   left: 0
-//   width: 100%
-//   z-index: 9999
+.loading-overlay
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  height: 100vh
+  background-color: rgba(255, 255, 255, 0.9)
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  z-index: 9999
 
-
-// .loading-overlay div
-//   margin-top: 10px
-//   font-size: 1.2em
-//   color: #555
-
+.loading-overlay div
+  margin-top: 10px
+  font-size: 1.2em
+  color: #555
 
 .text-subtitle1
   line-height: 1
