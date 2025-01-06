@@ -140,7 +140,7 @@ export default {
         try {
           const response = await OrderService.findOrderById(this.currentOrderId)
           if (response.status === 200) {
-            this.order = response.data
+            this.order = response
             await this.getSunglasses()
           } else {
             throw new Error('Order not found')
