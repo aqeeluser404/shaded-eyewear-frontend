@@ -139,7 +139,7 @@ export default {
       if (this.currentOrderId) {
         try {
           const response = await OrderService.findOrderById(this.currentOrderId)
-          if (response.status === 200) {
+          if (response) {
             this.order = response
             await this.getSunglasses()
           } else {
