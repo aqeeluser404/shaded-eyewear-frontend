@@ -137,9 +137,22 @@ export default {
     },
     async getCurrentOrder() {
       if (this.currentOrderId) {
-        const response = await OrderService.findOrderById(this.currentOrderId)
-        this.order = response
-        await this.getSunglasses()
+        try {
+          const response = await OrderService.findOrderById(this.currentOrderId)
+          if (response.status === 200) {
+            this.order = response.data
+            await this.getSunglasses()
+          } else {
+            throw new Error('Order not found')
+          }
+        } catch (error) {
+          if (error.response && error.response.status === 500) {
+            console.error('Server error: ', error)
+          } else {
+            console.error('Error: ', error)
+          }
+          localStorage.clear()
+        }
       }
     },
     async getSunglasses() {
