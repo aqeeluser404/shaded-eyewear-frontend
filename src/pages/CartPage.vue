@@ -151,7 +151,7 @@ export default {
           } else {
             console.error('Error: ', error)
           }
-          localStorage.clear()
+          localStorage.removeItem('currentOrderId')
         }
       }
     },
