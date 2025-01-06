@@ -263,7 +263,7 @@ export default {
   //   });
   // },
   mounted() {
-    this.getServerHeath()
+    this.getServerHealth()
     this.getCurrentOrder()
     this.checkLoginStatus()
     this.changeTextAutomatically()
@@ -434,8 +434,8 @@ export default {
       }
     },
     async getServerHealth() {
+      const startTime = Date.now()
       try {
-        const startTime = Date.now()
         const response = await axiosInstance.get('/health')
         if (response.status === 200) {
           this.isLoading = false
