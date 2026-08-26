@@ -1,6 +1,6 @@
 {
   "name": "shaded-eyewear-frontend",
-  "version": "0.0.1",
+  "version": "2.0.0-dev",
   "description": "A Sunglasses App",
   "productName": "Shaded Eyewear",
   "author": "Aqeel <aqeelhanslo@gmail.com>",
@@ -14,6 +14,8 @@
     "start": "quasar serve --history"
   },
   "dependencies": {
+    "@fontsource/archivo-black": "^5.3.0",
+    "@fontsource/hind": "^5.3.0",
     "@mdi/font": "^7.4.47",
     "@quasar/app-webpack": "^3.15.1",
     "@quasar/extras": "^1.16.15",

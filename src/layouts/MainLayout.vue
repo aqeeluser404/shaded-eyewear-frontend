@@ -10,42 +10,28 @@
     <div class="noise-overlay"></div>
 
     <!----------------------------------------------------------- HEADER SECTION -------------------------------------------------->
-    <q-header v-if="!isPaymentSuccessPage" :class="[headerClass, colorShiftClass]">
+    <q-header v-if="!isPaymentSuccessPage" :class="[headerClass, colorShiftClass]" :style="{ height: '75px' }" class="row items-center">
 
-      <q-toolbar class="q-px-lg row items-center justify-between">
+      <q-toolbar class="q-px-lg row items-center justify-around constrain">
 
         <!-- title and avatar -->
-        <q-toolbar-title class="col-md-6 row items-center ">
+        <q-toolbar-title class="col-md-4 row items-center ">
           <q-avatar class="q-mr-sm responsive-avatar">
             <img :src="logoSrc"/>
           </q-avatar>
-          <router-link to="/" :class="colorShiftClass" class="text-remove-decoration font-size-responsive-lg" >Shaded Eyewear ™ </router-link>
-          <span v-if="isLoggedIn" :class="[ 'q-ml-sm', $q.screen.lt.md ? 'font-size-responsive-md' : 'font-size-responsive-xxl', 'caveat' ]">
-            Hi, {{ userDetails.username }}
-          </span>
+          <router-link to="/" :class="colorShiftClass" class="text-remove-decoration font-size-responsive-md archivo" >SHADED EYEWEAR</router-link>
         </q-toolbar-title>
 
-        <!-- TEXT CAROUSEL -->
-        <!-- <div class="col-md-4 row large-screen-only justify-center">
-          <div class="text-carousel font-size-responsive-xs row flex-center justify-center">
-            <q-btn flat icon="eva-arrow-ios-back-outline" @click="prevText" />
-            <span class="q-mx-sm">{{ texts[currentIndex] }}</span>
-            <q-btn flat icon="eva-arrow-ios-forward-outline" @click="nextText" />
-          </div>
-        </div> -->
 
-        <div class="col-md-6">
+        <div class="col-md-4">
 
           <!----------------------------------------------------------- NAV SECTION -------------------------------------------------->
           <!-- Desktop nav -->
-          <div class="row justify-end items-center">
-            <q-btn to="/" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Home" flat rounded />
-            <q-btn to="/sunglasses" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Catalogue" flat rounded />
-            <q-btn v-if="!isLoggedIn" to="/auth/login" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Login" flat rounded />
-            <q-btn v-else @click="logout" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Logout" flat rounded />
-            <q-btn @click="openDash" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" icon="eva-person-outline" flat rounded />
-            <q-btn v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'" to="/admin/dashboard" icon="eva-pie-chart-outline" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" flat rounded />
-            <q-btn to="/cart" icon="eva-shopping-bag-outline" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" flat rounded />
+          <div class="row justify-center items-center">
+            <q-btn to="/" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Home" :ripple="false" no-caps flat rounded />
+            <q-btn to="/sunglasses" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Catalogue" :ripple="false" no-caps flat rounded />
+            <q-btn v-if="!isLoggedIn" to="/auth/login" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Login" :ripple="false" no-caps flat rounded />
+            <q-btn v-else @click="logout" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Logout" :ripple="false" no-caps flat rounded />
           </div>
 
           <!-- Mobile nav -->
@@ -74,6 +60,15 @@
               </q-item>
             </q-list>
           </q-btn-dropdown>
+        </div>
+
+        <div class="col-md-4">
+          <div class="row justify-end items-center">
+            <q-btn @click="openDash" class="custom-button q-py-sm large-screen-only font-size-responsive-xs" icon="eva-person-outline" :ripple="false" no-caps flat rounded />
+            <q-btn v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'" to="/admin/dashboard" icon="eva-pie-chart-outline" class="custom-button q-py-sm large-screen-only font-size-responsive-xs" :ripple="false" no-caps flat rounded />
+            <q-btn to="/cart" icon="eva-shopping-bag-outline" class="custom-button q-py-sm large-screen-only font-size-responsive-xs" :ripple="false" no-caps flat rounded />
+          </div>
+
         </div>
       </q-toolbar>
     </q-header>
@@ -213,7 +208,11 @@ export default {
       return {
         transform: this.isPaymentSuccessPage ? 'translateY(0px)' : 'translateY(-50px)'
       };
-    }
+    },
+    headerHeight() {
+      const baseHeight = 200
+      return baseHeight
+    },
   },
 
   data() {
@@ -252,15 +251,6 @@ export default {
     }
 
   },
-  // created() {
-  //   this.$router.beforeEach((to, from, next) => {
-  //     this.isLoading = true; // Show spinner before navigating
-  //     next();
-  //   });
-  //   this.$router.afterEach(() => {
-  //     this.isLoading = false; // Hide spinner after navigation
-  //   });
-  // },
   mounted() {
     this.getCurrentOrder()
     this.checkLoginStatus()
@@ -295,11 +285,11 @@ export default {
         this.colorShiftClass = 'transparent-black';
         this.logoSrc = logoBlack;
       } else if (window.scrollY > 50) {
-        this.headerClass = 'header-solid';
-        this.colorShiftClass = 'transparent-black';
-        this.logoSrc = logoBlack;
-      } else {
         this.headerClass = 'header-transparent';
+        // this.colorShiftClass = 'bg-light';
+        // this.logoSrc = logoBlack;
+      } else {
+        this.headerClass = 'bg-dark-dynamic';
         this.colorShiftClass = 'transparent-white';
         this.logoSrc = logoWhite;
       }
