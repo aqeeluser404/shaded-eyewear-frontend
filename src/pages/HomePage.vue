@@ -10,44 +10,44 @@
         >
           <q-card class="absolute-full" style="z-index: 1">
             <div class="full-height column justify-end items-start constrain">
-              <q-card-section class="q-px-none">
-                <div class="">
-                  <div class="overline text-caption text-dimmed">
-                    EST. 2023 · CAPE TOWN
-                  </div>
-                  <div class="section-spacer-sm"></div>
-                  <p class="font-size-responsive-hero archivo">
-                    SHADE IS A <br />
-                    <span class="text-primary">DISCIPLINE</span>
-                  </p>
-                  <div class="section-spacer-sm"></div>
-                  <p class="text-subtitle1 text-dimmed" style="word-wrap: break-word; overflow-wrap: break-word;">
-                    Small-run frames cut for the glare off Table Bay. Polarised,
-                    UV400, and <br />
-                    hand-checked before they leave Kenwyn.
-                  </p>
-                  <div class="section-spacer-sm"></div>
+              <div class="">
+                <div class="overline text-caption text-dimmed">
+                  EST. 2023 · CAPE TOWN
                 </div>
+                <div class="section-spacer-sm"></div>
+                <p class="font-size-responsive-hero archivo">
+                  SHADE IS A <br />
+                  <span class="text-primary">DISCIPLINE</span>
+                </p>
+                <div class="section-spacer-sm"></div>
+                <p
+                  class="text-subtitle1 text-dimmed"
+                >
+                  Small-run frames cut for the glare off Table Bay. Polarised,
+                  UV400, and <br />
+                  hand-checked before they leave Kenwyn.
+                </p>
+                <div class="section-spacer-sm"></div>
+              </div>
 
-                <div class="row justify-start items-center">
-                  <q-btn
-                    dense
-                    label="Shop the catalogue"
-                    to="/sunglasses"
-                    color="primary"
-                    text-color="dark"
-                    class="col-md-6 q-px-xl q-py-md q-mr-lg text-subtitle1 rounded-button text-bold"
-                    no-caps
-                    icon-right="eva-arrow-forward-outline"
-                  />
+              <div class="row justify-start items-center full-width">
+                <q-btn
+                  dense
+                  label="Shop the catalogue"
+                  to="/sunglasses"
+                  color="primary"
+                  text-color="dark"
+                  class=" q-px-xl q-py-md q-mr-lg text-subtitle1 rounded-button text-bold"
+                  no-caps
+                  icon-right="eva-arrow-forward-outline"
+                />
 
-                  <div
-                    class="col-md-6 col-12 text-subtitle1 text-dimmed q-mt-md q-md-mt-0"
-                  >
-                    Free delivery across Cape Town
-                  </div>
+                <div
+                  class="col-sm-6 col-12 text-subtitle1 text-dimmed q-mt-md q-md-mt-0 "
+                >
+                  Free delivery across Cape Town
                 </div>
-              </q-card-section>
+              </div>
 
               <div class="section-spacer-md"></div>
               <div class="marquee-section q-py-sm">
@@ -68,7 +68,7 @@
                   </div>
                 </div>
               </div>
-              <div class="section-spacer-xs"></div>
+              <!-- <div class="section-spacer-xs"></div> -->
             </div>
           </q-card>
         </q-img>
@@ -77,7 +77,7 @@
 
     <!--------------------------------------------------------------------- ABOUT US SECTION -------------------------------------------------->
 
-    <section class="bg-dark">
+    <section class="bg-white">
       <div class="section-spacer-md"></div>
       <div class="constrain">
         <div>
