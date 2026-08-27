@@ -4,6 +4,8 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [
 
+      { path: "/server-loading", component: () => import("pages/boot/ServerLoadingPage.vue") },
+
       // PUBLIC PAGES
       { path: "", component: () => import("pages/HomePage.vue") },
       { path: "/sunglasses", component: () => import("src/pages/sunglasses/SunglassesPage.vue"), },

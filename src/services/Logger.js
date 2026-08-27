@@ -1,10 +1,21 @@
-// Assuming you have a logging service like this
-class Logger {
-  static error(error) {
-    // Send error to your logging service here
-    // console.error(error);
-    throw error
-  }
-}
+const LOG_ERRORS = process.env.VUE_APP_LOG_ERRORS === 'true' || 'true';
 
-export default Logger
+const Logger = {
+  error: (...args) => {
+    if (LOG_ERRORS) {
+      console.error(...args);
+    }
+  },
+  warn: (...args) => {
+    if (LOG_ERRORS) {
+      console.warn(...args);
+    }
+  },
+  info: (...args) => {
+    if (LOG_ERRORS) {
+      console.info(...args);
+    }
+  }
+};
+
+export default Logger;

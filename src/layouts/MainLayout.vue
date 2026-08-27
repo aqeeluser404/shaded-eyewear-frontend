@@ -10,9 +10,9 @@
     <div class="noise-overlay"></div>
 
     <!----------------------------------------------------------- HEADER SECTION -------------------------------------------------->
-    <q-header v-if="!isPaymentSuccessPage" :class="[headerClass, colorShiftClass]" :style="{ height: '75px' }" class="row items-center">
+    <q-header v-if="showHeader" :class="[headerClass, colorShiftClass]" :style="{ height: '75px' }" class="row items-center">
 
-      <q-toolbar class="q-px-lg row items-center justify-around constrain">
+      <q-toolbar class="row items-center justify-around constrain">
 
         <!-- title and avatar -->
         <q-toolbar-title class="col-md-4 row items-center ">
@@ -87,10 +87,10 @@
     </div>
 
     <!----------------------------------------------------------- FOOTER SECTION -------------------------------------------------->
-    <q-footer class="bg-black text-white q-pa-md">
+    <q-footer class="bg-black text-white q-pa-md" v-if="showHeader">
       <q-toolbar class="constrain">
         <q-toolbar-title>
-          <div v-if="!isPaymentSuccessPage"  class="row justify-center">
+          <div class="row justify-center">
 
             <!-- Developed By Section -->
             <div  class="col-12 col-md-4 items-center">
@@ -201,12 +201,29 @@ export default {
       this.$route.path.includes('/user/dashboard') ||
       this.$route.path.includes('/admin/dashboard')
     },
+    showHeader() {
+      const hiddenRoutes = [
+        "/server-loading",
+        "/auth/login",
+        "/auth/register",
+        "/cart",
+        "/buy/review",
+        '/payment-success',
+        '/payment-cancel',
+        '/payment-failure',
+        '/verify-email',
+        '/resend-verification',
+        '/forgot-password',
+        '/reset-password'
+      ];
+      return !hiddenRoutes.includes(this.$route.path);
+    },
     isPaymentSuccessPage() {
       return this.$route.path === '/payment-success';
     },
     pageContainerStyle() {
       return {
-        transform: this.isPaymentSuccessPage ? 'translateY(0px)' : 'translateY(-50px)'
+        transform: this.isPaymentSuccessPage ? 'translateY(0px)' : 'translateY(-75px)'
       };
     },
     headerHeight() {

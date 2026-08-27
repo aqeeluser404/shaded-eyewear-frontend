@@ -12,12 +12,16 @@
             <div class="full-height column justify-end items-start constrain">
               <q-card-section class="q-px-none">
                 <div class="">
+                  <div class="overline text-caption text-dimmed">
+                    EST. 2023 · CAPE TOWN
+                  </div>
+                  <div class="section-spacer-sm"></div>
                   <p class="font-size-responsive-hero archivo">
                     SHADE IS A <br />
                     <span class="text-primary">DISCIPLINE</span>
                   </p>
                   <div class="section-spacer-sm"></div>
-                  <p class="font-size-responsive-lg">
+                  <p class="text-subtitle1 text-dimmed" style="word-wrap: break-word; overflow-wrap: break-word;">
                     Small-run frames cut for the glare off Table Bay. Polarised,
                     UV400, and <br />
                     hand-checked before they leave Kenwyn.
@@ -27,25 +31,26 @@
 
                 <div class="row justify-start items-center">
                   <q-btn
-                    rounded
                     dense
                     label="Shop the catalogue"
                     to="/sunglasses"
                     color="primary"
                     text-color="dark"
-                    class="q-px-lg q-py-md q-mr-lg font-size-responsive-md"
+                    class="col-md-6 q-px-xl q-py-md q-mr-lg text-subtitle1 rounded-button text-bold"
                     no-caps
                     icon-right="eva-arrow-forward-outline"
                   />
 
-                  <div class="font-size-responsive-md">
+                  <div
+                    class="col-md-6 col-12 text-subtitle1 text-dimmed q-mt-md q-md-mt-0"
+                  >
                     Free delivery across Cape Town
                   </div>
                 </div>
               </q-card-section>
 
-              <div class="section-spacer-xs"></div>
-              <div class="marquee-section q-py-md">
+              <div class="section-spacer-md"></div>
+              <div class="marquee-section q-py-sm">
                 <div class="marquee-track row no-wrap">
                   <div
                     v-for="i in 2"
@@ -55,9 +60,10 @@
                     <span
                       v-for="t in items"
                       :key="t"
-                      class=" archivo text-subtitle1 text-uppercase text-bold marquee-item"
+                      class="text-subtitle1 text-uppercase marquee-item"
                     >
-                      {{ t }} <span class="text-primary">✳</span>
+                      <span class="text-bold q-mr-md">{{ t }}</span>
+                      <span class="text-primary">✳</span>
                     </span>
                   </div>
                 </div>
@@ -72,17 +78,25 @@
     <!--------------------------------------------------------------------- ABOUT US SECTION -------------------------------------------------->
 
     <section class="bg-dark">
-      <div class="section-spacer-xs"></div>
+      <div class="section-spacer-md"></div>
       <div class="constrain">
         <div>
           <div class="overline">EST. 2023 · CAPE TOWN</div>
           <div class="row justify-between">
-            <div class="font-size-responsive-giant archivo text-light">THREE FRAMES</div>
-            <q-btn to="/sunglasses" class="custom-button q-py-sm font-size-responsive-sm" label="View all" :ripple="false" no-caps flat rounded />
-
+            <div class="font-size-responsive-giant archivo text-light">
+              THREE FRAMES
+            </div>
+            <q-btn
+              to="/sunglasses"
+              class="custom-button q-py-sm font-size-responsive-sm"
+              label="View all"
+              :ripple="false"
+              no-caps
+              flat
+              rounded
+            />
           </div>
         </div>
-
       </div>
     </section>
 
@@ -135,7 +149,7 @@
     </div> -->
 
     <!--------------------------------------------------------------------- IMAGE SECTION SECTION -------------------------------------------------->
-    <div class="row flex-center" style="position: relative">
+    <!-- <div class="row flex-center" style="position: relative">
       <div class="col-12 col-md-6">
         <q-img src="~src/assets/homepage/stock1.jpg" />
       </div>
@@ -167,7 +181,7 @@
           </p>
         </div>
       </div>
-    </div>
+    </div> -->
   </q-page>
 </template>
 
@@ -241,7 +255,7 @@ export default {
 
 .marquee-track
   width: max-content
-  animation: marquee-scroll 20s linear infinite
+  animation: marquee-scroll 50s linear infinite
 
 .marquee-group
   gap: 3rem

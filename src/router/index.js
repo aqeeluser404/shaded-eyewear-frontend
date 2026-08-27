@@ -1,19 +1,6 @@
 import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
-import axios from 'axios'
-import Helper from 'src/services/utils'
-
-const API_BASE_URL = process.env.API_BASE_URL
-
-/*
- * If not building with SSR mode, you can
- * directly export the Router instantiation;
- *
- * The function below can be async too; either use
- * async/await or return a Promise which resolves
- * with the Router instance.
- */
 
 export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
@@ -23,77 +10,59 @@ export default route(function (/* { store, ssrContext } */) {
   const Router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
     routes,
-
-    // Leave this as is and make changes in quasar.conf.js instead!
-    // quasar.conf.js -> build -> vueRouterMode
-    // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
-  // better way of handling authentication and server status check
-  Router.beforeEach(async (to, from, next) => {
-    try {
-      // Send a health check request to the server
-      const response = await axios.get(`${API_BASE_URL}/health`);
+  // =================================================================================
+  // SERVER STARTUP STATE (Render cold-start handling)
+  // Router's only job now: decide ONCE per session whether we need to detour
+  // through /server-loading before letting the app through to real routes.
 
-      // If the server is healthy
-      if (response.status === 200) {
-        // Redirect to the home page only if navigating to /server-offline
-        if (to.path === '/verify-email') {
-          const token = to.query.token
-          if (token) {
-            next()
-          } else {
-            next(({ path: '/404'}))
-          }
-        }
-        else if (to.path === '/resend-verification') {
-          if (from.path === '/verify-email') {                         //  check if previous route is verify-email
-            next()
-          } else {
-            next(({ path: '/404'}))
-          }
-        }
-        else if (to.path === '/payment-success') {
-          const orderId = to.query.orderId
-          if (orderId) {
-            next()                        // proceed if theres no token
-          } else {
-            next(({ path: '/404'}))
-          }
-        }
-        //else if (to.path === '/forgot-password') {
-          //const token = Helper.getCookie('token')
-          //if (!token) {
-            //next()                        // proceed if theres no token
-          //} else {
-            //next(({ path: '/404'}))
-          //}
-        //}
-        else if (to.path === '/reset-password') {
-          const token = to.query.token
-          if (token) {
-            next()
-          } else {
-            next(({ path: '/404'}))
-          }
-        }
-        else if (to.path === '/404') {
-          next('/');
-        } else {
-          next();
-        }
-      }
-    } catch (error) {
-      // If the server is offline or an error occurs
-      if (to.path !== '/404') {
-        next('/404'); // Redirect to /server-offline
-      } else {
-        next(); // Allow navigation to /server-offline
-      }
+  let serverReady = false
+
+  Router.beforeEach((to, from, next) => {
+    // Let the loading page and 404 through unconditionally
+    if (to.path === '/server-loading' || to.path === '/404') {
+      return next()
     }
-  });
 
+    // Once the loading page has confirmed the server is up, never check again
+    if (!serverReady) {
+      if (to.meta.skipServerCheck) {
+        // opt out per-route if you ever need it (e.g. a static landing page)
+        return next()
+      }
+      return next({
+        path: '/server-loading',
+        query: { redirect: to.fullPath }
+      })
+    }
+
+    // =================================================================================
+    // ROUTE PROTECTIONS
+
+    if (to.path === '/verify-email') {
+      return to.query.token ? next() : next({ path: '/404' })
+    }
+
+    if (to.path === '/resend-verification') {
+      return from.path === '/verify-email' ? next() : next({ path: '/404' })
+    }
+
+    if (to.path === '/payment-success') {
+      return to.query.orderId ? next() : next({ path: '/404' })
+    }
+
+    if (to.path === '/reset-password') {
+      return to.query.token ? next() : next({ path: '/404' })
+    }
+
+    next()
+  })
+
+  // Exposed so the loading page can flip this once the health check passes
+  Router.markServerReady = () => { serverReady = true }
+  Router.isServerReady = () => serverReady
 
   return Router
 })

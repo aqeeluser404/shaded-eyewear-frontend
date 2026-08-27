@@ -35,10 +35,6 @@ body
   -webkit-font-smoothing: antialiased
   // color: var(--background-color)
 
-p
-  padding-bottom: 0 !important
-  margin-bottom: 0 !important
-
 .archivo
   font-family: "Archivo Black", ui-sans-serif, system-ui, sans-serif
   letter-spacing: 0.05em
@@ -145,7 +141,7 @@ p
 
 
 .constrain
-  max-width: 1600px
+  max-width: 1280px
   margin: 0 auto
 
 // .constrain-hero
@@ -164,26 +160,25 @@ p
   margin: 0 auto
 
 p
-  // margin: 0
-  // padding: 0
-  line-height: 1.1
+  padding-bottom: 0 !important
+  margin-bottom: 0 !important
+  line-height: 0.9
 
 .overline
-  display: flex
-  flex-direction: column
-  align-items: center
-  gap: 10px
+  display: inline-block
   color: #ffffff
-  font-size: 12px
   letter-spacing: 3px
   text-transform: uppercase
   font-weight: 500
 
   &::before
     content: ''
+    display: block
     width: 100%
     height: 1px
-    background: rgba(255, 255, 255, 0.25)
+    background: rgba(255, 255, 255, 0.493)
+
+
 
 .noise-overlay
   position: fixed
@@ -210,6 +205,11 @@ p
   .q-focus-helper
     display: none !important
 
+.rounded-button
+  border-radius: 35px
+
+.text-dimmed
+  color: #9b9b9b
 
 
 .cursor-pointer
@@ -381,85 +381,85 @@ p
 
 
 
-// ===== PADDING SIZES =====
-.padding-xl
-  padding: 3rem
-  @media (max-width: 767px)
-    padding: 1.5rem
+// // ===== PADDING SIZES =====
+// .padding-xl
+//   padding: 3rem
+//   @media (max-width: 767px)
+//     padding: 1.5rem
 
-.padding-lg
-  padding: 2.5rem
-  @media (max-width: 767px)
-    padding: 1.5rem
+// .padding-lg
+//   padding: 2.5rem
+//   @media (max-width: 767px)
+//     padding: 1.5rem
 
-.padding-md
-  padding: 2rem
-  @media (max-width: 767px)
-    padding: 1.25rem
+// .padding-md
+//   padding: 2rem
+//   @media (max-width: 767px)
+//     padding: 1.25rem
 
-.padding-sm
-  padding: 1.5rem
-  @media (max-width: 767px)
-    padding: 1rem
+// .padding-sm
+//   padding: 1.5rem
+//   @media (max-width: 767px)
+//     padding: 1rem
 
-.padding-xs
-  padding: 1rem
-  @media (max-width: 767px)
-    padding: 0.75rem
+// .padding-xs
+//   padding: 1rem
+//   @media (max-width: 767px)
+//     padding: 0.75rem
 
-// Horizontal padding only
-.padding-x-md
-  padding-left: 2rem
-  padding-right: 2rem
-  @media (max-width: 767px)
-    padding-left: 1rem
-    padding-right: 1rem
+// // Horizontal padding only
+// .padding-x-md
+//   padding-left: 2rem
+//   padding-right: 2rem
+//   @media (max-width: 767px)
+//     padding-left: 1rem
+//     padding-right: 1rem
 
-.padding-x-xl
-  padding-left: 3rem
-  padding-right: 3rem
-  @media (max-width: 767px)
-    padding-left: 1.5rem
-    padding-right: 1.5rem
+// .padding-x-xl
+//   padding-left: 3rem
+//   padding-right: 3rem
+//   @media (max-width: 767px)
+//     padding-left: 1.5rem
+//     padding-right: 1.5rem
 
-.padding-x-lg
-  padding-left: 2.5rem
-  padding-right: 2.5rem
-  @media (max-width: 767px)
-    padding-left: 1.5rem
-    padding-right: 1.5rem
+// .padding-x-lg
+//   padding-left: 2.5rem
+//   padding-right: 2.5rem
+//   @media (max-width: 767px)
+//     padding-left: 1.5rem
+//     padding-right: 1.5rem
 
-// Vertical padding only
-.padding-y-xl
-  padding-top: 3rem
-  padding-bottom: 3rem
-  @media (max-width: 767px)
-    padding-top: 1.5rem
-    padding-bottom: 1.5rem
+// // Vertical padding only
+// .padding-y-xl
+//   padding-top: 3rem
+//   padding-bottom: 3rem
+//   @media (max-width: 767px)
+//     padding-top: 1.5rem
+//     padding-bottom: 1.5rem
 
-.padding-t-xl
-  padding-top: 3rem
-  @media (max-width: 767px)
-    padding-top: 1.5rem
+// .padding-t-xl
+//   padding-top: 3rem
+//   @media (max-width: 767px)
+//     padding-top: 1.5rem
 
-.padding-b-xl
-  padding-bottom: 3rem
-  @media (max-width: 767px)
-    padding-bottom: 1.5rem
+// .padding-b-xl
+//   padding-bottom: 3rem
+//   @media (max-width: 767px)
+//     padding-bottom: 1.5rem
 
-.padding-b-xl
-  padding-bottom: 3rem
-  @media (max-width: 767px)
-    padding-bottom: 1.5rem
+// .padding-b-xl
+//   padding-bottom: 3rem
+//   @media (max-width: 767px)
+//     padding-bottom: 1.5rem
 
-.padding-y-lg
-  padding-top: 2rem
-  padding-bottom: 2rem
-  @media (max-width: 767px)
-    padding-top: 1.25rem
-    padding-bottom: 1.25rem
+// .padding-y-lg
+//   padding-top: 2rem
+//   padding-bottom: 2rem
+//   @media (max-width: 767px)
+//     padding-top: 1.25rem
+//     padding-bottom: 1.25rem
 
-.padding-t-sm
-  padding-top: 1rem
-  @media (max-width: 767px)
-    padding-top: 0.5rem
+// .padding-t-sm
+//   padding-top: 1rem
+//   @media (max-width: 767px)
+//     padding-top: 0.5rem
