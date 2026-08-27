@@ -1,111 +1,92 @@
 <template>
   <q-page>
     <!--------------------------------------------------------------------- HERO SECTION -------------------------------------------------->
-    <!-- alt image -->
     <div>
-      <q-img
-        src="~src/assets/homepage/hero.jfif"
-        alt="Hero Image"
-        class="hero-image"
-      >
-        <q-card class="absolute-full">
-          <div class="full-height constrain row justify-start items-end">
-            <!-- <div style="width: 5%;"></div> -->
-            <q-card-section class="">
-              <div>
-                <p class="font-size-responsive-hero anton-regular q-mb-md">
-                  CATCH THE SUN<br />WEAR THE SHADE
-                </p>
-                <p class="font-size-responsive-xxl caveat q-mb-lg">
-                  Protecting your eyes and elevating your style.
-                </p>
-              </div>
-              <div>
-                <q-btn
-                  rounded
-                  dense
-                  label="shop our catalogue"
-                  to="/sunglasses"
-                  color="white"
-                  text-color="accent"
-                  class="q-px-lg q-py-sm q-mr-md anton-regular font-size-responsive-lg"
-                />
-                <q-btn
-                  rounded
-                  dense
-                  @click="scrollToAboutUs"
-                  outlined
-                  label="about us"
-                  text-color="white"
-                  class="q-px-lg q-py-sm anton-regular font-size-responsive-lg"
-                  style="border: 2px solid white"
-                />
-              </div>
-            </q-card-section>
-          </div>
-        </q-card>
-      </q-img>
-
-      <!-- small screen -->
-      <!-- <q-img
-        v-else
-        src="~src/assets/homepage/hero2.jpg"
-        alt="Hero Image"
-        class="hero-image"
-      >
-        <q-card class="absolute-full row justify-start items-center">
-          <div style="width: 5%"></div>
-          <q-card-section>
-            <div>
-              <p class="font-size-responsive-hero anton-regular q-mb-md">
-                CATCH THE SUN<br />WEAR THE SHADE
-              </p>
-              <p class="font-size-responsive-xxl caveat q-mb-lg">
-                Protecting your eyes and elevating your style.
-              </p>
-            </div>
-            <div>
-              <q-btn
-                rounded
-                dense
-                label="shop our catalogue"
-                to="/sunglasses"
-                color="white"
-                text-color="accent"
-                class="q-px-md q-py-sm q-mr-md anton-regular font-size-responsive-lg"
-              />
-              <q-btn
-                rounded
-                dense
-                outlined
-                label="Read more"
-                @click="scrollToAboutUs"
-                text-color="white"
-                class="q-px-md q-py-sm anton-regular font-size-responsive-lg"
-                style="border: 2px solid white"
-              />
-            </div>
-          </q-card-section>
-        </q-card>
-      </q-img> -->
-    </div>
-
-  <section class="marquee-section q-py-md">
-    <div class="marquee-track row no-wrap">
-      <div v-for="i in 2" :key="i" class="row no-wrap marquee-group">
-        <span
-          v-for="t in items"
-          :key="t"
-          class="font-display text-caption text-uppercase marquee-item"
+      <div class="hero-wrapper">
+        <q-img
+          src="~src/assets/homepage/hero.jfif"
+          alt="Hero Image"
+          class="hero-image"
         >
-          {{ t }} <span class="text-primary">✳</span>
-        </span>
+          <q-card class="absolute-full" style="z-index: 1">
+            <div class="full-height column justify-end items-start constrain">
+              <q-card-section class="q-px-none">
+                <div class="">
+                  <p class="font-size-responsive-hero archivo">
+                    SHADE IS A <br />
+                    <span class="text-primary">DISCIPLINE</span>
+                  </p>
+                  <div class="section-spacer-sm"></div>
+                  <p class="font-size-responsive-lg">
+                    Small-run frames cut for the glare off Table Bay. Polarised,
+                    UV400, and <br />
+                    hand-checked before they leave Kenwyn.
+                  </p>
+                  <div class="section-spacer-sm"></div>
+                </div>
+
+                <div class="row justify-start items-center">
+                  <q-btn
+                    rounded
+                    dense
+                    label="Shop the catalogue"
+                    to="/sunglasses"
+                    color="primary"
+                    text-color="dark"
+                    class="q-px-lg q-py-md q-mr-lg font-size-responsive-md"
+                    no-caps
+                    icon-right="eva-arrow-forward-outline"
+                  />
+
+                  <div class="font-size-responsive-md">
+                    Free delivery across Cape Town
+                  </div>
+                </div>
+              </q-card-section>
+
+              <div class="section-spacer-xs"></div>
+              <div class="marquee-section q-py-md">
+                <div class="marquee-track row no-wrap">
+                  <div
+                    v-for="i in 2"
+                    :key="i"
+                    class="row no-wrap marquee-group"
+                  >
+                    <span
+                      v-for="t in items"
+                      :key="t"
+                      class=" archivo text-subtitle1 text-uppercase text-bold marquee-item"
+                    >
+                      {{ t }} <span class="text-primary">✳</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="section-spacer-xs"></div>
+            </div>
+          </q-card>
+        </q-img>
       </div>
     </div>
-  </section>
 
     <!--------------------------------------------------------------------- ABOUT US SECTION -------------------------------------------------->
-    <div style="background-color: #f5f5f5">
+
+    <section class="bg-dark">
+      <div class="section-spacer-xs"></div>
+      <div class="constrain">
+        <div>
+          <div class="overline">EST. 2023 · CAPE TOWN</div>
+          <div class="row justify-between">
+            <div class="font-size-responsive-giant archivo text-light">THREE FRAMES</div>
+            <q-btn to="/sunglasses" class="custom-button q-py-sm font-size-responsive-sm" label="View all" :ripple="false" no-caps flat rounded />
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- <div style="background-color: #f5f5f5">
       <div
         class="q-pa-md about-us-height"
         id="about-us"
@@ -150,14 +131,8 @@
             </p>
           </div>
         </q-card-section>
-        <!-- <br> -->
-        <!-- <div class="row justify-center items-center">
-          <div class="col-12 col-md-5 row justify-center">
-            <q-img src="~src/assets/homepage/about.jpeg" style="width: 100%; border-radius: 1%;" />
-          </div>
-        </div> -->
       </div>
-    </div>
+    </div> -->
 
     <!--------------------------------------------------------------------- IMAGE SECTION SECTION -------------------------------------------------->
     <div class="row flex-center" style="position: relative">
@@ -201,15 +176,15 @@ export default {
   name: "HomePage",
   data() {
     return {
-      items : [
+      items: [
         "Polarised UV400",
         "Hand-finished",
         "Cape Town made",
         "Doorstep pickup",
         "2 year frame warranty",
         "Paid with Yoco",
-      ]
-    }
+      ],
+    };
   },
   methods: {
     scrollToAboutUs() {
@@ -223,11 +198,30 @@ export default {
 </script>
 
 <style lang="sass">
+.hero-wrapper
+  position: relative
+  width: 100%
+  height: 100vh
+  overflow: hidden
 .hero-image
   width: 100%
   height: 100vh
   object-fit: cover
-  @media (max-width: 1024px)
+  display: block
+  position: relative
+  &::before
+    content: ''
+    position: absolute
+    inset: 0
+    z-index: 1
+    pointer-events: none
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.85) 15%, rgba(0, 0, 0, 0) 50%), linear-gradient(to right, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 0.1) 60%),radial-gradient(circle at bottom left, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.1) 25%, rgba(0, 0, 0, 0) 70%)
+
+    // @media (max-width: 1024px)
+    //   height: 60vh
+:deep(.q-img__content)
+  z-index: 2
+  position: relative
 
 .about-us-text
   text-align: left
