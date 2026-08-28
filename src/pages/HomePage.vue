@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <!--------------------------------------------------------------------- HERO SECTION -------------------------------------------------->
-    <div>
+    <section>
       <div class="hero-wrapper">
         <q-img
           src="~src/assets/homepage/hero.jfif"
@@ -17,14 +17,12 @@
                 <div class="section-spacer-sm"></div>
                 <p class="font-size-responsive-hero archivo">
                   SHADE IS A <br />
-                  <span class="text-primary">DISCIPLINE</span>
+                  <span class="text-gradient-primary">DISCIPLINE</span>
                 </p>
                 <div class="section-spacer-sm"></div>
-                <p
-                  class="text-subtitle1 text-dimmed"
-                >
+                <p class="text-subtitle1 text-dimmed">
                   Small-run frames cut for the glare off Table Bay. Polarised,
-                  UV400, and <br />
+                  UV400, and <br class="break-desktop" />
                   hand-checked before they leave Kenwyn.
                 </p>
                 <div class="section-spacer-sm"></div>
@@ -35,15 +33,14 @@
                   dense
                   label="Shop the catalogue"
                   to="/sunglasses"
-                  color="primary"
                   text-color="dark"
-                  class=" q-px-xl q-py-md q-mr-lg text-subtitle1 rounded-button text-bold"
+                  class="btn-gradient-primary q-px-xl q-py-md q-mr-lg text-subtitle1 rounded-button text-bold"
                   no-caps
                   icon-right="eva-arrow-forward-outline"
                 />
 
                 <div
-                  class="col-sm-6 col-12 text-subtitle1 text-dimmed q-mt-md q-md-mt-0 "
+                  class="col-sm-6 col-12 text-subtitle1 text-dimmed q-mt-md q-md-mt-0"
                 >
                   Free delivery across Cape Town
                 </div>
@@ -73,22 +70,22 @@
           </q-card>
         </q-img>
       </div>
-    </div>
+    </section>
 
     <!--------------------------------------------------------------------- ABOUT US SECTION -------------------------------------------------->
 
-    <section class="bg-white">
+    <section class="bg-dark q-px-md q-md-px-0">
       <div class="section-spacer-md"></div>
       <div class="constrain">
         <div>
-          <div class="overline">EST. 2023 · CAPE TOWN</div>
+          <div class="overline text-dimmed">THE COLLECTION</div>
           <div class="row justify-between">
             <div class="font-size-responsive-giant archivo text-light">
               THREE FRAMES
             </div>
             <q-btn
               to="/sunglasses"
-              class="custom-button q-py-sm font-size-responsive-sm"
+              class="custom-button q-py-sm font-size-responsive-sm text-light"
               label="View all"
               :ripple="false"
               no-caps
@@ -97,8 +94,43 @@
             />
           </div>
         </div>
+        <div class="section-spacer-sm"></div>
+        <div>
+          <SunglassesList :search="search" />
+        </div>
       </div>
+      <div class="section-spacer-md"></div>
     </section>
+
+    <q-separator color="grey" />
+    <section class="bg-dark q-px-md q-md-px-0">
+
+      <div class="section-spacer-md"></div>
+
+      <div class="constrain row justify-around items-center">
+
+        <q-card flat class="bg-transparent text-light col-md-4">
+          <div>Icon</div>
+          <div class="font-size-responsive-lg archivo">PAID WITH YOCO</div>
+          <div class="text-subtitle1 text-dimmed">Card, EFT and instant payments, secured end to end at checkout.</div>
+        </q-card>
+
+        <q-card flat class="bg-transparent text-light col-md-4">
+          <div>Icon</div>
+          <div class="font-size-responsive-lg archivo">FAST AND RELIABLE</div>
+          <div class="text-subtitle1 text-dimmed">Cape Town deliveries within two working days, tracked all the way.</div>
+        </q-card>
+
+        <q-card flat class="bg-transparent text-light col-md-4">
+          <div>Icon</div>
+          <div class="font-size-responsive-lg archivo">DOORSTEP PICKUP</div>
+          <div class="text-subtitle1 text-dimmed">Collect at 65 Stockley Road, Kenwyn - open weekdays 08:00 to 17:00.</div>
+        </q-card>
+      </div>
+
+      <div class="section-spacer-md"></div>
+    </section>
+    <q-separator color="grey" />
 
     <!-- <div style="background-color: #f5f5f5">
       <div
@@ -186,6 +218,8 @@
 </template>
 
 <script>
+import SunglassesList from "src/components/user/SunglassesList.vue";
+
 export default {
   name: "HomePage",
   data() {
@@ -198,7 +232,11 @@ export default {
         "2 year frame warranty",
         "Paid with Yoco",
       ],
+      search: "",
     };
+  },
+  components: {
+    SunglassesList,
   },
   methods: {
     scrollToAboutUs() {
@@ -252,6 +290,9 @@ export default {
   overflow: hidden
   border-top: 1px solid var(--q-separator-color, #333)
   border-bottom: 1px solid var(--q-separator-color, #333)
+  width: 100vw
+  margin-left: calc(50% - 50vw)
+  margin-right: calc(50% - 50vw)
 
 .marquee-track
   width: max-content
