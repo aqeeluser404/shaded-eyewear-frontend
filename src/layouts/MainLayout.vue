@@ -10,7 +10,7 @@
     <div class="noise-overlay"></div>
 
     <!----------------------------------------------------------- HEADER SECTION -------------------------------------------------->
-    <q-header v-if="showHeader" :class="[headerClass, colorShiftClass]" :style="{ height: '75px' }" class="row items-center">
+    <q-header v-if="showHeader" :class="[headerClass, colorShiftClass]" :style="{ height: '75px' }" class="row items-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2);">
 
       <q-toolbar class="row items-center justify-around constrain">
 
@@ -22,62 +22,72 @@
           <router-link to="/" :class="colorShiftClass" class="text-remove-decoration font-size-responsive-md archivo" >SHADED EYEWEAR</router-link>
         </q-toolbar-title>
 
-
         <div class="col-md-4">
 
           <!----------------------------------------------------------- NAV SECTION -------------------------------------------------->
           <!-- Desktop nav -->
           <div class="row justify-center items-center">
             <q-btn to="/" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Home" :ripple="false" no-caps flat rounded />
+            <q-btn to="" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="About" :ripple="false" no-caps flat rounded />
             <q-btn to="/sunglasses" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Catalogue" :ripple="false" no-caps flat rounded />
-            <q-btn v-if="!isLoggedIn" to="/auth/login" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Login" :ripple="false" no-caps flat rounded />
-            <q-btn v-else @click="logout" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Logout" :ripple="false" no-caps flat rounded />
+            <!-- <q-btn v-if="!isLoggedIn" to="/auth/login" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Login" :ripple="false" no-caps flat rounded />
+            <q-btn v-else @click="logout" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Logout" :ripple="false" no-caps flat rounded /> -->
           </div>
-
-          <!-- Mobile nav -->
-          <q-btn-dropdown class="small-screen-only" dropdown-icon="menu" flat>
-            <q-list style="width: 200px">
-              <q-item clickable v-close-popup to="/">
-                <q-item-section class="font-size-responsive-md">Home</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup to="/sunglasses">
-                <q-item-section class="font-size-responsive-md">Catalogue</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup to="/auth/login" v-if="!isLoggedIn">
-                <q-item-section class="font-size-responsive-md">Login</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup @click="logout" v-else>
-                <q-item-section class="font-size-responsive-md">Logout</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup @click="openDash">
-                <q-item-section class="font-size-responsive-md">User Profile</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup to="/admin/dashboard" v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'">
-                <q-item-section class="font-size-responsive-md">Admin Panel</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup to="/cart">
-                <q-item-section class="font-size-responsive-md">Cart</q-item-section>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
         </div>
 
         <div class="col-md-4">
           <div class="row justify-end items-center">
-            <q-btn @click="openDash" class="custom-button q-py-sm large-screen-only font-size-responsive-xs" icon="eva-person-outline" :ripple="false" no-caps flat rounded />
-            <q-btn v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'" to="/admin/dashboard" icon="eva-pie-chart-outline" class="custom-button q-py-sm large-screen-only font-size-responsive-xs" :ripple="false" no-caps flat rounded />
-            <q-btn to="/cart" icon="eva-shopping-bag-outline" class="custom-button q-py-sm large-screen-only font-size-responsive-xs" :ripple="false" no-caps flat rounded />
-          </div>
+            <q-btn to="/cart" icon="eva-shopping-bag-outline" class="custom-button q-py-sm text-body2" :ripple="false" no-caps flat rounded />
 
+            <!-- Home Icons -->
+            <UniversalMenu :items="profileItems" :hover="false" class="large-screen-only" >
+              <template #trigger>
+                <q-btn class="custom-button q-py-sm text-caption" icon="fa-regular fa-circle-user" :ripple="false" no-caps flat rounded />
+              </template>
+            </UniversalMenu>
+          </div>
         </div>
+
+        <div class="col-md-4 small-screen-only">
+          <q-btn
+            flat
+            :icon="menuOpen ? 'eva-close-outline' : 'eva-menu-outline'"
+            @click="menuOpen = !menuOpen"
+          />
+        </div>
+
+        <Teleport to="body">
+          <div v-show="menuOpen" class="mobile-nav-backdrop" @click="menuOpen = false"></div>
+
+          <q-list v-show="menuOpen" class="mobile-nav-list">
+            <q-item clickable v-close-popup @click="menuOpen = false" to="/">
+              <q-item-section class="font-size-responsive-md">Home</q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click="menuOpen = false" to="/sunglasses">
+              <q-item-section class="font-size-responsive-md">About</q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click="menuOpen = false" to="/sunglasses">
+              <q-item-section class="font-size-responsive-md">Catalogue</q-item-section>
+            </q-item>
+            <!-- <q-item
+              clickable
+              v-close-popup
+              @click="menuOpen = false"
+              to="/admin/dashboard"
+              v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'"
+            >
+              <q-item-section class="font-size-responsive-md">Admin Panel</q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click="menuOpen = false" to="/auth/login" v-if="!isLoggedIn">
+              <q-item-section class="font-size-responsive-md">Login</q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click="() => { logout(); menuOpen = false }" v-else>
+              <q-item-section class="font-size-responsive-md">Logout</q-item-section>
+            </q-item> -->
+          </q-list>
+        </Teleport>
       </q-toolbar>
     </q-header>
-
-    <!-- Loading Spinner -->
-    <!-- <div v-if="isLoading" class="loading-overlay">
-      <q-spinner-ball color="primary" size="80px" />
-      <div>Loading...</div>
-    </div> -->
 
     <!----------------------------------------------------------- PAGES SECTION -------------------------------------------------->
     <div style="background-color: black;">
@@ -189,6 +199,7 @@ import Helper from 'src/services/utils'
 import logoWhite from '../assets/resources/logos/logo-white.png'
 import logoBlack from '../assets/resources/logos/logo-black.png'
 import EmailService from 'src/services/EmailService'
+import UniversalMenu from 'src/components/elements/UniversalMenu.vue'
 
 export default {
   name: "MainLayout",
@@ -218,6 +229,20 @@ export default {
       ];
       return !hiddenRoutes.includes(this.$route.path);
     },
+    profileItems() {
+      const items = []
+      if (this.isLoggedIn) {
+        items.push(
+          { label: 'Account Settings', to: '/user/dashboard' },
+          { label: 'Logout', handler: () => this.logout() }
+        )
+      } else {
+        items.push(
+          { label: 'Login', to: '/auth/login' }
+        )
+      }
+      return items
+    },
     isPaymentSuccessPage() {
       return this.$route.path === '/payment-success';
     },
@@ -232,9 +257,14 @@ export default {
     },
   },
 
+  components: {
+    UniversalMenu
+  },
+
   data() {
     return {
       // isLoading: false,
+      menuOpen: false,
       texts: [
         "Sunglasses and Eyewear Shop",
         "Discover our latest collections",
@@ -462,6 +492,34 @@ export default {
 //   font-size: 1.2em
 //   color: #555
 
+.mobile-nav-backdrop
+  position: fixed
+  inset: 0
+  z-index: 999
+  background: rgba(0, 0, 0, 0.5)
+
+.mobile-nav-list
+  position: fixed
+  top: 75px
+  left: 0
+  right: 0
+  width: 100vw
+  z-index: 1000
+  background-color: rgba(0, 0, 0, 0.8)
+  backdrop-filter: blur(10px)
+  padding: 0
+  margin: 0
+
+  .q-item
+    padding: 16px 20px
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2)
+    color: #ffffff
+
+    &:last-child
+      border-bottom: none
+
+    // &:first-child
+    //   border-top: 1px solid rgba(255, 255, 255, 0.2)
 
 .text-subtitle1
   line-height: 1
