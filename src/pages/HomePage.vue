@@ -78,7 +78,7 @@
       <div class="section-spacer-md"></div>
       <div class="constrain">
         <div>
-          <div class="overline text-dimmed">THE COLLECTION</div>
+          <div class="overline text-dimmed text-caption">THE COLLECTION</div>
           <div class="row justify-between">
             <div class="font-size-responsive-giant archivo text-light">
               THREE FRAMES

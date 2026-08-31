@@ -90,57 +90,56 @@
     </q-header>
 
     <!----------------------------------------------------------- PAGES SECTION -------------------------------------------------->
-    <div style="background-color: black;">
+    <div class="bg-dark">
       <q-page-container :style="pageContainerStyle">
         <router-view style="background-color: white;" />
       </q-page-container>
     </div>
 
     <!----------------------------------------------------------- FOOTER SECTION -------------------------------------------------->
-    <q-footer class="bg-black text-white q-pa-md" v-if="showHeader">
-      <q-toolbar class="constrain">
+    <q-footer class="bg-dark text-white q-px-md q-md-px-0" v-if="showHeader">
+      <q-toolbar class="constrain q-pa-none">
         <q-toolbar-title>
-          <div class="row justify-center">
+          <div class="row justify-center ">
 
             <!-- Developed By Section -->
-            <div  class="col-12 col-md-4 items-center">
-              <q-card flat class="q-pa-md bg-transparent">
-                <div class="font-size-responsive-xxl anton-regular">SHORTCUT LINKS</div>
-                <br>
+            <div class="col-12 col-md-4 items-center ">
+              <q-card flat class="bg-transparent q-mr-none q-mr-md-xl q-mb-xl">
+                <div class="overline text-dimmed text-caption">SHORTCUT LINKS</div>
+                <div class="section-spacer-sm"></div>
                 <div class="font-size-responsive-md">
-                  <q-card class="q-mb-xs q-pa-sm" style="background-color: #121212; width: 75%;">
-                    <router-link to="/" class="text-remove-decoration text-white">Home</router-link>
-                  </q-card>
-                  <q-card class="q-mb-xs q-pa-sm" style="background-color: #121212; width: 75%;">
-                    <router-link to="/sunglasses" class="text-remove-decoration text-white">Catalogue</router-link>
-                  </q-card>
-                  <q-card class="q-mb-xs q-pa-sm" style="background-color: #121212; width: 75%;">
-                    <router-link to="/user/dashboard" class="text-remove-decoration text-white">Dashboard</router-link>
-                  </q-card>
-                  <q-card class="q-mb-xs q-pa-sm" style="background-color: #121212; width: 75%;">
-                    <router-link to="/cart" class="text-remove-decoration text-white">Cart</router-link>
-                  </q-card>
+                  <div class="bg-transparent q-py-sm" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
+                    <router-link to="/" class="text-remove-decoration font-size-responsive-lg archivo text-light">HOME</router-link>
+                  </div>
+                  <div class="bg-transparent q-py-sm" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
+                    <router-link to="/" class="text-remove-decoration font-size-responsive-lg archivo text-light">ABOUT</router-link>
+                  </div>
+                  <div class="bg-transparent q-py-sm" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
+                    <router-link to="/" class="text-remove-decoration font-size-responsive-lg archivo text-light">CATALOGUE</router-link>
+                  </div>
+                  <div class="bg-transparent q-py-sm" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
+                    <router-link to="/" class="text-remove-decoration font-size-responsive-lg archivo text-light">CART</router-link>
+                  </div>
                 </div>
-                <br>
-                <div class="text-caption" style="opacity: 0.9;">
+                <!-- <div class="text-caption" style="opacity: 0.9;">
                   Shaded Eyewear founded by <span style="text-decoration: underline;" class="text-subtitle1 caveat cursor-pointer"> Amaan Ebrahim</span>
                 </div>
                 <div class="text-caption" style="opacity: 0.9;">
                   Website developed by
                   <a href="https://aqeel-dev-portfolio.web.app" target="_blank" style="text-decoration: none; color: inherit; text-decoration: underline;" class="text-subtitle1 caveat">Aqeel Hanslo</a>
-                </div>
+                </div> -->
               </q-card>
             </div>
 
             <!-- Contact Section -->
             <div  class="col-12 col-md-4">
-              <q-card flat class="q-pa-md bg-transparent">
-                <div class="font-size-responsive-xxl anton-regular">GET IN CONTACT</div>
-                <br>
+              <q-card flat class="bg-transparent">
+                <div class="overline text-dimmed text-caption">SHORTCUT LINKS</div>
+                <div class="section-spacer-sm"></div>
                 <div>
                   <div class="font-size-responsive-sm">
                     <q-form @submit="submitContactForm" style="width: 75%;">
-                      <q-input filled label-color=white color="white" v-model="userContact.firstName" label="Your Name" stack-label class="q-mb-xs font-size-responsive-sm" required
+                      <q-input filled label-color=white color="white" v-model="userContact.firstName" placeholder="Your name" stack-label class="q-mb-xs font-size-responsive-sm" required
                       style="background-color: #121212;" input-style="color: white;" />
                       <q-input filled label-color=white color="white" v-model="userContact.email" label="Your Email" stack-label class="q-mb-xs" required
                       style="background-color: #121212;" input-style="color: white;" />
