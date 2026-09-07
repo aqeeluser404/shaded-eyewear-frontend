@@ -139,13 +139,14 @@
                 <div>
                   <div class="font-size-responsive-sm">
                     <q-form @submit="submitContactForm" style="width: 75%;">
-                      <q-input filled label-color=white color="white" v-model="userContact.firstName" placeholder="Your name" stack-label class="q-mb-xs font-size-responsive-sm" required
+                      <q-input filled label-color=white color="white" v-model="userContact.firstName" placeholder="Your name" stack-label class="q-mb-sm font-size-responsive-sm" required
                       style="background-color: #121212;" input-style="color: white;" />
-                      <q-input filled label-color=white color="white" v-model="userContact.email" label="Your Email" stack-label class="q-mb-xs" required
+                      <q-input filled label-color=white color="white" v-model="userContact.email" placeholder="Your email" stack-label class="q-mb-sm font-size-responsive-sm" required
                       style="background-color: #121212;" input-style="color: white;" />
-                      <q-input filled label-color=white color="white" v-model="message" label="Message" type="textarea" stack-label class="q-mb-xs" required
+                      <q-input filled label-color=white color="white" v-model="message" placeholder="Message" type="textarea" stack-label class="font-size-responsive-sm" required
                       style="background-color: #121212;" input-style="color: white;"  />
-                      <q-btn rounded type="submit" label="Send Message" class="q-px-lg q-py-sm custom-button font-size-responsive-md" style="background-color: #121212;" />
+                      <div class="section-spacer-xs"></div>
+                      <q-btn dense type="submit" label="Send Message" no-caps text-color="dark" class="btn-gradient-primary q-px-xl q-py-md q-mr-lg text-subtitle1 rounded-button text-bold"  />
                     </q-form>
                   </div>
                 </div>
