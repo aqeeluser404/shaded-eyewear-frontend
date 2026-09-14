@@ -173,7 +173,7 @@
           </div>
 
           <!-- bottom footer -->
-          <div v-if="!isPaymentSuccessPage"   class="row justify-center">
+          <div v-if="!isFullHeightPage"   class="row justify-center">
             <q-separator class="q-my-md" style="background-color: #121212; width: 75%;"></q-separator>
           </div>
           <div class="row justify-center items-center font-size-responsive-sm q-pa-md">
@@ -243,12 +243,15 @@ export default {
       }
       return items
     },
-    isPaymentSuccessPage() {
-      return this.$route.path === '/payment-success';
+    isFullHeightPage() {
+      return (
+        this.$route.path === '/payment-success' ||
+        (this.$route.path === '/server-loading' && this.$route.query.redirect === '/')
+      );
     },
     pageContainerStyle() {
       return {
-        transform: this.isPaymentSuccessPage ? 'translateY(0px)' : 'translateY(-75px)'
+        transform: this.isFullHeightPage ? 'translateY(0px)' : 'translateY(-75px)'
       };
     },
     headerHeight() {

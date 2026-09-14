@@ -1,13 +1,19 @@
 <template>
-  <q-page class="absolute-full flex flex-center column">
-    <q-spinner-dots size="48px" color="primary" />
-    <div class="q-mt-md text-subtitle1">
-      {{
-        attempt === 0
-          ? "Connecting to server…"
-          : `Still waking up the server… (attempt ${attempt}/${maxAttempts})`
-      }}
-    </div>
+  <q-page>
+    <q-card class="absolute-full flex flex-center column bg-dark text-light">
+      <img
+        src="/shaded-eyewear.png"
+        alt="Loading"
+        class="loading-logo"
+      />
+      <div class="q-mt-md text-subtitle1 text-dimmed">
+        {{
+          attempt === 0
+            ? "Connecting to server…"
+            : `Still waking up the server… (attempt ${attempt}/${maxAttempts})`
+        }}
+      </div>
+    </q-card>
   </q-page>
 </template>
 
@@ -17,7 +23,7 @@ import axiosInstance from "src/services/axiosInstance";
 import Logger from "src/services/Logger";
 
 const MAX_ATTEMPTS = 6;
-const RETRY_DELAY_MS = 5000; // Render free tier can take 30-60s to wake
+const RETRY_DELAY_MS = 5000;
 
 export default defineComponent({
   name: "ServerLoadingPage",
@@ -60,3 +66,26 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.loading-logo {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  animation: spin-slowdown 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  transform-origin: center center;
+}
+
+/* Spin fast → ease out → pause → repeat */
+@keyframes spin-slowdown {
+  0% {
+    transform: rotate(0deg);
+  }
+  80% {
+    transform: rotate(360deg); /* 2 full spins */
+  }
+  100% {
+    transform: rotate(360deg); /* hold still to "breathe" */
+  }
+}
+</style>
