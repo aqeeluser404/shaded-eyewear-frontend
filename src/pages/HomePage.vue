@@ -109,26 +109,26 @@
 
       <div class="section-spacer-md"></div>
 
-      <div class="constrain row justify-around items-center">
+      <div class="constrain row justify-around items-start">
 
         <q-card flat class="bg-transparent text-light col-md-4 col-12 q-mb-xl q-md-mt-0">
           <div><q-icon name="eva-shield-outline" color="primary" size="32px" /></div>
           <div class="section-spacer-xs"></div>
-          <div class="font-size-responsive-lg archivo q-mb-sm">PAID WITH YOCO</div>
+          <div class="font-size-responsive-md archivo q-mb-sm">PAID WITH YOCO</div>
           <div class="text-subtitle1 text-dimmed">Card, EFT and instant payments, secured end to end at checkout.</div>
         </q-card>
 
         <q-card flat class="bg-transparent text-light col-md-4 col-12 q-mb-xl q-md-mt-0">
           <div><q-icon name="eva-car-outline" color="primary" size="32px" /></div>
           <div class="section-spacer-xs"></div>
-          <div class="font-size-responsive-lg archivo q-mb-sm">FAST AND RELIABLE</div>
+          <div class="font-size-responsive-md archivo q-mb-sm">FAST AND RELIABLE</div>
           <div class="text-subtitle1 text-dimmed">Cape Town deliveries within two working days, tracked all the way.</div>
         </q-card>
 
         <q-card flat class="bg-transparent text-light col-md-4 col-12">
           <div><q-icon name="eva-shopping-bag-outline" color="primary" size="32px" /></div>
           <div class="section-spacer-xs"></div>
-          <div class="font-size-responsive-lg archivo q-mb-sm">DOORSTEP PICKUP</div>
+          <div class="font-size-responsive-md archivo q-mb-sm">DOORSTEP PICKUP</div>
           <div class="text-subtitle1 text-dimmed">Collect at 65 Stockley Road, Kenwyn - open weekdays 08:00 to 17:00.</div>
         </q-card>
       </div>
