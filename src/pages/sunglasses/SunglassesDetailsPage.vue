@@ -1,17 +1,38 @@
 <template>
   <q-page>
     <!------------------------------------------------------------ IMAGES + DUO IMAGES PANEL --------------------------------------------->
-    <div class="row justify-center flex-center" >
-      <q-card flat class="row justify-center items-center responsive-height">
-        <q-card-section :class="['col-12 col-md-4', {'q-mr-xl': $q.screen.gt.sm}]">
-          <div class="column">
-            <q-img
-              v-if="mainImage"
-              :src="getImageUrl(mainImage)"
-              class="product-image"
-            />
-          </div>
-          <div class="row justify-around" style="transform: translateY(-25px);">
+    <section
+      class="bg-dark q-px-md text-light q-md-px-0"
+      style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+    >
+      <div class="constrain">
+        <div class="section-spacer-sm"></div>
+        <div>
+          <q-btn
+            dense
+            label="Catalogue"
+            to="/sunglasses"
+            class="custom-button font-size-responsive-xs text-light"
+            no-caps
+            icon="eva-arrow-back-outline"
+          />
+        </div>
+        <div class="section-spacer-sm"></div>
+
+        <q-card
+          flat
+          class="bg-transparent row justify-center items-start responsive-height"
+        >
+          <div class="col-12 col-md-6">
+            <div class="column q-mr-none q-mr-md-xl">
+              <q-img
+                v-if="mainImage"
+                :src="getImageUrl(mainImage)"
+                class="product-image"
+              />
+            </div>
+
+            <!-- <div class="row justify-around" style="transform: translateY(-25px);">
             <q-img
               v-if="sunglasses.images && sunglasses.images.length > 0"
               :src="getImageUrl(sunglasses.images[0].imageUrl)"
@@ -26,48 +47,114 @@
               :class="{'active-image': mainImage === sunglasses.images[1].imageUrl}"
               @click="updateMainImage(sunglasses.images[1].imageUrl)"
             />
+          </div> -->
           </div>
-        </q-card-section>
 
-        <!------------------------------------------------------------ PRODUCT DETAILS PANEL --------------------------------------------->
-        <div class="col-12 col-md-4">
-
-          <q-card-section class="font-size-responsive-md">Deliveries made in Cape Town</q-card-section>
-
-          <q-card-section class="q-gutter-md">
-            <div class="text-h3"><b>{{ sunglasses.model }}</b></div>
-            <div class="text-h5">R {{ sunglasses.price }}.00</div>
-          </q-card-section>
-
-          <q-card-section class="row items-center q-gutter-md">
-            <div class="">
-              <q-btn
-                @click="addToCart" color="white" text-color="black"
-                rounded dense label="Add to cart"
-                class="q-mr-sm q-py-sm q-px-lg custom-button font-size-responsive-md"
-              />
-              <q-btn
-                v-if="currentOrderId && currentOrderId !== null"
-                @click="navigateToCart" label="View cart" rounded dense color="black" text-color="white"
-                class="q-py-sm q-px-lg custom-button font-size-responsive-md"
-              />
+          <!------------------------------------------------------------ PRODUCT DETAILS PANEL --------------------------------------------->
+          <div class="col-12 col-md-6">
+            <div class="overline text-dimmed text-caption">
+              SUNGLASSES DESCRIPTION
             </div>
+
+            <div class="font-size-responsive-giant archivo text-light">
+              {{ sunglasses.model }}
+            </div>
+
+            <div
+              class="font-size-responsive-xxl text-gradient-primary archivo text-light"
+            >
+              R {{ sunglasses.price }}.00
+            </div>
+
+            <div class="section-spacer-sm"></div>
+
+            <div class="row justify-start items-center font-size-responsive-sm">
+              <div>
+                <q-btn
+                  @click="addToCart"
+                  color="white"
+                  text-color="black"
+                  rounded
+                  dense
+                  no-caps
+                  label="Add to cart"
+                  class="btn-gradient-primary q-px-xl q-py-md q-mr-md text-subtitle1 rounded-button text-bold"
+                />
+                <!-- v-if="currentOrderId && currentOrderId !== null"  -->
+                <q-btn
+                  @click="navigateToCart"
+                  label="View cart"
+                  rounded
+                  dense
+                  no-caps
+                  outline
+                  color="grey"
+                  text-color="grey"
+                  class="q-px-xl q-py-md q-mr-md text-subtitle1 rounded-button text-bold"
+                />
+              </div>
+              <div class="text-subtitle1 text-dimmed">
+                {{ sunglasses.stock }} in stock
+              </div>
+            </div>
+
+            <div class="section-spacer-sm"></div>
+
             <div>
-              <div class="text-caption"><b>{{ sunglasses.stock }} in stock</b></div>
+              <div class="text-subtitle1 text-dimmed">
+                {{ sunglasses.description }}
+              </div>
             </div>
-          </q-card-section>
-          <br>
-          <q-card-section>
-            <div class="font-size-responsive-xxl"><b>Product Details</b></div>
-            <br>
-            <div class="text-subtitle1">{{ sunglasses.description }}</div>
-          </q-card-section>
-        </div>
-      </q-card>
-    </div>
-    <br><br>
+
+            <div class="section-spacer-sm"></div>
+
+            <div class="font-size-responsive-md">
+              <div
+                class="bg-transparent q-py-sm text-caption text-dimmed row justify-between items-center"
+                style="
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                  border-top: 1px solid rgba(255, 255, 255, 0.2);
+                "
+              >
+                <div>Frame</div>
+                <div>N/A</div>
+              </div>
+              <div
+                class="bg-transparent q-py-sm text-caption text-dimmed row justify-between items-center"
+                style="
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                "
+              >
+                <div>Lens</div>
+                <div>N/A</div>
+              </div>
+              <div
+                class="bg-transparent q-py-sm text-caption text-dimmed row justify-between items-center"
+                style="
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                "
+              >
+                <div>Fit</div>
+                <div>N/A</div>
+              </div>
+              <div
+                class="bg-transparent q-py-sm text-caption text-dimmed row justify-between items-center"
+                style="
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                "
+              >
+                <div>Weight</div>
+                <div>N/A</div>
+              </div>
+
+            </div>
+          </div>
+        </q-card>
+      </div>
+    </section>
+
     <!------------------------------------------------------------ RELATED PRODUCTS PANEL --------------------------------------------->
-    <div class="column constrain-sunglasses responsive-height-2">
+    <!-- <div class="column constrain-sunglasses responsive-height-2">
       <q-card-section>
         <div class="font-size-responsive-xxl"><b>Related Products</b></div>
       </q-card-section>
@@ -95,42 +182,41 @@
 
         <q-btn flat icon="arrow_forward" @click="nextSlide" class="q-ml-none q-pl-sm" />
       </q-card-section>
-    </div>
+    </div> -->
   </q-page>
 </template>
 
 <script>
-import SunglassesService from 'src/services/SunglassesService';
-import UserService from 'src/services/UserService';
-import OrderService from 'src/services/OrderService';
-import Helper from 'src/services/utils';
-import CryptoJS from 'crypto-js'
+import SunglassesService from "src/services/SunglassesService";
+import UserService from "src/services/UserService";
+import OrderService from "src/services/OrderService";
+import Helper from "src/services/utils";
+import CryptoJS from "crypto-js";
 
 export default {
   name: "SunglassesDetailsPage",
 
   data() {
     return {
-
       // ORDER DATA STRUCTURE
       orderData: {
-        sunglasses: [{ _id: '', quantity: 1 }],
-        user: ''
+        sunglasses: [{ _id: "", quantity: 1 }],
+        user: "",
       },
-      currentOrderId: localStorage.getItem('currentOrderId') || null,
+      currentOrderId: localStorage.getItem("currentOrderId") || null,
 
       // GET DATA
       sunglasses: {},
       allSunglasses: [],
       userDetails: {},
-      userTokenDetails: { _id: '', username: '', userType: '' },
+      userTokenDetails: { _id: "", username: "", userType: "" },
 
       // CAROUSEL
       currentSlide: 0,
       itemsPerPage: 3,
 
-      mainImage: ''
-    }
+      mainImage: "",
+    };
   },
   computed: {
     visibleSunglasses() {
@@ -149,16 +235,16 @@ export default {
     },
   },
   beforeMount() {
-    this.fetchSunglassesDetails()
-    this.fetchAllSunglasses()
+    this.fetchSunglassesDetails();
+    this.fetchAllSunglasses();
     this.updateItemsPerPage();
-    window.addEventListener('resize', this.updateItemsPerPage);
+    window.addEventListener("resize", this.updateItemsPerPage);
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.updateItemsPerPage);
+    window.removeEventListener("resize", this.updateItemsPerPage);
   },
   watch: {
-    '$route.params.id': 'fetchSunglassesDetails',
+    "$route.params.id": "fetchSunglassesDetails",
     sunglasses: {
       handler(newValue) {
         if (newValue.images && newValue.images.length > 0) {
@@ -166,43 +252,59 @@ export default {
         }
       },
       immediate: true,
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     viewSunglassesDetails(id) {
       Helper.viewSunglassesDetails(id, this.$router);
     },
     navigateToCart() {
-      this.$router.push('/cart');
+      this.$router.push("/cart");
     },
     getImageUrl: Helper.getImageUrl,
     nextSlide() {
-      this.currentSlide = (this.currentSlide + 1) % Math.ceil(this.allSunglasses.length / this.itemsPerPage)
+      this.currentSlide =
+        (this.currentSlide + 1) %
+        Math.ceil(this.allSunglasses.length / this.itemsPerPage);
     },
     prevSlide() {
-      this.currentSlide = (this.currentSlide - 1 + Math.ceil(this.allSunglasses.length / this.itemsPerPage)) % Math.ceil(this.allSunglasses.length / this.itemsPerPage)
+      this.currentSlide =
+        (this.currentSlide -
+          1 +
+          Math.ceil(this.allSunglasses.length / this.itemsPerPage)) %
+        Math.ceil(this.allSunglasses.length / this.itemsPerPage);
     },
     updateItemsPerPage() {
       this.itemsPerPage = window.innerWidth <= 1024 ? 1 : 3;
     },
     async fetchAllSunglasses() {
-      const response = await SunglassesService.findAllSunglasses()
-      this.allSunglasses = response
+      const response = await SunglassesService.findAllSunglasses();
+      this.allSunglasses = response;
     },
     async fetchSunglassesDetails() {
-      const encryptedId = this.$route.params.id
-      const decryptedBytes = CryptoJS.AES.decrypt(decodeURIComponent(encryptedId), 'secret-key');
+      const encryptedId = this.$route.params.id;
+      const decryptedBytes = CryptoJS.AES.decrypt(
+        decodeURIComponent(encryptedId),
+        "secret-key"
+      );
       const decryptedId = decryptedBytes.toString(CryptoJS.enc.Utf8);
 
-      const response = await SunglassesService.findSunglassesById(decryptedId)
+      const response = await SunglassesService.findSunglassesById(decryptedId);
       this.sunglasses = response;
     },
     async addToCart() {
       if (!this.userTokenDetails._id) {
-        this.$q.notify({ type: 'negative', message: 'Please login to continue.' })
+        this.$q.notify({
+          type: "negative",
+          message: "Please login to continue.",
+        });
       } else {
-        this.$q.notify({ type: 'positive', color: 'primary', message: `Added to cart` })
+        this.$q.notify({
+          type: "positive",
+          color: "primary",
+          message: `Added to cart`,
+        });
         if (!this.currentOrderId) {
           await this.createOrder();
           return;
@@ -228,15 +330,17 @@ export default {
       }
     },
     async createOrder() {
-      this.orderData.user = this.userDetails._id
+      this.orderData.user = this.userDetails._id;
       this.orderData.sunglasses[0]._id = this.sunglasses._id;
       try {
-        const response = await OrderService.createOrder(this.userDetails._id, this.orderData)
-        this.currentOrderId = response.order._id
-        localStorage.setItem('currentOrderId', this.currentOrderId)
-      }
-      catch (error) {
-        console.error('Error creating order: ', error)
+        const response = await OrderService.createOrder(
+          this.userDetails._id,
+          this.orderData
+        );
+        this.currentOrderId = response.order._id;
+        localStorage.setItem("currentOrderId", this.currentOrderId);
+      } catch (error) {
+        console.error("Error creating order: ", error);
       }
     },
     async updateOrder() {
@@ -244,14 +348,13 @@ export default {
       try {
         this.orderData.sunglasses[0]._id = this.sunglasses._id;
         await OrderService.updateOrder(orderId, this.orderData);
-      }
-      catch (error) {
-        console.error('Error updating order:', error);
+      } catch (error) {
+        console.error("Error updating order:", error);
       }
     },
     async getUserDetails() {
-      const token = await Helper.getCookie('token');
-      
+      const token = await Helper.getCookie("token");
+
       if (token) {
         const id = await UserService.FindUserByToken();
         this.userTokenDetails = id;
@@ -261,12 +364,12 @@ export default {
     },
     updateMainImage(image) {
       this.mainImage = image;
-    }
+    },
   },
   created() {
-    this.getUserDetails()
-  }
-}
+    this.getUserDetails();
+  },
+};
 </script>
 
 <style lang="sass" scoped>
@@ -293,5 +396,46 @@ export default {
     height: 40vh
   @media (max-width: 500px)
     height: 32vh
-</style>
 
+.sunglasses-grid
+  gap: 24px
+
+.sunglass-card
+  background: transparent
+  border-radius: 4px
+  overflow: hidden
+  flex: 0 1 380px   // grow up to ~3 per row inside constrain, shrink+wrap below that
+  max-width: 420px
+
+.sunglass-image-wrap
+  background-color: #f0ede6
+  padding: 24px
+
+.product-image
+  border-radius: 0
+
+.sunglass-index
+  position: absolute
+  top: 12px
+  left: 12px
+  z-index: 1
+  background-color: rgba(0, 0, 0, 0.55)
+  color: #fff
+  font-size: 0.7rem
+  padding: 4px 10px
+
+.sunglass-info
+  background-color: #141414
+  padding: 16px
+
+.sunglass-model
+  letter-spacing: 0.03em
+  text-transform: uppercase
+
+// Below ~420px-per-card width the flex-basis math forces a wrap naturally,
+// but on very small phones let cards take the full row width
+@media (max-width: 480px)
+  .sunglass-card
+    flex: 1 1 100%
+    max-width: 100%
+</style>

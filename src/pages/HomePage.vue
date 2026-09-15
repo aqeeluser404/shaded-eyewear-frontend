@@ -86,7 +86,7 @@
             <q-btn
               to="/sunglasses"
               class="custom-button q-py-sm font-size-responsive-sm text-light"
-              label="View all"
+              label="Catalogue"
               :ripple="false"
               no-caps
               flat
@@ -104,38 +104,75 @@
 
     <!--------------------------------------------------------------------- SERVICES SECTION -------------------------------------------------->
 
-
-    <section class="bg-dark q-px-md q-md-px-0" style="border-top: 1px solid rgba(255, 255, 255, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
-
+    <section
+      class="bg-dark q-px-md q-md-px-0"
+      style="
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      "
+    >
       <div class="section-spacer-md"></div>
 
       <div class="constrain row justify-around items-start">
-
-        <q-card flat class="bg-transparent text-light col-md-4 col-12 q-mb-xl q-md-mt-0">
-          <div><q-icon name="eva-shield-outline" color="primary" size="32px" /></div>
-          <div class="section-spacer-xs"></div>
-          <div class="font-size-responsive-md archivo q-mb-sm">PAID WITH YOCO</div>
-          <div class="text-subtitle1 text-dimmed">Card, EFT and instant payments, secured end to end at checkout.</div>
+        <q-card
+          flat
+          class="bg-transparent text-light col-md-4 col-12 q-mb-xl q-md-mt-0"
+        >
+          <div class="q-mr-lg">
+            <div>
+              <q-icon name="eva-shield-outline" color="primary" size="32px" />
+            </div>
+            <div class="section-spacer-xs"></div>
+            <div class="font-size-responsive-md archivo q-mb-sm">
+              PAID WITH YOCO
+            </div>
+            <div class="text-subtitle1 text-dimmed">
+              Card, EFT and instant payments, secured end to end at checkout.
+            </div>
+          </div>
         </q-card>
 
-        <q-card flat class="bg-transparent text-light col-md-4 col-12 q-mb-xl q-md-mt-0">
-          <div><q-icon name="eva-car-outline" color="primary" size="32px" /></div>
-          <div class="section-spacer-xs"></div>
-          <div class="font-size-responsive-md archivo q-mb-sm">FAST AND RELIABLE</div>
-          <div class="text-subtitle1 text-dimmed">Cape Town deliveries within two working days, tracked all the way.</div>
+        <q-card
+          flat
+          class="bg-transparent text-light col-md-4 col-12 q-mb-xl q-md-mt-0"
+        >
+          <div class="q-mr-lg">
+            <div>
+              <q-icon name="eva-car-outline" color="primary" size="32px" />
+            </div>
+            <div class="section-spacer-xs"></div>
+            <div class="font-size-responsive-md archivo q-mb-sm">
+              FAST AND RELIABLE
+            </div>
+            <div class="text-subtitle1 text-dimmed">
+              Cape Town deliveries within two working days, tracked all the way.
+            </div>
+          </div>
         </q-card>
 
         <q-card flat class="bg-transparent text-light col-md-4 col-12">
-          <div><q-icon name="eva-shopping-bag-outline" color="primary" size="32px" /></div>
-          <div class="section-spacer-xs"></div>
-          <div class="font-size-responsive-md archivo q-mb-sm">DOORSTEP PICKUP</div>
-          <div class="text-subtitle1 text-dimmed">Collect at 65 Stockley Road, Kenwyn - open weekdays 08:00 to 17:00.</div>
+          <div>
+            <div>
+              <q-icon
+                name="eva-shopping-bag-outline"
+                color="primary"
+                size="32px"
+              />
+            </div>
+            <div class="section-spacer-xs"></div>
+            <div class="font-size-responsive-md archivo q-mb-sm">
+              DOORSTEP PICKUP
+            </div>
+            <div class="text-subtitle1 text-dimmed">
+              Collect at 65 Stockley Road, Kenwyn - open weekdays 08:00 to
+              17:00.
+            </div>
+          </div>
         </q-card>
       </div>
 
       <div class="section-spacer-md"></div>
     </section>
-
 
     <!-- <div style="background-color: #f5f5f5">
       <div

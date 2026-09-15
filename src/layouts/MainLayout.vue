@@ -27,7 +27,7 @@
       class="row items-center"
       style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
     >
-      <q-toolbar class="row items-center justify-around constrain">
+      <q-toolbar class="row items-center justify-around q-px-none constrain">
         <!-- title and avatar -->
         <q-toolbar-title class="col-md-4 row items-center">
           <q-avatar class="q-mr-sm responsive-avatar">
@@ -184,7 +184,7 @@
 
           <div class="row justify-center items-start constrain">
             <!-- Developed By Section -->
-            <div class="col-12 col-md-4 items-center q-px-md q-md-px-0">
+            <div class="col-12 col-md-4 items-center" :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'">
               <q-card flat class="bg-transparent q-mr-none q-mr-md-xl q-mb-xl">
                 <div class="overline text-dimmed text-caption">
                   SHORTCUT LINKS
@@ -236,8 +236,8 @@
             </div>
 
             <!-- Contact Section -->
-            <div class="col-12 col-md-4">
-              <q-card flat class="bg-transparent q-mr-none q-mr-md-xl q-mb-xl q-px-md q-md-px-0">
+            <div class="col-12 col-md-4" :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'">
+              <q-card flat class="bg-transparent q-mr-none q-mr-md-xl q-mb-xl">
                 <div class="overline text-dimmed text-caption">
                   SHORTCUT LINKS
                 </div>
@@ -298,29 +298,29 @@
             </div>
 
             <!-- Follow Us Section -->
-            <div class="col-12 col-md-4 q-px-md q-md-px-0">
+            <div class="col-12 col-md-4" :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'">
               <q-card flat class="bg-transparent q-mr-none q-mr-md-xl">
                 <div class="overline text-dimmed text-caption">FOLLOW US</div>
                 <div class="section-spacer-sm"></div>
 
                 <div
-                  class="row items-center justify-center q-pa-md mouse-cursor"
+                  class="row items-center justify-center mouse-cursor q-pa-md"
                   style="border: 1px solid rgba(255, 255, 255, 0.2)"
                   @click="openInstagram"
                 >
-                  <div class="col-md-3 row justify-center">
+                  <div class="col-md-2 row justify-start q-mr-sm">
                     <q-icon name="mdi-instagram" color="primary" size="36px" />
                     <!-- <q-btn  round icon="mdi-instagram" class="text-white font-size-responsive-lg"  /> -->
                   </div>
                   <div class="col-md-9">
-                    <div
-                      class="font-size-responsive-md archivo q-mb-xs"
+                    <p
+                      class="font-size-responsive-md archivo"
                       style="opacity: 1"
                     >
                       <span class="hind font-size-responsive-lg">@</span
                       >shadedeyewearza
-                    </div>
-                    <div class="text-subtitle1 text-dimmed" style="opacity: 1">
+                      </p>
+                    <div class="text-subtitle1 text-dimmed q-mt-sm" style="opacity: 1">
                       New arrivals, drop and fit guides
                     </div>
                   </div>
@@ -432,6 +432,7 @@ export default {
     isFullHeightPage() {
       return (
         this.$route.path === "/payment-success" ||
+        this.$route.path.startsWith("/sunglasses/view/") ||
         (this.$route.path === "/server-loading" &&
           this.$route.query.redirect === "/")
       );
@@ -521,9 +522,12 @@ export default {
     },
     handleScroll() {
       if (this.isSpecificPage) {
-        this.headerClass = "header-solid";
-        this.colorShiftClass = "transparent-black";
-        this.logoSrc = logoBlack;
+        // this.headerClass = "header-solid";
+        this.headerClass = "bg-dark-dynamic";
+        this.colorShiftClass = "transparent-white";
+        // this.colorShiftClass = "transparent-black";
+        // this.logoSrc = logoBlack;
+        this.logoSrc = logoWhite;
       } else if (window.scrollY > 50) {
         this.headerClass = "header-transparent";
         // this.colorShiftClass = 'bg-light';
