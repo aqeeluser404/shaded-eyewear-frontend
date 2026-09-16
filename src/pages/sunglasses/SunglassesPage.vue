@@ -2,9 +2,8 @@
   <q-page>
     <section
       class="bg-dark q-px-md text-light q-md-px-0"
-      style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
     >
-      <div class="section-spacer-xl"></div>
+      <div class="section-spacer-sm"></div>
       <div class="constrain">
         <div class="overline text-dimmed text-caption">CATALOGUE</div>
         <div class="row justify-between">

@@ -1,188 +1,242 @@
 <template>
   <q-page>
-    <!------------------------------------------------------------ IMAGES + DUO IMAGES PANEL --------------------------------------------->
-    <section
-      class="bg-dark q-px-md text-light q-md-px-0"
-      style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
-    >
-      <div class="constrain">
-        <div class="section-spacer-sm"></div>
-        <div>
-          <q-btn
-            dense
-            label="Catalogue"
-            to="/sunglasses"
-            class="custom-button font-size-responsive-xs text-light"
-            no-caps
-            icon="eva-arrow-back-outline"
-          />
-        </div>
-        <div class="section-spacer-sm"></div>
-
-        <q-card
-          flat
-          class="bg-transparent row justify-center items-start responsive-height"
-        >
-          <div class="col-12 col-md-6">
-            <div class="column q-mr-none q-mr-md-xl">
-              <q-img
-                v-if="mainImage"
-                :src="getImageUrl(mainImage)"
-                class="product-image"
-              />
-            </div>
-
-            <!-- <div class="row justify-around" style="transform: translateY(-25px);">
-            <q-img
-              v-if="sunglasses.images && sunglasses.images.length > 0"
-              :src="getImageUrl(sunglasses.images[0].imageUrl)"
-              class="product-image col-3 cursor-pointer"
-              :class="{'active-image': mainImage === sunglasses.images[0].imageUrl}"
-              @click="updateMainImage(sunglasses.images[0].imageUrl)"
+    <template v-if="!loading">
+      <!------------------------------------------------------------ IMAGES + DUO IMAGES PANEL --------------------------------------------->
+      <section class="gradient-bg q-px-md text-light q-md-px-0">
+        <div class="constrain">
+          <div class="section-spacer-sm"></div>
+          <div>
+            <q-btn
+              dense
+              label="Catalogue"
+              to="/sunglasses"
+              class="custom-button font-size-responsive-xs text-light"
+              no-caps
+              icon="eva-arrow-back-outline"
             />
-            <q-img
-              v-if="sunglasses.images && sunglasses.images.length > 1"
-              :src="getImageUrl(sunglasses.images[1].imageUrl)"
-              class="product-image col-3 cursor-pointer"
-              :class="{'active-image': mainImage === sunglasses.images[1].imageUrl}"
-              @click="updateMainImage(sunglasses.images[1].imageUrl)"
-            />
-          </div> -->
           </div>
+          <div class="section-spacer-sm"></div>
 
-          <!------------------------------------------------------------ PRODUCT DETAILS PANEL --------------------------------------------->
-          <div class="col-12 col-md-6">
-            <div class="overline text-dimmed text-caption">
-              SUNGLASSES DESCRIPTION
-            </div>
+          <q-card
+            flat
+            class="bg-transparent row justify-center items-start responsive-height"
+          >
+            <div class="col-12 col-md-7">
+              <div class="product-gallery q-mr-none q-mr-md-xl">
+                <div class="gallery-stage">
+                  <q-img
+                    v-if="mainImage"
+                    :src="getImageUrl(mainImage)"
+                    class="stage-image"
+                    fit="contain"
+                  />
 
-            <div class="font-size-responsive-giant archivo text-light">
-              {{ sunglasses.model }}
+                  <div class="thumb-dock">
+                    <button
+                      v-for="img in sunglasses.images"
+                      :key="img.imageUrl"
+                      class="thumb-circle"
+                      :class="{
+                        'thumb-circle--active': mainImage === img.imageUrl,
+                      }"
+                      @click="updateMainImage(img.imageUrl)"
+                    >
+                      <q-img :src="getImageUrl(img.imageUrl)" fit="cover" />
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div
-              class="font-size-responsive-xxl text-gradient-primary archivo text-light"
+              class="col-12 col-md-5"
+              :class="$q.screen.gt.md ? ' q-md-mt-none' : 'q-mt-xl'"
             >
-              R {{ sunglasses.price }}.00
-            </div>
+              <div class="overline text-dimmed text-caption">
+                SUNGLASSES DESCRIPTION
+              </div>
 
-            <div class="section-spacer-sm"></div>
+              <div class="font-size-responsive-giant archivo text-light">
+                {{ sunglasses.model }}
+              </div>
 
-            <div class="row justify-start items-center font-size-responsive-sm">
+              <div
+                class="font-size-responsive-xxl text-gradient-primary archivo text-light"
+              >
+                R {{ sunglasses.price }}.00
+              </div>
+
+              <div class="section-spacer-sm"></div>
+
+              <div
+                class="row justify-start items-center font-size-responsive-sm"
+              >
+                <div>
+                  <q-btn
+                    @click="addToCart"
+                    color="white"
+                    text-color="black"
+                    rounded
+                    dense
+                    no-caps
+                    label="Add to cart"
+                    class="btn-gradient-primary q-px-xl q-py-md q-mr-md text-subtitle1 rounded-button text-bold"
+                  />
+                  <!-- v-if="currentOrderId && currentOrderId !== null"  -->
+                  <q-btn
+                    @click="navigateToCart"
+                    label="View cart"
+                    rounded
+                    dense
+                    no-caps
+                    outline
+                    color="grey"
+                    text-color="grey"
+                    class="q-px-xl q-py-md q-mr-md text-subtitle1 rounded-button text-bold"
+                  />
+                </div>
+                <div class="text-subtitle1 text-dimmed">
+                  {{ sunglasses.stock }} in stock
+                </div>
+              </div>
+
+              <div class="section-spacer-sm"></div>
+
               <div>
-                <q-btn
-                  @click="addToCart"
-                  color="white"
-                  text-color="black"
-                  rounded
-                  dense
-                  no-caps
-                  label="Add to cart"
-                  class="btn-gradient-primary q-px-xl q-py-md q-mr-md text-subtitle1 rounded-button text-bold"
-                />
-                <!-- v-if="currentOrderId && currentOrderId !== null"  -->
-                <q-btn
-                  @click="navigateToCart"
-                  label="View cart"
-                  rounded
-                  dense
-                  no-caps
-                  outline
-                  color="grey"
-                  text-color="grey"
-                  class="q-px-xl q-py-md q-mr-md text-subtitle1 rounded-button text-bold"
-                />
+                <div class="text-subtitle1 text-dimmed">
+                  {{ sunglasses.description }}
+                </div>
               </div>
-              <div class="text-subtitle1 text-dimmed">
-                {{ sunglasses.stock }} in stock
+
+              <div class="section-spacer-sm"></div>
+
+              <div class="font-size-responsive-md">
+                <div
+                  class="bg-transparent q-py-sm text-subtitle1 text-dimmed row justify-between items-center"
+                  style="
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                    border-top: 1px solid rgba(255, 255, 255, 0.2);
+                  "
+                >
+                  <div>Frame</div>
+                  <div>N/A</div>
+                </div>
+                <div
+                  class="bg-transparent q-py-sm text-subtitle1 text-dimmed row justify-between items-center"
+                  style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+                >
+                  <div>Lens</div>
+                  <div>N/A</div>
+                </div>
+                <div
+                  class="bg-transparent q-py-sm text-subtitle1 text-dimmed row justify-between items-center"
+                  style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+                >
+                  <div>Fit</div>
+                  <div>N/A</div>
+                </div>
+                <div
+                  class="bg-transparent q-py-sm text-subtitle1 text-dimmed row justify-between items-center"
+                  style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+                >
+                  <div>Weight</div>
+                  <div>N/A</div>
+                </div>
+              </div>
+
+              <div class="section-spacer-sm"></div>
+
+              <div class="row items-center">
+                <q-icon name="eva-shield-outline" color="primary" size="24px" />
+                <span class="text-subtitle1 text-dimmed q-ml-sm"
+                  >Deliveries made in Cape Town · pickup available in
+                  Kenwyn</span
+                >
               </div>
             </div>
-
-            <div class="section-spacer-sm"></div>
-
-            <div>
-              <div class="text-subtitle1 text-dimmed">
-                {{ sunglasses.description }}
-              </div>
-            </div>
-
-            <div class="section-spacer-sm"></div>
-
-            <div class="font-size-responsive-md">
-              <div
-                class="bg-transparent q-py-sm text-caption text-dimmed row justify-between items-center"
-                style="
-                  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-                  border-top: 1px solid rgba(255, 255, 255, 0.2);
-                "
-              >
-                <div>Frame</div>
-                <div>N/A</div>
-              </div>
-              <div
-                class="bg-transparent q-py-sm text-caption text-dimmed row justify-between items-center"
-                style="
-                  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-                "
-              >
-                <div>Lens</div>
-                <div>N/A</div>
-              </div>
-              <div
-                class="bg-transparent q-py-sm text-caption text-dimmed row justify-between items-center"
-                style="
-                  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-                "
-              >
-                <div>Fit</div>
-                <div>N/A</div>
-              </div>
-              <div
-                class="bg-transparent q-py-sm text-caption text-dimmed row justify-between items-center"
-                style="
-                  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-                "
-              >
-                <div>Weight</div>
-                <div>N/A</div>
-              </div>
-
-            </div>
-          </div>
-        </q-card>
-      </div>
-    </section>
-
-    <!------------------------------------------------------------ RELATED PRODUCTS PANEL --------------------------------------------->
-    <!-- <div class="column constrain-sunglasses responsive-height-2">
-      <q-card-section>
-        <div class="font-size-responsive-xxl"><b>Related Products</b></div>
-      </q-card-section>
-
-      <q-card-section class="row justify-center items-center" style="height: fit-content;">
-
-        <q-btn flat icon="arrow_back" @click="prevSlide" class="q-mr-none q-pr-sm" />
-
-        <div class="row justify-center" style="flex-grow: 1; max-width: 85%;">
-          <div v-for="(sunglass) in visibleSunglasses" :key="sunglass._id" class="carousel-container">
-
-            <q-card flat @click="viewSunglassesDetails(sunglass._id)" class="cursor-pointer">
-              <div>
-                <q-img v-if="sunglass.images && sunglass.images.length > 0" :src="getImageUrl(sunglass.images[0].imageUrl)"
-                  class="product-image" />
-              </div>
-              <q-item class="column justify-between">
-                <div class="font-size-responsive-md"><b>{{ sunglass.model }} ™</b></div>
-                <div class="font-size-responsive-md caveat">R {{ sunglass.price }}.00</div>
-              </q-item>
-            </q-card>
-
-          </div>
+          </q-card>
         </div>
+        <!-- <div class="section-spacer-md"></div> -->
+      </section>
 
-        <q-btn flat icon="arrow_forward" @click="nextSlide" class="q-ml-none q-pl-sm" />
-      </q-card-section>
-    </div> -->
+      <!------------------------------------------------------------ RELATED PRODUCTS PANEL --------------------------------------------->
+      <section
+        class="bg-dark q-px-md text-light q-md-px-0"
+        :class="$q.screen.gt.md ? ' q-md-mt-none' : 'q-mt-xl'"
+        style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
+      >
+        <div class="section-spacer-md"></div>
+        <div class="constrain">
+          <div class="overline text-dimmed text-caption">You may also like</div>
+          <div class="font-size-responsive-giant archivo text-light text-bold">
+            Related frames
+          </div>
+
+          <div class="section-spacer-sm"></div>
+
+          <div class="row items-center no-wrap">
+            <q-btn
+              flat
+              round
+              dense
+              icon="eva-arrow-back-outline"
+              color="grey"
+              class="q-mr-sm gt-xs"
+              @click="prevSlide"
+            />
+
+            <div class="row related-grid" style="flex-grow: 1">
+              <q-card
+                v-for="sunglass in visibleSunglasses"
+                :key="sunglass._id"
+                flat
+                class="related-card bg-dark-secondary row items-center no-wrap cursor-pointer"
+                @click="viewSunglassesDetails(sunglass._id)"
+              >
+                <div class="related-image-wrap">
+                  <q-img
+                    v-if="sunglass.images && sunglass.images.length > 0"
+                    :src="getImageUrl(sunglass.images[0].imageUrl)"
+                    class="related-image"
+                    fit="contain"
+                  />
+                </div>
+
+                <div class="column q-pl-md related-info">
+                  <div
+                    class="font-size-responsive-md archivo text-light text-bold"
+                  >
+                    {{ sunglass.model }}
+                  </div>
+                  <div class="text-caption text-dimmed related-description">
+                    {{ sunglass.description }}
+                  </div>
+                  <div class="text-gradient-primary archivo text-bold q-mt-xs">
+                    R {{ sunglass.price }}.00
+                  </div>
+                </div>
+              </q-card>
+            </div>
+
+            <q-btn
+              flat
+              round
+              dense
+              icon="eva-arrow-forward-outline"
+              color="grey"
+              class="q-ml-sm gt-xs"
+              @click="nextSlide"
+            />
+          </div>
+
+        </div>
+        <div class="section-spacer-md"></div>
+      </section>
+    </template>
+
+    <div v-else class="full-width flex flex-center q-pa-xl">
+      <q-spinner-dots size="40px" color="primary" />
+    </div>
   </q-page>
 </template>
 
@@ -216,6 +270,7 @@ export default {
       itemsPerPage: 3,
 
       mainImage: "",
+      loading: true,
     };
   },
   computed: {
@@ -279,8 +334,10 @@ export default {
       this.itemsPerPage = window.innerWidth <= 1024 ? 1 : 3;
     },
     async fetchAllSunglasses() {
+      this.loading = true;
       const response = await SunglassesService.findAllSunglasses();
       this.allSunglasses = response;
+      this.loading = false;
     },
     async fetchSunglassesDetails() {
       const encryptedId = this.$route.params.id;
@@ -385,57 +442,91 @@ export default {
   @media (max-width: 1024px)
     height: auto
 
-.responsive-height-2
-  width: 100%
-  height: 100%
-  @media (max-width: 1024px)
-    height: 62vh
-  @media (max-width: 750px)
-    height: 50vh
-  @media (max-width: 600px)
-    height: 40vh
-  @media (max-width: 500px)
-    height: 32vh
-
 .sunglasses-grid
   gap: 24px
 
-.sunglass-card
-  background: transparent
-  border-radius: 4px
-  overflow: hidden
-  flex: 0 1 380px   // grow up to ~3 per row inside constrain, shrink+wrap below that
-  max-width: 420px
+// ---------- product gallery ----------
+.product-gallery
+  padding-bottom: 36px
 
-.sunglass-image-wrap
-  background-color: #f0ede6
-  padding: 24px
+.gallery-stage
+  position: relative
+  background: #ffffff
+  border-radius: 28px
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.35)
+  padding: 48px 40px 60px
 
-.product-image
-  border-radius: 0
+.stage-image
+  width: 100%
+  height: 320px
 
-.sunglass-index
+.thumb-dock
   position: absolute
-  top: 12px
-  left: 12px
-  z-index: 1
-  background-color: rgba(0, 0, 0, 0.55)
-  color: #fff
-  font-size: 0.7rem
-  padding: 4px 10px
+  bottom: -28px
+  left: 50%
+  transform: translateX(-50%)
+  display: flex
+  gap: 16px
+  background: #ffffff
+  padding: 8px
+  border-radius: 999px
+  box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.4)
 
-.sunglass-info
-  background-color: #141414
-  padding: 16px
+.thumb-circle
+  width: 56px
+  height: 56px
+  border-radius: 50%
+  overflow: hidden
+  border: 2px solid transparent
+  padding: 0
+  cursor: pointer
+  background: #f4f4f4
+  transition: border-color 0.2s ease, transform 0.2s ease
+  &:hover
+    transform: translateY(-2px)
+  &.thumb-circle--active
+    border-color: var(--q-primary)
 
-.sunglass-model
-  letter-spacing: 0.03em
-  text-transform: uppercase
+// ---------- related products ----------
+.related-grid
+  gap: 24px
+  flex-wrap: wrap
 
-// Below ~420px-per-card width the flex-basis math forces a wrap naturally,
-// but on very small phones let cards take the full row width
+.related-card
+  border: 1px solid rgba(255, 255, 255, 0.1) //lines and stuff
+  border-radius: 4px
+  padding: 20px
+  flex: 1 1 380px
+  max-width: 480px
+  transition: border-color 0.2s ease, transform 0.2s ease
+  &:hover
+    border-color: rgba(255, 255, 255, 0.25)
+    transform: translateY(-2px)
+
+.related-image-wrap
+  background-color: #ffffff
+  width: 96px
+  height: 96px
+  flex-shrink: 0
+  display: flex
+  align-items: center
+  justify-content: center
+
+.related-image
+  width: 80%
+  height: 80%
+
+.related-info
+  min-width: 0
+
+.related-description
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+  max-width: 100%
+
 @media (max-width: 480px)
-  .sunglass-card
+  .related-card
     flex: 1 1 100%
     max-width: 100%
 </style>

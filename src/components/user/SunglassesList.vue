@@ -2,7 +2,7 @@
   <div class="row justify-start flex-wrap sunglasses-grid">
     <template v-if="!loading">
       <q-card
-        v-for="(sunglass, index) in displayedSunglasses"
+        v-for="(sunglass) in displayedSunglasses"
         :key="sunglass._id"
         flat
         @click="viewSunglassesDetails(sunglass._id)"
@@ -10,9 +10,9 @@
       >
         <!-- Image panel -->
         <div class="sunglass-image-wrap relative-position">
-          <q-badge class="sunglass-index" rounded>
+          <!-- <q-badge class="sunglass-index" rounded>
             {{ String(index + 1).padStart(2, '0') }}
-          </q-badge>
+          </q-badge> -->
           <q-img
             v-if="sunglass.images && sunglass.images.length > 0"
             :src="getImageUrl(sunglass.images[0].imageUrl)"
@@ -121,6 +121,10 @@ export default {
   overflow: hidden
   flex: 0 1 380px   // grow up to ~3 per row inside constrain, shrink+wrap below that
   max-width: 420px
+  transition: border-color 0.4s ease, transform 0.4s ease
+  &:hover
+    border-color: rgba(255, 255, 255, 0.25)
+    transform: translateY(-2px)
 
 .sunglass-image-wrap
   background-color: #f0ede6
@@ -128,6 +132,10 @@ export default {
 
 .product-image
   border-radius: 0
+  transition: border-color 0.4s ease, transform 0.4s ease
+  &:hover
+    border-color: rgba(255, 255, 255, 0.25)
+    transform: scale(1.05)
 
 .sunglass-index
   position: absolute

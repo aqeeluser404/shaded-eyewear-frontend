@@ -173,18 +173,25 @@
     <!----------------------------------------------------------- PAGES SECTION -------------------------------------------------->
     <div class="bg-dark">
       <q-page-container :style="pageContainerStyle">
-        <router-view style="background-color: white" />
+        <router-view />
       </q-page-container>
     </div>
 
     <!----------------------------------------------------------- FOOTER SECTION -------------------------------------------------->
-    <q-footer class="bg-dark text-white" v-if="showHeader">
+    <q-footer
+      class="bg-dark text-white"
+      v-if="showHeader"
+      style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
+    >
+      <div class="section-spacer-md"></div>
       <q-toolbar class="q-pa-none">
         <q-toolbar-title>
-
           <div class="row justify-center items-start constrain">
             <!-- Developed By Section -->
-            <div class="col-12 col-md-4 items-center" :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'">
+            <div
+              class="col-12 col-md-4 items-center"
+              :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'"
+            >
               <q-card flat class="bg-transparent q-mr-none q-mr-md-xl q-mb-xl">
                 <div class="overline text-dimmed text-caption">
                   SHORTCUT LINKS
@@ -236,7 +243,10 @@
             </div>
 
             <!-- Contact Section -->
-            <div class="col-12 col-md-4" :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'">
+            <div
+              class="col-12 col-md-4"
+              :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'"
+            >
               <q-card flat class="bg-transparent q-mr-none q-mr-md-xl q-mb-xl">
                 <div class="overline text-dimmed text-caption">
                   SHORTCUT LINKS
@@ -298,7 +308,10 @@
             </div>
 
             <!-- Follow Us Section -->
-            <div class="col-12 col-md-4" :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'">
+            <div
+              class="col-12 col-md-4"
+              :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'"
+            >
               <q-card flat class="bg-transparent q-mr-none q-mr-md-xl">
                 <div class="overline text-dimmed text-caption">FOLLOW US</div>
                 <div class="section-spacer-sm"></div>
@@ -319,8 +332,11 @@
                     >
                       <span class="hind font-size-responsive-lg">@</span
                       >shadedeyewearza
-                      </p>
-                    <div class="text-subtitle1 text-dimmed q-mt-sm" style="opacity: 1">
+                    </p>
+                    <div
+                      class="text-subtitle1 text-dimmed q-mt-sm"
+                      style="opacity: 1"
+                    >
                       New arrivals, drop and fit guides
                     </div>
                   </div>
@@ -342,12 +358,12 @@
           <div class="section-spacer-md small-screen-only"></div>
 
           <section
-            v-if="!isFullHeightPage"
             class="bg-dark q-py-md"
             style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
           >
-            <div class="constrain row justify-between items-center q-px-md q-md-px-0">
-
+            <div
+              class="constrain row justify-between items-center q-px-md q-md-px-0"
+            >
               <div class="col-md-6 col-12 row items-center">
                 <q-avatar class="footer-avatar q-mr-xs">
                   <img
@@ -355,7 +371,9 @@
                     alt="Logo"
                   />
                 </q-avatar>
-                <span class="text-caption text-dimmed">Shaded Eyewear ™ · Est. 2023 · Cape Town</span>
+                <span class="text-caption text-dimmed"
+                  >Shaded Eyewear ™ · Est. 2023 · Cape Town</span
+                >
               </div>
 
               <div class="col-md-6 col-12 text-caption text-dimmed">
@@ -363,10 +381,7 @@
                 <a
                   href="https://aqeel-dev-portfolio.web.app"
                   target="_blank"
-                  style="
-                    text-decoration: none;
-                    color: inherit;
-                  "
+                  style="text-decoration: none; color: inherit"
                   >Aqeel Hanslo</a
                 >
               </div>
@@ -429,30 +444,15 @@ export default {
       }
       return items;
     },
-    isFullHeightPage() {
-      return (
-        this.$route.path === "/payment-success" ||
-        this.$route.path.startsWith("/sunglasses/view/") ||
-        (this.$route.path === "/server-loading" &&
-          this.$route.query.redirect === "/")
-      );
-    },
+
     pageContainerStyle() {
       return {
-        transform: this.isFullHeightPage
-          ? "translateY(0px)"
-          : "translateY(-75px)",
+        marginTop: this.$route.path === "/" ? "-75px" : "0px",
       };
-    },
-    headerHeight() {
-      const baseHeight = 200;
-      return baseHeight;
     },
   },
 
-  components: {
-    UniversalMenu,
-  },
+  components: { UniversalMenu },
 
   data() {
     return {
@@ -521,22 +521,29 @@ export default {
         localStorage.setItem("cookieAccepted", true);
     },
     handleScroll() {
-      if (this.isSpecificPage) {
-        // this.headerClass = "header-solid";
-        this.headerClass = "bg-dark-dynamic";
-        this.colorShiftClass = "transparent-white";
-        // this.colorShiftClass = "transparent-black";
-        // this.logoSrc = logoBlack;
-        this.logoSrc = logoWhite;
-      } else if (window.scrollY > 50) {
+      if (window.scrollY > 50) {
         this.headerClass = "header-transparent";
-        // this.colorShiftClass = 'bg-light';
-        // this.logoSrc = logoBlack;
       } else {
         this.headerClass = "bg-dark-dynamic";
         this.colorShiftClass = "transparent-white";
         this.logoSrc = logoWhite;
       }
+
+      // if (this.isSpecificPage) {
+      //   this.headerClass = "bg-dark-dynamic";
+      //   this.colorShiftClass = "transparent-white";
+
+      //   // this.headerClass = "header-solid";
+      //   // this.colorShiftClass = "transparent-black";
+      //   // this.logoSrc = logoBlack;
+      //   this.logoSrc = logoWhite;
+      // } else if (window.scrollY > 50) {
+      //   this.headerClass = "header-transparent";
+      //   // this.colorShiftClass = 'bg-light';
+      //   // this.logoSrc = logoBlack;
+      // } else {
+
+      // }
     },
     prevText() {
       this.currentIndex =
@@ -697,24 +704,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-// .loading-overlay
-//   display: flex
-//   flex-direction: column
-//   align-items: center
-//   justify-content: center
-//   height: 100vh
-//   background-color: rgba(255, 255, 255, 0.9)
-//   position: fixed
-//   top: 0
-//   left: 0
-//   width: 100%
-//   z-index: 9999
-
-
-// .loading-overlay div
-//   margin-top: 10px
-//   font-size: 1.2em
-//   color: #555
 
 .mobile-nav-backdrop
   position: fixed
@@ -786,10 +775,6 @@ export default {
   width: clamp(1.975rem, 5vw, 3.125rem) // 30px to 50px
   height: clamp(1.975rem, 5vw, 3.125rem) // 30px to 50px
 
-.footer-avatar
-  width: 28px
-  height: 28px
-
 .responsive-avatar-2
   width: clamp(1.2rem, 5vw, 3.125rem) // 30px to 50px
   height: clamp(1.2rem, 5vw, 3.125rem) // 30px to 50px
@@ -806,4 +791,8 @@ export default {
   background-color: #121212
   color: white !important
   font-size: clamp(0.75rem, 2.5vw, 1.25rem)
+
+.no-border
+  border-top: none !important
+  box-shadow: none !important
 </style>

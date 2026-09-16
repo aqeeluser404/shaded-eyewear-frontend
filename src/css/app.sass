@@ -25,6 +25,8 @@
 
   --background-color-offwhite: #{$background-offwhite}
 
+  --background-color-secondary: #{$dark-secondary}
+
   --border-color-light: grey
   --border-color-dark: lightgrey
 
@@ -71,8 +73,13 @@ body
   background-color: $background-light
 .bg-dark
   background-color: $background-dark
-.bg-shaded-dark
-  background-color: $background-shaded-dark
+.bg-dark-secondary
+  background-color: $dark-secondary
+
+.gradient-bg
+  background: linear-gradient(180deg, $dark 0%, $dark-secondary 100%)
+
+
 .text-light
   color: $text-color-light
 .text-dark
@@ -379,6 +386,10 @@ p
 .border
   border: 1px solid lightgrey
 
+
+.footer-avatar
+  width: 28px
+  height: 28px
 
 
 

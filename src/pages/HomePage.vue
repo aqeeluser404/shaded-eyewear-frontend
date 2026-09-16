@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="gradient-bg">
     <!--------------------------------------------------------------------- HERO SECTION -------------------------------------------------->
     <section>
       <div class="hero-wrapper">
@@ -74,7 +74,7 @@
 
     <!--------------------------------------------------------------------- FRAMES SECTION -------------------------------------------------->
 
-    <section class="bg-dark q-px-md q-md-px-0">
+    <section class="q-px-md q-md-px-0">
       <div class="section-spacer-md"></div>
       <div class="constrain">
         <div>
@@ -105,10 +105,9 @@
     <!--------------------------------------------------------------------- SERVICES SECTION -------------------------------------------------->
 
     <section
-      class="bg-dark q-px-md q-md-px-0"
+      class="q-px-md q-md-px-0 bg-dark"
       style="
         border-top: 1px solid rgba(255, 255, 255, 0.2);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       "
     >
       <div class="section-spacer-md"></div>
@@ -116,7 +115,7 @@
       <div class="constrain row justify-around items-start">
         <q-card
           flat
-          class="bg-transparent text-light col-md-4 col-12 q-mb-xl q-md-mt-0"
+          class="bg-transparent text-light col-md-4 col-12" :class="$q.screen.gt.md ? ' q-md-mb-none' : 'q-mb-xl'"
         >
           <div class="q-mr-lg">
             <div>
@@ -134,7 +133,7 @@
 
         <q-card
           flat
-          class="bg-transparent text-light col-md-4 col-12 q-mb-xl q-md-mt-0"
+          class="bg-transparent text-light col-md-4 col-12" :class="$q.screen.gt.md ? ' q-md-mb-none' : 'q-mb-xl'"
         >
           <div class="q-mr-lg">
             <div>
