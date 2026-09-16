@@ -1,5 +1,5 @@
 <template>
-  <q-page class="gradient-bg">
+  <q-page class="">
     <!--------------------------------------------------------------------- HERO SECTION -------------------------------------------------->
     <section>
       <div class="hero-wrapper">
@@ -74,7 +74,7 @@
 
     <!--------------------------------------------------------------------- FRAMES SECTION -------------------------------------------------->
 
-    <section class="q-px-md q-md-px-0">
+    <section class="q-px-md q-md-px-0 gradient-bg">
       <div class="section-spacer-md"></div>
       <div class="constrain">
         <div>
