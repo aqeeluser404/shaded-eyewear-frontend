@@ -19,7 +19,7 @@
 
           <q-card
             flat
-            class="bg-transparent row justify-center items-start responsive-height"
+            class="bg-transparent row justify-center items-start"
           >
             <div class="col-12 col-md-7">
               <div class="product-gallery q-mr-none q-mr-md-xl">
@@ -56,7 +56,7 @@
                 SUNGLASSES DESCRIPTION
               </div>
 
-              <div class="font-size-responsive-giant archivo text-light">
+              <div class="font-size-responsive-giant archivo text-light text-uppercase">
                 {{ sunglasses.model }}
               </div>
 
@@ -156,7 +156,7 @@
             </div>
           </q-card>
         </div>
-        <!-- <div class="section-spacer-md"></div> -->
+        <div class="section-spacer-md"></div>
       </section>
 
       <!------------------------------------------------------------ RELATED PRODUCTS PANEL --------------------------------------------->
@@ -436,12 +436,6 @@ export default {
 .active-image
   border: 2px solid lightgrey
 
-.responsive-height
-  width: 100%
-  height: 100vh
-  @media (max-width: 1024px)
-    height: auto
-
 .sunglasses-grid
   gap: 24px
 
@@ -458,7 +452,7 @@ export default {
 
 .stage-image
   width: 100%
-  height: 320px
+  height: 100%
 
 .thumb-dock
   position: absolute
@@ -477,7 +471,7 @@ export default {
   height: 56px
   border-radius: 50%
   overflow: hidden
-  border: 2px solid transparent
+  border: 4px solid transparent
   padding: 0
   cursor: pointer
   background: #f4f4f4
