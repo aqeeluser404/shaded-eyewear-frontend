@@ -5,7 +5,7 @@
         <div class="constrain">
           <div class="section-spacer-sm"></div>
 
-          <div v-if="currentOrderId !== null" class="">
+          <div class="">
             <div class="">
               <div class="overline text-dimmed text-caption">STEP 1 OF 2</div>
               <div
@@ -17,11 +17,14 @@
             </div>
 
             <div class="row justify-between items-start">
-              <div class="col-12 col-md-7">
+              <div
+                class="col-12 col-md-7"
+                :class="$q.screen.gt.md ? ' q-mb-none' : 'q-mb-lg'"
+              >
                 <q-card
                   flat
                   bordered
-                  class="bg-dark-secondary col-12 col-md-6 full-height q-mr-none q-mr-md-lg"
+                  class="bg-dark-secondary full-height q-mr-none q-mr-md-lg"
                   style="border: 1px solid rgba(255, 255, 255, 0.2)"
                 >
                   <q-card-section
@@ -43,7 +46,8 @@
                   <div
                     v-if="
                       order.sunglassesDetails &&
-                      order.sunglassesDetails.length > 0
+                      order.sunglassesDetails.length > 0 &&
+                      currentOrderId !== null
                     "
                   >
                     <div
@@ -80,105 +84,134 @@
                         </div>
                       </div>
 
-                      <div class="col-md-2 col-12 text-gradient-primary archivo text-center">
+                      <div
+                        class="col-md-2 col-12 text-gradient-primary archivo text-center"
+                      >
                         R {{ sunglass.price }}.00
                       </div>
                     </div>
+                  </div>
+
+                  <div v-else class="column items-center q-py-xl q-px-md">
+                    <div class="section-spacer-sm"></div>
+
+                    <div class="text-subtitle1 text-dimmed q-mb-md">
+                      Your cart is empty.
+                    </div>
+
+                    <div>
+                      <q-btn
+                        rounded
+                        dense
+                        text-color="dark"
+                        no-caps
+                        to="/sunglasses"
+                        label="Browse frames"
+                        class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mb-sm"
+                        style="width: 100%"
+                      />
+                    </div>
+                    <div class="section-spacer-sm"></div>
                   </div>
                 </q-card>
               </div>
 
               <div class="col-12 col-md-5">
-                <div class="q-gutter-md">
-                  <q-card flat bordered>
-                    <q-card-section>
-                      <div class="font-size-responsive-lg">Cart Summary</div>
-                    </q-card-section>
-                    <q-separator />
-                    <div class="q-px-md">
-                      <q-card-section
-                        class="row items-center q-gutter-md justify-start"
+                <q-card
+                  flat
+                  bordered
+                  class="bg-dark-secondary full-height q-mb-lg"
+                  style="border: 1px solid rgba(255, 255, 255, 0.2)"
+                >
+                  <q-card-section
+                    class="row items-center justify-between"
+                    style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+                  >
+                    <p class="font-size-responsive-md archivo">CART SUMMARY</p>
+                    <q-btn
+                      @click="cancelOrder(order._id)"
+                      class="custom-button q-py-sm text-caption text-light"
+                      label="-"
+                      :ripple="false"
+                      no-caps
+                      flat
+                      rounded
+                    />
+                  </q-card-section>
+
+                  <div class="q-py-lg q-px-md">
+                    <q-card-section
+                      class="row items-center justify-between q-pa-none q-mb-md"
+                    >
+                      <div class="overline text-dimmed text-caption">
+                        <b>TOTAL:</b> {{ order.totalItems }} item(s)
+                      </div>
+                      <div
+                        class="font-size-responsive-xl archivo text-gradient-primary"
                       >
-                        <div class="text-caption">
-                          <b>TOTAL:</b> {{ order.totalItems }} item(s)
-                        </div>
-                        <div class="text-h5">R {{ order.totalAmount }}.00</div>
-                      </q-card-section>
-                    </div>
-                    <q-card-section class="q-pa-none q-px-md q-pb-md">
+                        R {{ order.totalAmount }}.00
+                      </div>
+                    </q-card-section>
+                    <div class="column items-center">
                       <q-btn
                         rounded
                         dense
-                        color="black"
-                        text-color="white"
+                        text-color="dark"
+                        no-caps
                         to="/buy/review"
                         label="Proceed to checkout"
-                        class="q-px-lg q-py-sm custom-button font-size-responsive-md"
+                        class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mb-sm"
                         style="width: 100%"
                       />
+                      <q-btn
+                        rounded
+                        dense
+                        flat
+                        to="/sunglasses"
+                        class="q-px-lg q-py-sm custom-button text-subtitle1"
+                        label="Continue Shopping"
+                        no-caps
+                      />
+                    </div>
+                  </div>
+                </q-card>
 
-                      <!-- <q-card-section class="q-gutter-md">
-                    <q-btn
-                      rounded
-                      dense
-                      flat
-                      to="/sunglasses"
-                      class="q-px-lg q-py-sm custom-button font-size-responsive-md"
-                      label="Continue Shopping"
-                      style="opacity: 0.9"
+                <!-- qualities panel -->
+                <q-card
+                  flat
+                  bordered
+                  class="bg-dark-secondary q-pa-sm"
+                  style="border: 1px solid rgba(255, 255, 255, 0.2)"
+                >
+                  <q-card-section class="row items-center text-subtitle1">
+                    <q-icon
+                      name="credit_card"
+                      color="primary"
+                      class="q-mr-md"
                     />
-                  </q-card-section> -->
-                    </q-card-section>
-                  </q-card>
-                  <!-- qualities panel -->
-                  <q-card flat bordered class="q-pa-md">
-                    <q-card-section class="row items-center text-subtitle1">
-                      <q-icon name="credit_card" class="q-mr-md" />
-                      <div style="opacity: 0.9" class="">
-                        Payments made with Yoco
-                      </div>
-                    </q-card-section>
-                    <q-card-section class="row items-center text-subtitle1">
-                      <q-icon name="local_shipping" class="q-mr-md" />
-                      <div style="opacity: 0.9" class="">Fast and reliable</div>
-                    </q-card-section>
-                    <q-card-section class="row items-center text-subtitle1">
-                      <q-icon name="store" class="q-mr-md" />
-                      <div style="opacity: 0.9" class="">
-                        Pickup at our doorstep available
-                      </div>
-                    </q-card-section>
-                  </q-card>
-                </div>
+                    <div style="opacity: 0.9" class="text-dimmed">
+                      Payments made with Yoco
+                    </div>
+                  </q-card-section>
+                  <q-card-section class="row items-center text-subtitle1">
+                    <q-icon
+                      name="local_shipping"
+                      color="primary"
+                      class="q-mr-md"
+                    />
+                    <div style="opacity: 0.9" class="text-dimmed">
+                      Fast and reliable
+                    </div>
+                  </q-card-section>
+                  <q-card-section class="row items-center text-subtitle1">
+                    <q-icon name="store" color="primary" class="q-mr-md" />
+                    <div style="opacity: 0.9" class="text-dimmed">
+                      Pickup at our doorstep available
+                    </div>
+                  </q-card-section>
+                </q-card>
               </div>
             </div>
-
-            <!--------------------------------------------------------------------- CART SUMMARY PANEL --------------------------------------------->
-          </div>
-
-          <!--------------------------------------------------------------------- CART IS EMPTY PANEL --------------------------------------------->
-          <div v-else class="row q-py-xl justify-center full-height">
-            <q-card
-              flat
-              bordered
-              class="column flex-center"
-              style="width: 300px"
-            >
-              <q-card-section>
-                <div class="font-size-responsive-lg">Your cart is empty</div>
-              </q-card-section>
-              <q-card-section>
-                <q-btn
-                  rounded
-                  dense
-                  color="black"
-                  text-color="white"
-                  to="/sunglasses"
-                  label="Order some stuff"
-                  class="q-py-sm q-px-lg custom-button font-size-responsive-md"
-                />
-              </q-card-section>
-            </q-card>
           </div>
         </div>
         <div class="section-spacer-md"></div>

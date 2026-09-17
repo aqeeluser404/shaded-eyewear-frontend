@@ -86,7 +86,7 @@
             <q-btn
               to="/sunglasses"
               class="custom-button q-py-sm font-size-responsive-sm text-light"
-              label="Catalogue"
+              label="View all"
               :ripple="false"
               no-caps
               flat
