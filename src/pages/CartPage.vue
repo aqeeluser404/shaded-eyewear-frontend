@@ -141,7 +141,7 @@
 
                   <div class="q-py-lg q-px-md">
                     <q-card-section
-                      class="row items-center justify-between q-pa-none q-mb-md"
+                      class="row items-end justify-between q-pa-none q-mb-md"
                     >
                       <div class="overline text-dimmed text-caption">
                         <b>TOTAL:</b> {{ order.totalItems }} item(s)
@@ -162,6 +162,7 @@
                         label="Proceed to checkout"
                         class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mb-sm"
                         style="width: 100%"
+                        :disable="currentOrderId === null"
                       />
                       <q-btn
                         rounded
