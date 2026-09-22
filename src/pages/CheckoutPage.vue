@@ -35,15 +35,6 @@
                   <p class="font-size-responsive-md archivo">
                     HOW YOU'D LIKE IT
                   </p>
-                  <q-btn
-                    @click="cancelOrder(order._id)"
-                    class="custom-button q-py-sm text-caption text-light"
-                    label="-"
-                    :ripple="false"
-                    no-caps
-                    flat
-                    rounded
-                  />
                 </q-card-section>
 
                 <q-card-section
@@ -155,15 +146,6 @@
                   style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
                 >
                   <p class="font-size-responsive-md archivo">ORDER SUMMARY</p>
-                  <q-btn
-                    @click="cancelOrder(order._id)"
-                    class="custom-button q-py-sm text-caption text-light"
-                    label="-"
-                    :ripple="false"
-                    no-caps
-                    flat
-                    rounded
-                  />
                 </q-card-section>
 
                 <div class="q-py-lg q-px-md">
@@ -218,15 +200,6 @@
                   <p class="font-size-responsive-md archivo">
                     REVIEW YOUR ITEMS
                   </p>
-                  <q-btn
-                    @click="cancelOrder(order._id)"
-                    class="custom-button q-py-sm text-caption text-light"
-                    label="CLEAR CART"
-                    :ripple="false"
-                    no-caps
-                    flat
-                    rounded
-                  />
                 </q-card-section>
 
                 <q-card-section

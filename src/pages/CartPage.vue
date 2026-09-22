@@ -33,11 +33,13 @@
                   >
                     <p class="font-size-responsive-md archivo">ORDER DETAILS</p>
                     <q-btn
+                      v-if="currentOrderId !== null"
                       @click="cancelOrder(order._id)"
-                      class="custom-button q-py-sm text-caption text-light"
+                      class="custom-button text-caption text-light"
                       label="CLEAR CART"
                       :ripple="false"
                       no-caps
+                      dense
                       flat
                       rounded
                     />
@@ -128,15 +130,6 @@
                     style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
                   >
                     <p class="font-size-responsive-md archivo">CART SUMMARY</p>
-                    <q-btn
-                      @click="cancelOrder(order._id)"
-                      class="custom-button q-py-sm text-caption text-light"
-                      label="-"
-                      :ripple="false"
-                      no-caps
-                      flat
-                      rounded
-                    />
                   </q-card-section>
 
                   <div class="q-py-lg q-px-md">
@@ -144,12 +137,12 @@
                       class="row items-end justify-between q-pa-none q-mb-md"
                     >
                       <div class="overline text-dimmed text-caption">
-                        <b>TOTAL:</b> {{ order.totalItems }} item(s)
+                        <b>TOTAL:</b> {{ order.totalItems || 0 }} item(s)
                       </div>
                       <div
                         class="font-size-responsive-xl archivo text-gradient-primary"
                       >
-                        R {{ order.totalAmount }}.00
+                        R {{ order.totalAmount || 0 }}.00
                       </div>
                     </q-card-section>
                     <div class="column items-center">
@@ -331,6 +324,14 @@ export default {
         this.userDetails = user;
 
         await this.getCurrentOrder();
+      } else {
+        this.loading = true;
+        this.$q.notify({
+          type: "info",
+          color: "gradient-primary",
+          message: "Please login to view your cart",
+        });
+        this.loading = false;
       }
     },
   },

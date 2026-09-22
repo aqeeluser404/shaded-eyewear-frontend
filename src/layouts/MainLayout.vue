@@ -492,12 +492,11 @@ export default {
       message: "",
     };
   },
-  mounted() {
-    this.getCurrentOrder();
-    this.checkLoginStatus();
+  async mounted() {
+    await this.checkLoginStatus();
     this.changeTextAutomatically();
     window.addEventListener("scroll", this.handleScroll);
-    this.handleScroll(); // Ensure the correct header state on initial load
+    this.handleScroll();
     if (localStorage.getItem("cookieAccepted") === "true") {
       this.cookieAccepted = true;
     }
@@ -506,10 +505,12 @@ export default {
     window.removeEventListener("scroll", this.handleScroll);
   },
   watch: {
-    $route() {
-      this.checkLoginStatus();
-      this.handleScroll(); // Ensure the correct header state on route change
-      this.getCurrentOrder();
+    async $route() {
+      await this.checkLoginStatus();
+      this.handleScroll();
+    },
+    "userDetails._id"(newId) {
+      if (newId) this.getCurrentOrder();
     },
     "userContact.firstName": function (newVal) {
       this.userContact.firstName = newVal.toLowerCase();
@@ -557,36 +558,72 @@ export default {
         this.nextText();
       }, 10000);
     },
+    // async checkLoginStatus() {
+    //   const isLoggedIn = await Helper.checkCookie();
+
+    //   if (isLoggedIn) {
+    //     const token = await Helper.getCookie("token");
+
+    //     if (token) {
+    //       try {
+    //         // Check if the token is still valid and fetch user details
+    //         const user = await UserService.FindUserByToken();
+    //         const userDetails = await UserService.findUserById(user._id);
+
+    //         // Compare tokens to detect if the user logged in from another browser
+    //         if (token === userDetails.loginInfo.loginToken) {
+    //           this.isLoggedIn = true;
+    //           this.fetchUserDetails();
+    //         } else {
+    //           // If tokens do not match, handle logout
+    //           this.isLoggedIn = false;
+    //           this.handleLogout();
+    //         }
+    //       } catch (error) {
+    //         console.error("Error checking login status:", error);
+    //         this.isLoggedIn = false;
+    //         this.handleLogout();
+    //       }
+    //     } else {
+    //       this.isLoggedIn = false;
+    //       this.handleLogout();
+    //     }
+    //   }
+    // },
+
     async checkLoginStatus() {
       const isLoggedIn = await Helper.checkCookie();
 
-      if (isLoggedIn) {
-        const token = await Helper.getCookie("token");
+      if (!isLoggedIn) {
+        this.isLoggedIn = false;
+        this.handleLogout();
+        return;
+      }
 
-        if (token) {
-          try {
-            // Check if the token is still valid and fetch user details
-            const user = await UserService.FindUserByToken();
-            const userDetails = await UserService.findUserById(user._id);
+      const token = await Helper.getCookie("token");
 
-            // Compare tokens to detect if the user logged in from another browser
-            if (token === userDetails.loginInfo.loginToken) {
-              this.isLoggedIn = true;
-              this.fetchUserDetails();
-            } else {
-              // If tokens do not match, handle logout
-              this.isLoggedIn = false;
-              this.handleLogout();
-            }
-          } catch (error) {
-            console.error("Error checking login status:", error);
-            this.isLoggedIn = false;
-            this.handleLogout();
-          }
+      if (!token) {
+        this.isLoggedIn = false;
+        this.handleLogout();
+        return;
+      }
+
+      try {
+        const user = await UserService.FindUserByToken();
+        const userDetails = await UserService.findUserById(user._id);
+
+        if (token === userDetails.loginInfo.loginToken) {
+          this.isLoggedIn = true;
+          await this.fetchUserDetails(); // wait for userDetails to actually populate
+          await this.getCurrentOrder(); // only now try to resolve the cart order
         } else {
           this.isLoggedIn = false;
           this.handleLogout();
         }
+      } catch (error) {
+        console.error("Error checking login status:", error);
+        this.isLoggedIn = false;
+        this.handleLogout();
       }
     },
     handleLogout() {
