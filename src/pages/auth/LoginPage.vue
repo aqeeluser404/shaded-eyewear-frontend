@@ -179,7 +179,7 @@ export default {
             color: "primary",
             message: "Login successful!",
           });
-          this.$router.push("/");
+          window.location.href = "/";
         } else {
           this.$q.notify({
             type: "negative",

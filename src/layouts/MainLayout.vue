@@ -1,5 +1,7 @@
 <template>
   <q-layout view="hHh lpR fff">
+    <div class="noise-overlay"></div>
+
     <div v-if="!cookieAccepted" class="cookie-consent-banner">
       <div class="q-pa-lg bg-black text-white q-mb-sm">
         <span class="font-size-responsive-xs"
@@ -17,7 +19,6 @@
         ></q-btn>
       </div>
     </div>
-    <div class="noise-overlay"></div>
 
     <!----------------------------------------------------------- HEADER SECTION -------------------------------------------------->
     <q-header
@@ -482,7 +483,7 @@ export default {
       logoSrc: logoWhite,
 
       // cookies
-      cookieAccepted: false,
+      cookieAccepted: !!localStorage.getItem("cookieAccepted"),
 
       // send message
       userContact: {
@@ -497,9 +498,6 @@ export default {
     this.changeTextAutomatically();
     window.addEventListener("scroll", this.handleScroll);
     this.handleScroll();
-    if (localStorage.getItem("cookieAccepted") === "true") {
-      this.cookieAccepted = true;
-    }
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
@@ -518,8 +516,8 @@ export default {
   },
   methods: {
     acceptCookies() {
-      (this.cookieAccepted = true),
-        localStorage.setItem("cookieAccepted", true);
+      this.cookieAccepted = true;
+      localStorage.setItem("cookieAccepted", "true");
     },
     handleScroll() {
       if (window.scrollY > 50) {

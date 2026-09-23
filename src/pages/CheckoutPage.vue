@@ -296,7 +296,7 @@ export default {
         { label: "johannesburg", value: "johannesburg" },
       ],
       userTokenDetails: { _id: "", username: "", userType: "" },
-      orderType: null,
+      orderType: "pickup",
       pickupPanel: false,
       deliveryPanel: false,
       loading: true,
@@ -495,12 +495,13 @@ export default {
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-.option-card:hover {
+.option-card:not(.option-card--selected):hover {
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-.option-card--selected {
-  border-color: #ff9800; /* or your primary color */
+.option-card--selected,
+.option-card--selected:hover {
+  border-color: #ff9800;
   background-color: rgba(255, 152, 0, 0.05);
 }
 </style>

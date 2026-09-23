@@ -14,7 +14,6 @@
       v-model="isOpen"
       :anchor="anchor"
       :self="self"
-      :persistent="true"
       transition-show="jump-down"
       transition-hide="jump-up"
       @mouseenter="hover ? open() : null"
@@ -137,18 +136,32 @@ computed: {
 };
 </script>
 
-<style scoped lang="sass">
+<style lang="sass">
 .universal-menu
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15)
-  border-radius: 8px
+  background-color: #0a0a0a
+  border: 1px solid rgba(255, 255, 255, 0.2)
+  border-top: none
+  border-radius: 0 0 8px 8px
   overflow: hidden
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5)
+  min-width: 220px
 
-.relative-position
-  position: relative
+  .q-list
+    padding: 4px 0
+
+  .q-item
+    color: #f0f0f0
+    min-height: 44px
+    padding: 0 20px
+    transition: background-color 0.15s ease
+
+  .q-item__label
+    font-size: 0.9rem
+    letter-spacing: 0.02em
 
 .nav-hover
   &:hover
-    background-color: var(--background-color-offwhite)
+    background-color: rgba(255, 255, 255, 0.06)
 
 .menu-trigger
   display: inline-block
