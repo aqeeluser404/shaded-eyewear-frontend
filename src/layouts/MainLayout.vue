@@ -28,9 +28,12 @@
       class="row items-center"
       style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
     >
-      <q-toolbar class="row items-center justify-around q-px-none constrain">
-        <!-- title and avatar -->
-        <q-toolbar-title class="col-md-4 row items-center">
+      <q-toolbar
+        class="row items-center q-px-none constrain"
+        :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-sm'"
+      >
+        <!-- ============================== LEFT: logo + brand ============================== -->
+        <div class="col-md-4 col-6 row items-center">
           <q-avatar class="q-mr-sm responsive-avatar">
             <img :src="logoSrc" />
           </q-avatar>
@@ -38,17 +41,17 @@
             to="/"
             :class="colorShiftClass"
             class="text-remove-decoration font-size-responsive-md archivo"
-            >SHADED EYEWEAR</router-link
           >
-        </q-toolbar-title>
+            SHADED EYEWEAR
+          </router-link>
+        </div>
 
-        <div class="col-md-4">
-          <!----------------------------------------------------------- NAV SECTION -------------------------------------------------->
-          <!-- Desktop nav -->
-          <div class="row justify-center items-center">
+        <!-- ============================== MIDDLE: desktop nav ============================== -->
+        <div class="col-md-4 row items-center justify-center large-screen-only">
+          <div class="row items-center justify-center">
             <q-btn
               to="/"
-              class="custom-button q-py-sm large-screen-only font-size-responsive-sm"
+              class="custom-button q-py-sm font-size-responsive-sm"
               label="Home"
               :ripple="false"
               no-caps
@@ -57,7 +60,7 @@
             />
             <q-btn
               to=""
-              class="custom-button q-py-sm large-screen-only font-size-responsive-sm"
+              class="custom-button q-py-sm font-size-responsive-sm"
               label="About"
               :ripple="false"
               no-caps
@@ -66,58 +69,57 @@
             />
             <q-btn
               to="/sunglasses"
-              class="custom-button q-py-sm large-screen-only font-size-responsive-sm"
+              class="custom-button q-py-sm font-size-responsive-sm"
               label="Catalogue"
               :ripple="false"
               no-caps
               flat
               rounded
             />
-            <!-- <q-btn v-if="!isLoggedIn" to="/auth/login" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Login" :ripple="false" no-caps flat rounded />
-            <q-btn v-else @click="logout" class="custom-button q-py-sm large-screen-only font-size-responsive-sm" label="Logout" :ripple="false" no-caps flat rounded /> -->
           </div>
         </div>
 
-        <div class="col-md-4">
-          <div class="row justify-end items-center">
-            <q-btn
-              to="/cart"
-              icon="eva-shopping-bag-outline"
-              class="custom-button q-py-sm text-body2"
-              :ripple="false"
-              no-caps
-              flat
-              rounded
-            />
+        <!-- ============================== RIGHT: cart + profile ============================== -->
+        <div class="col-md-4 col-6 row items-center justify-end">
+          <q-btn
+            to="/cart"
+            icon="eva-shopping-bag-outline"
+            class="custom-button q-py-sm text-body2"
+            :ripple="false"
+            no-caps
+            flat
+            rounded
+          />
 
-            <!-- Home Icons -->
-            <UniversalMenu
-              :items="profileItems"
-              :hover="false"
-              class="large-screen-only"
-            >
-              <template #trigger>
-                <q-btn
-                  class="custom-button q-py-sm text-caption"
-                  icon="fa-regular fa-circle-user"
-                  :ripple="false"
-                  no-caps
-                  flat
-                  rounded
-                />
-              </template>
-            </UniversalMenu>
-          </div>
-        </div>
+          <UniversalMenu
+            v-if="isLoggedIn !== null"
+            :items="profileItems"
+            :hover="false"
+            class="large-screen-only"
+            :offset="[0, 19]"
+          >
+            <template #trigger>
+              <q-btn
+                class="custom-button q-py-sm text-caption"
+                icon="fa-regular fa-circle-user"
+                :ripple="false"
+                no-caps
+                flat
+                rounded
+              />
+            </template>
+          </UniversalMenu>
 
-        <div class="col-md-4 small-screen-only">
+          <!-- mobile burger -->
           <q-btn
             flat
+            class="small-screen-only"
             :icon="menuOpen ? 'eva-close-outline' : 'eva-menu-outline'"
             @click="menuOpen = !menuOpen"
           />
         </div>
 
+        <!-- ============================== MOBILE MENU ============================== -->
         <Teleport to="body">
           <div
             v-show="menuOpen"
@@ -151,21 +153,6 @@
                 >Catalogue</q-item-section
               >
             </q-item>
-            <!-- <q-item
-              clickable
-              v-close-popup
-              @click="menuOpen = false"
-              to="/admin/dashboard"
-              v-if="userDetails && userDetails.userType != null && userDetails.userType == 'admin'"
-            >
-              <q-item-section class="font-size-responsive-md">Admin Panel</q-item-section>
-            </q-item>
-            <q-item clickable v-close-popup @click="menuOpen = false" to="/auth/login" v-if="!isLoggedIn">
-              <q-item-section class="font-size-responsive-md">Login</q-item-section>
-            </q-item>
-            <q-item clickable v-close-popup @click="() => { logout(); menuOpen = false }" v-else>
-              <q-item-section class="font-size-responsive-md">Logout</q-item-section>
-            </q-item> -->
           </q-list>
         </Teleport>
       </q-toolbar>
@@ -435,6 +422,13 @@ export default {
     },
     profileItems() {
       const items = [];
+      if (
+        this.userDetails &&
+        this.userDetails.userType != null &&
+        this.userDetails.userType === "admin"
+      ) {
+        items.push({ label: "Admin Panel", to: "/admin/dashboard" });
+      }
       if (this.isLoggedIn) {
         items.push(
           { label: "Account Settings", to: "/user/dashboard" },
@@ -472,7 +466,7 @@ export default {
         username: "",
         userType: "",
       },
-      isLoggedIn: false,
+      isLoggedIn: null,
       burgerMenuShown: false,
 
       // css stuff
@@ -611,8 +605,8 @@ export default {
         const userDetails = await UserService.findUserById(user._id);
 
         if (token === userDetails.loginInfo.loginToken) {
-          this.isLoggedIn = true;
           await this.fetchUserDetails(); // wait for userDetails to actually populate
+          this.isLoggedIn = true;
           await this.getCurrentOrder(); // only now try to resolve the cart order
         } else {
           this.isLoggedIn = false;

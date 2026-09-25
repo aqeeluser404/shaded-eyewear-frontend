@@ -4,7 +4,7 @@
     @mouseenter="hover ? open() : null"
     @mouseleave="hover ? delayedClose() : null"
   >
-    <div class="menu-trigger">
+    <div class="menu-trigger" ref="triggerRef">
       <div @click.stop="hover ? null : toggle()">
         <slot name="trigger" />
       </div>
@@ -12,13 +12,15 @@
 
     <q-menu
       v-model="isOpen"
+      :target="triggerRef"
       :anchor="anchor"
       :self="self"
+      :offset="offset"
       transition-show="jump-down"
       transition-hide="jump-up"
       @mouseenter="hover ? open() : null"
       @mouseleave="hover ? delayedClose() : null"
-      class="universal-menu"
+      class="universal-menu bg-dark"
     >
     <div class="row q-col-gutter-md q-pa-md">
       <!-- First column -->
@@ -32,7 +34,7 @@
               :disable="item.disabled"
               :class="item.negative ? 'text-negative' : ''"
               @click="handleAction(item)"
-              class="nav-hover q-ma-md"
+              class="nav-hover"
             >
               <q-item-section avatar v-if="item.icon">
                 <q-icon
@@ -59,7 +61,7 @@
               :disable="item.disabled"
               :class="item.negative ? 'text-negative' : ''"
               @click="handleAction(item)"
-              class="nav-hover q-ma-md"
+              class="nav-hover"
             >
               <q-item-section side v-if="item.icon">
                 <q-icon
@@ -75,19 +77,25 @@
         </q-list>
       </div>
     </div>
-
     </q-menu>
   </div>
 </template>
 
 <script>
+import { ref } from 'vue';
+
 export default {
   name: 'UniversalMenu',
   props: {
     items: { type: Array, required: true },
     hover: { type: Boolean, default: false },
     anchor: { type: String, default: 'bottom right' },
-    self: { type: String, default: 'top right' }
+    self: { type: String, default: 'top right' },
+    offset: { type: Array, default: () => [0, 8] }
+  },
+  setup() {
+    const triggerRef = ref(null);
+    return { triggerRef };
   },
   data() {
     return {
@@ -138,30 +146,39 @@ computed: {
 
 <style lang="sass">
 .universal-menu
-  background-color: #0a0a0a
-  border: 1px solid rgba(255, 255, 255, 0.2)
-  border-top: none
-  border-radius: 0 0 8px 8px
+  border: 1px solid rgba(255, 255, 255, 0.12)
+  border-radius: 12px
   overflow: hidden
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5)
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55)
   min-width: 220px
+  background-color: #141414
 
   .q-list
-    padding: 4px 0
+    padding: 8px
 
   .q-item
-    color: #f0f0f0
+    color: #e8e8e8
     min-height: 44px
-    padding: 0 20px
-    transition: background-color 0.15s ease
+    padding: 10px 12px
+    border-radius: 8px
+    transition: background-color 0.15s ease, color 0.15s ease
+
+  .q-item + .q-item
+    margin-top: 2px
 
   .q-item__label
-    font-size: 0.9rem
-    letter-spacing: 0.02em
+    font-size: 0.875rem
+    font-weight: 500
+    letter-spacing: 0.01em
+
+  .q-item__section--avatar,
+  .q-item__section--side
+    min-width: 32px
 
 .nav-hover
   &:hover
-    background-color: rgba(255, 255, 255, 0.06)
+    background-color: rgba(255, 255, 255, 0.08)
+    color: #ffffff
 
 .menu-trigger
   display: inline-block
