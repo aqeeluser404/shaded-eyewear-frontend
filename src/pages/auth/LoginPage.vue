@@ -33,6 +33,7 @@
       <div class="col-md-6 col-12 right-panel column justify-center q-pa-xl">
         <div class="full-width">
           <div class="constrain-more">
+
             <div class="row justify-between items-center q-mb-xl">
               <q-btn
                 dense
@@ -43,10 +44,10 @@
                 icon="eva-arrow-back-outline"
                 class="custom-button font-size-responsive-xs text-dimmed"
               />
-              <div class="row items-center text-caption text-dimmed">
+              <!-- <div class="row items-center text-caption text-dimmed">
                 <q-icon name="lock_outline" size="14px" class="q-mr-xs" />
                 MEMBER ACCOUNT
-              </div>
+              </div> -->
             </div>
 
             <div class="overline text-primary text-caption q-mb-sm">
@@ -55,8 +56,7 @@
             <div
               class="font-size-responsive-giant archivo text-light text-bold q-mb-md"
             >
-              CREATE YOUR <br />
-              ACCOUNT.
+              SIGN IN TO SHADED EYEWEAR
             </div>
             <div class="text-subtitle1 text-dimmed q-mb-xl">
               Sign in to review your saved details and keep track of your
@@ -76,7 +76,11 @@
                   class="custom-input"
                   input-style="color: white;"
                   :rules="[(val) => !!val || 'Email is required']"
-                />
+                >
+                  <!-- <template #prepend>
+                    <q-icon name="eva-email-outline" size="18px" />
+                  </template> -->
+                </q-input>
               </div>
 
               <div>
@@ -93,9 +97,12 @@
                   input-style="color: white;"
                   :rules="[(val) => !!val || 'Password is required']"
                 >
+                  <!-- <template #prepend>
+                    <q-icon name="eva-lock-outline" size="18px" />
+                  </template> -->
                   <template #append>
                     <q-icon
-                      :name="showPassword ? 'visibility_off' : 'visibility'"
+                      :name="showPassword ? 'eva-eye-off-outline' : 'eva-eye-outline'"
                       class="cursor-pointer"
                       @click="showPassword = !showPassword"
                     />
@@ -281,4 +288,51 @@ export default {
     background: transparent !important
   :deep(.q-checkbox__inner--truthy .q-checkbox__bg)
     border-color: var(--q-primary)
+
+// ---------- INPUT STYLE (matches your footer contact form) ----------
+.custom-input
+  :deep(.q-field__control)
+    background-color: #121212
+    border-radius: 10px
+    padding: 0 14px
+    transition: background-color 0.2s ease
+
+  :deep(.q-field__native),
+  :deep(.q-field__input)
+    color: #ffffff !important
+
+  :deep(.q-field__control:before)
+    border: 1px solid rgba(255, 255, 255, 0.1)
+    border-radius: 10px
+    transition: border-color 0.2s ease
+
+  :deep(.q-field__control:hover:before)
+    border-color: rgba(255, 255, 255, 0.25)
+
+  :deep(.q-field--focused .q-field__control)
+    background-color: #161616
+
+  // kill Quasar's built-in filled-input underline entirely
+  :deep(.q-field__control:after)
+    display: none
+
+  // re-add the focus ring as its own layer instead of relying on :after
+  :deep(.q-field--focused .q-field__control)
+    box-shadow: 0 0 0 2px var(--q-primary)
+    border-radius: 10px
+
+  // and the same for the error state, so it doesn't fall back to the red underline either
+  :deep(.q-field--error .q-field__control)
+    box-shadow: 0 0 0 2px var(--negative, #c10015)
+    border-radius: 10px
+
+  :deep(.q-field__prepend),
+  :deep(.q-field__append)
+    color: rgba(255, 255, 255, 0.45)
+
+  :deep(.q-field--focused .q-field__prepend)
+    color: var(--q-primary)
+
+  :deep(.q-field__marginal)
+    height: 52px
 </style>
