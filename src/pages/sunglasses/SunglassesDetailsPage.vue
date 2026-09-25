@@ -8,14 +8,15 @@
           <div>
             <q-btn
               dense
+              no-caps
+              flat
               label="Catalogue"
               to="/sunglasses"
-              class="custom-button font-size-responsive-xs text-light"
-              no-caps
               icon="eva-arrow-back-outline"
+              class="custom-button icon-btn font-size-responsive-sm text-light"
             />
           </div>
-          <div class="section-spacer-sm"></div>
+          <div class="section-spacer-xs"></div>
 
           <q-card
             flat

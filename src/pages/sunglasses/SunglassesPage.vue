@@ -9,6 +9,7 @@
         <div class="row justify-between">
           <div class="font-size-responsive-giant archivo">EVERY FRAME</div>
         </div>
+        <div class="section-spacer-xs"></div>
         <div>
           <p class="text-subtitle1 text-dimmed">
             3 frames in stock. Each one polarised, UV400 and hand-checked
@@ -17,7 +18,7 @@
           </p>
         </div>
 
-        <div class="section-spacer-sm"></div>
+        <div class="section-spacer-xs"></div>
         <div>
           <SunglassesList :search="search" />
         </div>

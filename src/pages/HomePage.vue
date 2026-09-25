@@ -34,7 +34,7 @@
                   label="Shop the catalogue"
                   to="/sunglasses"
                   text-color="dark"
-                  class="btn-gradient-primary q-px-xl q-py-md q-mr-lg text-subtitle1 rounded-button text-bold"
+                  class="btn-gradient-primary icon-btn q-px-xl q-py-md q-mr-lg text-subtitle1 rounded-button text-bold"
                   no-caps
                   icon-right="eva-arrow-forward-outline"
                 />

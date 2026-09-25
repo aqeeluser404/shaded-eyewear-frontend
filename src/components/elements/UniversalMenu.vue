@@ -34,7 +34,7 @@
               :disable="item.disabled"
               :class="item.negative ? 'text-negative' : ''"
               @click="handleAction(item)"
-              class="nav-hover"
+              class="nav-hover custom-button"
             >
               <q-item-section avatar v-if="item.icon">
                 <q-icon
