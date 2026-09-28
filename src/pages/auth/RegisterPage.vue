@@ -28,32 +28,33 @@
       </div>
 
       <!----------------------------------------------------------- RIGHT PANEL (form) -------------------------------------------------->
-      <div class="col-md-6 col-12 right-panel column justify-center q-pa-xl">
-        <div class="full-width">
-          <div class="constrain-narrow">
+      <div class="col-md-6 col-12 right-panel column q-pa-xl">
+        <div class="full-width" style="margin: auto 0;">
+          <div class="constrain-more">
+
+            <div class="section-spacer-xs"></div>
 
             <div class="row justify-between items-center q-mb-xl">
               <q-btn
                 dense
-                flat
                 no-caps
-                label="BACK TO SHOP"
-                to="/sunglasses"
+                flat
+                label="Back to login"
+                to="/auth/login"
                 icon="eva-arrow-back-outline"
-                class="custom-button font-size-responsive-xs text-dimmed"
+                class="custom-button icon-btn font-size-responsive-sm text-light text-dimmed"
               />
-              <div class="row items-center text-caption text-dimmed">
+              <!-- <div class="row items-center text-caption text-dimmed">
                 <q-icon name="lock_outline" size="14px" class="q-mr-xs" />
                 MEMBER ACCOUNT
-              </div>
+              </div> -->
             </div>
 
             <div class="overline text-primary text-caption q-mb-sm">
-              GET STARTED
+              WELCOME BACK
             </div>
             <div class="font-size-responsive-giant archivo text-light text-bold q-mb-md">
-              CREATE YOUR<br />
-              ACCOUNT.
+              CREATE YOUR ACCOUNT
             </div>
             <div class="text-subtitle1 text-dimmed q-mb-xl">
               Takes a minute. Keep your details, orders and favourites all in one place.
@@ -61,60 +62,74 @@
 
             <q-form @submit="onSubmit" class="q-gutter-md">
 
-              <!-- Name row -->
-              <div class="row q-col-gutter-md">
-                <div class="col-12 col-sm-6">
-                  <div class="overline text-dimmed text-caption q-mb-xs">FIRST NAME</div>
-                  <q-input
-                    filled
-                    dark
-                    v-model="user.firstName"
-                    placeholder="Jane"
-                    class="custom-input"
-                    input-style="color: white;"
-                    :rules="[(val) => !!val || 'Required']"
-                  />
+              <div>
+                <div class="overline text-dimmed text-caption q-mb-xs">
+                  FIRST NAME
                 </div>
-                <div class="col-12 col-sm-6">
-                  <div class="overline text-dimmed text-caption q-mb-xs">LAST NAME</div>
-                  <q-input
-                    filled
-                    dark
-                    v-model="user.lastName"
-                    placeholder="Doe"
-                    class="custom-input"
-                    input-style="color: white;"
-                    :rules="[(val) => !!val || 'Required']"
-                  />
-                </div>
+                <q-input
+                  filled
+                  dark
+                  v-model="user.firstName"
+                  placeholder="Jane"
+                  class="custom-input"
+                  input-style="color: white;"
+                  :rules="[(val) => !!val || 'First name is required']"
+                >
+                  <!-- <template #prepend>
+                    <q-icon name="eva-email-outline" size="18px" />
+                  </template> -->
+                </q-input>
               </div>
 
-              <!-- Username / Email -->
-              <div class="row q-col-gutter-md">
-                <div class="col-12 col-sm-6">
-                  <div class="overline text-dimmed text-caption q-mb-xs">USERNAME</div>
-                  <q-input
-                    filled
-                    dark
-                    v-model="user.username"
-                    placeholder="janedoe"
-                    class="custom-input"
-                    input-style="color: white;"
-                    :rules="[(val) => !!val || 'Required']"
-                  />
+              <div>
+                <div class="overline text-dimmed text-caption q-mb-xs">
+                  LAST NAME
                 </div>
-                <div class="col-12 col-sm-6">
-                  <div class="overline text-dimmed text-caption q-mb-xs">EMAIL ADDRESS</div>
-                  <q-input
-                    filled
-                    dark
-                    v-model="user.email"
-                    placeholder="you@example.com"
-                    class="custom-input"
-                    input-style="color: white;"
-                    :rules="[(val) => !!val || 'Required']"
-                  />
+                <q-input
+                  filled
+                  dark
+                  v-model="user.lastName"
+                  placeholder="Doe"
+                  class="custom-input"
+                  input-style="color: white;"
+                  :rules="[(val) => !!val || 'Last name is required']"
+                >
+                  <!-- <template #prepend>
+                    <q-icon name="eva-email-outline" size="18px" />
+                  </template> -->
+                </q-input>
+              </div>
+
+              <div>
+                <div class="overline text-dimmed text-caption q-mb-xs">
+                  USERNAME
                 </div>
+                <q-input
+                  filled
+                  dark
+                  v-model="user.username"
+                  placeholder="janedoe"
+                  class="custom-input"
+                  input-style="color: white;"
+                  :rules="[(val) => !!val || 'Username is required']"
+                >
+                </q-input>
+              </div>
+
+              <div>
+                <div class="overline text-dimmed text-caption q-mb-xs">
+                  Email ADDRESS
+                </div>
+                <q-input
+                  filled
+                  dark
+                  v-model="user.email"
+                  placeholder="you@example.com"
+                  class="custom-input"
+                  input-style="color: white;"
+                  :rules="[(val) => !!val || 'Email is required']"
+                >
+                </q-input>
               </div>
 
               <!-- Phone -->
@@ -154,7 +169,7 @@
                 </q-input>
               </div>
 
-              <div class="text-caption text-dimmed">
+              <div class="text-dimmed text-subtitle1">
                 By signing up you agree to Shaded Eyewear's Terms of Service.
               </div>
 
@@ -288,15 +303,15 @@ export default {
 
 <style lang="sass" scoped>
 .register-shell
-  min-height: 100vh
+  height: 100vh
+  overflow: hidden
   background-color: #000000
 
-// ---------- LEFT PANEL ----------
 .left-panel
   position: relative
   overflow: hidden
   background-color: #0a0a0a
-  min-height: 100vh
+  height: 100vh
 
 .left-image
   position: absolute
@@ -310,29 +325,28 @@ export default {
   z-index: 2
   background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.85) 100%)
 
-// ---------- RIGHT PANEL ----------
 .right-panel
   background-color: #000000
+  height: 100vh
+  overflow-y: auto
+  overflow-x: hidden
 
-.constrain-narrow
-  max-width: 460px
-  width: 100%
+  &::-webkit-scrollbar
+    width: 6px
+  &::-webkit-scrollbar-thumb
+    background: rgba(255, 255, 255, 0.15)
+    border-radius: 3px
+  &::-webkit-scrollbar-track
+    background: transparent
+
+.constrain-more
+  max-width: 600px
   margin: 0 auto
 
-// ---------- INPUT STYLE ----------
-.custom-input
-  :deep(.q-field__control)
-    background-color: #121212
-    border-radius: 4px
-  :deep(.q-field__native),
-  :deep(.q-field__input)
-    color: #ffffff !important
-  :deep(.q-field__control:before)
-    border: 1px solid rgba(255, 255, 255, 0.1)
-  :deep(.q-field__control:hover:before)
-    border-color: rgba(255, 255, 255, 0.25)
-  :deep(.q-field--focused .q-field__control:after)
-    border-color: var(--q-primary)
+// @media (max-width: 1023px)
+//   .right-panel
+//     padding-top: 48px
+//     padding-bottom: 48px
 
 .overline
   letter-spacing: 0.15em
@@ -343,4 +357,56 @@ export default {
   .right-panel
     padding-top: 48px
     padding-bottom: 48px
+
+// ---------- INPUT STYLE ----------
+.outlined-checkbox
+  :deep(.q-checkbox__bg)
+    border: 1px solid rgba(255, 255, 255, 0.4)
+    border-radius: 3px
+    background: transparent !important
+  :deep(.q-checkbox__inner--truthy .q-checkbox__bg)
+    border-color: var(--q-primary)
+
+.custom-input
+  :deep(.q-field__control)
+    background-color: #121212
+    border-radius: 10px
+    padding: 0 14px
+    transition: background-color 0.2s ease
+
+  :deep(.q-field__native),
+  :deep(.q-field__input)
+    color: #ffffff !important
+
+  :deep(.q-field__control:before)
+    border: 1px solid rgba(255, 255, 255, 0.1)
+    border-radius: 10px
+    transition: border-color 0.2s ease
+
+  :deep(.q-field__control:hover:before)
+    border-color: rgba(255, 255, 255, 0.25)
+
+  :deep(.q-field--focused .q-field__control)
+    background-color: #161616
+    box-shadow: 0 0 0 2px var(--q-primary)
+    border-radius: 10px
+
+  // kill Quasar's built-in filled-input underline
+  :deep(.q-field__control:after)
+    display: none
+
+  // error state — same treatment as focus but red
+  :deep(.q-field--error .q-field__control)
+    box-shadow: 0 0 0 2px var(--negative, #c10015)
+    border-radius: 10px
+
+  :deep(.q-field__prepend),
+  :deep(.q-field__append)
+    color: rgba(255, 255, 255, 0.45)
+
+  :deep(.q-field--focused .q-field__prepend)
+    color: var(--q-primary)
+
+  :deep(.q-field__marginal)
+    height: 52px
 </style>

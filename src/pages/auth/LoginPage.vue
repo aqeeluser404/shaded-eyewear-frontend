@@ -37,12 +37,12 @@
             <div class="row justify-between items-center q-mb-xl">
               <q-btn
                 dense
-                flat
                 no-caps
-                label="BACK TO SHOP"
+                flat
+                label="Back to shop"
                 to="/sunglasses"
                 icon="eva-arrow-back-outline"
-                class="custom-button font-size-responsive-xs text-dimmed"
+                class="custom-button icon-btn font-size-responsive-sm text-light text-dimmed"
               />
               <!-- <div class="row items-center text-caption text-dimmed">
                 <q-icon name="lock_outline" size="14px" class="q-mr-xs" />
@@ -64,6 +64,7 @@
             </div>
 
             <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+
               <div>
                 <div class="overline text-dimmed text-caption q-mb-xs">
                   EMAIL ADDRESS
@@ -116,11 +117,11 @@
                   label="Remember me"
                   dense
                   color="primary"
-                  class="text-dimmed outlined-checkbox"
+                  class="text-dimmed text-subtitle1 outlined-checkbox"
                 />
                 <router-link
                   to="/forgot-password"
-                  class="text-dimmed"
+                  class="text-dimmed text-subtitle1"
                   style="text-decoration: none"
                 >
                   Forgot password?
@@ -233,11 +234,11 @@ export default {
   position: relative
   overflow: hidden
   background-color: #0a0a0a
-  min-height: 100vh          // ← add this
+  min-height: 100vh
 
 .left-image
-  position: absolute          // ← add this
-  inset: 0                    // ← add this
+  position: absolute
+  inset: 0
   width: 100%
   height: 100%
 
@@ -251,36 +252,23 @@ export default {
 .right-panel
   background-color: #000000
 
-.constrain-narrow
-  max-width: 460px
-  width: 100%
-  margin: 0 auto
-
-// ---------- INPUT STYLE (matches your footer contact form) ----------
-.custom-input
-  :deep(.q-field__control)
-    background-color: #121212
-    border-radius: 4px
-  :deep(.q-field__native),
-  :deep(.q-field__input)
-    color: #ffffff !important
-  :deep(.q-field__control:before)
-    border: 1px solid rgba(255, 255, 255, 0.1)
-  :deep(.q-field__control:hover:before)
-    border-color: rgba(255, 255, 255, 0.25)
-  :deep(.q-field--focused .q-field__control:after)
-    border-color: var(--q-primary)
-
-.overline
-  letter-spacing: 0.15em
-  font-weight: 600
-
 // ---------- MOBILE ----------
 @media (max-width: 1023px)
   .right-panel
     padding-top: 48px
     padding-bottom: 48px
 
+.constrain-narrow
+  max-width: 460px
+  width: 100%
+  margin: 0 auto
+
+.overline
+  letter-spacing: 0.15em
+  font-weight: 600
+
+
+// ---------- INPUT STYLE ----------
 .outlined-checkbox
   :deep(.q-checkbox__bg)
     border: 1px solid rgba(255, 255, 255, 0.4)
@@ -289,7 +277,6 @@ export default {
   :deep(.q-checkbox__inner--truthy .q-checkbox__bg)
     border-color: var(--q-primary)
 
-// ---------- INPUT STYLE (matches your footer contact form) ----------
 .custom-input
   :deep(.q-field__control)
     background-color: #121212
@@ -311,17 +298,14 @@ export default {
 
   :deep(.q-field--focused .q-field__control)
     background-color: #161616
-
-  // kill Quasar's built-in filled-input underline entirely
-  :deep(.q-field__control:after)
-    display: none
-
-  // re-add the focus ring as its own layer instead of relying on :after
-  :deep(.q-field--focused .q-field__control)
     box-shadow: 0 0 0 2px var(--q-primary)
     border-radius: 10px
 
-  // and the same for the error state, so it doesn't fall back to the red underline either
+  // kill Quasar's built-in filled-input underline
+  :deep(.q-field__control:after)
+    display: none
+
+  // error state — same treatment as focus but red
   :deep(.q-field--error .q-field__control)
     box-shadow: 0 0 0 2px var(--negative, #c10015)
     border-radius: 10px
