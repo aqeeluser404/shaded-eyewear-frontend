@@ -70,7 +70,7 @@
               <div class="row">
                 <div
                   class="col-12 col-md-6"
-                  :class="$q.screen.gt.sm ? 'q-pr-sm' : 'q-pr-none'"
+                  :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
                 >
                   <div class="overline text-dimmed text-caption q-mb-xs">
                     FIRST NAME
@@ -115,7 +115,7 @@
               <div class="row">
                 <div
                   class="col-12 col-md-6"
-                  :class="$q.screen.gt.sm ? 'q-pr-sm' : 'q-pr-none'"
+                  :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
                 >
                   <div class="overline text-dimmed text-caption q-mb-xs">
                     USERNAME

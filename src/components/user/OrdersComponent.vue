@@ -1,269 +1,204 @@
 <template>
-  <q-card-section>
-    <div class="font-size-responsive-xl archivo text-light text-bold">
-      ORDER HISTORY
-    </div>
-    <div class="text-subtitle1 text-dimmed q-mt-sm">
-      Every frame you've bought, in one place.
-    </div>
-  </q-card-section>
-
-  <!--------------------------------------------------------------------- HAS ORDERS -------------------------------------------------->
-  <template v-if="orders.length > 0">
-
-    <!------------------------------------------------ SELECTED ORDER (DETAIL VIEW) ------------------------------------------------>
-    <div v-if="selectedOrder" class="q-px-md q-pb-md">
-      <q-card
-        flat
-        bordered
-        class="bg-dark-secondary"
-        style="border: 1px solid rgba(255, 255, 255, 0.2)"
-      >
-        <!-- header -->
-        <q-card-section
-          class="row justify-between items-center q-gutter-md"
-          style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
-        >
-          <div>
-            <div class="overline text-primary text-caption q-mb-xs">STATUS</div>
-            <div class="font-size-responsive-md archivo text-light text-bold">
-              <template v-if="selectedOrder.status === 'paid'">
-                PAID ON {{ formatDate(selectedOrder.orderDate) }}
-              </template>
-              <template v-else-if="selectedOrder.status === 'pending'">
-                PENDING PAYMENT · {{ formatDate(selectedOrder.orderDate) }}
-              </template>
-              <template v-else-if="selectedOrder.status === 'paid & picked up'">
-                COLLECTED BY {{ selectedOrder.userFirstName }}
-              </template>
-            </div>
+  <div class="orders-details q-pl-lg">
+    <!--------------------------------------------------------------------- HAS ORDERS -------------------------------------------------->
+    <section v-if="orders.length > 0">
+      <!-- Heading -->
+      <div>
+        <div class="font-size-responsive-xl archivo text-light text-bold">
+          ORDER HISTORY
+        </div>
+        <div class="row justify-between items-center">
+          <div class="text-subtitle1 text-dimmed q-mt-sm">
+            Every frame you've bought, in one place.
           </div>
-          <div class="text-right">
-            <div class="text-caption text-dimmed">ORDER ID</div>
-            <div class="text-caption text-light">#{{ selectedOrder._id }}</div>
-          </div>
-        </q-card-section>
-
-        <!-- totals -->
-        <q-card-section
-          class="row justify-between items-center"
-          style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
-        >
-          <div class="overline text-dimmed text-caption">
-            <b>TOTAL:</b> {{ selectedOrder.totalItems }} ITEM(S)
-          </div>
-          <div class="font-size-responsive-xl archivo text-gradient-primary">
-            R {{ selectedOrder.totalAmount }}.00
-          </div>
-        </q-card-section>
-
-        <!-- items -->
-        <q-card-section
-          v-if="selectedOrder.sunglassesDetails && selectedOrder.sunglassesDetails.length > 0"
-          class="q-pa-none"
-        >
-          <div
-            v-for="(sunglass, index) in selectedOrder.sunglassesDetails"
-            :key="sunglass._id"
-            class="row items-center cursor-pointer q-py-lg q-px-md"
-            :style="
-              index !== selectedOrder.sunglassesDetails.length - 1
-                ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
-                : ''
-            "
-            @click="viewSunglassesDetails(sunglass._id)"
-          >
-            <div class="col-md-2 col-4">
-              <q-img
-                :src="getImageUrl(sunglass.images[0].imageUrl)"
-                alt="Sunglass"
-                class="border"
-              />
-            </div>
-            <div class="col-md-10 col-8 q-pl-md">
-              <div class="font-size-responsive-md archivo text-uppercase">
-                <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
-              </div>
-              <div class="text-subtitle1 text-dimmed">
-                R {{ sunglass.price }}.00
-              </div>
-            </div>
-          </div>
-        </q-card-section>
-
-        <!-- pickup info -->
-        <template v-if="selectedOrder.orderType === 'pickup'">
-          <q-card-section style="border-top: 1px solid rgba(255, 255, 255, 0.2)">
-            <div class="row items-center q-mb-md">
-              <q-icon name="store" color="primary" size="20px" class="q-mr-sm" />
-              <div class="overline text-primary text-caption">PICKUP LOCATION</div>
-            </div>
-            <div class="text-subtitle1 text-light"><b>65 Stockley Road</b></div>
-            <div class="text-subtitle1 text-dimmed">Kenwyn</div>
-            <div class="text-subtitle1 text-dimmed">Cape Town, 7779</div>
-            <div class="text-subtitle1 text-primary q-mt-md">
-              <b>OPEN WEEKDAYS 08:00 – 17:00</b>
-            </div>
-          </q-card-section>
-
-          <q-card-section style="border-top: 1px solid rgba(255, 255, 255, 0.2)">
-            <div class="overline text-dimmed text-caption q-mb-sm">
-              PICKUP INSTRUCTIONS
-            </div>
-            <div class="text-subtitle1 text-dimmed">
-              Bring the order ID from your confirmation email. If anything
-              changes, message us through the contact form and we'll hold your
-              frame for seven days. Thank you for shopping with us.
-            </div>
-          </q-card-section>
-        </template>
-
-        <!-- actions -->
-        <q-card-section
-          class="row items-center q-gutter-md"
-          style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
-        >
           <q-btn
             rounded
-            dense
-            no-caps
-            flat
-            label="Back"
-            icon="eva-arrow-back-outline"
-            class="custom-button text-subtitle1 text-dimmed q-px-lg q-py-sm"
-            @click="closeDetails"
-          />
-          <q-btn
-            v-if="selectedOrder.status === 'pending'"
-            rounded
-            dense
             no-caps
             outline
-            label="Cancel"
-            color="grey"
-            text-color="grey"
-            class="q-px-lg q-py-sm rounded-button text-subtitle1"
-            @click="cancelOrder(selectedOrder._id)"
+            label="READY TO COLLECT"
+            color="green"
+            text-color="green"
+            class="q-px-lg q-py-sm text-caption rounded-button text-bold"
           />
-          <q-btn
-            v-if="selectedOrder.status === 'pending'"
-            rounded
-            dense
-            no-caps
-            to="/cart"
-            label="Proceed to checkout"
-            text-color="dark"
-            class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold"
-          />
-        </q-card-section>
-      </q-card>
-    </div>
+        </div>
+      </div>
 
-    <!------------------------------------------------ ALL ORDERS (LIST VIEW) ------------------------------------------------>
-    <div v-else class="q-px-md q-pb-md q-gutter-md">
-      <div
-        v-for="order in sortedOrders"
-        :key="order._id"
-        class="cursor-pointer"
-        @click="openDetails(order)"
-      >
+      <div class="section-spacer-sm"></div>
+
+      <div class="q-pb-md q-gutter-md">
         <q-card
+          v-for="order in sortedOrders"
+          :key="order._id"
           flat
           bordered
           class="bg-dark-secondary order-list-card"
           style="border: 1px solid rgba(255, 255, 255, 0.2)"
         >
-          <q-card-section
-            class="row justify-between items-center q-gutter-md"
-            style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
-          >
-            <div>
-              <div class="overline text-primary text-caption q-mb-xs">STATUS</div>
-              <div class="font-size-responsive-md archivo text-light text-bold">
-                <template v-if="order.status === 'paid'">
-                  PAID · {{ formatDate(order.orderDate) }}
-                </template>
-                <template v-else-if="order.status === 'pending'">
-                  PENDING PAYMENT
-                </template>
-                <template v-else-if="order.status === 'paid & picked up'">
-                  COLLECTED
-                </template>
-              </div>
-            </div>
-            <div class="text-right">
-              <div class="text-caption text-dimmed">ORDER ID</div>
-              <div class="text-caption text-light">#{{ order._id }}</div>
-            </div>
-          </q-card-section>
-
+          <!-- order meta -->
           <q-card-section
             class="row justify-between items-center"
             style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
           >
-            <div class="overline text-dimmed text-caption">
-              <b>TOTAL:</b> {{ order.totalItems }} ITEM(S)
+            <div>
+              <div class="overline text-dimmed text-caption q-mb-xs">ORDER</div>
+              <div class="text-subtitle1 text-light">#{{ order._id }}</div>
             </div>
-            <div class="font-size-responsive-lg archivo text-gradient-primary">
-              R {{ order.totalAmount }}.00
+            <div>
+              <div class="overline text-dimmed text-caption q-mb-xs">
+                PLACED
+              </div>
+              <div class="text-subtitle1 text-light">
+                {{ formatDate(order.orderDate) }}
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="overline text-dimmed text-caption q-mb-xs">TOTAL</div>
+              <div
+                class="font-size-responsive-lg archivo text-gradient-primary"
+              >
+                R {{ order.totalAmount }}.00
+              </div>
             </div>
           </q-card-section>
 
+          <!-- items -->
           <q-card-section
             v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0"
-            class="row items-center"
+            class="q-pa-none"
           >
-            <q-img
-              v-for="sunglass in order.sunglassesDetails"
+            <div
+              v-for="(sunglass, index) in order.sunglassesDetails"
               :key="sunglass._id"
-              :src="getImageUrl(sunglass.images[0].imageUrl)"
-              alt="Sunglass"
-              class="border q-mr-md"
-              style="max-width: 72px; max-height: 72px"
-            />
+              class="row items-center cursor-pointer q-py-lg q-px-md"
+              :style="
+                index !== order.sunglassesDetails.length - 1
+                  ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
+                  : ''
+              "
+              @click="viewSunglassesDetails(sunglass._id)"
+            >
+              <div class="col-md-2 col-4">
+                <q-img
+                  :src="getImageUrl(sunglass.images[0].imageUrl)"
+                  alt="Sunglass"
+                  class="border"
+                />
+              </div>
+
+              <div class="col-md-7 col-8 q-pl-md">
+                <div
+                  class="font-size-responsive-md archivo text-uppercase text-light"
+                >
+                  <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
+                </div>
+                <div class="text-subtitle1 text-dimmed">
+                  R {{ sunglass.price }}.00
+                </div>
+                <div
+                  v-if="order.orderType === 'pickup'"
+                  class="text-subtitle1 text-dimmed q-mt-sm"
+                >
+                  Collection at 65 Stockley Road, Kenwyn
+                </div>
+              </div>
+
+              <div class="col-md-3 col-12 row justify-end q-mt-md q-mt-md-none">
+                <q-btn
+                  rounded
+                  dense
+                  no-caps
+                  outline
+                  color="grey"
+                  text-color="grey"
+                  label="View frame"
+                  icon-right="eva-arrow-forward-outline"
+                  class="q-px-lg q-py-sm rounded-button text-subtitle1"
+                  @click.stop="viewSunglassesDetails(sunglass._id)"
+                />
+              </div>
+            </div>
+          </q-card-section>
+
+          <!-- status / actions -->
+          <q-card-section
+            class="row items-center justify-between"
+            style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
+          >
+            <div class="overline text-dimmed text-caption">
+              <template v-if="order.status === 'paid'">
+                PAID · {{ order.totalItems }} ITEM(S)
+              </template>
+              <template v-else-if="order.status === 'pending'">
+                PENDING PAYMENT · {{ order.totalItems }} ITEM(S)
+              </template>
+              <template v-else-if="order.status === 'paid & picked up'">
+                COLLECTED BY {{ order.userFirstName }}
+              </template>
+            </div>
+
+            <div
+              v-if="order.status === 'pending'"
+              class="row items-center q-gutter-sm"
+            >
+              <q-btn
+                rounded
+                dense
+                no-caps
+                flat
+                label="Cancel"
+                class="custom-button text-subtitle1 text-dimmed q-px-lg q-py-sm"
+                @click="cancelOrder(order._id)"
+              />
+              <q-btn
+                rounded
+                dense
+                no-caps
+                to="/cart"
+                label="Proceed to checkout"
+                text-color="dark"
+                class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold"
+              />
+            </div>
           </q-card-section>
         </q-card>
       </div>
-    </div>
+    </section>
 
-  </template>
+    <!--------------------------------------------------------------------- NO ORDERS -------------------------------------------------->
+    <section v-else>
+      <q-card
+        flat
+        bordered
+        class="bg-dark-secondary q-pa-xl"
+        style="border: 1px solid rgba(255, 255, 255, 0.2)"
+      >
+        <div class="column items-start">
+          <q-icon name="fa-solid fa-cube" color="primary" size="42px" />
 
-  <!--------------------------------------------------------------------- NO ORDERS -------------------------------------------------->
-  <div v-else class="q-px-md q-pb-md">
-    <q-card
-      flat
-      bordered
-      class="bg-dark-secondary q-pa-xl"
-      style="border: 1px solid rgba(255, 255, 255, 0.2)"
-    >
-      <div class="column items-start">
+          <div class="section-spacer-sm"></div>
 
-        <q-icon
-          name="inventory_2"
-          color="primary"
-          size="42px"
-          class="q-mb-md"
-        />
+          <div class="font-size-responsive-xl archivo text-light text-bold q-mb-sm">
+            NO ORDERS YET.
+          </div>
 
-        <div class="font-size-responsive-xxl archivo text-light text-bold">
-          NO ORDERS YET.
+          <div class="text-subtitle1 text-dimmed">
+            Your completed purchases will appear here.
+          </div>
+
+          <div class="section-spacer-xs"></div>
+
+          <q-btn
+            flat
+            no-caps
+            dense
+            to="/sunglasses"
+            label="Browse frames"
+            icon-right="eva-arrow-forward-outline"
+            class="custom-button icon-btn text-primary text-subtitle1"
+          />
         </div>
-
-        <div class="text-subtitle1 text-dimmed q-mt-sm q-mb-lg">
-          Your completed purchases will appear here.
-        </div>
-
-        <q-btn
-          flat
-          no-caps
-          dense
-          to="/sunglasses"
-          label="Browse frames"
-          icon-right="eva-arrow-forward-outline"
-          class="custom-button text-primary text-subtitle1 q-px-none"
-        />
-      </div>
-    </q-card>
+      </q-card>
+    </section>
   </div>
 </template>
 
@@ -279,7 +214,6 @@ export default {
       orders: [],
       userDetails: {},
       userTokenDetails: { _id: "", username: "", userType: "" },
-      selectedOrder: null,
     };
   },
 
@@ -313,7 +247,6 @@ export default {
             await OrderService.deleteOrder(orderId);
             localStorage.removeItem("currentOrderId");
             this.getAllMyOrders();
-            this.closeDetails();
             this.$q.notify({
               type: "positive",
               color: "primary",
@@ -332,11 +265,14 @@ export default {
       if (!this.userDetails || !this.userDetails._id) return;
 
       try {
-        const response = (await OrderService.findAllMyOrders(this.userDetails._id)) || [];
+        const response =
+          (await OrderService.findAllMyOrders(this.userDetails._id)) || [];
 
         this.orders = await Promise.all(
           response.map(async (order) => {
-            const user = await UserService.findUserById(order.user).catch(() => null);
+            const user = await UserService.findUserById(order.user).catch(
+              () => null
+            );
             return {
               ...order,
               userFirstName: user?.username || "Unknown",
@@ -366,7 +302,9 @@ export default {
           order.sunglassesDetails = [];
           for (const sunglass of order.sunglasses) {
             try {
-              const response = await SunglassesService.findSunglassesById(sunglass._id);
+              const response = await SunglassesService.findSunglassesById(
+                sunglass._id
+              );
               order.sunglassesDetails.push(response);
             } catch (error) {
               console.error(
@@ -377,14 +315,6 @@ export default {
           }
         }
       }
-    },
-
-    openDetails(order) {
-      this.selectedOrder = order;
-    },
-
-    closeDetails() {
-      this.selectedOrder = null;
     },
   },
 
@@ -397,9 +327,8 @@ export default {
 
 <style lang="sass" scoped>
 .order-list-card
-  transition: border-color 0.2s ease, transform 0.2s ease
+  transition: border-color 0.2s ease
 
   &:hover
     border-color: rgba(255, 255, 255, 0.35) !important
-    transform: translateY(-2px)
 </style>

@@ -14,21 +14,9 @@
             label="Sign out of account"
             color="grey"
             text-color="grey"
-            class="q-px-xl q-py-md text-subtitle1 rounded-button text-bold"
+            class="q-px-lg q-py-sm text-caption rounded-button text-bold"
             @click="logout"
           />
-
-                  <!-- <q-btn
-                    @click="navigateToCart"
-                    label="View cart"
-                    rounded
-                    dense
-                    no-caps
-                    outline
-                    color="grey"
-                    text-color="grey"
-                    class="q-px-xl q-py-md q-mr-md text-subtitle1 rounded-button text-bold"
-                  /> -->
         </div>
 
         <div class="section-spacer-md"></div>
@@ -58,7 +46,7 @@
               @click="changePage('OrdersComponent')"
             >
               <q-item-section avatar>
-                <q-icon name="eva-clipboard-outline" />
+                <q-icon name="fa-solid fa-cube" />
               </q-item-section>
               <q-item-section class="text-subtitle1">Orders</q-item-section>
             </q-item>
@@ -70,7 +58,7 @@
               @click="changePage('ReturnsComponent')"
             >
               <q-item-section avatar>
-                <q-icon name="eva-credit-card-outline" />
+                <q-icon name="fa-solid fa-arrow-rotate-left" />
               </q-item-section>
               <q-item-section class="text-subtitle1">Returns</q-item-section>
             </q-item>
