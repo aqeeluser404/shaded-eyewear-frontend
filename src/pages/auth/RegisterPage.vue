@@ -1,7 +1,6 @@
 <template>
   <q-page>
     <div class="register-shell row no-wrap">
-
       <!----------------------------------------------------------- LEFT PANEL (image) -------------------------------------------------->
       <div class="col-md-6 left-panel gt-sm">
         <q-img
@@ -18,20 +17,22 @@
           <div class="font-size-responsive-giant archivo text-light text-bold">
             JOIN THE CLUB.
           </div>
-          <div class="font-size-responsive-giant archivo text-gradient-primary text-bold">
+          <div
+            class="font-size-responsive-giant archivo text-gradient-primary text-bold"
+          >
             SEE THE SUN DIFFERENTLY.
           </div>
           <div class="text-subtitle1 text-dimmed q-mt-md">
-            Save your favourite frames, track orders and get early access to new drops.
+            Save your favourite frames, track orders and get early access to new
+            drops.
           </div>
         </div>
       </div>
 
       <!----------------------------------------------------------- RIGHT PANEL (form) -------------------------------------------------->
       <div class="col-md-6 col-12 right-panel column q-pa-xl">
-        <div class="full-width" style="margin: auto 0;">
+        <div class="full-width" style="margin: auto 0">
           <div class="constrain-more">
-
             <div class="section-spacer-xs"></div>
 
             <div class="row justify-between items-center q-mb-xl">
@@ -53,88 +54,108 @@
             <div class="overline text-primary text-caption q-mb-sm">
               WELCOME BACK
             </div>
-            <div class="font-size-responsive-giant archivo text-light text-bold q-mb-md">
+            <div
+              class="font-size-responsive-giant archivo text-light text-bold q-mb-md"
+            >
               CREATE YOUR ACCOUNT
             </div>
             <div class="text-subtitle1 text-dimmed q-mb-xl">
-              Takes a minute. Keep your details, orders and favourites all in one place.
+              Takes a minute. Keep your details, orders and favourites all in
+              one place.
             </div>
 
             <q-form @submit="onSubmit" class="q-gutter-md">
 
-              <div>
-                <div class="overline text-dimmed text-caption q-mb-xs">
-                  FIRST NAME
-                </div>
-                <q-input
-                  filled
-                  dark
-                  v-model="user.firstName"
-                  placeholder="Jane"
-                  class="custom-input"
-                  input-style="color: white;"
-                  :rules="[(val) => !!val || 'First name is required']"
+
+              <div class="row">
+                <div
+                  class="col-12 col-md-6"
+                  :class="$q.screen.gt.sm ? 'q-pr-sm' : 'q-pr-none'"
                 >
-                  <!-- <template #prepend>
+                  <div class="overline text-dimmed text-caption q-mb-xs">
+                    FIRST NAME
+                  </div>
+                  <q-input
+                    filled
+                    dark
+                    v-model="user.firstName"
+                    placeholder="Jane"
+                    class="custom-input"
+                    input-style="color: white;"
+                    :rules="[(val) => !!val || 'First name is required']"
+                  >
+                    <!-- <template #prepend>
+                      <q-icon name="eva-email-outline" size="18px" />
+                    </template> -->
+                  </q-input>
+                </div>
+
+                <div
+                  class="col-12 col-md-6"
+                >
+                  <div class="overline text-dimmed text-caption q-mb-xs">
+                    LAST NAME
+                  </div>
+                  <q-input
+                    filled
+                    dark
+                    v-model="user.lastName"
+                    placeholder="Doe"
+                    class="custom-input"
+                    input-style="color: white;"
+                    :rules="[(val) => !!val || 'Last name is required']"
+                  >
+                    <!-- <template #prepend>
                     <q-icon name="eva-email-outline" size="18px" />
                   </template> -->
-                </q-input>
+                  </q-input>
+                </div>
               </div>
 
-              <div>
-                <div class="overline text-dimmed text-caption q-mb-xs">
-                  LAST NAME
-                </div>
-                <q-input
-                  filled
-                  dark
-                  v-model="user.lastName"
-                  placeholder="Doe"
-                  class="custom-input"
-                  input-style="color: white;"
-                  :rules="[(val) => !!val || 'Last name is required']"
+              <div class="row">
+                <div
+                  class="col-12 col-md-6"
+                  :class="$q.screen.gt.sm ? 'q-pr-sm' : 'q-pr-none'"
                 >
-                  <!-- <template #prepend>
-                    <q-icon name="eva-email-outline" size="18px" />
-                  </template> -->
-                </q-input>
-              </div>
+                  <div class="overline text-dimmed text-caption q-mb-xs">
+                    USERNAME
+                  </div>
+                  <q-input
+                    filled
+                    dark
+                    v-model="user.username"
+                    placeholder="janedoe"
+                    class="custom-input"
+                    input-style="color: white;"
+                    :rules="[(val) => !!val || 'Username is required']"
+                  >
+                  </q-input>
+                </div>
 
-              <div>
-                <div class="overline text-dimmed text-caption q-mb-xs">
-                  USERNAME
-                </div>
-                <q-input
-                  filled
-                  dark
-                  v-model="user.username"
-                  placeholder="janedoe"
-                  class="custom-input"
-                  input-style="color: white;"
-                  :rules="[(val) => !!val || 'Username is required']"
+                <div
+                  class="col-12 col-md-6"
                 >
-                </q-input>
-              </div>
-
-              <div>
-                <div class="overline text-dimmed text-caption q-mb-xs">
-                  Email ADDRESS
+                  <div class="overline text-dimmed text-caption q-mb-xs">
+                    Email ADDRESS
+                  </div>
+                  <q-input
+                    filled
+                    dark
+                    v-model="user.email"
+                    placeholder="you@example.com"
+                    class="custom-input"
+                    input-style="color: white;"
+                    :rules="[(val) => !!val || 'Email is required']"
+                  >
+                  </q-input>
                 </div>
-                <q-input
-                  filled
-                  dark
-                  v-model="user.email"
-                  placeholder="you@example.com"
-                  class="custom-input"
-                  input-style="color: white;"
-                  :rules="[(val) => !!val || 'Email is required']"
-                >
-                </q-input>
               </div>
 
               <!-- Phone -->
               <div>
-                <div class="overline text-dimmed text-caption q-mb-xs">PHONE NUMBER</div>
+                <div class="overline text-dimmed text-caption q-mb-xs">
+                  PHONE NUMBER
+                </div>
                 <q-input
                   filled
                   dark
@@ -148,7 +169,9 @@
 
               <!-- Password -->
               <div>
-                <div class="overline text-dimmed text-caption q-mb-xs">PASSWORD</div>
+                <div class="overline text-dimmed text-caption q-mb-xs">
+                  PASSWORD
+                </div>
                 <q-input
                   filled
                   dark
@@ -233,34 +256,66 @@ export default {
 
     validateFields() {
       const details = this.user;
-      const requiredFields = ["firstName", "lastName", "email", "phone", "username", "password"];
+      const requiredFields = [
+        "firstName",
+        "lastName",
+        "email",
+        "phone",
+        "username",
+        "password",
+      ];
 
       if (requiredFields.every((key) => details[key] === "")) {
-        this.$q.notify({ type: "negative", message: "Please fill in all the fields." });
+        this.$q.notify({
+          type: "negative",
+          message: "Please fill in all the fields.",
+        });
         return false;
       }
       if (details.firstName && !this.validateText(details.firstName)) {
-        this.$q.notify({ type: "negative", message: "First name must be at least 5 characters long and start with an uppercase." });
+        this.$q.notify({
+          type: "negative",
+          message:
+            "First name must be at least 5 characters long and start with an uppercase.",
+        });
         return false;
       }
       if (details.lastName && !this.validateText(details.lastName)) {
-        this.$q.notify({ type: "negative", message: "Last name must be at least 5 characters long and start with an uppercase." });
+        this.$q.notify({
+          type: "negative",
+          message:
+            "Last name must be at least 5 characters long and start with an uppercase.",
+        });
         return false;
       }
       if (details.email && !this.validateEmail(details.email)) {
-        this.$q.notify({ type: "negative", message: "Please enter a valid email address." });
+        this.$q.notify({
+          type: "negative",
+          message: "Please enter a valid email address.",
+        });
         return false;
       }
       if (details.phone && !this.validatePhone(details.phone)) {
-        this.$q.notify({ type: "negative", message: "Please enter a valid 10-digit phone number." });
+        this.$q.notify({
+          type: "negative",
+          message: "Please enter a valid 10-digit phone number.",
+        });
         return false;
       }
       if (details.username && !this.validateUsername(details.username)) {
-        this.$q.notify({ type: "negative", message: "Username must be 3-15 characters long and contain only letters and numbers." });
+        this.$q.notify({
+          type: "negative",
+          message:
+            "Username must be 3-15 characters long and contain only letters and numbers.",
+        });
         return false;
       }
       if (details.password && !this.validatePassword(details.password)) {
-        this.$q.notify({ type: "negative", message: "Password must be at least 8 characters long and include at least one letter and one number." });
+        this.$q.notify({
+          type: "negative",
+          message:
+            "Password must be at least 8 characters long and include at least one letter and one number.",
+        });
         return false;
       }
       return true;
@@ -278,15 +333,29 @@ export default {
             });
             this.$router.push("/auth/login");
           } else {
-            this.$q.notify({ type: "negative", message: "Registration failed. Please try again!" });
+            this.$q.notify({
+              type: "negative",
+              message: "Registration failed. Please try again!",
+            });
             this.onReset();
           }
         }
       } catch (error) {
-        if (error.response && (error.response.status === 401 || error.response.status === 400)) {
-          this.$q.notify({ type: "negative", color: "red", message: "Username or Email already exists. Please try again!" });
+        if (
+          error.response &&
+          (error.response.status === 401 || error.response.status === 400)
+        ) {
+          this.$q.notify({
+            type: "negative",
+            color: "red",
+            message: "Username or Email already exists. Please try again!",
+          });
         } else {
-          this.$q.notify({ type: "negative", color: "red", message: "Registration failed. Please try again!" });
+          this.$q.notify({
+            type: "negative",
+            color: "red",
+            message: "Registration failed. Please try again!",
+          });
         }
       }
     },

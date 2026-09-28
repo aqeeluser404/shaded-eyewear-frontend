@@ -1,172 +1,366 @@
 <template>
-  <q-card-section>
-    <div class="text-h6 text-black">Personal Details</div>
-  </q-card-section>
+  <div class="personal-details q-pl-lg">
+    <!-- Heading -->
 
-  <q-card flat bordered class="q-mb-md ">
-    <q-item>
-      <q-item-section class="text-left text-subtitle1">First Name</q-item-section>
-      <q-item-section class="text-left">
-        <q-input v-model="userDetails.firstName" />
-      </q-item-section>
-    </q-item>
-  </q-card>
+    <div>
+      <div class="font-size-responsive-xl archivo text-light text-bold">
+        PERSONAL DETAILS
+      </div>
+      <div class="text-subtitle1 text-dimmed q-mt-sm">
+        These fields are illustrative and are not saved.
+      </div>
+    </div>
 
-  <q-card flat bordered class="q-mb-md text-subtitle1">
-    <q-item>
-      <q-item-section class="text-left">Last Name</q-item-section>
-      <q-item-section class="text-left">
-        <q-input v-model="userDetails.lastName" />
-      </q-item-section>
-    </q-item>
-  </q-card>
+    <div class="section-spacer-sm"></div>
 
-  <q-card flat bordered class="q-mb-md text-subtitle1">
-    <q-item>
-      <q-item-section class="text-left">
-        <span>Email
-          <span class="q-ml-md" v-if="userDetails && userDetails.verification && userDetails.verification.isVerified">
-            Verified <q-icon color="secondary" name="eva-checkmark-circle-2-outline" />
-          </span>
-          <span class="q-ml-md" v-else>
-            Not Verified <q-icon color="negative" name="eva-alert-circle-outline" />
-          </span>
-        </span>
-      </q-item-section>
-      <q-item-section class="text-left">
-        <q-input v-model="userDetails.email" />
-      </q-item-section>
-    </q-item>
-  </q-card>
+    <q-form @submit="updateUser" class="q-gutter-md">
+      <!-- First + Last name -->
+      <div class="row">
+        <div
+          class="col-12 col-md-6"
+          :class="$q.screen.gt.sm ? 'q-pr-sm' : 'q-pr-none'"
+        >
+          <div class="overline text-dimmed text-caption q-mb-xs">
+            FIRST NAME
+          </div>
+          <q-input
+            filled
+            dark
+            v-model="userDetails.firstName"
+            placeholder="Your first name"
+            class="custom-input"
+            input-style="color: white;"
+            :rules="[(val) => !!val || 'First name is required']"
+          />
+        </div>
 
-  <q-card flat bordered class="q-mb-md text-subtitle1">
-    <q-item>
-      <q-item-section class="text-left">Phone</q-item-section>
-      <q-item-section class="text-left">
-        <q-input v-model="userDetails.phone" />
-      </q-item-section>
-    </q-item>
-  </q-card>
+        <div class="col-12 col-md-6">
+          <div class="overline text-dimmed text-caption q-mb-xs">LAST NAME</div>
+          <q-input
+            filled
+            dark
+            v-model="userDetails.lastName"
+            placeholder="Your last name"
+            class="custom-input"
+            input-style="color: white;"
+            :rules="[(val) => !!val || 'Last name is required']"
+          />
+        </div>
+      </div>
 
-  <q-card flat bordered class="q-mb-md text-subtitle1">
-    <q-item>
-      <q-item-section class="text-left">Username</q-item-section>
-      <q-item-section class="text-left">
-        <q-input v-model="userDetails.username" />
-      </q-item-section>
-    </q-item>
-  </q-card>
+      <!-- Email + Phone -->
+      <div class="row">
+        <div
+          class="col-12 col-md-6"
+          :class="$q.screen.gt.sm ? 'q-pr-sm' : 'q-pr-none'"
+        >
+          <div class="row items-center justify-between q-mb-xs">
+            <div class="overline text-dimmed text-caption">EMAIL ADDRESS</div>
+            <div
+              v-if="userDetails && userDetails.verification"
+              class="row items-center text-caption"
+            >
+              <template v-if="userDetails.verification.isVerified">
+                <span class="text-secondary">Verified</span>
+                <q-icon
+                  color="secondary"
+                  name="eva-checkmark-circle-2-outline"
+                  size="14px"
+                  class="q-ml-xs"
+                />
+              </template>
+              <template v-else>
+                <span class="text-negative">Not Verified</span>
+                <q-icon
+                  color="negative"
+                  name="eva-alert-circle-outline"
+                  size="14px"
+                  class="q-ml-xs"
+                />
+              </template>
+            </div>
+          </div>
+          <q-input
+            filled
+            dark
+            v-model="userDetails.email"
+            placeholder="you@example.com"
+            class="custom-input"
+            input-style="color: white;"
+            :rules="[(val) => !!val || 'Email is required']"
+          />
+        </div>
 
-  <div class="q-gutter-md">
-    <q-btn rounded dense label="Save Changes" color="black" text-color="white" class="q-py-sm q-px-lg custom-button font-size-responsive-md" @click="updateUser" />
-    <q-btn rounded dense label="Verify Email" color="white" text-color="black" class="q-py-sm q-px-lg custom-button font-size-responsive-md" @click="resendVerificationEmail" v-if="userDetails && userDetails.verification && !userDetails.verification.isVerified" />
+        <div class="col-12 col-md-6">
+          <div class="overline text-dimmed text-caption q-mb-xs">
+            PHONE NUMBER
+          </div>
+          <q-input
+            filled
+            dark
+            v-model="userDetails.phone"
+            placeholder="082 123 4567"
+            class="custom-input"
+            input-style="color: white;"
+            :rules="[(val) => !!val || 'Phone is required']"
+          />
+        </div>
+      </div>
+
+      <!-- Username (full width) -->
+      <div>
+        <div class="overline text-dimmed text-caption q-mb-xs">USERNAME</div>
+        <q-input
+          filled
+          dark
+          v-model="userDetails.username"
+          placeholder="Choose a display name"
+          class="custom-input"
+          input-style="color: white;"
+          :rules="[(val) => !!val || 'Username is required']"
+        />
+      </div>
+
+      <!-- Actions -->
+      <div class="row items-center q-gutter-md">
+        <q-btn
+          rounded
+          no-caps
+          label="Save changes"
+          type="submit"
+          text-color="dark"
+          class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold"
+          :loading="saving"
+        />
+
+        <q-btn
+          v-if="
+            userDetails &&
+            userDetails.verification &&
+            !userDetails.verification.isVerified
+          "
+          rounded
+          no-caps
+          outline
+          label="Verify email"
+          color="grey"
+          text-color="grey"
+          class="q-px-xl q-py-md rounded-button text-subtitle1 text-bold"
+          @click="resendVerificationEmail"
+        />
+      </div>
+    </q-form>
   </div>
 </template>
 
 <script>
-import EmailService from '../../services/EmailService'
-import UserService from 'src/services/UserService'
-import Helper from 'src/services/utils';
+import EmailService from "src/services/EmailService";
+import UserService from "src/services/UserService";
+import Helper from "src/services/utils";
 
 export default {
+  name: "ProfileComponent",
+
   data() {
     return {
       userDetails: {},
-      userTokenDetails: { _id : '', username: '', userType: '' }
-    }
+      userTokenDetails: { _id: "", username: "", userType: "" },
+      saving: false,
+    };
   },
+
   methods: {
     validateText: Helper.validateText,
     validateEmail: Helper.validateEmail,
     validatePhone: Helper.validatePhone,
     validateUsername: Helper.validateUsername,
-    validatePassword: Helper.validatePassword,
+
     validateFields() {
-        const details = this.userDetails
-        const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'username', 'password']
+      const details = this.userDetails;
+      const requiredFields = [
+        "firstName",
+        "lastName",
+        "email",
+        "phone",
+        "username",
+      ];
 
-        if (requiredFields.every(key => details[key] === '')) {
-          this.$q.notify({ type: 'negative', message: 'Please fill in all the fields.' })
-          return false;
-        }
-        if (details.firstName && !this.validateText(details.firstName)) {
-          this.$q.notify({ type: 'negative', message: 'First name must be at least 5 characters long and start with an uppercase.' })
-          return false;
-        }
-        if (details.lastName && !this.validateText(details.lastName)) {
-          this.$q.notify({ type: 'negative', message: 'Last name must be at least 5 characters long and start with an uppercase.' })
-          return false;
-        }
-        if (details.email && !this.validateEmail(details.email)) {
-          this.$q.notify({ type: 'negative', message: 'Please enter a valid email address.' })
-          return false;
-        }
-        if (details.phone && !this.validatePhone(details.phone)) {
-          this.$q.notify({ type: 'negative', message: 'Please enter a valid 10-digit phone number.'})
-          return false;
-        }
-        if (details.username && !this.validateUsername(details.username)) {
-          this.$q.notify({ type: 'negative', message: 'Username must be 3-15 characters long and contain only letters and numbers.' });
-          return false;
-        }
-        if (details.password && !this.validatePassword(details.password)) {
-          this.$q.notify({ type: 'negative', message: 'Password must be at least 8 characters long and include at least one letter and one number.' });
-          return false;
-        }
-        return true;
-      },
-    async resendVerificationEmail() {                                                       // Send verification email function
+      if (requiredFields.some((key) => !details[key])) {
+        this.$q.notify({
+          type: "negative",
+          message: "Please fill in all the fields.",
+        });
+        return false;
+      }
+      if (!this.validateText(details.firstName)) {
+        this.$q.notify({
+          type: "negative",
+          message:
+            "First name must be at least 5 characters long and start with an uppercase.",
+        });
+        return false;
+      }
+      if (!this.validateText(details.lastName)) {
+        this.$q.notify({
+          type: "negative",
+          message:
+            "Last name must be at least 5 characters long and start with an uppercase.",
+        });
+        return false;
+      }
+      if (!this.validateEmail(details.email)) {
+        this.$q.notify({
+          type: "negative",
+          message: "Please enter a valid email address.",
+        });
+        return false;
+      }
+      if (!this.validatePhone(details.phone)) {
+        this.$q.notify({
+          type: "negative",
+          message: "Please enter a valid 10-digit phone number.",
+        });
+        return false;
+      }
+      if (!this.validateUsername(details.username)) {
+        this.$q.notify({
+          type: "negative",
+          message:
+            "Username must be 3-15 characters long and contain only letters and numbers.",
+        });
+        return false;
+      }
+      return true;
+    },
+
+    async resendVerificationEmail() {
       try {
-        const response = await EmailService.resendVerificationEmail(this.userDetails.email);
+        const response = await EmailService.resendVerificationEmail(
+          this.userDetails.email
+        );
         if (response) {
-          this.$q.notify({ type: 'negative', message: 'Please check your email for verification link.' })
-          this.getUserDetails()
+          this.$q.notify({
+            type: "positive",
+            color: "primary",
+            message: "Please check your email for the verification link.",
+          });
+          this.getUserDetails();
         }
-        this.message = 'Verification email resent successfully!';
       } catch (error) {
-        this.message = 'Error resending verification email.';
+        this.$q.notify({
+          type: "negative",
+          message: "Error resending verification email.",
+        });
       }
     },
-    async updateUser() {                                                                      // Update user function
-      const updatedUser = {
-        firstName: this.userDetails.firstName,
-        lastName: this.userDetails.lastName,
-        email: this.userDetails.email,
-        phone: this.userDetails.phone,
-        username: this.userDetails.username,
-        password: this.userDetails.password,
-        userType: this.userDetails.userType,
-        location: this.userDetails.location,
-        loginInfo: this.userDetails.loginInfo,
-        order: this.userDetails.order
-      }
-      if (this.validateFields()) {
-        this.$q.dialog({
-          title: 'Confirm', message: `You are about to update your profile, continue?`, color: 'primary', cancel: true, persistent: true
-        }).onOk(async () => {
-          const response = await UserService.updateUserDetails(this.userDetails._id, updatedUser)
-          if (response) {
-            this.$q.notify({ type: 'positive', color: 'primary', message: 'Update successful!' })
-            this.getUserDetails()
-          } else {
-            this.$q.notify({ type: 'negative', message: 'Update failed. Please try again.' })
-          }
-        }).onCancel(() => {
-          this.getUserDetails()
-          return
-        })
-      }
 
+    async updateUser() {
+      if (!this.validateFields()) return;
+
+      this.$q
+        .dialog({
+          title: "Confirm",
+          message: "You are about to update your profile, continue?",
+          color: "primary",
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(async () => {
+          this.saving = true;
+          const updatedUser = {
+            firstName: this.userDetails.firstName,
+            lastName: this.userDetails.lastName,
+            email: this.userDetails.email,
+            phone: this.userDetails.phone,
+            username: this.userDetails.username,
+            userType: this.userDetails.userType,
+            location: this.userDetails.location,
+            loginInfo: this.userDetails.loginInfo,
+            order: this.userDetails.order,
+          };
+
+          try {
+            const response = await UserService.updateUserDetails(
+              this.userDetails._id,
+              updatedUser
+            );
+            if (response) {
+              this.$q.notify({
+                type: "positive",
+                color: "primary",
+                message: "Update successful!",
+              });
+              this.getUserDetails();
+            } else {
+              this.$q.notify({
+                type: "negative",
+                message: "Update failed. Please try again.",
+              });
+            }
+          } catch (error) {
+            this.$q.notify({
+              type: "negative",
+              message: "Update failed. Please try again.",
+            });
+          } finally {
+            this.saving = false;
+          }
+        })
+        .onCancel(() => {
+          this.getUserDetails();
+        });
     },
-    async getUserDetails() {                                                                   // Get user details function
-      const id = await UserService.FindUserByToken()
-      this.userTokenDetails = id
-      const user = await UserService.findUserById(this.userTokenDetails._id)
-      this.userDetails = user
+
+    async getUserDetails() {
+      const id = await UserService.FindUserByToken();
+      this.userTokenDetails = id;
+      const user = await UserService.findUserById(this.userTokenDetails._id);
+      this.userDetails = user;
     },
   },
+
   created() {
-    this.getUserDetails()
-  }
+    this.getUserDetails();
+  },
 };
 </script>
+
+<style lang="sass" scoped>
+.custom-input
+  :deep(.q-field__control)
+    background-color: #121212
+    border-radius: 10px
+    padding: 0 14px
+    transition: background-color 0.2s ease
+
+  :deep(.q-field__native),
+  :deep(.q-field__input)
+    color: #ffffff !important
+
+  :deep(.q-field__control:before)
+    border: 1px solid rgba(255, 255, 255, 0.1)
+    border-radius: 10px
+    transition: border-color 0.2s ease
+
+  :deep(.q-field__control:hover:before)
+    border-color: rgba(255, 255, 255, 0.25)
+
+  :deep(.q-field--focused .q-field__control)
+    background-color: #161616
+    box-shadow: 0 0 0 2px var(--q-primary)
+    border-radius: 10px
+
+  :deep(.q-field__control:after)
+    display: none
+
+  :deep(.q-field--error .q-field__control)
+    box-shadow: 0 0 0 2px var(--negative, #c10015)
+    border-radius: 10px
+
+  :deep(.q-field__marginal)
+    height: 52px
+
+.overline
+  letter-spacing: 0.15em
+  font-weight: 600
+</style>
