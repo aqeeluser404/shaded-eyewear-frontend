@@ -56,7 +56,7 @@
             <div
               class="font-size-responsive-giant archivo text-light text-bold q-mb-md"
             >
-              SIGN IN TO SHADED EYEWEAR
+              SIGN-IN TO YOUR ACCOUNT
             </div>
             <div class="text-subtitle1 text-dimmed q-mb-xl">
               Sign in to review your saved details and keep track of your

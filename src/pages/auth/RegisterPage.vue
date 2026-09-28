@@ -194,6 +194,8 @@
                 </router-link>
               </div>
             </q-form>
+
+            <div class="section-spacer-xs"></div>
           </div>
         </div>
       </div>
