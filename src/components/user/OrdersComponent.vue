@@ -1,7 +1,10 @@
 <template>
-  <div class="orders-details q-pl-lg">
+  <div
+    class="orders-details"
+    :class="$q.screen.gt.sm ? 'q-pl-lg' : 'q-pl-none'"
+  >
     <!--------------------------------------------------------------------- HAS ORDERS -------------------------------------------------->
-    <section v-if="orders.length > 0">
+    <section v-if="loading || orders.length > 0">
       <!-- Heading -->
       <div>
         <div class="font-size-responsive-xl archivo text-light text-bold">
@@ -12,6 +15,17 @@
             Every frame you've bought, in one place.
           </div>
           <q-btn
+            v-if="!loading && hasPendingOrder"
+            rounded
+            no-caps
+            outline
+            label="AWAITING PAYMENT"
+            color="orange"
+            text-color="orange"
+            class="q-px-lg q-py-sm text-caption rounded-button text-bold"
+          />
+          <q-btn
+            v-else-if="!loading && hasReadyToCollectOrder"
             rounded
             no-caps
             outline
@@ -26,141 +40,215 @@
       <div class="section-spacer-sm"></div>
 
       <div class="q-pb-md q-gutter-md">
-        <q-card
-          v-for="order in sortedOrders"
-          :key="order._id"
-          flat
-          bordered
-          class="bg-dark-secondary order-list-card"
-          style="border: 1px solid rgba(255, 255, 255, 0.2)"
-        >
-          <!-- order meta -->
-          <q-card-section
-            class="row justify-between items-center"
-            style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+        <!------------------------------------------ LOADING SKELETON ------------------------------------------>
+        <template v-if="loading">
+          <q-card
+            v-for="n in 2"
+            :key="'skel-' + n"
+            flat
+            bordered
+            class="bg-dark-secondary"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
           >
-            <div>
-              <div class="overline text-dimmed text-caption q-mb-xs">ORDER</div>
-              <div class="text-subtitle1 text-light">#{{ order._id }}</div>
-            </div>
-            <div>
-              <div class="overline text-dimmed text-caption q-mb-xs">
-                PLACED
-              </div>
-              <div class="text-subtitle1 text-light">
-                {{ formatDate(order.orderDate) }}
-              </div>
-            </div>
-            <div class="text-right">
-              <div class="overline text-dimmed text-caption q-mb-xs">TOTAL</div>
-              <div
-                class="font-size-responsive-lg archivo text-gradient-primary"
-              >
-                R {{ order.totalAmount }}.00
-              </div>
-            </div>
-          </q-card-section>
-
-          <!-- items -->
-          <q-card-section
-            v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0"
-            class="q-pa-none"
-          >
-            <div
-              v-for="(sunglass, index) in order.sunglassesDetails"
-              :key="sunglass._id"
-              class="row items-center cursor-pointer q-py-lg q-px-md"
-              :style="
-                index !== order.sunglassesDetails.length - 1
-                  ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
-                  : ''
-              "
-              @click="viewSunglassesDetails(sunglass._id)"
+            <!-- meta skeleton -->
+            <q-card-section
+              class="row justify-between items-center"
+              style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
             >
-              <div class="col-md-2 col-4">
-                <q-img
-                  :src="getImageUrl(sunglass.images[0].imageUrl)"
-                  alt="Sunglass"
-                  class="border"
-                />
+              <div class="col-4">
+                <div class="skeleton-line skeleton-line--xs q-mb-xs"></div>
+                <div class="skeleton-line skeleton-line--md"></div>
               </div>
-
-              <div class="col-md-7 col-8 q-pl-md">
-                <div
-                  class="font-size-responsive-md archivo text-uppercase text-light"
-                >
-                  <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
-                </div>
-                <div class="text-subtitle1 text-dimmed">
-                  R {{ sunglass.price }}.00
-                </div>
-                <div
-                  v-if="order.orderType === 'pickup'"
-                  class="text-subtitle1 text-dimmed q-mt-sm"
-                >
-                  Collection at 65 Stockley Road, Kenwyn
+              <div class="col-4">
+                <div class="skeleton-line skeleton-line--xs q-mb-xs"></div>
+                <div class="skeleton-line skeleton-line--md"></div>
+              </div>
+              <div class="col-4 row justify-end">
+                <div>
+                  <div class="skeleton-line skeleton-line--xs q-mb-xs"></div>
+                  <div class="skeleton-line skeleton-line--sm"></div>
                 </div>
               </div>
+            </q-card-section>
 
-              <div class="col-md-3 col-12 row justify-end q-mt-md q-mt-md-none">
+            <!-- item skeleton -->
+            <q-card-section class="q-pa-none">
+              <div class="row items-center q-py-lg q-px-md">
+                <div class="col-md-1 col-6">
+                  <div class="skeleton-line skeleton-line--hero"></div>
+                </div>
+                <div class="col-md-7 col-6 q-pl-md">
+                  <div class="skeleton-line skeleton-line--md q-mb-sm"></div>
+                  <div class="skeleton-line skeleton-line--sm"></div>
+                </div>
+                <div class="col-md-3 col-12 row justify-end q-mt-lg q-mt-md-none">
+                  <div class="skeleton-line skeleton-line--btn"></div>
+                </div>
+              </div>
+            </q-card-section>
+
+            <!-- footer skeleton -->
+            <q-card-section
+              class="order-footer"
+              style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
+            >
+              <div class="skeleton-line skeleton-line--md"></div>
+              <div class="order-footer-actions">
+                <div class="skeleton-line skeleton-line--btn"></div>
+              </div>
+            </q-card-section>
+          </q-card>
+        </template>
+
+        <!------------------------------------------ REAL ORDERS ------------------------------------------>
+        <template v-else>
+          <q-card
+            v-for="order in sortedOrders"
+            :key="order._id"
+            flat
+            bordered
+            class="bg-dark-secondary order-list-card"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
+            <!-- order meta -->
+            <q-card-section
+              class="row justify-between items-center order-meta-row"
+              style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+            >
+              <div class="col-4">
+                <div class="overline-tight text-dimmed text-caption q-mb-xs">
+                  ORDER
+                </div>
+                <div>
+                  <q-badge
+                    outline
+                    color="grey"
+                    text-color="grey"
+                    class="order-id-badge"
+                  >
+                    #{{ formateOrderId(order) }}
+                  </q-badge>
+                </div>
+              </div>
+
+              <div class="col-4 row justify-center">
+                <div>
+                  <div class="overline-tight text-dimmed text-caption q-mb-xs">
+                    PLACED
+                  </div>
+                  <div class="text-subtitle1 text-dimmed">
+                    {{ formatDate(order.orderDate) }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-4 text-right">
+                <div class="overline-tight text-dimmed text-caption q-mb-xs">
+                  TOTAL
+                </div>
+                <div class="text-subtitle1 archivo text-gradient-primary">
+                  R {{ order.totalAmount }}.00
+                </div>
+              </div>
+            </q-card-section>
+
+            <!-- items -->
+            <q-card-section
+              v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0"
+              class="q-pa-none"
+            >
+              <div
+                v-for="(sunglass, index) in order.sunglassesDetails"
+                :key="sunglass._id"
+                class="row items-center q-py-lg q-px-md"
+                :style="
+                  index !== order.sunglassesDetails.length - 1
+                    ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
+                    : ''
+                "
+              >
+                <div class="col-md-1 col-6">
+                  <q-img
+                    :src="getImageUrl(sunglass.images[0].imageUrl)"
+                    alt="Sunglass"
+                    class="border"
+                  />
+                </div>
+
+                <div class="col-md-7 col-6 q-pl-md">
+                  <div
+                    class="font-size-responsive-md archivo text-uppercase text-light"
+                  >
+                    <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
+                  </div>
+                  <div class="text-subtitle1 text-dimmed">
+                    R {{ sunglass.price }}.00
+                  </div>
+                  <div
+                    v-if="order.orderType === 'pickup'"
+                    class="text-subtitle1 text-dimmed q-mt-sm"
+                  >
+                    Collection at 65 Stockley Road, Kenwyn
+                  </div>
+                </div>
+
+                <div class="col-md-3 col-12 row justify-end q-mt-lg q-mt-md-none">
+                  <q-btn
+                    rounded
+                    dense
+                    no-caps
+                    outline
+                    color="grey"
+                    text-color="grey"
+                    label="View frame"
+                    icon-right="eva-arrow-forward-outline"
+                    class="col-md-8 col-12 q-px-lg q-py-sm text-caption icon-btn text-subtitle1 text-bold"
+                    @click.stop="viewSunglassesDetails(sunglass._id)"
+                  />
+                </div>
+              </div>
+            </q-card-section>
+
+            <!-- status / actions -->
+            <q-card-section
+              class="order-footer"
+              style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
+            >
+              <div class="overline-tight text-dimmed text-caption">
+                <template v-if="order.status === 'paid'">
+                  PAID · {{ order.totalItems }} ITEM(S)
+                </template>
+                <template v-else-if="order.status === 'pending'">
+                  PENDING PAYMENT · {{ order.totalItems }} ITEM(S)
+                </template>
+                <template v-else-if="order.status === 'paid & picked up'">
+                  COLLECTED BY {{ order.userFirstName }}
+                </template>
+              </div>
+
+              <div v-if="order.status === 'pending'" class="order-footer-actions">
                 <q-btn
                   rounded
                   dense
                   no-caps
-                  outline
-                  color="grey"
-                  text-color="grey"
-                  label="View frame"
-                  icon-right="eva-arrow-forward-outline"
-                  class="q-px-lg q-py-sm rounded-button text-subtitle1"
-                  @click.stop="viewSunglassesDetails(sunglass._id)"
+                  flat
+                  label="Cancel"
+                  class="custom-button text-subtitle1 text-dimmed q-px-lg q-py-sm"
+                  @click="cancelOrder(order._id)"
+                />
+                <q-btn
+                  rounded
+                  dense
+                  no-caps
+                  to="/cart"
+                  label="Proceed to checkout"
+                  text-color="dark"
+                  class="btn-gradient-primary q-px-lg q-py-sm rounded-button text-subtitle1 text-bold"
                 />
               </div>
-            </div>
-          </q-card-section>
-
-          <!-- status / actions -->
-          <q-card-section
-            class="row items-center justify-between"
-            style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
-          >
-            <div class="overline text-dimmed text-caption">
-              <template v-if="order.status === 'paid'">
-                PAID · {{ order.totalItems }} ITEM(S)
-              </template>
-              <template v-else-if="order.status === 'pending'">
-                PENDING PAYMENT · {{ order.totalItems }} ITEM(S)
-              </template>
-              <template v-else-if="order.status === 'paid & picked up'">
-                COLLECTED BY {{ order.userFirstName }}
-              </template>
-            </div>
-
-            <div
-              v-if="order.status === 'pending'"
-              class="row items-center q-gutter-sm"
-            >
-              <q-btn
-                rounded
-                dense
-                no-caps
-                flat
-                label="Cancel"
-                class="custom-button text-subtitle1 text-dimmed q-px-lg q-py-sm"
-                @click="cancelOrder(order._id)"
-              />
-              <q-btn
-                rounded
-                dense
-                no-caps
-                to="/cart"
-                label="Proceed to checkout"
-                text-color="dark"
-                class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold"
-              />
-            </div>
-          </q-card-section>
-        </q-card>
+            </q-card-section>
+          </q-card>
+        </template>
       </div>
     </section>
 
@@ -214,6 +302,7 @@ export default {
       orders: [],
       userDetails: {},
       userTokenDetails: { _id: "", username: "", userType: "" },
+      loading: true,
     };
   },
 
@@ -223,12 +312,20 @@ export default {
         (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
       );
     },
+    hasPendingOrder() {
+      return this.orders.some((o) => o.status === "pending");
+    },
+    hasReadyToCollectOrder() {
+      return this.orders.some((o) => o.status === "paid");
+    },
   },
 
   methods: {
     formatDate: Helper.formatDate,
     capitalizeFirstLetter: Helper.capitalizeFirstLetter,
     getImageUrl: Helper.getImageUrl,
+    formateOrderId: Helper.formateOrderId,
+
     viewSunglassesDetails(id) {
       Helper.viewSunglassesDetails(id, this.$router);
     },
@@ -264,6 +361,8 @@ export default {
     async getAllMyOrders() {
       if (!this.userDetails || !this.userDetails._id) return;
 
+      this.loading = true;
+
       try {
         const response =
           (await OrderService.findAllMyOrders(this.userDetails._id)) || [];
@@ -285,6 +384,7 @@ export default {
       }
 
       await this.getSunglasses();
+      this.loading = false;
     },
 
     async getUserDetails() {
@@ -320,7 +420,6 @@ export default {
 
   created() {
     this.getUserDetails();
-    this.getAllMyOrders();
   },
 };
 </script>
@@ -331,4 +430,61 @@ export default {
 
   &:hover
     border-color: rgba(255, 255, 255, 0.35) !important
+
+.order-id-badge
+  font-family: 'Hind', sans-serif
+  font-weight: 900
+  letter-spacing: 0.05em
+  padding: 4px 10px
+  border-radius: 4px
+  max-width: 100%
+  display: inline-block
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+
+.order-footer
+  display: flex
+  align-items: center
+  justify-content: space-between
+  flex-wrap: nowrap
+  gap: 16px
+
+.order-footer-actions
+  display: flex
+  align-items: center
+  gap: 12px
+  flex-shrink: 0
+
+@media (max-width: 1024px)
+  .order-footer
+    flex-direction: column
+    align-items: flex-start
+    gap: 14px
+
+  .order-footer-actions
+    width: 100%
+    justify-content: space-between
+
+    .btn-gradient-primary
+      flex: 1
+      text-align: center
+
+.order-meta-row
+  .col-4
+    max-width: 33.33%
+    overflow: hidden
+
+@media (max-width: 1024px)
+  .order-meta-row
+    .overline-tight
+      font-size: 10px
+      letter-spacing: 1px
+
+    .order-id-badge
+      font-size: 11px
+      padding: 2px 6px
+
+    .text-subtitle1
+      font-size: 12px
 </style>

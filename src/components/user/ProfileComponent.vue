@@ -1,5 +1,5 @@
 <template>
-  <div class="personal-details q-pl-lg">
+  <div class="personal-details" :class="$q.screen.gt.sm ? 'q-pl-lg' : 'q-pl-none'">
     <div>
       <div class="font-size-responsive-xl archivo text-light text-bold">
         PERSONAL DETAILS

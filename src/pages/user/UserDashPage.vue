@@ -3,10 +3,9 @@
     <section class="bg-dark q-px-md text-light q-md-px-0">
       <div class="section-spacer-sm"></div>
       <div class="constrain">
-
         <div class="overline text-dimmed text-caption">USER ACCOUNT</div>
         <div class="row justify-between items-center">
-          <div class="font-size-responsive-giant archivo">YOUR SHADE.</div>
+          <div class="font-size-responsive-giant archivo col-md-6 col-12" :class="$q.screen.gt.sm ? 'q-mb-none' : 'q-mb-md'">YOUR SHADE.</div>
           <q-btn
             rounded
             no-caps
@@ -19,16 +18,22 @@
           />
         </div>
 
-        <div class="section-spacer-md"></div>
+        <div class="section-spacer-md large-screen-only"></div>
+        <div class="section-spacer-sm small-screen-only"></div>
 
         <div class="row justify-start full-width">
-
           <!-- Sidebar -->
-          <div class="bg-transparent col-12 col-md-3 q-pr-lg" style="border-right: 1px solid rgba(255, 255, 255, 0.2)">
+          <div
+            class="bg-transparent col-12 col-md-3 border-right"
+            :class="$q.screen.gt.sm ? 'q-pr-lg' : 'q-pr-none'"
+          >
             <q-item
               clickable
               class="menu-item"
-              :class="{ 'menu-item--active': currentPageComponent === 'ProfileComponent' }"
+              :class="{
+                'menu-item--active':
+                  currentPageComponent === 'ProfileComponent',
+              }"
               @click="changePage('ProfileComponent')"
             >
               <q-item-section avatar>
@@ -42,7 +47,9 @@
             <q-item
               clickable
               class="menu-item"
-              :class="{ 'menu-item--active': currentPageComponent === 'OrdersComponent' }"
+              :class="{
+                'menu-item--active': currentPageComponent === 'OrdersComponent',
+              }"
               @click="changePage('OrdersComponent')"
             >
               <q-item-section avatar>
@@ -54,7 +61,10 @@
             <q-item
               clickable
               class="menu-item"
-              :class="{ 'menu-item--active': currentPageComponent === 'ReturnsComponent' }"
+              :class="{
+                'menu-item--active':
+                  currentPageComponent === 'ReturnsComponent',
+              }"
               @click="changePage('ReturnsComponent')"
             >
               <q-item-section avatar>
@@ -68,7 +78,6 @@
           <div class="col-12 col-md-9">
             <component :is="currentPageComponent"></component>
           </div>
-
         </div>
       </div>
       <div class="section-spacer-md"></div>

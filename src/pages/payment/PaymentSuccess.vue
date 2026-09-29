@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import PaymentService from '../../services/PayService'
+import PaymentService from 'src/services/PayService'
 
 export default {
   async created() {
