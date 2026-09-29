@@ -2,8 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap')
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap')
 @import url('https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css')
-// @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap')
-
 @import '@fontsource/archivo-black'
 @import '@fontsource/hind'
 @import '@fontsource/hind/300.css'
@@ -11,33 +9,40 @@
 @import '@fontsource/hind/600.css'
 @import '@fontsource/hind/700.css'
 
-// =================================================================================
-// COLORS AND VARIABLES
 
+// =================================================================================
+// THEME VARIABLES
 
 :root
   --gradient-primary: linear-gradient(90deg, #FBBF24 0%, #F97316 100%)
-
   --text-color: #{$text-color-dark}
   --text-color-inverse: #{$text-color-light}
   --background-color: #{$background-light}
   --background-color-dark: #{$background-dark}
-
   --background-color-offwhite: #{$background-offwhite}
-
   --background-color-secondary: #{$dark-secondary}
-
   --border-color-light: grey
   --border-color-dark: lightgrey
-
   --text-primary: #{$primary}
+
+
+// =================================================================================
+// BASE
 
 body
   font-family: "Hind", ui-sans-serif, system-ui, sans-serif
   font-weight: 300
   font-style: normal
   -webkit-font-smoothing: antialiased
-  // color: var(--background-color)
+
+p
+  padding-bottom: 0 !important
+  margin-bottom: 0 !important
+  line-height: 0.9
+
+
+// =================================================================================
+// TYPOGRAPHY — font families
 
 .archivo
   font-family: "Archivo Black", ui-sans-serif, system-ui, sans-serif
@@ -48,294 +53,21 @@ body
   font-style: normal
   -webkit-font-smoothing: antialiased
 
+.anton-regular
+  font-family: "Anton", sans-serif
+  font-weight: 400
+  font-style: normal
 
-  // h1,
-  // h2,
-  // h3
-  //   font-family: var(--font-display)
-  //   letter-spacing: -0.02em
-  //   line-height: 0.95
-
-
-// USES DARKMODE
-.q-dark
-  --text-color: #{$text-color-light}
-  --text-color-inverse: #{$text-color-dark}
-  --background-color: #{$background-dark}
-  --background-color-dark: #{$background-light}
-  --background-color-offwhite: #{$background-dark}
-  --border-color-light: lightgrey
-  --border-color-dark: grey
+.caveat
+  font-family: "Caveat", cursive
+  font-optical-sizing: auto
+  font-weight: 400
+  font-style: normal
 
 
-// FIXED COLORS
-.bg-light
-  background-color: $background-light
-.bg-dark
-  background-color: $background-dark
-.bg-dark-secondary
-  background-color: $dark-secondary
+// =================================================================================
+// TYPOGRAPHY — responsive sizes
 
-.gradient-bg
-  background: linear-gradient(180deg, $dark 0%, $dark-secondary 100%)
-
-
-.text-light
-  color: $text-color-light
-.text-dark
-  color: $text-color-dark
-
-
-// AUTO DYNAMIC COLORS
-.bg-tint-dynamic
-  background-color: var(--background-color-offwhite)
-.bg-light-dynamic
-  background-color: var(--background-color)
-.bg-dark-dynamic
-  background-color: var(--background-color-dark)
-.text-light-dynamic
-  color: var(--text-color-inverse)
-.text-dark-dynamic
-  color: var(--text-color)
-
-
-.text-gradient-primary
-  background: var(--gradient-primary)
-  -webkit-background-clip: text
-  background-clip: text
-  -webkit-text-fill-color: transparent
-  color: transparent
-
-.btn-gradient-primary
-  background: var(--gradient-primary) !important
-
-.mouse-cursor
-  cursor: pointer
-
-// header code
-.header-transparent
-  background-color: rgba(0, 0, 0, 0.8)
-  backdrop-filter: blur(10px)
-
-.transparent-white
-  color: white
-
-.header-solid
-  background-color: white
-  transition: background-color 0.3s ease
-
-.transparent-black
-  color: black
-
-// .list-container
-//   flex: 1 1 30%
-//   max-width: 30%
-//   box-sizing: border-box
-//   margin: 1rem
-
-// .carousel-container
-//   flex: 1 1 30%
-//   max-width: 29%
-//   box-sizing: border-box
-//   margin: 1rem
-//   height: 350px
-
-// @media (max-width: 1024px)
-//   .carousel-container
-//     flex: 1 1 90%
-//     max-width: 50%
-//     margin: 0rem
-//     height: 100%
-
-// ================================================================= // LAYOUT
-
-
-.small-screen-only
-  @media (max-width: 1024px)
-    display: block
-  @media (min-width: 1025px)
-    display: none
-
-.large-screen-only
-  @media (max-width: 1024px)
-    display: none
-
-  @media (min-width: 1025px)
-    display: block
-
-.break-desktop
-  @media (max-width: 600px)
-    display: none
-
-
-.constrain
-  max-width: 1280px
-  margin: 0 auto
-
-// .constrain-hero
-//   max-width: 1600px
-//   margin: 0 0 0 auto
-
-.constrain-sunglasses
-  max-width: 1024px
-  margin: 0 auto
-
-.constrain-carousel
-  max-width: 1024px
-
-.constrain-more
-  max-width: 600px
-  margin: 0 auto
-
-p
-  padding-bottom: 0 !important
-  margin-bottom: 0 !important
-  line-height: 0.9
-
-.overline
-  display: inline-block
-  color: #ffffff
-  letter-spacing: 3px
-  text-transform: uppercase
-  font-weight: 500
-
-  &::before
-    content: ''
-    display: block
-    width: 100%
-    height: 1px
-    background: rgba(255, 255, 255, 0.493)
-
-
-
-.noise-overlay
-  position: fixed
-  top: 0
-  left: 0
-  width: 100%
-  height: 100%
-  pointer-events: none
-  background: url('/theme/noise.gif') repeat
-  opacity: 0.02
-  z-index: 999
-
-// ================================================================= // MISC
-.custom-button
-  opacity: 0.6
-  transition: opacity 0.2s ease
-
-  &:hover,
-  &:focus
-    background: transparent !important
-    box-shadow: none !important
-    opacity: 1
-
-  .q-focus-helper
-    display: none !important
-
-.icon-btn
-  .q-btn__content
-    align-items: center
-    gap: 6px
-
-  .q-icon
-    font-size: 1.1em
-
-.rounded-button
-  border-radius: 35px
-
-.text-dimmed
-  color: #9b9b9b
-
-
-.cursor-pointer
-  cursor: pointer
-
-.dark-overlay
-  position: fixed
-  top: 0
-  left: 0
-  width: 100%
-  height: 100%
-  background-color: rgba(0, 0, 0, 0.25)
-  z-index: 1
-
-.element-fixed
-  position: fixed
-  height: fit-content
-  z-index: 1
-  top: 0
-  left: 0
-  right: 0
-  bottom: 0
-  width: fit-content
-  margin: auto
-
-.green-dot
-  height: 10px
-  width: 10px
-  background-color: #00FF00
-  border-radius: 50%
-  display: inline-block
-
-.red-dot
-  height: 10px
-  width: 10px
-  background-color: $negative
-  border-radius: 50%
-  display: inline-block
-
-.admin-user
-  color: black
-  font-weight: bold
-
-.refunded
-  color: #800000
-  font-weight: bold
-
-.round-btn
-  width: fit-content
-  height: fit-content
-  background: $primary
-  color: white
-
-// ================================================================= // FONTS
-.text-uppercase
-  text-transform: uppercase
-.text-capitalize
-  text-transform: capitalize
-.text-lowercase
-  text-transform: lowercase
-
-.text-remove-decoration
-  text-decoration: none
-  list-style-type: none
-
-.limit-text
-  max-width: 200px
-  overflow: hidden
-  text-overflow: ellipsis
-  white-space: nowrap
-
-.limit-text-2
-  display: -webkit-box
-  -webkit-box-orient: vertical
-  -webkit-line-clamp: 2
-  overflow: hidden
-  text-overflow: ellipsis
-  max-width: 99%
-
-.wrap-text
-  overflow: hidden
-  white-space: normal
-
-.model-text
-  max-width: 50%
-  white-space: normal
-  word-wrap: break-word
-
-
-/* Responsive font size utility classes */
 .font-size-responsive-xs
   font-size: $font-size-responsive-xs
   line-height: 1.4
@@ -372,53 +104,220 @@ p
   font-size: $font-size-responsive-hero
   line-height: 1
 
-.anton-regular
-  font-family: "Anton", sans-serif
-  font-weight: 400
-  font-style: normal
 
-// .anton-regular
-//   font-family: "Poppins", sans-serif
-//   font-weight: 700
-//   font-style: normal
+// =================================================================================
+// TYPOGRAPHY — transforms
 
-.caveat
-  font-family: "Caveat", cursive
-  font-optical-sizing: auto
-  font-weight: 400
-  font-style: normal
+.text-uppercase
+  text-transform: uppercase
 
+.text-capitalize
+  text-transform: capitalize
 
-// ================================================================= // IMAGES
-// .image
-//   width: 300px
-//   height: 300px
-//   object-fit: cover
+.text-lowercase
+  text-transform: lowercase
 
-// .product-image
-//   height: 100%
-//   max-height: 1280px
-
-.image-rounded
-  border-radius: 5%
-  width: 300px
-  height: 300px
-  object-fit: cover
-
-.order-image
-  max-height: 120px
-
-.border
-  border: 1px solid lightgrey
+.text-remove-decoration
+  text-decoration: none
+  list-style-type: none
 
 
-.footer-avatar
-  width: 28px
-  height: 28px
+// =================================================================================
+// TYPOGRAPHY — line clamps
+
+.limit-text
+  max-width: 200px
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.limit-text-2
+  display: -webkit-box
+  -webkit-box-orient: vertical
+  -webkit-line-clamp: 2
+  overflow: hidden
+  text-overflow: ellipsis
+  max-width: 99%
+
+.wrap-text
+  overflow: hidden
+  white-space: normal
+
+.model-text
+  max-width: 50%
+  white-space: normal
+  word-wrap: break-word
 
 
+// =================================================================================
+// OVERLINE — two variants
 
-// ===== SPACERS SIZES =====
+// Default overline — what you had originally (wider tracking, heavier weight)
+.overline
+  display: inline-block
+  color: #ffffff
+  letter-spacing: 3px
+  text-transform: uppercase
+  font-weight: 500
+
+  &::before
+    content: ''
+    display: block
+    width: 100%
+    height: 1px
+    background: rgba(255, 255, 255, 0.493)
+
+// Tighter variant — narrower tracking, semibold
+.overline-tight
+  display: inline-block
+  color: #ffffff
+  letter-spacing: 0.15em
+  text-transform: uppercase
+  font-weight: 600
+
+  &::before
+    content: ''
+    display: block
+    width: 100%
+    height: 1px
+    background: rgba(255, 255, 255, 0.493)
+
+
+// =================================================================================
+// COLORS — dark mode
+
+.q-dark
+  --text-color: #{$text-color-light}
+  --text-color-inverse: #{$text-color-dark}
+  --background-color: #{$background-dark}
+  --background-color-dark: #{$background-light}
+  --background-color-offwhite: #{$background-dark}
+  --border-color-light: lightgrey
+  --border-color-dark: grey
+
+
+// =================================================================================
+// COLORS — fixed backgrounds
+
+.bg-light
+  background-color: $background-light
+
+.bg-dark
+  background-color: $background-dark
+
+.bg-dark-secondary
+  background-color: $dark-secondary
+
+.gradient-bg
+  background: linear-gradient(180deg, $dark 0%, $dark-secondary 100%)
+
+
+// =================================================================================
+// COLORS — fixed text
+
+.text-light
+  color: $text-color-light
+
+.text-dark
+  color: $text-color-dark
+
+.text-dimmed
+  color: #9b9b9b
+
+
+// =================================================================================
+// COLORS — dynamic (respect q-dark)
+
+.bg-tint-dynamic
+  background-color: var(--background-color-offwhite)
+
+.bg-light-dynamic
+  background-color: var(--background-color)
+
+.bg-dark-dynamic
+  background-color: var(--background-color-dark)
+
+.text-light-dynamic
+  color: var(--text-color-inverse)
+
+.text-dark-dynamic
+  color: var(--text-color)
+
+
+// =================================================================================
+// GRADIENTS
+
+.text-gradient-primary
+  background: var(--gradient-primary)
+  -webkit-background-clip: text
+  background-clip: text
+  -webkit-text-fill-color: transparent
+  color: transparent
+
+.btn-gradient-primary
+  background: var(--gradient-primary) !important
+
+
+// =================================================================================
+// HEADER
+
+.header-transparent
+  background-color: rgba(0, 0, 0, 0.8)
+  backdrop-filter: blur(10px)
+
+.transparent-white
+  color: white
+
+.header-solid
+  background-color: white
+  transition: background-color 0.3s ease
+
+.transparent-black
+  color: black
+
+
+// =================================================================================
+// LAYOUT — responsive visibility
+
+.small-screen-only
+  @media (max-width: 1024px)
+    display: block
+  @media (min-width: 1025px)
+    display: none
+
+.large-screen-only
+  @media (max-width: 1024px)
+    display: none
+  @media (min-width: 1025px)
+    display: block
+
+.break-desktop
+  @media (max-width: 600px)
+    display: none
+
+
+// =================================================================================
+// LAYOUT — width constraints
+
+.constrain
+  max-width: 1280px
+  margin: 0 auto
+
+.constrain-sunglasses
+  max-width: 1024px
+  margin: 0 auto
+
+.constrain-carousel
+  max-width: 1024px
+
+.constrain-more
+  max-width: 600px
+  margin: 0 auto
+
+
+// =================================================================================
+// LAYOUT — spacers
+
 .section-spacer-xs
   height: 20px
 
@@ -438,88 +337,243 @@ p
   height: 160px
 
 
+// =================================================================================
+// LAYOUT — overlays
+
+.noise-overlay
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  pointer-events: none
+  background: url('/theme/noise.gif') repeat
+  opacity: 0.02
+  z-index: 999
+
+.dark-overlay
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  background-color: rgba(0, 0, 0, 0.25)
+  z-index: 1
+
+.element-fixed
+  position: fixed
+  height: fit-content
+  z-index: 1
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  width: fit-content
+  margin: auto
 
 
+// =================================================================================
+// FORMS — custom input
 
-// // ===== PADDING SIZES =====
-// .padding-xl
-//   padding: 3rem
-//   @media (max-width: 767px)
-//     padding: 1.5rem
+.custom-input
+  .q-field__control
+    background-color: #121212
+    border-radius: 10px
+    padding: 0 14px
+    transition: background-color 0.2s ease
 
-// .padding-lg
-//   padding: 2.5rem
-//   @media (max-width: 767px)
-//     padding: 1.5rem
+  .q-field__native,
+  .q-field__input
+    color: #ffffff !important
 
-// .padding-md
-//   padding: 2rem
-//   @media (max-width: 767px)
-//     padding: 1.25rem
+  .q-field__control:before
+    border: 1px solid rgba(255, 255, 255, 0.1)
+    border-radius: 10px
+    transition: border-color 0.2s ease
 
-// .padding-sm
-//   padding: 1.5rem
-//   @media (max-width: 767px)
-//     padding: 1rem
+  .q-field__control:hover:before
+    border-color: rgba(255, 255, 255, 0.25)
 
-// .padding-xs
-//   padding: 1rem
-//   @media (max-width: 767px)
-//     padding: 0.75rem
+  .q-field--focused .q-field__control
+    background-color: #161616
+    box-shadow: 0 0 0 2px var(--q-primary)
+    border-radius: 10px
 
-// // Horizontal padding only
-// .padding-x-md
-//   padding-left: 2rem
-//   padding-right: 2rem
-//   @media (max-width: 767px)
-//     padding-left: 1rem
-//     padding-right: 1rem
+  .q-field__control:after
+    display: none
 
-// .padding-x-xl
-//   padding-left: 3rem
-//   padding-right: 3rem
-//   @media (max-width: 767px)
-//     padding-left: 1.5rem
-//     padding-right: 1.5rem
+  .q-field--error .q-field__control
+    box-shadow: 0 0 0 2px var(--negative, #c10015)
+    border-radius: 10px
 
-// .padding-x-lg
-//   padding-left: 2.5rem
-//   padding-right: 2.5rem
-//   @media (max-width: 767px)
-//     padding-left: 1.5rem
-//     padding-right: 1.5rem
+  .q-field__marginal
+    height: 52px
 
-// // Vertical padding only
-// .padding-y-xl
-//   padding-top: 3rem
-//   padding-bottom: 3rem
-//   @media (max-width: 767px)
-//     padding-top: 1.5rem
-//     padding-bottom: 1.5rem
 
-// .padding-t-xl
-//   padding-top: 3rem
-//   @media (max-width: 767px)
-//     padding-top: 1.5rem
+// =================================================================================
+// BUTTONS
 
-// .padding-b-xl
-//   padding-bottom: 3rem
-//   @media (max-width: 767px)
-//     padding-bottom: 1.5rem
+.custom-button
+  opacity: 0.6
+  transition: opacity 0.2s ease
 
-// .padding-b-xl
-//   padding-bottom: 3rem
-//   @media (max-width: 767px)
-//     padding-bottom: 1.5rem
+  &:hover,
+  &:focus
+    background: transparent !important
+    box-shadow: none !important
+    opacity: 1
 
-// .padding-y-lg
-//   padding-top: 2rem
-//   padding-bottom: 2rem
-//   @media (max-width: 767px)
-//     padding-top: 1.25rem
-//     padding-bottom: 1.25rem
+  .q-focus-helper
+    display: none !important
 
-// .padding-t-sm
-//   padding-top: 1rem
-//   @media (max-width: 767px)
-//     padding-top: 0.5rem
+.icon-btn
+  .q-btn__content
+    align-items: center
+    gap: 6px
+
+  .q-icon
+    font-size: 1.1em
+
+.rounded-button
+  border-radius: 35px
+
+.round-btn
+  width: fit-content
+  height: fit-content
+  background: $primary
+  color: white
+
+
+// =================================================================================
+// MISC — cursors
+
+.mouse-cursor,
+.cursor-pointer
+  cursor: pointer
+
+
+// =================================================================================
+// MISC — status indicators
+
+.green-dot
+  height: 10px
+  width: 10px
+  background-color: #00FF00
+  border-radius: 50%
+  display: inline-block
+
+.red-dot
+  height: 10px
+  width: 10px
+  background-color: $negative
+  border-radius: 50%
+  display: inline-block
+
+.admin-user
+  color: black
+  font-weight: bold
+
+.refunded
+  color: #800000
+  font-weight: bold
+
+
+// =================================================================================
+// IMAGES
+
+.image-rounded
+  border-radius: 5%
+  width: 300px
+  height: 300px
+  object-fit: cover
+
+.order-image
+  max-height: 120px
+
+.border
+  border: 1px solid lightgrey
+
+.footer-avatar
+  width: 28px
+  height: 28px
+
+
+// =================================================================================
+// SKELETON SHIMMER
+
+$skeleton-shimmer: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.09) 50%, rgba(255, 255, 255, 0.04) 100%)
+
+.skeleton-line,
+.skeleton-block
+  background: $skeleton-shimmer
+  background-size: 200% 100%
+  animation: skeleton-shimmer 1.4s ease-in-out infinite
+  border-radius: 6px
+
+.skeleton-line
+  height: 14px
+  width: 100%
+
+// width modifiers
+.skeleton-line--xs
+  width: 60px
+.skeleton-line--sm
+  width: 90px
+.skeleton-line--md
+  width: 140px
+.skeleton-line--lg
+  width: 200px
+.skeleton-line--full
+  width: 100%
+
+// height modifiers
+.skeleton-line--input
+  height: 52px
+  border-radius: 10px
+
+.skeleton-line--btn
+  height: 56px
+  border-radius: 999px
+  width: 160px
+
+.skeleton-line--avatar
+  width: 48px
+  height: 48px
+  border-radius: 50%
+
+.skeleton-line--hero
+  height: 320px
+  border-radius: 12px
+
+.skeleton-block
+  width: 100%
+  height: 100%
+
+@keyframes skeleton-shimmer
+  0%
+    background-position: 200% 0
+  100%
+    background-position: -200% 0
+
+
+// =================================================================================
+// BORDER RADIUS UTILITIES
+
+.no-radius
+  border-radius: 0 !important
+
+.no-radius-top
+  border-top-left-radius: 0 !important
+  border-top-right-radius: 0 !important
+
+.no-radius-bottom
+  border-bottom-left-radius: 0 !important
+  border-bottom-right-radius: 0 !important
+
+.no-radius-left
+  border-top-left-radius: 0 !important
+  border-bottom-left-radius: 0 !important
+
+.no-radius-right
+  border-top-right-radius: 0 !important
+  border-bottom-right-radius: 0 !important

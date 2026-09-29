@@ -1,7 +1,5 @@
 <template>
   <div class="personal-details q-pl-lg">
-
-    <!-- Heading -->
     <div>
       <div class="font-size-responsive-xl archivo text-light text-bold">
         PERSONAL DETAILS
@@ -16,114 +14,116 @@
     <q-form @submit="updateUser" class="q-gutter-md">
       <!-- First + Last name -->
       <div class="row">
-        <div
-          class="col-12 col-md-6"
-          :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
-        >
-          <div class="overline text-dimmed text-caption q-mb-xs">
-            FIRST NAME
+        <div class="col-12 col-md-6" :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'">
+          <div class="overline-tight text-dimmed text-caption q-mb-xs">FIRST NAME</div>
+          <div class="field-shell">
+            <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
+            <q-input
+              v-else
+              filled
+              dark
+              v-model="userDetails.firstName"
+              placeholder="Your first name"
+              class="custom-input"
+              input-style="color: white;"
+              :rules="[(val) => !!val || 'First name is required']"
+            />
           </div>
-          <q-input
-            filled
-            dark
-            v-model="userDetails.firstName"
-            placeholder="Your first name"
-            class="custom-input"
-            input-style="color: white;"
-            :rules="[(val) => !!val || 'First name is required']"
-          />
         </div>
 
         <div class="col-12 col-md-6">
-          <div class="overline text-dimmed text-caption q-mb-xs">LAST NAME</div>
-          <q-input
-            filled
-            dark
-            v-model="userDetails.lastName"
-            placeholder="Your last name"
-            class="custom-input"
-            input-style="color: white;"
-            :rules="[(val) => !!val || 'Last name is required']"
-          />
+          <div class="overline-tight text-dimmed text-caption q-mb-xs">LAST NAME</div>
+          <div class="field-shell">
+            <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
+            <q-input
+              v-else
+              filled
+              dark
+              v-model="userDetails.lastName"
+              placeholder="Your last name"
+              class="custom-input"
+              input-style="color: white;"
+              :rules="[(val) => !!val || 'Last name is required']"
+            />
+          </div>
         </div>
       </div>
 
       <!-- Email + Phone -->
       <div class="row">
-        <div
-          class="col-12 col-md-6"
-          :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
-        >
+        <div class="col-12 col-md-6" :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'">
           <div class="row items-center justify-between q-mb-xs">
-            <div class="overline text-dimmed text-caption">EMAIL ADDRESS</div>
+            <div class="overline-tight text-dimmed text-caption">EMAIL ADDRESS</div>
             <div
-              v-if="userDetails && userDetails.verification"
+              v-if="!loading && userDetails && userDetails.verification"
               class="row items-center text-caption"
             >
               <template v-if="userDetails.verification.isVerified">
                 <span class="text-secondary">Verified</span>
-                <q-icon
-                  color="secondary"
-                  name="eva-checkmark-circle-2-outline"
-                  size="14px"
-                  class="q-ml-xs"
-                />
+                <q-icon color="secondary" name="eva-checkmark-circle-2-outline" size="14px" class="q-ml-xs" />
               </template>
               <template v-else>
                 <span class="text-negative">Not Verified</span>
-                <q-icon
-                  color="negative"
-                  name="eva-alert-circle-outline"
-                  size="14px"
-                  class="q-ml-xs"
-                />
+                <q-icon color="negative" name="eva-alert-circle-outline" size="14px" class="q-ml-xs" />
               </template>
             </div>
           </div>
-          <q-input
-            filled
-            dark
-            v-model="userDetails.email"
-            placeholder="you@example.com"
-            class="custom-input"
-            input-style="color: white;"
-            :rules="[(val) => !!val || 'Email is required']"
-          />
+          <div class="field-shell">
+            <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
+            <q-input
+              v-else
+              filled
+              dark
+              v-model="userDetails.email"
+              placeholder="you@example.com"
+              class="custom-input"
+              input-style="color: white;"
+              :rules="[(val) => !!val || 'Email is required']"
+            />
+          </div>
         </div>
 
         <div class="col-12 col-md-6">
-          <div class="overline text-dimmed text-caption q-mb-xs">
-            PHONE NUMBER
+          <div class="overline-tight text-dimmed text-caption q-mb-xs">PHONE NUMBER</div>
+          <div class="field-shell">
+            <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
+            <q-input
+              v-else
+              filled
+              dark
+              v-model="userDetails.phone"
+              placeholder="082 123 4567"
+              class="custom-input"
+              input-style="color: white;"
+              :rules="[(val) => !!val || 'Phone is required']"
+            />
           </div>
+        </div>
+      </div>
+
+      <!-- Username -->
+      <div>
+        <div class="overline-tight text-dimmed text-caption q-mb-xs">USERNAME</div>
+        <div class="field-shell">
+          <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
           <q-input
+            v-else
             filled
             dark
-            v-model="userDetails.phone"
-            placeholder="082 123 4567"
+            v-model="userDetails.username"
+            placeholder="Choose a display name"
             class="custom-input"
             input-style="color: white;"
-            :rules="[(val) => !!val || 'Phone is required']"
+            :rules="[(val) => !!val || 'Username is required']"
           />
         </div>
       </div>
 
-      <!-- Username (full width) -->
-      <div>
-        <div class="overline text-dimmed text-caption q-mb-xs">USERNAME</div>
-        <q-input
-          filled
-          dark
-          v-model="userDetails.username"
-          placeholder="Choose a display name"
-          class="custom-input"
-          input-style="color: white;"
-          :rules="[(val) => !!val || 'Username is required']"
-        />
-      </div>
-
       <!-- Actions -->
-      <div class="row items-center q-gutter-md">
+      <div class="row items-center q-gutter-md q-mt-md">
+        <div v-if="loading" class="skeleton-line skeleton-line--btn"></div>
         <q-btn
+          v-else
           rounded
           no-caps
           label="Save changes"
@@ -133,12 +133,11 @@
           :loading="saving"
         />
 
+        <template v-if="loading">
+          <div class="skeleton-line skeleton-line--btn"></div>
+        </template>
         <q-btn
-          v-if="
-            userDetails &&
-            userDetails.verification &&
-            !userDetails.verification.isVerified
-          "
+          v-else-if="userDetails && userDetails.verification && !userDetails.verification.isVerified"
           rounded
           no-caps
           outline
@@ -166,6 +165,7 @@ export default {
       userDetails: {},
       userTokenDetails: { _id: "", username: "", userType: "" },
       saving: false,
+      loading: true,
     };
   },
 
@@ -312,10 +312,12 @@ export default {
     },
 
     async getUserDetails() {
+      this.loading = true;
       const id = await UserService.FindUserByToken();
       this.userTokenDetails = id;
       const user = await UserService.findUserById(this.userTokenDetails._id);
       this.userDetails = user;
+      this.loading = false;
     },
   },
 
@@ -324,43 +326,3 @@ export default {
   },
 };
 </script>
-
-<style lang="sass" scoped>
-.custom-input
-  :deep(.q-field__control)
-    background-color: #121212
-    border-radius: 10px
-    padding: 0 14px
-    transition: background-color 0.2s ease
-
-  :deep(.q-field__native),
-  :deep(.q-field__input)
-    color: #ffffff !important
-
-  :deep(.q-field__control:before)
-    border: 1px solid rgba(255, 255, 255, 0.1)
-    border-radius: 10px
-    transition: border-color 0.2s ease
-
-  :deep(.q-field__control:hover:before)
-    border-color: rgba(255, 255, 255, 0.25)
-
-  :deep(.q-field--focused .q-field__control)
-    background-color: #161616
-    box-shadow: 0 0 0 2px var(--q-primary)
-    border-radius: 10px
-
-  :deep(.q-field__control:after)
-    display: none
-
-  :deep(.q-field--error .q-field__control)
-    box-shadow: 0 0 0 2px var(--negative, #c10015)
-    border-radius: 10px
-
-  :deep(.q-field__marginal)
-    height: 52px
-
-.overline
-  letter-spacing: 0.15em
-  font-weight: 600
-</style>

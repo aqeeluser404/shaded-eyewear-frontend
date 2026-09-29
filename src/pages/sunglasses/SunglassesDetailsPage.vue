@@ -1,63 +1,101 @@
 <template>
   <q-page>
-    <template v-if="!loading">
-      <!------------------------------------------------------------ IMAGES + DUO IMAGES PANEL --------------------------------------------->
-      <section class="gradient-bg q-px-md text-light q-md-px-0">
-        <div class="constrain">
-          <div class="section-spacer-sm"></div>
-          <div>
-            <q-btn
-              dense
-              no-caps
-              flat
-              label="Catalogue"
-              to="/sunglasses"
-              icon="eva-arrow-back-outline"
-              class="custom-button icon-btn font-size-responsive-sm text-light"
-            />
-          </div>
-          <div class="section-spacer-xs"></div>
-
-          <q-card
+    <!------------------------------------------------------------ IMAGES + DUO IMAGES PANEL --------------------------------------------->
+    <section class="gradient-bg q-px-md text-light q-md-px-0">
+      <div class="constrain">
+        <div class="section-spacer-sm"></div>
+        <div>
+          <q-btn
+            dense
+            no-caps
             flat
-            class="bg-transparent row justify-center items-start"
+            label="Catalogue"
+            to="/sunglasses"
+            icon="eva-arrow-back-outline"
+            class="custom-button icon-btn font-size-responsive-sm text-light"
+          />
+        </div>
+        <div class="section-spacer-xs"></div>
+
+        <q-card flat class="bg-transparent row justify-center items-start">
+          <!-- LEFT: gallery -->
+          <div class="col-12 col-md-7">
+<div class="product-gallery q-mr-none q-mr-md-xl">
+  <div
+    class="gallery-stage"
+    :class="{ 'gallery-stage--loading': loading }"
+  >
+    <div
+      v-if="loading"
+      class="skeleton-line skeleton-line--hero"
+    ></div>
+
+    <template v-else>
+      <q-img
+        v-if="mainImage"
+        :src="getImageUrl(mainImage)"
+        class="stage-image"
+        fit="contain"
+      />
+
+      <div class="thumb-dock">
+        <button
+          v-for="img in sunglasses.images"
+          :key="img.imageUrl"
+          class="thumb-circle"
+          :class="{ 'thumb-circle--active': mainImage === img.imageUrl }"
+          @click="updateMainImage(img.imageUrl)"
+        >
+          <q-img :src="getImageUrl(img.imageUrl)" fit="cover" />
+        </button>
+      </div>
+    </template>
+  </div>
+</div>
+          </div>
+
+          <!-- RIGHT: details -->
+          <div
+            class="col-12 col-md-5"
+            :class="$q.screen.gt.md ? 'q-md-mt-none' : 'q-mt-xl'"
           >
-            <div class="col-12 col-md-7">
-              <div class="product-gallery q-mr-none q-mr-md-xl">
-                <div class="gallery-stage">
-                  <q-img
-                    v-if="mainImage"
-                    :src="getImageUrl(mainImage)"
-                    class="stage-image"
-                    fit="contain"
-                  />
+            <!-- skeleton block -->
+            <template v-if="loading">
+              <div class="skeleton-line skeleton-line--sm q-mb-md"></div>
 
-                  <div class="thumb-dock">
-                    <button
-                      v-for="img in sunglasses.images"
-                      :key="img.imageUrl"
-                      class="thumb-circle"
-                      :class="{
-                        'thumb-circle--active': mainImage === img.imageUrl,
-                      }"
-                      @click="updateMainImage(img.imageUrl)"
-                    >
-                      <q-img :src="getImageUrl(img.imageUrl)" fit="cover" />
-                    </button>
-                  </div>
-                </div>
+              <div class="skeleton-line skeleton-line--hero q-mb-md"></div>
+
+              <div class="skeleton-line skeleton-line--md q-mb-xl"></div>
+
+              <div class="row items-center q-gutter-md q-mb-xl">
+                <div class="skeleton-line skeleton-line--btn"></div>
+                <div class="skeleton-line skeleton-line--btn"></div>
               </div>
-            </div>
 
-            <div
-              class="col-12 col-md-5"
-              :class="$q.screen.gt.md ? ' q-md-mt-none' : 'q-mt-xl'"
-            >
+              <div class="skeleton-line skeleton-line--full q-mb-sm"></div>
+              <div class="skeleton-line skeleton-line--full q-mb-sm"></div>
+              <div class="skeleton-line skeleton-line--md q-mb-xl"></div>
+
+              <div
+                v-for="n in 4"
+                :key="'spec-skel-' + n"
+                class="row justify-between items-center q-py-md"
+                style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+              >
+                <div class="skeleton-line skeleton-line--xs"></div>
+                <div class="skeleton-line skeleton-line--xs"></div>
+              </div>
+            </template>
+
+            <!-- real content -->
+            <template v-else>
               <div class="overline text-dimmed text-caption">
                 SUNGLASSES DESCRIPTION
               </div>
 
-              <div class="font-size-responsive-giant archivo text-light text-uppercase">
+              <div
+                class="font-size-responsive-giant archivo text-light text-uppercase"
+              >
                 {{ sunglasses.model }}
               </div>
 
@@ -83,7 +121,6 @@
                     label="Add to cart"
                     class="btn-gradient-primary q-px-xl q-py-md q-mr-md text-subtitle1 rounded-button text-bold"
                   />
-                  <!-- v-if="currentOrderId && currentOrderId !== null"  -->
                   <q-btn
                     @click="navigateToCart"
                     label="View cart"
@@ -149,44 +186,68 @@
 
               <div class="row items-center">
                 <q-icon name="eva-shield-outline" color="primary" size="24px" />
-                <span class="text-subtitle1 text-dimmed q-ml-sm"
-                  >Deliveries made in Cape Town · pickup available in
-                  Kenwyn</span
-                >
+                <span class="text-subtitle1 text-dimmed q-ml-sm">
+                  Deliveries made in Cape Town · pickup available in Kenwyn
+                </span>
               </div>
-            </div>
-          </q-card>
-        </div>
-        <div class="section-spacer-md"></div>
-      </section>
-
-      <!------------------------------------------------------------ RELATED PRODUCTS PANEL --------------------------------------------->
-      <section
-        class="bg-dark q-px-md text-light q-md-px-0"
-        :class="$q.screen.gt.md ? ' q-md-mt-none' : 'q-mt-xl'"
-        style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
-      >
-        <div class="section-spacer-md"></div>
-        <div class="constrain">
-          <div class="overline text-dimmed text-caption">You may also like</div>
-          <div class="font-size-responsive-giant archivo text-light text-bold">
-            Related frames
+            </template>
           </div>
+        </q-card>
+      </div>
+      <div class="section-spacer-md"></div>
+    </section>
 
-          <div class="section-spacer-sm"></div>
+    <!------------------------------------------------------------ RELATED PRODUCTS PANEL --------------------------------------------->
+    <section
+      class="bg-dark q-px-md text-light q-md-px-0"
+      :class="$q.screen.gt.md ? 'q-md-mt-none' : 'q-mt-xl'"
+      style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
+    >
+      <div class="section-spacer-md"></div>
+      <div class="constrain">
+        <div class="overline text-dimmed text-caption">You may also like</div>
+        <div class="font-size-responsive-giant archivo text-light text-bold">
+          Related frames
+        </div>
 
-          <div class="row items-center no-wrap">
-            <q-btn
-              flat
-              round
-              dense
-              icon="eva-arrow-back-outline"
-              color="grey"
-              class="q-mr-sm gt-xs"
-              @click="prevSlide"
-            />
+        <div class="section-spacer-sm"></div>
 
-            <div class="row related-grid" style="flex-grow: 1">
+        <div class="row items-center no-wrap">
+          <q-btn
+            flat
+            round
+            dense
+            icon="eva-arrow-back-outline"
+            color="grey"
+            class="q-mr-sm gt-xs"
+            @click="prevSlide"
+          />
+
+          <div class="row related-grid" style="flex-grow: 1">
+            <!-- skeleton cards -->
+            <template v-if="loadingRelated">
+              <q-card
+                v-for="n in 3"
+                :key="'rel-skel-' + n"
+                flat
+                class="related-card bg-dark-secondary row items-center no-wrap"
+              >
+                <div class="related-image-wrap">
+                  <div
+                    class="skeleton-line skeleton-line--avatar"
+                    style="border-radius: 4px"
+                  ></div>
+                </div>
+                <div class="column q-pl-md related-info full-width">
+                  <div class="skeleton-line skeleton-line--md q-mb-sm"></div>
+                  <div class="skeleton-line skeleton-line--full q-mb-sm"></div>
+                  <div class="skeleton-line skeleton-line--sm"></div>
+                </div>
+              </q-card>
+            </template>
+
+            <!-- real cards -->
+            <template v-else>
               <q-card
                 v-for="sunglass in visibleSunglasses"
                 :key="sunglass._id"
@@ -217,27 +278,22 @@
                   </div>
                 </div>
               </q-card>
-            </div>
-
-            <q-btn
-              flat
-              round
-              dense
-              icon="eva-arrow-forward-outline"
-              color="grey"
-              class="q-ml-sm gt-xs"
-              @click="nextSlide"
-            />
+            </template>
           </div>
 
+          <q-btn
+            flat
+            round
+            dense
+            icon="eva-arrow-forward-outline"
+            color="grey"
+            class="q-ml-sm gt-xs"
+            @click="nextSlide"
+          />
         </div>
-        <div class="section-spacer-md"></div>
-      </section>
-    </template>
-
-    <div v-else class="full-width flex flex-center q-pa-xl">
-      <q-spinner-dots size="40px" color="primary" />
-    </div>
+      </div>
+      <div class="section-spacer-md"></div>
+    </section>
   </q-page>
 </template>
 
@@ -253,6 +309,8 @@ export default {
 
   data() {
     return {
+      loadingRelated: true, // related products
+
       // ORDER DATA STRUCTURE
       orderData: {
         sunglasses: [{ _id: "", quantity: 1 }],
@@ -335,21 +393,31 @@ export default {
       this.itemsPerPage = window.innerWidth <= 1024 ? 1 : 3;
     },
     async fetchAllSunglasses() {
-      this.loading = true;
-      const response = await SunglassesService.findAllSunglasses();
-      this.allSunglasses = response;
-      this.loading = false;
+      this.loadingRelated = true;
+      try {
+        const response = await SunglassesService.findAllSunglasses();
+        this.allSunglasses = response;
+      } finally {
+        this.loadingRelated = false;
+      }
     },
     async fetchSunglassesDetails() {
-      const encryptedId = this.$route.params.id;
-      const decryptedBytes = CryptoJS.AES.decrypt(
-        decodeURIComponent(encryptedId),
-        "secret-key"
-      );
-      const decryptedId = decryptedBytes.toString(CryptoJS.enc.Utf8);
+      this.loading = true;
+      try {
+        const encryptedId = this.$route.params.id;
+        const decryptedBytes = CryptoJS.AES.decrypt(
+          decodeURIComponent(encryptedId),
+          "secret-key"
+        );
+        const decryptedId = decryptedBytes.toString(CryptoJS.enc.Utf8);
 
-      const response = await SunglassesService.findSunglassesById(decryptedId);
-      this.sunglasses = response;
+        const response = await SunglassesService.findSunglassesById(
+          decryptedId
+        );
+        this.sunglasses = response;
+      } finally {
+        this.loading = false;
+      }
     },
     async addToCart() {
       if (!this.userTokenDetails._id) {
@@ -524,4 +592,9 @@ export default {
   .related-card
     flex: 1 1 100%
     max-width: 100%
+
+.gallery-stage--loading
+  background: transparent
+  box-shadow: none
+  padding: 0
 </style>

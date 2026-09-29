@@ -32,7 +32,7 @@
               @click="changePage('ProfileComponent')"
             >
               <q-item-section avatar>
-                <q-icon name="eva-person-outline" />
+                <q-icon name="fa-solid fa-user" size="18px" />
               </q-item-section>
               <q-item-section class="text-subtitle1">
                 Personal Details
@@ -46,7 +46,7 @@
               @click="changePage('OrdersComponent')"
             >
               <q-item-section avatar>
-                <q-icon name="fa-solid fa-cube" />
+                <q-icon name="fa-solid fa-cube" size="18px" />
               </q-item-section>
               <q-item-section class="text-subtitle1">Orders</q-item-section>
             </q-item>
@@ -58,7 +58,7 @@
               @click="changePage('ReturnsComponent')"
             >
               <q-item-section avatar>
-                <q-icon name="fa-solid fa-arrow-rotate-left" />
+                <q-icon name="fa-solid fa-arrow-rotate-left" size="18px" />
               </q-item-section>
               <q-item-section class="text-subtitle1">Returns</q-item-section>
             </q-item>

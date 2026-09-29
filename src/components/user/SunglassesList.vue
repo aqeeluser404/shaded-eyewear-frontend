@@ -1,18 +1,36 @@
 <template>
   <div class="row justify-start flex-wrap sunglasses-grid">
-    <template v-if="!loading">
+    <!------------------------------------------------ LOADING SKELETON ------------------------------------------------>
+    <template v-if="loading">
       <q-card
-        v-for="(sunglass) in displayedSunglasses"
+        v-for="n in skeletonCount"
+        :key="'skel-' + n"
+        flat
+        class="sunglass-card"
+      >
+        <div class="sunglass-image-wrap sunglass-image-wrap--loading">
+          <div class="skeleton-line skeleton-line--hero no-radius-bottom"></div>
+        </div>
+
+        <q-item class="column sunglass-info">
+          <div class="row items-start justify-between full-width no-wrap">
+            <div class="skeleton-line skeleton-line--md "></div>
+            <div class="skeleton-line skeleton-line--sm"></div>
+          </div>
+        </q-item>
+      </q-card>
+    </template>
+
+    <!------------------------------------------------ REAL CONTENT ------------------------------------------------>
+    <template v-else>
+      <q-card
+        v-for="sunglass in displayedSunglasses"
         :key="sunglass._id"
         flat
         @click="viewSunglassesDetails(sunglass._id)"
         class="cursor-pointer sunglass-card"
       >
-        <!-- Image panel -->
         <div class="sunglass-image-wrap relative-position">
-          <!-- <q-badge class="sunglass-index" rounded>
-            {{ String(index + 1).padStart(2, '0') }}
-          </q-badge> -->
           <q-img
             v-if="sunglass.images && sunglass.images.length > 0"
             :src="getImageUrl(sunglass.images[0].imageUrl)"
@@ -20,7 +38,6 @@
           />
         </div>
 
-        <!-- Info bar -->
         <q-item class="column sunglass-info">
           <div class="row items-start justify-between full-width no-wrap">
             <div class="text-subtitle1 text-white text-bold sunglass-model">
@@ -30,20 +47,16 @@
               R {{ sunglass.price }}.00
             </div>
           </div>
-          <!-- <div class="text-caption text-dimmed q-mt-xs">
-            {{ sunglass.description }}
-          </div> -->
         </q-item>
       </q-card>
 
-      <div v-if="displayedSunglasses.length === 0" class="text-center full-width q-pa-xl text-grey">
+      <div
+        v-if="displayedSunglasses.length === 0"
+        class="text-center full-width q-pa-xl text-grey"
+      >
         No sunglasses found.
       </div>
     </template>
-
-    <div v-else class="full-width flex flex-center q-pa-xl">
-      <q-spinner-dots size="40px" color="primary" />
-    </div>
   </div>
 </template>
 
@@ -68,7 +81,8 @@ export default {
   data() {
     return {
       sunglasses: [],
-      loading: true
+      loading: true,
+      skeletonCount: 3
     }
   },
 
@@ -99,9 +113,14 @@ export default {
     },
     async fetchSunglasses() {
       this.loading = true
-      const response = await SunglassesService.findAllSunglasses()
-      this.sunglasses = response || []
-      this.loading = false
+      try {
+        const response = await SunglassesService.findAllSunglasses()
+        this.sunglasses = response || []
+        // once we know the count, keep skeleton matched on subsequent loads
+        this.skeletonCount = Math.max(this.sunglasses.length, 1)
+      } finally {
+        this.loading = false
+      }
     }
   },
 
@@ -119,7 +138,7 @@ export default {
   background: transparent
   border-radius: 4px
   overflow: hidden
-  flex: 0 1 380px   // grow up to ~3 per row inside constrain, shrink+wrap below that
+  flex: 0 1 380px
   max-width: 420px
   transition: border-color 0.4s ease, transform 0.4s ease
   &:hover
@@ -130,22 +149,16 @@ export default {
   background-color: #f0ede6
   padding: 24px
 
+.sunglass-image-wrap--loading
+  background-color: transparent
+  padding: 0
+
 .product-image
   border-radius: 0
   transition: border-color 0.4s ease, transform 0.4s ease
   &:hover
     border-color: rgba(255, 255, 255, 0.25)
     transform: scale(1.05)
-
-.sunglass-index
-  position: absolute
-  top: 12px
-  left: 12px
-  z-index: 1
-  background-color: rgba(0, 0, 0, 0.55)
-  color: #fff
-  font-size: 0.7rem
-  padding: 4px 10px
 
 .sunglass-info
   background-color: #141414
@@ -155,8 +168,6 @@ export default {
   letter-spacing: 0.03em
   text-transform: uppercase
 
-// Below ~420px-per-card width the flex-basis math forces a wrap naturally,
-// but on very small phones let cards take the full row width
 @media (max-width: 480px)
   .sunglass-card
     flex: 1 1 100%
