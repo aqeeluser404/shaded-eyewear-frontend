@@ -43,7 +43,7 @@
         <!------------------------------------------ LOADING SKELETON ------------------------------------------>
         <template v-if="loading">
           <q-card
-            v-for="n in 2"
+            v-for="n in 1"
             :key="'skel-' + n"
             flat
             bordered
@@ -226,25 +226,43 @@
                 </template>
               </div>
 
-              <div v-if="order.status === 'pending'" class="order-footer-actions">
+              <div class="order-footer-actions">
+                <!-- Return request -->
                 <q-btn
+                  v-if="isReturnEligible(order)"
                   rounded
                   dense
                   no-caps
-                  flat
-                  label="Cancel"
-                  class="custom-button text-subtitle1 text-dimmed q-px-lg q-py-sm"
-                  @click="cancelOrder(order._id)"
+                  outline
+                  color="grey"
+                  text-color="grey"
+                  label="Request return"
+                  icon-right="eva-undo-outline"
+                  class="q-px-lg q-py-sm text-caption icon-btn text-bold"
+                  @click.stop="startReturn(order)"
                 />
-                <q-btn
-                  rounded
-                  dense
-                  no-caps
-                  to="/cart"
-                  label="Proceed to checkout"
-                  text-color="dark"
-                  class="btn-gradient-primary q-px-lg q-py-sm rounded-button text-subtitle1 text-bold"
-                />
+
+                <!-- Pending actions -->
+                <template v-if="order.status === 'pending'">
+                  <q-btn
+                    rounded
+                    dense
+                    no-caps
+                    flat
+                    label="Cancel"
+                    class="custom-button text-subtitle1 text-dimmed q-px-lg q-py-sm"
+                    @click="cancelOrder(order._id)"
+                  />
+                  <q-btn
+                    rounded
+                    dense
+                    no-caps
+                    to="/cart"
+                    label="Proceed to checkout"
+                    text-color="dark"
+                    class="btn-gradient-primary q-px-lg q-py-sm rounded-button text-subtitle1 text-bold"
+                  />
+                </template>
               </div>
             </q-card-section>
           </q-card>
@@ -328,6 +346,85 @@ export default {
 
     viewSunglassesDetails(id) {
       Helper.viewSunglassesDetails(id, this.$router);
+    },
+
+    isReturnEligible(order) {
+      // Must be paid or collected — not pending, not already returned
+      if (order.status !== "paid" && order.status !== "paid & picked up") {
+        return false;
+      }
+
+      // Not already flagged as returned
+      if (order.returns === "returned item(s)") {
+        return false;
+      }
+
+      // Within the 14-day return window
+      const daysSinceOrder =
+        (Date.now() - new Date(order.orderDate).getTime()) /
+        (1000 * 60 * 60 * 24);
+      if (daysSinceOrder > 14) {
+        return false;
+      }
+
+      return true;
+    },
+
+    async startReturn(order) {
+      this.$q
+        .dialog({
+          title: "Request a return",
+          message: `Would you like to request a return for order #${this.formateOrderId(
+            order
+          )}? We'll email you the next steps.`,
+          cancel: true,
+          persistent: true,
+          ok: {
+            label: "Request return",
+            color: "primary",
+            rounded: true,
+            noCaps: true,
+          },
+          cancel: {
+            label: "Keep order",
+            color: "grey",
+            flat: true,
+            rounded: true,
+            noCaps: true,
+          },
+        })
+        .onOk(async () => {
+          try {
+            // Send every sunglass in the order as the items to refund.
+            // Adjust if you want per-item returns.
+            const sunglassesToRefund = order.sunglasses || [];
+
+            const response = await OrderService.refundOrder(
+              order._id,
+              sunglassesToRefund
+            );
+
+            if (response) {
+              this.$q.notify({
+                type: "positive",
+                color: "primary",
+                message: "Return requested. Check your email for next steps.",
+              });
+              this.getAllMyOrders();
+            } else {
+              this.$q.notify({
+                type: "negative",
+                message: "Could not process return. Please try again.",
+              });
+            }
+          } catch (error) {
+            console.error("Return request failed:", error);
+            this.$q.notify({
+              type: "negative",
+              message: "Could not process return. Please try again.",
+            });
+          }
+        });
     },
 
     async cancelOrder(orderId) {

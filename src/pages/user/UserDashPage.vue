@@ -13,7 +13,7 @@
             label="Sign out of account"
             color="grey"
             text-color="grey"
-            class="q-px-lg q-py-sm text-caption rounded-button text-bold"
+            class="q-px-lg q-py-sm text-subtitle1 rounded-button text-bold"
             @click="logout"
           />
         </div>
