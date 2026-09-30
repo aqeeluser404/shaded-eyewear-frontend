@@ -5,7 +5,12 @@
       <div class="constrain">
         <div class="overline text-dimmed text-caption">USER ACCOUNT</div>
         <div class="row justify-between items-center">
-          <div class="font-size-responsive-giant archivo col-md-6 col-12" :class="$q.screen.gt.sm ? 'q-mb-none' : 'q-mb-md'">YOUR SHADE.</div>
+          <div
+            class="font-size-responsive-giant archivo col-md-6 col-12"
+            :class="$q.screen.gt.sm ? 'q-mb-none' : 'q-mb-md'"
+          >
+            YOUR SHADE.
+          </div>
           <q-btn
             rounded
             no-caps
@@ -90,6 +95,7 @@ import ProfileComponent from "src/components/user/ProfileComponent.vue";
 import OrdersComponent from "src/components/user/OrdersComponent.vue";
 import ReturnsComponent from "src/components/user/ReturnsComponent.vue";
 import Helper from "../../services/utils";
+import UserService from "src/services/UserService";
 
 export default {
   beforeRouteEnter: Helper.beforeRouteEnterUser,
@@ -106,6 +112,47 @@ export default {
   methods: {
     changePage(componentName) {
       this.currentPageComponent = componentName;
+    },
+    async logout() {
+      this.$q
+        .dialog({
+          title: "Logout",
+          message: `You are about to logout, continue?`,
+          color: "primary",
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(async () => {
+          try {
+            const user = await UserService.FindUserByToken();
+            const response = await UserService.logout(user._id);
+
+            if (response) {
+              // Clear the cart session too — same as MainLayout.handleLogout does
+              localStorage.removeItem("currentOrderId");
+
+              this.$q.notify({
+                type: "positive",
+                color: "primary",
+                message: "You have successfully logged out!",
+              });
+
+              this.$router.push("/");
+              window.location.reload();
+            } else {
+              this.$q.notify({
+                type: "negative",
+                message: "Logout failed. Please try again.",
+              });
+            }
+          } catch (error) {
+            console.error("Logout failed:", error);
+            this.$q.notify({
+              type: "negative",
+              message: "Logout failed. Please try again.",
+            });
+          }
+        });
     },
   },
 };

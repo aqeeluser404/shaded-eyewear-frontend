@@ -81,7 +81,9 @@
                   <div class="skeleton-line skeleton-line--md q-mb-sm"></div>
                   <div class="skeleton-line skeleton-line--sm"></div>
                 </div>
-                <div class="col-md-3 col-12 row justify-end q-mt-lg q-mt-md-none">
+                <div
+                  class="col-md-3 col-12 row justify-end q-mt-lg q-mt-md-none"
+                >
                   <div class="skeleton-line skeleton-line--btn"></div>
                 </div>
               </div>
@@ -154,57 +156,70 @@
 
             <!-- items -->
             <q-card-section
-              v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0"
+              v-if="
+                order.sunglassesDetails && order.sunglassesDetails.length > 0
+              "
               class="q-pa-none"
             >
               <div
                 v-for="(sunglass, index) in order.sunglassesDetails"
                 :key="sunglass._id"
-                class="row items-center q-py-lg q-px-md"
+                class="q-py-lg q-px-md"
                 :style="
                   index !== order.sunglassesDetails.length - 1
                     ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
                     : ''
                 "
               >
-                <div class="col-md-1 col-6">
-                  <q-img
-                    :src="getImageUrl(sunglass.images[0].imageUrl)"
-                    alt="Sunglass"
-                    class="border"
-                  />
+                <!-- top row: image + model/price + button -->
+                <div class="row items-center">
+                  <div class="col-md-1 col-6">
+                    <q-img
+                      :src="getImageUrl(sunglass.images[0].imageUrl)"
+                      alt="Sunglass"
+                      class="border"
+                    />
+                  </div>
+
+                  <div class="col-md-7 col-6 q-pl-md">
+                    <div
+                      class="font-size-responsive-md archivo text-uppercase text-light"
+                    >
+                      <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
+                    </div>
+                    <div class="text-subtitle1 text-dimmed">
+                      R {{ sunglass.price }}.00
+                    </div>
+                    <div class="text-caption text-dimmed q-mt-xs">
+                      Qty {{ sunglass.quantity || 1 }}
+                    </div>
+                  </div>
+
+                  <div
+                    class="col-md-3 col-12 row justify-end q-mt-lg q-mt-md-none"
+                  >
+                    <q-btn
+                      rounded
+                      dense
+                      no-caps
+                      outline
+                      color="grey"
+                      text-color="grey"
+                      label="View frame"
+                      icon-right="eva-arrow-forward-outline"
+                      class="col-md-8 col-12 q-px-lg q-py-sm text-caption icon-btn text-subtitle1 text-bold"
+                      @click.stop="viewSunglassesDetails(sunglass._id)"
+                    />
+                  </div>
                 </div>
 
-                <div class="col-md-7 col-6 q-pl-md">
-                  <div
-                    class="font-size-responsive-md archivo text-uppercase text-light"
-                  >
-                    <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
+                <!-- bottom row: collection line, only on pickup -->
+                <div v-if="order.orderType === 'pickup'" class="row q-mt-md">
+                  <div class="col-12">
+                    <div class="text-subtitle1 text-dimmed">
+                      Collection at 65 Stockley Road, Kenwyn
+                    </div>
                   </div>
-                  <div class="text-subtitle1 text-dimmed">
-                    R {{ sunglass.price }}.00
-                  </div>
-                  <div
-                    v-if="order.orderType === 'pickup'"
-                    class="text-subtitle1 text-dimmed q-mt-sm"
-                  >
-                    Collection at 65 Stockley Road, Kenwyn
-                  </div>
-                </div>
-
-                <div class="col-md-3 col-12 row justify-end q-mt-lg q-mt-md-none">
-                  <q-btn
-                    rounded
-                    dense
-                    no-caps
-                    outline
-                    color="grey"
-                    text-color="grey"
-                    label="View frame"
-                    icon-right="eva-arrow-forward-outline"
-                    class="col-md-8 col-12 q-px-lg q-py-sm text-caption icon-btn text-subtitle1 text-bold"
-                    @click.stop="viewSunglassesDetails(sunglass._id)"
-                  />
                 </div>
               </div>
             </q-card-section>
@@ -283,7 +298,9 @@
 
           <div class="section-spacer-sm"></div>
 
-          <div class="font-size-responsive-xl archivo text-light text-bold q-mb-sm">
+          <div
+            class="font-size-responsive-xl archivo text-light text-bold q-mb-sm"
+          >
             NO ORDERS YET.
           </div>
 

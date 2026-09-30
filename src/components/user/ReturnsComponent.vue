@@ -114,13 +114,12 @@
             <div
               v-for="(sunglass, index) in selectedReturn.sunglassesDetails"
               :key="sunglass._id"
-              class="row items-center cursor-pointer q-py-lg q-px-md"
+              class="row items-center q-py-lg q-px-md"
               :style="
                 index !== selectedReturn.sunglassesDetails.length - 1
                   ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
                   : ''
               "
-              @click="viewSunglassesDetails(sunglass._id)"
             >
               <div class="col-md-1 col-6">
                 <q-img

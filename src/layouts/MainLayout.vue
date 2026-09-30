@@ -81,15 +81,7 @@
 
         <!-- ============================== RIGHT: cart + profile ============================== -->
         <div class="col-md-4 col-6 row items-center justify-end">
-          <q-btn
-            to="/cart"
-            icon="eva-shopping-bag-outline"
-            class="custom-button q-py-sm text-body2"
-            :ripple="false"
-            no-caps
-            flat
-            rounded
-          />
+          <CartButton :count="cartItemCount" />
 
           <UniversalMenu
             v-if="isLoggedIn !== null"
@@ -389,6 +381,7 @@ import logoWhite from "../assets/resources/logos/logo-white.png";
 import logoBlack from "../assets/resources/logos/logo-black.png";
 import EmailService from "src/services/EmailService";
 import UniversalMenu from "src/components/elements/UniversalMenu.vue";
+import CartButton from "src/components/elements/CartButton.vue";
 
 export default {
   name: "MainLayout",
@@ -401,6 +394,15 @@ export default {
         this.$route.path.includes("/buy/review") ||
         this.$route.path.includes("/user/dashboard") ||
         this.$route.path.includes("/admin/dashboard")
+      );
+    },
+    cartItemCount() {
+      // Order comes from localStorage + getCurrentOrder()
+      // If the order is loaded and pending, count its items
+      if (!this.order || !this.order.sunglasses) return 0;
+      return this.order.sunglasses.reduce(
+        (sum, s) => sum + (s.quantity || 1),
+        0
       );
     },
     showHeader() {
@@ -447,7 +449,7 @@ export default {
     },
   },
 
-  components: { UniversalMenu },
+  components: { UniversalMenu, CartButton },
 
   data() {
     return {
