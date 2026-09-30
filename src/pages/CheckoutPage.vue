@@ -1,49 +1,82 @@
 <template>
   <q-page>
-    <template v-if="!loading">
-      <section class="gradient-bg q-px-md text-light q-md-px-0">
-        <div class="constrain">
-          <div class="section-spacer-sm"></div>
+    <section class="gradient-bg q-px-md text-light q-md-px-0">
+      <div class="constrain">
+        <div class="section-spacer-sm"></div>
 
-          <div>
-            <div class>
-              <div class="overline text-dimmed text-caption">STEP 2 OF 2</div>
-              <div
-                class="font-size-responsive-giant archivo text-light text-bold"
-              >
-                COLLECT
-              </div>
-              <div class="section-spacer-sm"></div>
-            </div>
+        <div>
+          <div class="overline text-dimmed text-caption">STEP 2 OF 2</div>
+          <div class="font-size-responsive-giant archivo text-light text-bold">
+            COLLECT
           </div>
+          <div class="section-spacer-sm"></div>
+        </div>
 
-          <div class="row justify-between items-start">
-            <div
-              class="col-12 col-md-7"
-              :class="$q.screen.gt.md ? ' q-mb-none' : 'q-mb-lg'"
+        <div class="row justify-between items-start">
+          <!-------------------------------------------------------- LEFT: ORDER TYPE -------------------------------------------------------->
+          <div
+            class="col-12 col-md-7"
+            :class="$q.screen.gt.md ? 'q-mb-none' : 'q-mb-lg'"
+          >
+            <q-card
+              flat
+              bordered
+              class="bg-dark-secondary full-height q-mr-none q-mr-md-lg"
+              style="border: 1px solid rgba(255, 255, 255, 0.2)"
             >
-              <q-card
-                flat
-                bordered
-                class="bg-dark-secondary full-height q-mr-none q-mr-md-lg"
-                style="border: 1px solid rgba(255, 255, 255, 0.2)"
+              <q-card-section
+                class="row items-center justify-between"
+                style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
               >
-                <q-card-section
-                  class="row items-center justify-between"
-                  style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
-                >
-                  <p class="font-size-responsive-md archivo">
-                    HOW YOU'D LIKE IT
-                  </p>
-                </q-card-section>
+                <p class="font-size-responsive-md archivo">
+                  HOW YOU'D LIKE IT
+                </p>
+              </q-card-section>
 
+              <!----------------------------------- LOADING SKELETON ----------------------------------->
+              <template v-if="loading">
                 <q-card-section
                   style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
                 >
                   <div class="row q-col-gutter-md">
-                    <!-- ============================== -->
-                    <!-- DOORSTEP PICKUP CARD -->
-                    <!-- ============================== -->
+                    <div
+                      v-for="n in 2"
+                      :key="'skel-option-' + n"
+                      class="col-md-6 col-12"
+                    >
+                      <q-card
+                        flat
+                        bordered
+                        class="bg-transparent option-card full-height q-pa-md"
+                        style="border-color: rgba(255, 255, 255, 0.15)"
+                      >
+                        <div class="row items-center q-mb-md">
+                          <div class="skeleton-line skeleton-line--avatar q-mr-sm"></div>
+                          <div class="skeleton-line skeleton-line--md"></div>
+                        </div>
+                        <div class="skeleton-line skeleton-line--full q-mb-sm"></div>
+                        <div class="skeleton-line skeleton-line--md q-mb-md"></div>
+                        <div class="skeleton-line skeleton-line--sm"></div>
+                      </q-card>
+                    </div>
+                  </div>
+                </q-card-section>
+
+                <q-card-section>
+                  <div class="skeleton-line skeleton-line--md q-mb-md"></div>
+                  <div class="skeleton-line skeleton-line--full q-mb-sm"></div>
+                  <div class="skeleton-line skeleton-line--full q-mb-sm"></div>
+                  <div class="skeleton-line skeleton-line--md"></div>
+                </q-card-section>
+              </template>
+
+              <!----------------------------------- REAL CONTENT ----------------------------------->
+              <template v-else>
+                <q-card-section
+                  style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+                >
+                  <div class="row q-col-gutter-md">
+                    <!-- DOORSTEP PICKUP -->
                     <div class="col-md-6 col-12">
                       <q-card
                         flat
@@ -74,15 +107,13 @@
                           Kenwyn, Cape Town, 7779
                         </div>
 
-                        <div class="text-caption  text-primary">
+                        <div class="text-caption text-primary">
                           <b>OPEN WEEKDAYS 08:00 – 17:00</b>
                         </div>
                       </q-card>
                     </div>
 
-                    <!-- ============================== -->
-                    <!-- CAPE TOWN DELIVERY CARD -->
-                    <!-- ============================== -->
+                    <!-- CAPE TOWN DELIVERY -->
                     <div class="col-md-6 col-12">
                       <q-card
                         flat
@@ -131,27 +162,37 @@
                     your frame for seven days. Thank you for shopping with us.
                   </p>
                 </q-card-section>
-              </q-card>
-            </div>
+              </template>
+            </q-card>
+          </div>
 
-            <div class="col-12 col-md-5">
-              <q-card
-                flat
-                bordered
-                class="bg-dark-secondary full-height q-mb-lg"
-                style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          <!-------------------------------------------------------- RIGHT: SUMMARY + ITEMS -------------------------------------------------------->
+          <div class="col-12 col-md-5">
+            <q-card
+              flat
+              bordered
+              class="bg-dark-secondary full-height q-mb-lg"
+              style="border: 1px solid rgba(255, 255, 255, 0.2)"
+            >
+              <q-card-section
+                class="row items-center justify-between"
+                style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
               >
-                <q-card-section
-                  class="row items-center justify-between"
-                  style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
-                >
-                  <p class="font-size-responsive-md archivo">ORDER SUMMARY</p>
-                </q-card-section>
+                <p class="font-size-responsive-md archivo">ORDER SUMMARY</p>
+              </q-card-section>
 
-                <div class="q-py-lg q-px-md">
-                  <q-card-section
-                    class="row items-end justify-between q-pa-none q-mb-md"
-                  >
+              <div class="q-py-lg q-px-md">
+                <q-card-section
+                  class="row items-end justify-between q-pa-none q-mb-md"
+                >
+                  <!-- skeleton totals -->
+                  <template v-if="loading">
+                    <div class="skeleton-line skeleton-line--md"></div>
+                    <div class="skeleton-line skeleton-line--md"></div>
+                  </template>
+
+                  <!-- real totals -->
+                  <template v-else>
                     <div class="overline text-dimmed text-caption">
                       <b>TOTAL:</b> {{ order.totalItems }} item(s)
                     </div>
@@ -160,8 +201,24 @@
                     >
                       R {{ order.totalAmount }}.00
                     </div>
-                  </q-card-section>
-                  <div class="column items-center">
+                  </template>
+                </q-card-section>
+
+                <div class="column items-center">
+                  <!-- skeleton buttons -->
+                  <template v-if="loading">
+                    <div
+                      class="skeleton-line skeleton-line--btn q-mb-sm"
+                      style="width: 100%"
+                    ></div>
+                    <div
+                      class="skeleton-line skeleton-line--btn"
+                      style="width: 60%"
+                    ></div>
+                  </template>
+
+                  <!-- real buttons -->
+                  <template v-else>
                     <q-btn
                       rounded
                       dense
@@ -182,81 +239,103 @@
                       label="Secure Checkout"
                       no-caps
                     />
-                  </div>
+                  </template>
                 </div>
-              </q-card>
+              </div>
+            </q-card>
 
-              <!-- review your items -->
-              <q-card
-                flat
-                bordered
-                class="bg-dark-secondary"
-                style="border: 1px solid rgba(255, 255, 255, 0.2)"
+            <!-- review items -->
+            <q-card
+              flat
+              bordered
+              class="bg-dark-secondary"
+              style="border: 1px solid rgba(255, 255, 255, 0.2)"
+            >
+              <q-card-section
+                class="row items-center justify-between"
+                style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
               >
-                <q-card-section
-                  class="row items-center justify-between"
-                  style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
-                >
-                  <p class="font-size-responsive-md archivo">
-                    REVIEW YOUR ITEMS
-                  </p>
-                </q-card-section>
+                <p class="font-size-responsive-md archivo">
+                  REVIEW YOUR ITEMS
+                </p>
+              </q-card-section>
 
-                <q-card-section
-                  v-if="
-                    order.sunglassesDetails &&
-                    order.sunglassesDetails.length > 0 &&
-                    currentOrderId !== null
+              <!----------------------------------- LOADING SKELETON ----------------------------------->
+              <q-card-section v-if="loading">
+                <div
+                  v-for="n in 1"
+                  :key="'skel-review-' + n"
+                  class="row justify-between items-center q-py-lg q-px-md"
+                  :style="
+                    n !== 1
+                      ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
+                      : ''
                   "
                 >
-                  <div
-                    v-for="(sunglass, index) in order.sunglassesDetails"
-                    :key="sunglass._id"
-                    class="row justify-between items-center cursor-pointer q-py-lg q-px-md"
-                    :style="
-                      index !== order.sunglassesDetails.length - 1
-                        ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
-                        : ''
-                    "
-                    @click="viewSunglassesDetails(sunglass._id)"
-                  >
-                    <div class="col-md-10 col-12 row items-start">
-                      <div class="col-md-2 col-4">
-                        <div class="q-mr-md">
-                          <q-img
-                            :src="getImageUrl(sunglass.images[0].imageUrl)"
-                            alt="Sunglass Image"
-                            class="border"
-                          />
-                        </div>
+                  <div class="col-md-10 col-12 row items-start">
+                    <div class="col-md-2 col-4">
+                      <div class="q-mr-md">
+                        <div class="skeleton-line skeleton-line--thumb-sm"></div>
                       </div>
+                    </div>
 
-                      <div class="col-md-10 col-8 column items-start">
-                        <div
-                          class="font-size-responsive-md archivo text-uppercase"
-                        >
-                          <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
-                        </div>
-                        <div
-                          class="col-md-2 col-12 text-subtitle1 text-dimmed text-center"
-                        >
-                          {{ sunglass.quantity }} x R {{ sunglass.price }}.00
-                        </div>
+                    <div class="col-md-10 col-8 column items-start">
+                      <div class="skeleton-line skeleton-line--md q-mb-sm"></div>
+                      <div class="skeleton-line skeleton-line--sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </q-card-section>
+
+              <!----------------------------------- REAL ITEMS ----------------------------------->
+              <q-card-section
+                v-else-if="
+                  order.sunglassesDetails &&
+                  order.sunglassesDetails.length > 0 &&
+                  currentOrderId !== null
+                "
+              >
+                <div
+                  v-for="(sunglass, index) in order.sunglassesDetails"
+                  :key="sunglass._id"
+                  class="row justify-between items-center cursor-pointer q-py-lg q-px-md"
+                  :style="
+                    index !== order.sunglassesDetails.length - 1
+                      ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
+                      : ''
+                  "
+                  @click="viewSunglassesDetails(sunglass._id)"
+                >
+                  <div class="col-md-10 col-12 row items-start">
+                    <div class="col-md-2 col-4">
+                      <div class="q-mr-md">
+                        <q-img
+                          :src="getImageUrl(sunglass.images[0].imageUrl)"
+                          alt="Sunglass Image"
+                          class="border"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-md-10 col-8 column items-start">
+                      <div
+                        class="font-size-responsive-md archivo text-uppercase"
+                      >
+                        <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
+                      </div>
+                      <div class="text-subtitle1 text-dimmed">
+                        {{ sunglass.quantity }} x R {{ sunglass.price }}.00
                       </div>
                     </div>
                   </div>
-                </q-card-section>
-              </q-card>
-            </div>
+                </div>
+              </q-card-section>
+            </q-card>
           </div>
         </div>
-        <div class="section-spacer-md"></div>
-      </section>
-    </template>
-
-    <div v-else class="full-width flex flex-center q-pa-xl">
-      <q-spinner-dots size="40px" color="primary" />
-    </div>
+      </div>
+      <div class="section-spacer-md"></div>
+    </section>
   </q-page>
 </template>
 
@@ -269,6 +348,7 @@ import Helper from "../services/utils";
 
 export default {
   beforeRouteEnter: Helper.beforeRouteEnterUser,
+
   data() {
     return {
       order: {},
@@ -302,25 +382,32 @@ export default {
       loading: true,
     };
   },
+
   created() {
     this.getUserDetails();
   },
+
   methods: {
     getImageUrl: Helper.getImageUrl,
     capitalizeFirstLetter: Helper.capitalizeFirstLetter,
+    formateOrderId: Helper.formateOrderId,
+
     viewSunglassesDetails(id) {
       Helper.viewSunglassesDetails(id, this.$router);
     },
+
     togglePickupPanel() {
       this.pickupPanel = !this.pickupPanel;
       this.deliveryPanel = false;
       this.orderType = "pickup";
     },
+
     toggleDeliveryPanel() {
       this.deliveryPanel = true;
       this.pickupPanel = false;
       this.orderType = "delivery";
     },
+
     async addAddress() {
       const updatedUser = {
         location: this.userAddress.location,
@@ -359,7 +446,7 @@ export default {
           return;
         });
     },
-    // when i implement delivery, ensure that the ordertype is execute after a successful payment
+
     async initiatePayment() {
       try {
         if (this.orderType === null) {
@@ -386,12 +473,12 @@ export default {
         }
         const response = await PayService.initiatePayment(this.currentOrderId);
         const { checkout } = response;
-        // console.log('Checkout URL:', checkout.redirectUrl); // Add this line to log the checkout URL
-        window.location.href = checkout.redirectUrl; // Redirect to Yoco checkout page
+        window.location.href = checkout.redirectUrl;
       } catch (error) {
         console.error("Payment initiation failed:", error);
       }
     },
+
     async createPickup() {
       try {
         await OrderService.createPickup(this.currentOrderId);
@@ -399,46 +486,32 @@ export default {
         console.error("Creating pickup failed:", error);
       }
     },
-    // async createDelivery() {
-    //   try {
-    //     await OrderService.createDelivery(this.currentOrderId)
-    //   } catch (error) {
-    //     console.error('Creating delivery failed:', error)
-    //   }
-    // },
-    // async validateAddress() {
-    //     const address = `${this.userAddress.location.streetAddress}, ${this.userAddress.location.suburb}, ${this.userAddress.location.city}, ${this.userAddress.location.province}, ${this.userAddress.location.postalCode}`;
-    //     try {
-    //       const response = await axios.get(`https://api.1map.co.za/v1/validate?address=${encodeURIComponent(address)}`);
-    //       if (response.data.valid) {
-    //         this.$q.notify({ type: 'positive', message: 'Address is valid!' });
-    //       } else {
-    //         this.$q.notify({ type: 'negative', message: 'Address is invalid. Please check the details.' });
-    //       }
-    //     } catch (error) {
-    //       console.error('Address validation failed:', error);
-    //       if (error.response) {
-    //         // Server responded with a status other than 200 range
-    //         this.$q.notify({ type: 'negative', message: `Validation failed: ${error.response.data.message}` });
-    //       } else if (error.request) {
-    //         // Request was made but no response received
-    //         this.$q.notify({ type: 'negative', message: 'Network error. Please check your connection.' });
-    //       } else {
-    //         // Something else happened
-    //         this.$q.notify({ type: 'negative', message: `Error: ${error.message}` });
-    //       }
-    //     }
-    // },
+
     async getCurrentOrder() {
-      this.loading = true;
-      const response = await OrderService.findOrderById(this.currentOrderId);
-      this.order = response;
-      await this.getSunglasses();
+      if (!this.currentOrderId) {
+        this.loading = false;
+        return;
+      }
+
+      try {
+        const response = await OrderService.findOrderById(this.currentOrderId);
+        if (response) {
+          this.order = response;
+          await this.getSunglasses();
+        } else {
+          throw new Error("Order not found");
+        }
+      } catch (error) {
+        console.error("Error fetching order: ", error);
+        localStorage.removeItem("currentOrderId");
+        this.currentOrderId = null;
+      }
+
       this.loading = false;
     },
+
     async getSunglasses() {
       if (this.order.sunglasses && this.order.sunglasses.length > 0) {
-        // ✅ Count how many times each sunglass _id appears
         const quantityMap = {};
         this.order.sunglasses.forEach((sunglass) => {
           const id = String(sunglass._id);
@@ -446,13 +519,11 @@ export default {
         });
 
         this.order.sunglassesDetails = [];
-
-        // ✅ Track which IDs we've already added (avoid duplicates)
         const seenIds = new Set();
 
         for (const sunglass of this.order.sunglasses) {
           const id = String(sunglass._id);
-          if (seenIds.has(id)) continue; // skip duplicates
+          if (seenIds.has(id)) continue;
           seenIds.add(id);
 
           try {
@@ -461,7 +532,7 @@ export default {
             );
             if (response && response.images && response.images.length > 0) {
               response.image = this.getImageUrl(response.images[0]);
-              response.quantity = quantityMap[id]; // ✅ attach quantity
+              response.quantity = quantityMap[id];
               this.order.sunglassesDetails.push(response);
             } else {
               console.error(
@@ -477,6 +548,7 @@ export default {
         }
       }
     },
+
     async getUserDetails() {
       const id = await UserService.FindUserByToken();
       this.userTokenDetails = id;

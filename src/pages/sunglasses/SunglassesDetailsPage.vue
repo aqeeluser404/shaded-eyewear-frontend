@@ -20,38 +20,40 @@
         <q-card flat class="bg-transparent row justify-center items-start">
           <!-- LEFT: gallery -->
           <div class="col-12 col-md-7">
-<div class="product-gallery q-mr-none q-mr-md-xl">
-  <div
-    class="gallery-stage"
-    :class="{ 'gallery-stage--loading': loading }"
-  >
-    <div
-      v-if="loading"
-      class="skeleton-line skeleton-line--hero"
-    ></div>
+            <div class="product-gallery q-mr-none q-mr-md-xl">
+              <div
+                class="gallery-stage"
+                :class="{ 'gallery-stage--loading': loading }"
+              >
+                <div
+                  v-if="loading"
+                  class="skeleton-line skeleton-line--hero"
+                ></div>
 
-    <template v-else>
-      <q-img
-        v-if="mainImage"
-        :src="getImageUrl(mainImage)"
-        class="stage-image"
-        fit="contain"
-      />
+                <template v-else>
+                  <q-img
+                    v-if="mainImage"
+                    :src="getImageUrl(mainImage)"
+                    class="stage-image"
+                    fit="contain"
+                  />
 
-      <div class="thumb-dock">
-        <button
-          v-for="img in sunglasses.images"
-          :key="img.imageUrl"
-          class="thumb-circle"
-          :class="{ 'thumb-circle--active': mainImage === img.imageUrl }"
-          @click="updateMainImage(img.imageUrl)"
-        >
-          <q-img :src="getImageUrl(img.imageUrl)" fit="cover" />
-        </button>
-      </div>
-    </template>
-  </div>
-</div>
+                  <div class="thumb-dock">
+                    <button
+                      v-for="img in sunglasses.images"
+                      :key="img.imageUrl"
+                      class="thumb-circle"
+                      :class="{
+                        'thumb-circle--active': mainImage === img.imageUrl,
+                      }"
+                      @click="updateMainImage(img.imageUrl)"
+                    >
+                      <q-img :src="getImageUrl(img.imageUrl)" fit="cover" />
+                    </button>
+                  </div>
+                </template>
+              </div>
+            </div>
           </div>
 
           <!-- RIGHT: details -->
@@ -212,19 +214,22 @@
 
         <div class="section-spacer-sm"></div>
 
-        <div class="row items-center no-wrap">
+        <div class="related-scroll-wrap">
           <q-btn
-            flat
+            v-if="canScrollLeft"
             round
             dense
             icon="eva-arrow-back-outline"
-            color="grey"
-            class="q-mr-sm gt-xs"
-            @click="prevSlide"
+            color="white"
+            class="scroll-arrow scroll-arrow--left"
+            @click="scrollRelated(-1)"
           />
 
-          <div class="row related-grid" style="flex-grow: 1">
-            <!-- skeleton cards -->
+          <div
+            class="related-scroll"
+            ref="relatedScroll"
+            @scroll="updateScrollState"
+          >
             <template v-if="loadingRelated">
               <q-card
                 v-for="n in 3"
@@ -246,10 +251,9 @@
               </q-card>
             </template>
 
-            <!-- real cards -->
             <template v-else>
               <q-card
-                v-for="sunglass in visibleSunglasses"
+                v-for="sunglass in allSunglasses"
                 :key="sunglass._id"
                 flat
                 class="related-card bg-dark-secondary row items-center no-wrap cursor-pointer"
@@ -282,13 +286,13 @@
           </div>
 
           <q-btn
-            flat
+            v-if="canScrollRight"
             round
             dense
             icon="eva-arrow-forward-outline"
-            color="grey"
-            class="q-ml-sm gt-xs"
-            @click="nextSlide"
+            color="white"
+            class="scroll-arrow scroll-arrow--right"
+            @click="scrollRelated(1)"
           />
         </div>
       </div>
@@ -330,6 +334,9 @@ export default {
 
       mainImage: "",
       loading: true,
+
+      canScrollLeft: false,
+      canScrollRight: false,
     };
   },
   computed: {
@@ -368,8 +375,29 @@ export default {
       immediate: true,
       deep: true,
     },
+    loadingRelated(newVal) {
+      if (!newVal) {
+        this.$nextTick(() => this.updateScrollState());
+      }
+    },
   },
   methods: {
+    scrollRelated(direction) {
+      const el = this.$refs.relatedScroll;
+      if (!el) return;
+      const cardWidth = 380 + 24;
+      el.scrollBy({ left: direction * cardWidth, behavior: "smooth" });
+    },
+
+    updateScrollState() {
+      const el = this.$refs.relatedScroll;
+      if (!el) return;
+      const { scrollLeft, scrollWidth, clientWidth } = el;
+
+      this.canScrollLeft = scrollLeft > 4; // small threshold avoids flicker at exact 0
+      this.canScrollRight = scrollLeft < scrollWidth - clientWidth - 4;
+    },
+
     viewSunglassesDetails(id) {
       Helper.viewSunglassesDetails(id, this.$router);
     },
@@ -425,23 +453,38 @@ export default {
           type: "negative",
           message: "Please login to continue.",
         });
-      } else {
+        return;
+      }
+
+      this.$q.loading.show({
+        message: "Adding to cart...",
+      });
+
+      try {
+        if (!this.currentOrderId) {
+          await this.createOrder();
+        } else {
+          const orderExists = await this.checkOrderExists(this.currentOrderId);
+          if (orderExists) {
+            await this.updateOrder();
+          } else {
+            await this.createOrder();
+          }
+        }
         this.$q.notify({
           type: "positive",
           color: "primary",
           message: `Added to cart`,
         });
-        if (!this.currentOrderId) {
-          await this.createOrder();
-          return;
-        }
-        const orderExists = await this.checkOrderExists(this.currentOrderId);
-        if (orderExists) {
-          await this.updateOrder();
-        } else {
-          await this.createOrder();
-        }
-        this.fetchSunglassesDetails();
+        await this.fetchSunglassesDetails();
+      } catch (error) {
+        console.error("Error adding to cart:", error);
+        this.$q.notify({
+          type: "negative",
+          message: "Could not add to cart. Please try again.",
+        });
+      } finally {
+        this.$q.loading.hide();
       }
     },
     async checkOrderExists(orderId) {
@@ -491,6 +534,16 @@ export default {
     updateMainImage(image) {
       this.mainImage = image;
     },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.updateScrollState();
+      window.addEventListener("resize", this.updateScrollState);
+    });
+  },
+
+  beforeUnmount() {
+    window.removeEventListener("resize", this.updateScrollState);
   },
   created() {
     this.getUserDetails();
@@ -551,16 +604,36 @@ export default {
     border-color: var(--q-primary)
 
 // ---------- related products ----------
-.related-grid
+.related-scroll-wrap
+  position: relative
+  display: flex
+  align-items: center
+
+.related-scroll
+  display: flex
   gap: 24px
-  flex-wrap: wrap
+  overflow-x: auto
+  scroll-snap-type: x proximity
+  padding-top: 8px    // room for the hover lift
+  padding-bottom: 8px
+  margin-top: -8px    // cancel the extra top padding visually
+  -webkit-overflow-scrolling: touch
+  scroll-behavior: smooth
+
+  scrollbar-width: thin
+  &::-webkit-scrollbar
+    height: 6px
+  &::-webkit-scrollbar-thumb
+    background: rgba(255, 255, 255, 0.15)
+    border-radius: 999px
 
 .related-card
-  border: 1px solid rgba(255, 255, 255, 0.1) //lines and stuff
+  border: 1px solid rgba(255, 255, 255, 0.1)
   border-radius: 4px
   padding: 20px
-  flex: 1 1 380px
-  max-width: 480px
+  scroll-snap-align: start
+  flex: 0 0 380px
+  max-width: 380px
   transition: border-color 0.2s ease, transform 0.2s ease
   &:hover
     border-color: rgba(255, 255, 255, 0.25)
@@ -588,10 +661,19 @@ export default {
   white-space: nowrap
   max-width: 100%
 
-@media (max-width: 480px)
-  .related-card
-    flex: 1 1 100%
-    max-width: 100%
+.scroll-arrow
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+  z-index: 2
+  background: rgba(0, 0, 0, 0.6)
+  backdrop-filter: blur(4px)
+
+  &--left
+    left: -8px
+
+  &--right
+    right: -8px
 
 .gallery-stage--loading
   background: transparent

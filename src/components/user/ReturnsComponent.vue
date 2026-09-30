@@ -221,7 +221,7 @@
           <q-card-section class="q-pa-none">
             <div class="row items-center q-py-lg q-px-md">
               <div class="col-md-1 col-6">
-                <div class="skeleton-line skeleton-line--hero"></div>
+                <div class="skeleton-line skeleton-line--thumb-sm"></div>
               </div>
               <div class="col-md-7 col-6 q-pl-md">
                 <div class="skeleton-line skeleton-line--md q-mb-sm"></div>

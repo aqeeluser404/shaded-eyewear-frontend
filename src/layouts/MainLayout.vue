@@ -33,14 +33,14 @@
         :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-sm'"
       >
         <!-- ============================== LEFT: logo + brand ============================== -->
-        <div class="col-md-4 col-6 row items-center">
+        <div class="col-md-4 col-6 row items-center no-wrap">
           <q-avatar class="q-mr-sm responsive-avatar">
             <img :src="logoSrc" />
           </q-avatar>
           <router-link
             to="/"
             :class="colorShiftClass"
-            class="text-remove-decoration font-size-responsive-md archivo"
+            class="text-remove-decoration font-size-responsive-md archivo brand-text"
           >
             SHADED EYEWEAR
           </router-link>
@@ -129,7 +129,7 @@
               clickable
               v-close-popup
               @click="menuOpen = false"
-              to="/sunglasses"
+              to="/about"
             >
               <q-item-section class="font-size-responsive-md"
                 >About</q-item-section
@@ -144,6 +144,26 @@
               <q-item-section class="font-size-responsive-md"
                 >Catalogue</q-item-section
               >
+            </q-item>
+
+            <q-separator v-if="isLoggedIn !== null" class="nav-divider" />
+
+            <q-item
+              v-for="item in profileItems"
+              :key="item.label"
+              clickable
+              v-close-popup
+              :to="item.to"
+              @click="
+                () => {
+                  if (item.handler) item.handler();
+                  menuOpen = false;
+                }
+              "
+            >
+              <q-item-section class="font-size-responsive-md">{{
+                item.label
+              }}</q-item-section>
             </q-item>
           </q-list>
         </Teleport>
@@ -803,12 +823,18 @@ export default {
     font-size: 0.75rem
 
 .responsive-avatar
-  width: clamp(1.975rem, 5vw, 3.125rem) // 30px to 50px
-  height: clamp(1.975rem, 5vw, 3.125rem) // 30px to 50px
+  width: clamp(2.5rem, 5vw, 3.125rem) // 36px to 50px
+  height: clamp(2.5rem, 5vw, 3.125rem) // 36px to 50px
 
 .responsive-avatar-2
   width: clamp(1.2rem, 5vw, 3.125rem) // 30px to 50px
   height: clamp(1.2rem, 5vw, 3.125rem) // 30px to 50px
+
+.brand-text
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+  min-width: 0 // required for ellipsis to work inside a flex/row child
 
 .custom-input
   background-color: #121212
