@@ -33,7 +33,7 @@
         <div class="row justify-start full-width">
           <!-------------------------------------------------------- SIDEBAR -------------------------------------------------------->
           <div
-            class="bg-transparent col-12 col-md-3 border-right"
+            class="bg-transparent col-12 col-md-2 border-right"
             :class="$q.screen.gt.sm ? 'q-pr-lg' : 'q-pr-none'"
           >
             <div style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
@@ -41,14 +41,28 @@
                 clickable
                 class="menu-item"
                 :class="{
+                  'menu-item--active': currentPageComponent === 'OverviewComponent',
+                }"
+                @click="changePage('Overview', 'OverviewComponent')"
+              >
+                <q-item-section avatar>
+                  <q-icon name="eva-grid-outline" size="18px" />
+                </q-item-section>
+                <q-item-section class="text-subtitle1">Overview</q-item-section>
+              </q-item>
+
+              <q-item
+                clickable
+                class="menu-item"
+                :class="{
                   'menu-item--active': currentPageComponent === 'UserComponent',
                 }"
-                @click="changePage('User Panel', 'UserComponent')"
+                @click="changePage('Customers', 'UserComponent')"
               >
                 <q-item-section avatar>
                   <q-icon name="eva-people-outline" size="18px" />
                 </q-item-section>
-                <q-item-section class="text-subtitle1">Users</q-item-section>
+                <q-item-section class="text-subtitle1">Customers</q-item-section>
               </q-item>
 
               <q-item
@@ -58,13 +72,13 @@
                   'menu-item--active':
                     currentPageComponent === 'SunglassesComponent',
                 }"
-                @click="changePage('Sunglasses Panel', 'SunglassesComponent')"
+                @click="changePage('Inventory', 'SunglassesComponent')"
               >
                 <q-item-section avatar>
                   <q-icon name="eva-eye-off-2-outline" size="18px" />
                 </q-item-section>
                 <q-item-section class="text-subtitle1"
-                  >Sunglasses</q-item-section
+                  >Inventory</q-item-section
                 >
               </q-item>
 
@@ -75,7 +89,7 @@
                   'menu-item--active':
                     currentPageComponent === 'OrdersComponent',
                 }"
-                @click="changePage('Order Panel', 'OrdersComponent')"
+                @click="changePage('Orders', 'OrdersComponent')"
               >
                 <q-item-section avatar>
                   <q-icon name="eva-clipboard-outline" size="18px" />
@@ -90,7 +104,7 @@
                   'menu-item--active':
                     currentPageComponent === 'ReturnsComponent',
                 }"
-                @click="changePage('Return Panel', 'ReturnsComponent')"
+                @click="changePage('Return', 'ReturnsComponent')"
               >
                 <q-item-section avatar>
                   <q-icon name="eva-calendar-outline" size="18px" />
@@ -136,6 +150,7 @@ import UserComponent from "../../components/admin/UserComponent.vue";
 import SunglassesComponent from "../../components/admin/SunglassesComponent.vue";
 import OrdersComponent from "../../components/admin/OrdersComponent.vue";
 import ReturnsComponent from "../../components/admin/ReturnsComponent.vue";
+import OverviewComponent from "src/components/admin/OverviewComponent.vue";
 import Helper from "../../services/utils.js";
 
 export default {
@@ -146,14 +161,15 @@ export default {
     SunglassesComponent,
     OrdersComponent,
     ReturnsComponent,
+    OverviewComponent
   },
 
   data() {
     return {
       currentUser: { _id: "" },
       userDetails: {},
-      currentPageTitle: "User Panel",
-      currentPageComponent: "UserComponent",
+      currentPageTitle: "Overview",
+      currentPageComponent: "OverviewComponent",
     };
   },
 

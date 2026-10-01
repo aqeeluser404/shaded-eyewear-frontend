@@ -1,5 +1,8 @@
 <template>
-  <div class="personal-details" :class="$q.screen.gt.sm ? 'q-pl-lg' : 'q-pl-none'">
+  <div
+    class="personal-details"
+    :class="$q.screen.gt.sm ? 'q-pl-lg' : 'q-pl-none'"
+  >
     <div>
       <div class="font-size-responsive-xl archivo text-light text-bold">
         PERSONAL DETAILS
@@ -14,10 +17,18 @@
     <q-form @submit="updateUser" class="q-gutter-md">
       <!-- First + Last name -->
       <div class="row">
-        <div class="col-12 col-md-6" :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'">
-          <div class="overline-tight text-dimmed text-caption q-mb-xs">FIRST NAME</div>
+        <div
+          class="col-12 col-md-6"
+          :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
+        >
+          <div class="overline-tight text-dimmed text-caption q-mb-xs">
+            FIRST NAME
+          </div>
           <div class="field-shell">
-            <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
+            <div
+              v-if="loading"
+              class="skeleton-line skeleton-line--input"
+            ></div>
             <q-input
               v-else
               filled
@@ -32,9 +43,14 @@
         </div>
 
         <div class="col-12 col-md-6">
-          <div class="overline-tight text-dimmed text-caption q-mb-xs">LAST NAME</div>
+          <div class="overline-tight text-dimmed text-caption q-mb-xs">
+            LAST NAME
+          </div>
           <div class="field-shell">
-            <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
+            <div
+              v-if="loading"
+              class="skeleton-line skeleton-line--input"
+            ></div>
             <q-input
               v-else
               filled
@@ -51,25 +67,57 @@
 
       <!-- Email + Phone -->
       <div class="row">
-        <div class="col-12 col-md-6" :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'">
+        <div
+          class="col-12 col-md-6"
+          :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
+        >
           <div class="row items-center justify-between q-mb-xs">
-            <div class="overline-tight text-dimmed text-caption">EMAIL ADDRESS</div>
+            <div class="overline-tight text-dimmed text-caption">
+              EMAIL ADDRESS
+            </div>
             <div
               v-if="!loading && userDetails && userDetails.verification"
               class="row items-center text-caption"
             >
-              <template v-if="userDetails.verification.isVerified">
-                <span class="text-secondary">Verified</span>
-                <q-icon color="secondary" name="eva-checkmark-circle-2-outline" size="14px" class="q-ml-xs" />
+              <!-- Guest -->
+              <template v-if="isGuest">
+                <span class="text-primary">Demo Guest Address</span>
+                <q-icon
+                  color="primary"
+                  name="eva-info-outline"
+                  size="14px"
+                  class="q-ml-xs"
+                />
               </template>
+
+              <!-- Verified -->
+              <template v-else-if="userDetails.verification.isVerified">
+                <span class="text-secondary">Verified</span>
+                <q-icon
+                  color="secondary"
+                  name="eva-checkmark-circle-2-outline"
+                  size="14px"
+                  class="q-ml-xs"
+                />
+              </template>
+
+              <!-- Not verified -->
               <template v-else>
                 <span class="text-negative">Not Verified</span>
-                <q-icon color="negative" name="eva-alert-circle-outline" size="14px" class="q-ml-xs" />
+                <q-icon
+                  color="negative"
+                  name="eva-alert-circle-outline"
+                  size="14px"
+                  class="q-ml-xs"
+                />
               </template>
             </div>
           </div>
           <div class="field-shell">
-            <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
+            <div
+              v-if="loading"
+              class="skeleton-line skeleton-line--input"
+            ></div>
             <q-input
               v-else
               filled
@@ -79,14 +127,34 @@
               class="custom-input"
               input-style="color: white;"
               :rules="[(val) => !!val || 'Email is required']"
+              :disable="isGuest"
             />
           </div>
         </div>
 
         <div class="col-12 col-md-6">
-          <div class="overline-tight text-dimmed text-caption q-mb-xs">PHONE NUMBER</div>
+          <div class="row items-center justify-between q-mb-xs">
+            <div class="overline-tight text-dimmed text-caption">
+              PHONE NUMBER
+            </div>
+            <div
+              v-if="!loading && isGuest"
+              class="row items-center text-caption"
+            >
+              <span class="text-primary">Demo Guest Number</span>
+              <q-icon
+                color="primary"
+                name="eva-info-outline"
+                size="14px"
+                class="q-ml-xs"
+              />
+            </div>
+          </div>
           <div class="field-shell">
-            <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
+            <div
+              v-if="loading"
+              class="skeleton-line skeleton-line--input"
+            ></div>
             <q-input
               v-else
               filled
@@ -96,6 +164,7 @@
               class="custom-input"
               input-style="color: white;"
               :rules="[(val) => !!val || 'Phone is required']"
+              :disable="isGuest"
             />
           </div>
         </div>
@@ -103,7 +172,18 @@
 
       <!-- Username -->
       <div>
-        <div class="overline-tight text-dimmed text-caption q-mb-xs">USERNAME</div>
+        <div class="row items-center justify-between q-mb-xs">
+          <div class="overline-tight text-dimmed text-caption">USERNAME</div>
+          <div v-if="!loading && isGuest" class="row items-center text-caption">
+            <span class="text-primary">Demo Guest Username</span>
+            <q-icon
+              color="primary"
+              name="eva-info-outline"
+              size="14px"
+              class="q-ml-xs"
+            />
+          </div>
+        </div>
         <div class="field-shell">
           <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
           <q-input
@@ -115,6 +195,7 @@
             class="custom-input"
             input-style="color: white;"
             :rules="[(val) => !!val || 'Username is required']"
+            :disable="isGuest"
           />
         </div>
       </div>
@@ -131,13 +212,18 @@
           text-color="dark"
           class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold"
           :loading="saving"
+          :disable="changedFields.length === 0"
         />
 
         <template v-if="loading">
           <div class="skeleton-line skeleton-line--btn"></div>
         </template>
         <q-btn
-          v-else-if="userDetails && userDetails.verification && !userDetails.verification.isVerified"
+          v-else-if="
+            userDetails &&
+            userDetails.verification &&
+            !userDetails.verification.isVerified
+          "
           rounded
           no-caps
           outline
@@ -146,6 +232,7 @@
           text-color="grey"
           class="q-px-xl q-py-md rounded-button text-subtitle1 text-bold"
           @click="resendVerificationEmail"
+          :disable="isGuest"
         />
       </div>
     </q-form>
@@ -163,10 +250,25 @@ export default {
   data() {
     return {
       userDetails: {},
+      savedUserDetails: {},
       userTokenDetails: { _id: "", username: "", userType: "" },
       saving: false,
       loading: true,
     };
+  },
+
+  computed: {
+    isGuest() {
+      return Helper.isGuest(this.userDetails);
+    },
+
+    // Which fields differ from the saved snapshot
+    changedFields() {
+      const fields = ["firstName", "lastName", "email", "phone", "username"];
+      return fields.filter(
+        (key) => this.userDetails[key] !== this.savedUserDetails[key]
+      );
+    },
   },
 
   methods: {
@@ -175,109 +277,97 @@ export default {
     validatePhone: Helper.validatePhone,
     validateUsername: Helper.validateUsername,
 
-    validateFields() {
-      const details = this.userDetails;
-      const requiredFields = [
-        "firstName",
-        "lastName",
-        "email",
-        "phone",
-        "username",
-      ];
+    // Only validate the fields that were actually changed
+    validateChangedFields() {
+      const changed = this.changedFields;
 
-      if (requiredFields.some((key) => !details[key])) {
+      if (changed.length === 0) {
         this.$q.notify({
-          type: "negative",
-          message: "Please fill in all the fields.",
+          type: "info",
+          message: "No changes to save.",
         });
         return false;
       }
-      if (!this.validateText(details.firstName)) {
-        this.$q.notify({
-          type: "negative",
+
+      const validators = {
+        firstName: {
+          fn: this.validateText,
           message:
             "First name must be at least 5 characters long and start with an uppercase.",
-        });
-        return false;
-      }
-      if (!this.validateText(details.lastName)) {
-        this.$q.notify({
-          type: "negative",
+        },
+        lastName: {
+          fn: this.validateText,
           message:
             "Last name must be at least 5 characters long and start with an uppercase.",
-        });
-        return false;
-      }
-      if (!this.validateEmail(details.email)) {
-        this.$q.notify({
-          type: "negative",
+        },
+        email: {
+          fn: this.validateEmail,
           message: "Please enter a valid email address.",
-        });
-        return false;
-      }
-      if (!this.validatePhone(details.phone)) {
-        this.$q.notify({
-          type: "negative",
+        },
+        phone: {
+          fn: this.validatePhone,
           message: "Please enter a valid 10-digit phone number.",
-        });
-        return false;
-      }
-      if (!this.validateUsername(details.username)) {
-        this.$q.notify({
-          type: "negative",
+        },
+        username: {
+          fn: this.validateUsername,
           message:
             "Username must be 3-15 characters long and contain only letters and numbers.",
-        });
-        return false;
+        },
+      };
+
+      // Required check — only on changed fields
+      for (const key of changed) {
+        if (!this.userDetails[key]) {
+          this.$q.notify({
+            type: "negative",
+            message: "Please fill in all the fields.",
+          });
+          return false;
+        }
       }
+
+      // Format check — only on changed fields
+      for (const key of changed) {
+        const v = validators[key];
+        if (v && !v.fn(this.userDetails[key])) {
+          this.$q.notify({
+            type: "negative",
+            message: v.message,
+          });
+          return false;
+        }
+      }
+
       return true;
     },
 
-    async resendVerificationEmail() {
-      try {
-        const response = await EmailService.resendVerificationEmail(
-          this.userDetails.email
-        );
-        if (response) {
-          this.$q.notify({
-            type: "positive",
-            color: "primary",
-            message: "Please check your email for the verification link.",
-          });
-          this.getUserDetails();
-        }
-      } catch (error) {
-        this.$q.notify({
-          type: "negative",
-          message: "Error resending verification email.",
-        });
-      }
-    },
-
     async updateUser() {
-      if (!this.validateFields()) return;
+      if (!this.validateChangedFields()) return;
 
       this.$q
         .dialog({
           title: "Confirm",
-          message: "You are about to update your profile, continue?",
+          message: `You are about to update: ${this.changedFields.join(
+            ", "
+          )}. Continue?`,
           color: "primary",
           cancel: true,
           persistent: true,
         })
         .onOk(async () => {
           this.saving = true;
+
+          // Only send changed fields + fields the backend always expects
           const updatedUser = {
-            firstName: this.userDetails.firstName,
-            lastName: this.userDetails.lastName,
-            email: this.userDetails.email,
-            phone: this.userDetails.phone,
-            username: this.userDetails.username,
             userType: this.userDetails.userType,
             location: this.userDetails.location,
             loginInfo: this.userDetails.loginInfo,
             order: this.userDetails.order,
           };
+
+          for (const key of this.changedFields) {
+            updatedUser[key] = this.userDetails[key];
+          }
 
           try {
             const response = await UserService.updateUserDetails(
@@ -311,12 +401,34 @@ export default {
         });
     },
 
+    async resendVerificationEmail() {
+      try {
+        const response = await EmailService.resendVerificationEmail(
+          this.userDetails.email
+        );
+        if (response) {
+          this.$q.notify({
+            type: "positive",
+            color: "primary",
+            message: "Please check your email for the verification link.",
+          });
+          this.getUserDetails();
+        }
+      } catch (error) {
+        this.$q.notify({
+          type: "negative",
+          message: "Error resending verification email.",
+        });
+      }
+    },
+
     async getUserDetails() {
       this.loading = true;
       const id = await UserService.FindUserByToken();
       this.userTokenDetails = id;
       const user = await UserService.findUserById(this.userTokenDetails._id);
       this.userDetails = user;
+      this.savedUserDetails = JSON.parse(JSON.stringify(user));
       this.loading = false;
     },
   },

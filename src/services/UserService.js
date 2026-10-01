@@ -21,6 +21,15 @@ class UserService {
       Logger.error(error)
     }
   }
+  static async guestLogin() {
+    const ENDPOINT = "/auth/guest-login";
+    try {
+      const response = await axiosInstance.post(ENDPOINT)
+      return response.data
+    } catch (error) {
+      Logger.error(error)
+    }
+  }
   static async logout(userId) {
     const ENDPOINT = `/user/logout/${userId}`
     try {

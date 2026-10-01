@@ -2,7 +2,7 @@
   <q-page>
     <div class="login-shell row no-wrap">
       <!----------------------------------------------------------- LEFT PANEL (image placeholder) -------------------------------------------------->
-      <div class="col-md-6 left-panel gt-sm">
+      <div class="col-md-5 left-panel gt-sm">
         <q-img
           src="~src/assets/homepage/stock1.jpg"
           class="left-image"
@@ -30,10 +30,9 @@
       </div>
 
       <!----------------------------------------------------------- RIGHT PANEL (form) -------------------------------------------------->
-      <div class="col-md-6 col-12 right-panel column justify-center q-pa-xl">
+      <div class="col-md-7 col-12 right-panel column justify-center q-pa-xl">
         <div class="full-width">
           <div class="constrain-more">
-
             <div class="row justify-between items-center q-mb-xl">
               <q-btn
                 dense
@@ -50,21 +49,19 @@
               </div> -->
             </div>
 
-            <div class="overline text-primary text-caption q-mb-sm">
+            <!-- <div class="overline text-primary text-caption q-mb-sm">
+              WELCOME BACK
+            </div> -->
+            <div
+              class="font-size-responsive-xxl archivo text-light text-bold q-mb-md text-center"
+            >
               WELCOME BACK
             </div>
-            <div
-              class="font-size-responsive-giant archivo text-light text-bold q-mb-md"
-            >
-              SIGN-IN TO YOUR ACCOUNT
-            </div>
-            <div class="text-subtitle1 text-dimmed q-mb-xl">
-              Sign in to review your saved details and keep track of your
-              orders.
+            <div class="font-size-responsive-sm text-dimmed q-mb-xl text-center">
+              Sign in to keep track of your orders
             </div>
 
             <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-
               <div>
                 <div class="overline text-dimmed text-caption q-mb-xs">
                   EMAIL ADDRESS
@@ -103,7 +100,9 @@
                   </template> -->
                   <template #append>
                     <q-icon
-                      :name="showPassword ? 'eva-eye-off-outline' : 'eva-eye-outline'"
+                      :name="
+                        showPassword ? 'eva-eye-off-outline' : 'eva-eye-outline'
+                      "
                       class="cursor-pointer"
                       @click="showPassword = !showPassword"
                     />
@@ -138,7 +137,28 @@
                 style="width: 100%"
               />
 
-              <div class="text-center text-subtitle1 text-dimmed q-mt-md">
+              <!-- Divider -->
+              <div class="row items-center">
+                <q-separator color="grey-9" class="col" />
+                <div class="text-caption text-dimmed q-px-md">OR</div>
+                <q-separator color="grey-9" class="col" />
+              </div>
+
+              <!-- Guest + register -->
+              <q-btn
+                rounded
+                no-caps
+                outline
+                color="grey"
+                text-color="grey"
+                label="Continue as guest"
+                class="q-px-xl q-py-md rounded-button text-subtitle1 q-mb-md"
+                style="width: 100%"
+                @click="loginAsGuest"
+                :loading="guestLoading"
+              />
+
+              <div class="text-center text-subtitle1 text-dimmed">
                 New to Shaded Eyewear?
                 <router-link
                   to="/auth/register"
@@ -214,6 +234,41 @@ export default {
           });
         }
         this.onReset();
+      }
+    },
+
+    async loginAsGuest() {
+      try {
+        const response = await UserService.guestLogin();
+
+        if (response) {
+          this.$q.notify({
+            type: "positive",
+            color: "primary",
+            message: "Logged in as guest",
+          });
+          window.location.href = "/";
+        } else {
+          this.$q.notify({
+            type: "negative",
+            color: "red",
+            message: "Guest login failed. Please try again!",
+          });
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 429) {
+          this.$q.notify({
+            type: "negative",
+            color: "red",
+            message: "Too many guest logins. Please try again later.",
+          });
+        } else {
+          this.$q.notify({
+            type: "negative",
+            color: "red",
+            message: "Guest login failed. Please try again!",
+          });
+        }
       }
     },
 

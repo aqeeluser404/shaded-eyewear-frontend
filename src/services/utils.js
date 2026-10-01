@@ -24,6 +24,14 @@ class Helper {
     return `SHD-${datePart}-${shortId}`;
   }
 
+  static isGuest(userDetails) {
+    if (!userDetails) return false;
+    return (
+      userDetails.username === "guest" ||
+      userDetails.email === "guest@shaded-eyewear-za.web.app"
+    );
+  }
+
   // static getImageUrl(imagePath) {
   //   try {
   //     const isProduction = process.env.NODE_ENV === 'production';
