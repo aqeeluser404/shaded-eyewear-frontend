@@ -30,25 +30,28 @@
 
         <div class="section-spacer-xs"></div>
 
-        <div class="row justify-start full-width">
+        <div class="row justify-start full-width admin-shell-row">
           <!-------------------------------------------------------- SIDEBAR -------------------------------------------------------->
           <div
-            class="bg-transparent col-12 col-md-2 border-right"
-            :class="$q.screen.gt.sm ? 'q-pr-lg' : 'q-pr-none'"
+            class="bg-transparent sidebar-collapsible"
+            :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
           >
-            <div style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
+            <div class="sidebar-menu-list">
               <q-item
                 clickable
                 class="menu-item"
                 :class="{
-                  'menu-item--active': currentPageComponent === 'OverviewComponent',
+                  'menu-item--active':
+                    currentPageComponent === 'OverviewComponent',
                 }"
                 @click="changePage('Overview', 'OverviewComponent')"
               >
                 <q-item-section avatar>
                   <q-icon name="eva-grid-outline" size="18px" />
                 </q-item-section>
-                <q-item-section class="text-subtitle1">Overview</q-item-section>
+                <q-item-section class="text-subtitle1 menu-label"
+                  >Overview</q-item-section
+                >
               </q-item>
 
               <q-item
@@ -62,7 +65,9 @@
                 <q-item-section avatar>
                   <q-icon name="eva-people-outline" size="18px" />
                 </q-item-section>
-                <q-item-section class="text-subtitle1">Customers</q-item-section>
+                <q-item-section class="text-subtitle1 menu-label"
+                  >Customers</q-item-section
+                >
               </q-item>
 
               <q-item
@@ -77,7 +82,7 @@
                 <q-item-section avatar>
                   <q-icon name="eva-eye-off-2-outline" size="18px" />
                 </q-item-section>
-                <q-item-section class="text-subtitle1"
+                <q-item-section class="text-subtitle1 menu-label"
                   >Inventory</q-item-section
                 >
               </q-item>
@@ -94,7 +99,9 @@
                 <q-item-section avatar>
                   <q-icon name="eva-clipboard-outline" size="18px" />
                 </q-item-section>
-                <q-item-section class="text-subtitle1">Orders</q-item-section>
+                <q-item-section class="text-subtitle1 menu-label"
+                  >Orders</q-item-section
+                >
               </q-item>
 
               <q-item
@@ -109,32 +116,29 @@
                 <q-item-section avatar>
                   <q-icon name="eva-calendar-outline" size="18px" />
                 </q-item-section>
-                <q-item-section class="text-subtitle1">Returns</q-item-section>
+                <q-item-section class="text-subtitle1 menu-label"
+                  >Returns</q-item-section
+                >
               </q-item>
               <div class="section-spacer-sm"></div>
             </div>
 
             <div class="section-spacer-xs"></div>
-            <div>
+            <div class="sidebar-user-block menu-label">
               <div class="overline-tight text-dimmed text-caption q-mb-sm">
                 SIGNED IN AS
               </div>
-
               <div class="text-subtitle1 text-light text-bold">
                 {{ userDetails.firstName }} {{ userDetails.lastName }}
               </div>
-
               <div class="text-caption text-light text-dimmed">
                 {{ capitalizeFirstLetter(userDetails.userType) }} Account Type
               </div>
             </div>
-
-            <!-- admin profile -->
-
           </div>
 
           <!-------------------------------------------------------- COMPONENT PANEL -------------------------------------------------------->
-          <div class="col-12 col-md-9">
+          <div class="admin-content-panel">
             <component :is="currentPageComponent"></component>
           </div>
         </div>
@@ -161,7 +165,7 @@ export default {
     SunglassesComponent,
     OrdersComponent,
     ReturnsComponent,
-    OverviewComponent
+    OverviewComponent,
   },
 
   data() {
@@ -198,15 +202,131 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.menu-item
-  margin-bottom: 4px
-  transition: background-color 0.2s ease
+// =================================================================================
+// SHELL LAYOUT — row stacks on mobile, side-by-side on desktop
 
-  &:hover
+.admin-shell-row
+  flex-wrap: wrap
+
+  @media (min-width: 1024px)
+    flex-wrap: nowrap
+
+.admin-content-panel
+  flex: 1 1 auto
+  min-width: 0
+
+
+// =================================================================================
+// SIDEBAR — icon tabs on mobile, collapsible rail on desktop
+
+.sidebar-collapsible
+  // ---------- MOBILE (default, no media query) ----------
+  // everything here applies below 1024px
+  flex: 1 1 100%
+  max-width: 100%
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2)
+
+  .sidebar-user-block
+    display: none
+
+  .menu-label
+    display: none
+
+  .sidebar-menu-list
+    display: flex
+    flex-direction: row
+    justify-content: space-around
+    border-bottom: none
+
+    .section-spacer-sm,
+    .section-spacer-xs
+      display: none
+
+  .menu-item
+    flex: 1 1 auto
+    min-width: 0
+    margin-bottom: 0
+    padding: 12px 0 !important
+    justify-content: center
+    align-items: center
+
+    .q-item__section--avatar
+      display: flex
+      align-items: center
+      justify-content: center
+      min-width: 0
+      padding: 0
+      margin: 0
+
+    // hide the whole label section on mobile
+    .q-item__section:not(.q-item__section--avatar)
+      display: none !important
+
+  .menu-item--active
     background-color: rgba(255, 255, 255, 0.04)
+    border-left: none
+    border-bottom: 2px solid var(--q-primary)
+    padding-left: 0 !important
 
-.menu-item--active
-  background-color: #1a1a1a
-  border-left: 3px solid var(--q-primary)
-  padding-left: calc(16px - 3px)
+  // ---------- DESKTOP (>= 1024px) ----------
+  // overrides everything above
+  @media (min-width: 1024px)
+    flex: 0 0 64px
+    max-width: 64px
+    border-right: 1px solid rgba(255, 255, 255, 0.2)
+    border-bottom: none
+    transition: flex 0.28s ease
+
+    .sidebar-menu-list
+      display: block
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2)
+
+      .section-spacer-sm,
+      .section-spacer-xs
+        display: block
+
+    .sidebar-user-block
+      display: block
+
+    // UNDO the mobile label hiding
+    .menu-item .q-item__section:not(.q-item__section--avatar)
+      display: block !important
+
+    // UNDO the mobile icon centering
+    .menu-item
+      flex: initial
+      padding: 0 16px !important
+      justify-content: flex-start
+      align-items: center
+      margin-bottom: 4px
+
+      .q-item__section--avatar
+        display: block
+        align-items: initial
+        justify-content: initial
+        min-width: 32px
+        padding: initial
+        margin: initial
+
+    // labels: visible but collapsed until hover
+    .menu-label
+      display: block
+      opacity: 0
+      width: 0
+      overflow: hidden
+      transition: opacity 0.15s ease
+
+    .menu-item--active
+      background-color: #1a1a1a
+      border-left: 3px solid var(--q-primary)
+      border-bottom: none
+      padding-left: calc(16px - 3px) !important
+
+    &:hover
+      flex: 0 0 240px
+      max-width: 240px
+
+      .menu-label
+        opacity: 1
+        width: auto
 </style>
