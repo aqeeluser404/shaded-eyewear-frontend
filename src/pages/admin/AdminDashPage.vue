@@ -4,15 +4,15 @@
       <div class="section-spacer-sm"></div>
       <div class="constrain">
         <div style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
-          <div class="overline-tight text-dimmed text-caption">
-            SHADED OPERATIONS
-          </div>
+          <!-- <div class="overline-tight text-dimmed text-caption">
+            SHADED EYEWEAR
+          </div> -->
           <div class="row justify-between items-center">
             <div
               class="font-size-responsive-giant archivo col-md-8 col-12"
               :class="$q.screen.gt.sm ? 'q-mb-none' : 'q-mb-md'"
             >
-              CONTROL ROOM.
+              Command Center
             </div>
             <q-btn
               rounded

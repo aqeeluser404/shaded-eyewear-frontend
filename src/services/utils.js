@@ -24,6 +24,14 @@ class Helper {
     return `SHD-${datePart}-${shortId}`;
   }
 
+  static formatUserId(user) {
+    const datePart = new Date(user.dateCreated || Date.now())
+      .toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit" })
+      .replace("/", "");
+    const shortId = String(user._id).slice(-3).toUpperCase();
+    return `USR-${datePart}-${shortId}`;
+  }
+
   static isGuest(userDetails) {
     if (!userDetails) return false;
     return (
