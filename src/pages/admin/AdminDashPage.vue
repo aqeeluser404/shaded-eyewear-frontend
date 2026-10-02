@@ -80,7 +80,7 @@
                 @click="changePage('Inventory', 'SunglassesComponent')"
               >
                 <q-item-section avatar>
-                  <q-icon name="eva-eye-off-2-outline" size="18px" />
+                  <q-icon name="fa-solid fa-glasses" size="16px" />
                 </q-item-section>
                 <q-item-section class="text-subtitle1 menu-label"
                   >Inventory</q-item-section

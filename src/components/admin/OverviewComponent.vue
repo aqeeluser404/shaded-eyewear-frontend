@@ -113,13 +113,13 @@
           >
             <div class="row justify-between items-center q-mb-lg">
               <div class="overline-tight text-dimmed text-caption">REVENUE</div>
-              <q-icon name="eva-dollar-outline" color="primary" size="20px" />
+              <q-icon name="fa-solid fa-coins" color="primary" size="16px" />
             </div>
             <div class="font-size-responsive-xl archivo text-light text-bold">
               R {{ formatNumber(stats.revenue) }}
             </div>
             <div class="text-caption text-dimmed q-mt-sm">
-              Lifetime paid orders
+              Lifetime net revenue
             </div>
           </q-card>
         </div>
@@ -163,12 +163,12 @@
               {{ stats.customers }}
             </div>
             <div class="text-caption text-dimmed q-mt-sm">
-              Registered accounts
+              {{ stats.activeToday }} active today
             </div>
           </q-card>
         </div>
 
-        <!-- Low Stock -->
+        <!-- Inventory -->
         <div class="col-12 col-sm-6 col-md-3">
           <q-card
             flat
@@ -178,19 +178,15 @@
           >
             <div class="row justify-between items-center q-mb-lg">
               <div class="overline-tight text-dimmed text-caption">
-                LOW STOCK
+                INVENTORY
               </div>
-              <q-icon
-                name="eva-alert-circle-outline"
-                color="primary"
-                size="20px"
-              />
+              <q-icon name="fa-solid fa-glasses" color="primary" size="16px" />
             </div>
             <div class="font-size-responsive-xl archivo text-light text-bold">
-              {{ stats.lowStock }}
+              {{ stats.totalStock }}
             </div>
             <div class="text-caption text-dimmed q-mt-sm">
-              Frames below 3 units
+              {{ stats.frameCount }} frames in stock
             </div>
           </q-card>
         </div>
@@ -206,11 +202,30 @@
             class="bg-dark-secondary q-pa-lg"
             style="border: 1px solid rgba(255, 255, 255, 0.2)"
           >
-            <div class="text-subtitle1 text-light text-bold">
-              Sales this week
-            </div>
-            <div class="text-caption text-dimmed q-mb-md">
-              Revenue in rand, last 7 days
+            <div class="row justify-between items-start q-mb-md">
+              <div>
+                <div class="font-size-responsive-md text-light text-bold">
+                  Sales
+                </div>
+                <div class="text-caption text-dimmed">
+                  {{ periodCaption }}
+                </div>
+              </div>
+
+              <q-select
+                v-model="period"
+                :options="periodOptions"
+                option-label="label"
+                option-value="value"
+                emit-value
+                map-options
+                dense
+                outlined
+                dark
+                color="primary"
+                class="period-select"
+                @update:model-value="computeCharts"
+              />
             </div>
 
             <apexchart
@@ -230,7 +245,7 @@
             class="bg-dark-secondary q-pa-lg"
             style="border: 1px solid rgba(255, 255, 255, 0.2)"
           >
-            <div class="text-subtitle1 text-light text-bold">
+            <div class="font-size-responsive-md text-light text-bold">
               Frequent users
             </div>
             <div class="text-caption text-dimmed q-mb-md">
@@ -259,12 +274,14 @@
           style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
         >
           <div>
-            <div class="text-subtitle1 text-light text-bold">RECENT ORDERS</div>
+            <div class="font-size-responsive-md text-light text-bold">
+              Recent Orders
+            </div>
             <div class="text-caption text-dimmed">
-              Latest 5 orders across the store
+              Latest orders across the store
             </div>
           </div>
-          <q-btn
+          <!-- <q-btn
             flat
             dense
             no-caps
@@ -272,7 +289,7 @@
             icon-right="eva-arrow-forward-outline"
             class="custom-button icon-btn text-primary text-subtitle1"
             @click="$emit('navigate', 'OrdersComponent')"
-          />
+          /> -->
         </q-card-section>
 
         <q-card-section class="q-pa-none">
@@ -281,11 +298,23 @@
             class="row items-center q-px-md q-py-md"
             style="border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
           >
-            <div class="col-2 text-dimmed text-caption">ORDER</div>
-            <div class="col-3 text-dimmed text-caption">CUSTOMER</div>
-            <div class="col-3 text-dimmed text-caption">ITEM</div>
-            <div class="col-2 text-dimmed text-caption">TOTAL</div>
-            <div class="col-2 text-right text-dimmed text-caption">STATUS</div>
+            <div class="col-2 text-dimmed font-size-responsive-xs text-bold">
+              ORDER
+            </div>
+            <div class="col-3 text-dimmed font-size-responsive-xs text-bold">
+              CUSTOMER
+            </div>
+            <div class="col-3 text-dimmed font-size-responsive-xs text-bold">
+              ITEM
+            </div>
+            <div class="col-2 text-dimmed font-size-responsive-xs text-bold">
+              TOTAL
+            </div>
+            <div
+              class="col-2 text-dimmed font-size-responsive-xs text-bold text-center"
+            >
+              STATUS
+            </div>
           </div>
 
           <!-- data rows -->
@@ -309,16 +338,16 @@
                 #{{ formateOrderId(order) }}
               </q-badge>
             </div>
-            <div class="col-3 text-subtitle1 text-dimmed">
+            <div class="col-3 font-size-responsive-sm text-dimmed">
               {{ order.userFirstName }}
             </div>
-            <div class="col-3 text-subtitle1 text-light">
+            <div class="col-3 font-size-responsive-sm text-dimmed">
               {{ order.itemName }}
             </div>
-            <div class="col-2 text-subtitle1 archivo text-gradient-primary">
+            <div class="col-2 font-size-responsive-sm text-dimmed">
               R {{ order.totalAmount }}.00
             </div>
-            <div class="col-2 row justify-end">
+            <div class="col-2 row justify-center">
               <div class="row items-center">
                 <div
                   class="status-dot"
@@ -369,8 +398,19 @@ export default {
         orders: 0,
         pendingOrders: 0,
         customers: 0,
-        lowStock: 0,
+        activeToday: 0,
+        totalStock: 0,
+        frameCount: 0,
       },
+
+      period: "all-time",
+      periodOptions: [
+        { label: "This week", value: "this-week" },
+        { label: "Last week", value: "last-week" },
+        { label: "This month", value: "this-month" },
+        { label: "Last 30 days", value: "last-30" },
+        { label: "All time", value: "all-time" },
+      ],
 
       recentOrders: [],
       salesChartSeries: [],
@@ -378,7 +418,20 @@ export default {
   },
 
   computed: {
+    periodCaption() {
+      const map = {
+        "this-week": "Revenue and refunds, this week",
+        "last-week": "Revenue and refunds, last week",
+        "this-month": "Revenue and refunds, this month",
+        "last-30": "Revenue and refunds, last 30 days",
+        "all-time": "Revenue and refunds, all time",
+      };
+      return map[this.period] || "";
+    },
+
     salesChartOptions() {
+      const { labels } = this.getPeriodRange();
+
       return {
         chart: {
           id: "sales-weekly",
@@ -387,7 +440,7 @@ export default {
           fontFamily: "Hind, sans-serif",
         },
         theme: { mode: "dark" },
-        colors: ["#F97316"],
+        colors: ["#F97316", "#EF4444"],
         stroke: { curve: "smooth", width: 2 },
         fill: {
           type: "gradient",
@@ -403,8 +456,16 @@ export default {
           borderColor: "rgba(255, 255, 255, 0.08)",
           strokeDashArray: 3,
         },
+        legend: {
+          show: true,
+          position: "top",
+          horizontalAlign: "right",
+          labels: { colors: "#9b9b9b" },
+          markers: { radius: 6, offsetX: -4 },
+          itemMargin: { horizontal: 16, vertical: 0 },
+        },
         xaxis: {
-          categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          categories: labels,
           labels: { style: { colors: "#9b9b9b" } },
           axisBorder: { color: "rgba(255, 255, 255, 0.1)" },
           axisTicks: { color: "rgba(255, 255, 255, 0.1)" },
@@ -510,55 +571,85 @@ export default {
     },
 
     async computeStats() {
-      const paidOrders = this.orders.filter((o) => o.status === "paid");
+      const paidStatuses = ["paid", "paid & picked up", "paid & delivered"];
+
+      const paidOrders = this.orders.filter((o) =>
+        paidStatuses.includes(o.status)
+      );
       const pendingOrders = this.orders.filter((o) => o.status === "pending");
+      const refundedOrders = this.orders.filter((o) => o.status === "refunded");
+
+      const framesWithStock = this.sunglasses.filter(
+        (s) => typeof s.stock === "number" && s.stock > 0
+      );
+
+      // Count users whose lastLogin falls on today's date
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+
+      const activeToday = this.users.filter((u) => {
+        const last = u?.loginInfo?.lastLogin;
+        if (!last) return false;
+        return new Date(last) >= startOfToday;
+      }).length;
+
+      const grossRevenue = paidOrders.reduce(
+        (sum, o) => sum + (o.totalAmount || 0),
+        0
+      );
+      const refundedTotal = refundedOrders.reduce(
+        (sum, o) => sum + Math.abs(o.totalAmount || 0),
+        0
+      );
 
       this.stats = {
-        revenue: paidOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0),
+        revenue: grossRevenue - refundedTotal,
         orders: this.orders.length,
         pendingOrders: pendingOrders.length,
         customers: this.users.length,
-        lowStock: this.sunglasses.filter((s) => (s.stock || 0) < 3).length,
+        activeToday,
+        totalStock: framesWithStock.reduce((sum, s) => sum + s.stock, 0),
+        frameCount: framesWithStock.length,
       };
     },
 
     async computeCharts() {
-      // Sales per day for the last 7 days
-      const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-      const dailyTotals = {
-        Mon: 0,
-        Tue: 0,
-        Wed: 0,
-        Thu: 0,
-        Fri: 0,
-        Sat: 0,
-        Sun: 0,
-      };
+      // determine the date range and labels based on selected period
+      const { start, end, labels, bucketKeys } = this.getPeriodRange();
 
-      const now = new Date();
-      const weekAgo = new Date();
-      weekAgo.setDate(now.getDate() - 7);
+      // build empty buckets
+      const revenueBuckets = {};
+      const refundBuckets = {};
+      for (const key of bucketKeys) {
+        revenueBuckets[key] = 0;
+        refundBuckets[key] = 0;
+      }
+
+      const paidStatuses = ["paid", "paid & picked up", "paid & delivered"];
 
       for (const order of this.orders) {
-        if (order.status !== "paid") continue;
         const d = new Date(order.orderDate);
-        if (d < weekAgo) continue;
-        const dayName = days[d.getDay()];
-        dailyTotals[dayName] += order.totalAmount || 0;
+        if (start && d < start) continue;
+        if (end && d > end) continue;
+
+        const key = this.getBucketKey(d, this.period);
+        if (!(key in revenueBuckets)) continue;
+
+        if (paidStatuses.includes(order.status)) {
+          revenueBuckets[key] += order.totalAmount || 0;
+        } else if (order.status === "refunded") {
+          refundBuckets[key] += Math.abs(order.totalAmount || 0);
+        }
       }
 
       this.salesChartSeries = [
         {
           name: "Revenue",
-          data: [
-            dailyTotals.Mon,
-            dailyTotals.Tue,
-            dailyTotals.Wed,
-            dailyTotals.Thu,
-            dailyTotals.Fri,
-            dailyTotals.Sat,
-            dailyTotals.Sun,
-          ],
+          data: bucketKeys.map((k) => revenueBuckets[k]),
+        },
+        {
+          name: "Refunds",
+          data: bucketKeys.map((k) => refundBuckets[k]),
         },
       ];
     },
@@ -599,32 +690,176 @@ export default {
       );
     },
 
+    getPeriodRange() {
+      const now = new Date();
+
+      if (this.period === "this-week") {
+        // Monday to Sunday of current week
+        const day = now.getDay(); // 0 = Sun, 1 = Mon, ...
+        const diffToMonday = (day + 6) % 7;
+        const monday = new Date(now);
+        monday.setDate(now.getDate() - diffToMonday);
+        monday.setHours(0, 0, 0, 0);
+
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        sunday.setHours(23, 59, 59, 999);
+
+        return {
+          start: monday,
+          end: sunday,
+          labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          bucketKeys: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        };
+      }
+
+      if (this.period === "last-week") {
+        const day = now.getDay();
+        const diffToMonday = (day + 6) % 7;
+        const monday = new Date(now);
+        monday.setDate(now.getDate() - diffToMonday - 7);
+        monday.setHours(0, 0, 0, 0);
+
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        sunday.setHours(23, 59, 59, 999);
+
+        return {
+          start: monday,
+          end: sunday,
+          labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          bucketKeys: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        };
+      }
+
+      if (this.period === "this-month") {
+        const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const lastOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+        // buckets: one per day of the month
+        const bucketKeys = [];
+        const labels = [];
+        for (let d = 1; d <= lastOfMonth.getDate(); d++) {
+          bucketKeys.push(String(d));
+          labels.push(String(d));
+        }
+
+        return { start: firstOfMonth, end: lastOfMonth, labels, bucketKeys };
+      }
+
+      if (this.period === "last-30") {
+        const start = new Date(now);
+        start.setDate(now.getDate() - 29);
+        start.setHours(0, 0, 0, 0);
+
+        // buckets: one per day
+        const bucketKeys = [];
+        const labels = [];
+        for (let i = 0; i < 30; i++) {
+          const d = new Date(start);
+          d.setDate(start.getDate() + i);
+          bucketKeys.push(d.toISOString().slice(0, 10));
+          labels.push(`${d.getDate()}/${d.getMonth() + 1}`);
+        }
+
+        return { start, end: now, labels, bucketKeys };
+      }
+
+      if (this.period === "all-time") {
+        // buckets: one per month
+        const bucketKeys = [];
+        const labels = [];
+        const monthNames = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+
+        // find earliest order
+        const dates = this.orders.map((o) => new Date(o.orderDate));
+        const earliest = dates.length ? new Date(Math.min(...dates)) : now;
+        const cursor = new Date(earliest.getFullYear(), earliest.getMonth(), 1);
+
+        while (cursor <= now) {
+          const key = `${cursor.getFullYear()}-${String(
+            cursor.getMonth() + 1
+          ).padStart(2, "0")}`;
+          bucketKeys.push(key);
+          labels.push(
+            `${monthNames[cursor.getMonth()]} ${String(
+              cursor.getFullYear()
+            ).slice(-2)}`
+          );
+          cursor.setMonth(cursor.getMonth() + 1);
+        }
+
+        return { start: null, end: null, labels, bucketKeys };
+      }
+
+      // fallback
+      return {
+        start: null,
+        end: null,
+        labels: [],
+        bucketKeys: [],
+      };
+    },
+
+    getBucketKey(date, period) {
+      if (period === "this-week" || period === "last-week") {
+        const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        return days[date.getDay()];
+      }
+      if (period === "this-month") {
+        return String(date.getDate());
+      }
+      if (period === "last-30") {
+        return date.toISOString().slice(0, 10);
+      }
+      if (period === "all-time") {
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+          2,
+          "0"
+        )}`;
+      }
+      return "";
+    },
+
     mapStatus(status) {
       const map = {
-        paid: {
-          statusLabel: "READY",
-          statusColor: "primary",
-          statusBucket: "ready",
-        },
         pending: {
           statusLabel: "PENDING",
           statusColor: "warning",
           statusBucket: "pending",
         },
-        "paid & picked up": {
-          statusLabel: "COMPLETE",
+        paid: {
+          statusLabel: "PAID",
           statusColor: "positive",
-          statusBucket: "complete",
+          statusBucket: "paid",
         },
-        shipped: {
-          statusLabel: "SHIPPED",
-          statusColor: "info",
-          statusBucket: "shipped",
+        "paid & picked up": {
+          statusLabel: "COLLECTED",
+          statusColor: "collected",
+          statusBucket: "collected",
         },
-        returned: {
-          statusLabel: "RETURNED",
+        "paid & delivered": {
+          statusLabel: "DELIVERED",
+          statusColor: "delivered",
+          statusBucket: "delivered",
+        },
+        refunded: {
+          statusLabel: "REFUNDED",
           statusColor: "negative",
-          statusBucket: "returned",
+          statusBucket: "refunded",
         },
       };
       return (
@@ -644,6 +879,16 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.period-select
+  min-width: 130px
+  font-size: 0.85rem
+
+  :deep(.q-field__control)
+    background-color: #121212
+
+  :deep(.q-field__native)
+    color: #f0f0f0
+
 .stat-card
   transition: border-color 0.2s ease
 
@@ -668,26 +913,32 @@ export default {
   border-radius: 50%
   display: inline-block
 
-.status-dot--ready
-  background-color: var(--q-primary)
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15)
-
+// pending — yellow
 .status-dot--pending
   background-color: #fbbf24
   box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15)
 
-.status-dot--complete
+// paid — green (new, stands alone)
+.status-dot--paid
   background-color: #22c55e
   box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15)
 
-.status-dot--shipped
-  background-color: #38bdf8
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15)
+// collected — cyan/teal (unique)
+.status-dot--collected
+  background-color: #14b8a6
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15)
 
-.status-dot--returned
+// delivered — purple (unique)
+.status-dot--delivered
+  background-color: #a855f7
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15)
+
+// refunded — red
+.status-dot--refunded
   background-color: #ef4444
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15)
 
+// fallback
 .status-dot--grey
   background-color: #9b9b9b
 </style>
