@@ -5,7 +5,7 @@
   >
     <!-- Heading -->
     <section>
-      <div class="row justify-between items-start">
+      <div class="row justify-between items-center">
         <div>
           <div class="overline-tight text-dimmed text-caption">
             ADMIN DASHBOARD

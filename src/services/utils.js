@@ -32,6 +32,14 @@ class Helper {
     return `USR-${datePart}-${shortId}`;
   }
 
+  static formatSunglassesId(sunglasses) {
+    const datePart = new Date(sunglasses.dateCreated || Date.now())
+      .toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit" })
+      .replace("/", "");
+    const shortId = String(sunglasses._id).slice(-3).toUpperCase();
+    return `USR-${datePart}-${shortId}`;
+  }
+
   static isGuest(userDetails) {
     if (!userDetails) return false;
     return (

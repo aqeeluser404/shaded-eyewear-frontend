@@ -1,102 +1,376 @@
 <template>
-  <div class="row q-pa-md q-gutter-md justify-center">
+  <div
+    class="admin-sunglasses-details"
+    :class="$q.screen.gt.sm ? 'q-pl-lg' : 'q-pl-none'"
+  >
+    <!-- Heading -->
+    <section>
+      <div class="row justify-between items-center">
+        <div>
+          <div class="overline-tight text-dimmed text-caption">
+            ADMIN DASHBOARD
+          </div>
+          <div class="font-size-responsive-xl archivo text-light text-bold">
+            INVENTORY
+          </div>
+        </div>
 
-    <!--------------------------------------------------------------------- ADD SUNGLASSES SECTION -------------------------------------------------->
-    <q-card flat bordered class="col-12 col-md-11">
-      <q-card v-if="openAddSunglasses === null" class="q-pa-md ">
-        <q-card-section class="column flex-start">
-          <div class="font-size-responsive-lg"><b>All Sunglasses</b></div>
-        </q-card-section>
-        <q-markup-table>
-          <thead>
-            <tr>
-              <th class="text-left">Image</th>
-              <th class="text-left">Model</th>
-              <th class="text-left">Sunglasses ID</th>
-              <th class="text-left">Description</th>
-              <th class="text-left">Price</th>
-              <th class="text-center">Stock</th>
-              <th class="text-left">Quick Tools</th>
-            </tr>
-          </thead>
-          <tbody v-for="(sunglass) in sunglasses" :key="sunglass._id">
-            <tr>
-              <td class="text-left cursor-pointer">
-                <q-img :src="getImageUrl(sunglass.images[0].imageUrl)" alt="Sunglass Image" style="width: 50px;"/>
-              </td>
-              <td class="text-left cursor-pointer">
-                <q-input v-if="editMode === sunglass._id" v-model="sunglass.model" />
-                <div v-else>
-                  {{ sunglass.model }}
-                </div>
-              </td>
-              <td class="text-left cursor-pointer">
-                <div>
-                  #{{ sunglass._id }}
-                </div>
-              </td>
-              <td class="text-left cursor-pointer">
-                <q-input v-if="editMode === sunglass._id" v-model="sunglass.description" />
-                <div v-else class="limit-text">
-                  {{ sunglass.description }}
-                </div>
-              </td>
-              <td class="text-left cursor-pointer">
-                <q-input v-if="editMode === sunglass._id" v-model="sunglass.price" />
-                <div v-else>
-                  R {{ sunglass.price }}.00
-                </div>
-              </td>
-              <td class="text-center cursor-pointer">
-                <q-input v-if="editMode === sunglass._id" v-model="sunglass.stock" />
-                <div v-else>
-                  {{ sunglass.stock }}
-                </div>
-              </td>
-              <td class="text-left cursor-pointer">
-                <!-- edit mode -->
-                <q-btn rounded dense icon="eva-edit-outline" color="primary" class="q-pa-sm font-size-responsive-sm q-mr-sm" v-if="editMode !== sunglass._id" @click="editMode = sunglass._id" />
-                <!-- update mode -->
-                <q-btn rounded dense icon="eva-edit-outline" label="Save" class="custom-button q-px-md q-py-sm custom-button font-size-responsive-sm q-mr-sm" color="primary"  v-if="editMode === sunglass._id" @click="updateSunglasses(sunglass)" />
-                <!-- cancel/save -->
-                <q-btn rounded dense label="Close" class="custom-button q-px-md q-py-sm custom-button font-size-responsive-sm q-mr-sm" v-if="editMode === sunglass._id" @click="editMode = null" />
-                <!-- delete -->
-                <q-btn rounded dense icon="eva-trash-2-outline" class="custom-button q-pa-sm custom-button font-size-responsive-sm" color="negative" @click="deleteSunglasses(sunglass)" />
-              </td>
-            </tr>
-          </tbody>
-        </q-markup-table>
-      </q-card>
+        <!-- Add button only visible when NOT showing the add form -->
+        <q-btn
+          v-if="!openAddSunglasses"
+          rounded
+          dense
+          no-caps
+          icon="eva-plus-outline"
+          label="Add frame"
+          text-color="dark"
+          class="btn-gradient-primary icon-btn q-px-lg q-py-sm rounded-button text-subtitle1 text-bold"
+          @click="toggleAddSunglasses"
+        />
+      </div>
+    </section>
 
-      <!--------------------------------------------------------------------- ADD SUNGLASSES SECTION -------------------------------------------------->
-      <q-card v-else class="q-pa-md column flex-start">
-        <q-card-section>
-          <div class="font-size-responsive-lg"><b>Add Sunglasses</b></div>
+    <div class="section-spacer-sm"></div>
+
+    <!--------------------------------------------------------------------- ADD FORM -------------------------------------------------->
+    <template v-if="openAddSunglasses">
+      <q-card
+        flat
+        bordered
+        class="bg-dark-secondary"
+        style="border: 1px solid rgba(255, 255, 255, 0.2)"
+      >
+        <!-- header with title + close button -->
+        <q-card-section
+          class="row justify-between items-center q-px-md q-py-lg"
+          style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+        >
+          <div class="row items-center q-gutter-md">
+            <div class="add-frame-icon">
+              <q-icon name="eva-plus-outline" size="22px" color="primary" />
+            </div>
+
+            <div>
+              <div class="font-size-responsive-md text-light text-bold">
+                Add Sunglasses
+              </div>
+              <div class="text-caption text-dimmed">
+                Upload a new frame to the store
+              </div>
+            </div>
+          </div>
+
+          <q-btn
+            rounded
+            dense
+            no-caps
+            flat
+            label="Close"
+            icon="eva-close-outline"
+            class="custom-button icon-btn text-subtitle1 text-dimmed q-px-lg q-py-sm"
+            @click="toggleAddSunglasses"
+          />
         </q-card-section>
+
         <q-card-section>
-          <q-form @submit.prevent="addSunglasses" @reset="onReset" class="q-gutter-lg" style="min-width: 100%;" enctype="multipart/form-data">
-            <q-input filled v-model="sunglassesDetails.model" label="Model Name *" id="model" name="model" />
-            <q-input filled v-model="sunglassesDetails.description" label="Description (max 50 words) *" id="description" name="description" />
-            <q-select filled v-model="sunglassesDetails.color" label="Color *" id="color" name="color" :options="colors" emit-value map-options />
-            <q-input class="q-pa-none" filled v-model="sunglassesDetails.price" label="Price (ZAR) *" type="number" prefix="R" :rules="[val => val > 0] || 'Price must be positive'" id="price" name="price" />
-            <q-select filled v-model="sunglassesDetails.stock" label="Stock *" :options="[...Array(11).keys()].slice(1)" emit-value map-options id="stock" name="stock" />
-            <q-file filled v-model="image1" label="image (Side View) * " accept="image/*" name="image1" id="image1" />
-            <q-file filled v-model="image2" label="image (Front View) * " accept="image/*" name="image2" id="image2" />
-            <q-btn rounded dense label="Add Sunglasses" type="submit" color="primary" icon="eva-cloud-upload-outline" class="q-px-lg q-py-sm custom-button font-size-responsive-md" />
-            <q-btn rounded dense flat label="Reset" type="reset" color="primary" class="q-px-lg q-py-sm custom-button font-size-responsive-md" />
+          <q-form
+            @submit.prevent="addSunglasses"
+            @reset="onReset"
+            class="q-gutter-lg"
+            enctype="multipart/form-data"
+          >
+            <div class="row q-col-gutter-md">
+              <!-- Left column -->
+              <div class="col-12 col-md-6">
+                <div class="overline-tight text-dimmed text-caption q-mb-xs">
+                  MODEL NAME
+                </div>
+                <q-input
+                  v-model="sunglassesDetails.model"
+                  filled
+                  dark
+                  placeholder="e.g. Horizon"
+                  class="custom-input"
+                  input-style="color: white;"
+                  :rules="[(val) => !!val || 'Required']"
+                />
+
+                <div class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md">
+                  DESCRIPTION
+                </div>
+                <q-input
+                  v-model="sunglassesDetails.description"
+                  filled
+                  dark
+                  type="textarea"
+                  rows="3"
+                  placeholder="Max 50 words"
+                  class="custom-input"
+                  input-style="color: white;"
+                  :rules="[(val) => !!val || 'Required']"
+                />
+
+                <div class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md">
+                  COLOR
+                </div>
+                <q-select
+                  v-model="sunglassesDetails.color"
+                  :options="colors"
+                  option-label="label"
+                  option-value="value"
+                  emit-value
+                  map-options
+                  filled
+                  dark
+                  class="custom-input"
+                  popup-content-class="period-select-menu"
+                  :rules="[(val) => !!val || 'Required']"
+                />
+              </div>
+
+              <!-- Right column -->
+              <div class="col-12 col-md-6">
+                <div class="overline-tight text-dimmed text-caption q-mb-xs">
+                  PRICE (ZAR)
+                </div>
+                <q-input
+                  v-model="sunglassesDetails.price"
+                  type="number"
+                  prefix="R"
+                  filled
+                  dark
+                  placeholder="0"
+                  class="custom-input"
+                  input-style="color: white;"
+                  :rules="[(val) => val > 0 || 'Price must be positive']"
+                />
+
+                <div class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md">
+                  STOCK
+                </div>
+                <q-select
+                  v-model="sunglassesDetails.stock"
+                  :options="[...Array(11).keys()].slice(1)"
+                  emit-value
+                  map-options
+                  filled
+                  dark
+                  class="custom-input"
+                  popup-content-class="period-select-menu"
+                  :rules="[(val) => !!val || 'Required']"
+                />
+
+                <div class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md">
+                  IMAGE — SIDE VIEW
+                </div>
+                <q-file
+                  v-model="image1"
+                  accept="image/*"
+                  filled
+                  dark
+                  class="custom-input"
+                  input-style="color: white;"
+                  :rules="[(val) => !!val || 'Required']"
+                />
+
+                <div class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md">
+                  IMAGE — FRONT VIEW
+                </div>
+                <q-file
+                  v-model="image2"
+                  accept="image/*"
+                  filled
+                  dark
+                  class="custom-input"
+                  input-style="color: white;"
+                  :rules="[(val) => !!val || 'Required']"
+                />
+              </div>
+            </div>
+
+            <div class="row items-center q-gutter-sm q-mt-md">
+              <q-btn
+                rounded
+                dense
+                no-caps
+                type="submit"
+                label="Add Sunglasses"
+                icon="eva-cloud-upload-outline"
+                text-color="dark"
+                class="btn-gradient-primary q-px-lg q-py-sm rounded-button text-subtitle1 text-bold"
+              />
+              <q-btn
+                rounded
+                dense
+                no-caps
+                flat
+                type="reset"
+                label="Reset"
+                class="custom-button text-subtitle1 text-dimmed q-px-lg q-py-sm"
+              />
+            </div>
           </q-form>
         </q-card-section>
       </q-card>
-    </q-card>
+    </template>
 
-    <!-- button to toggle add sunglasses -->
-    <q-btn round class="round-btn" :label="buttonLabel" @click="toggleAddSunglasses" />
+    <!--------------------------------------------------------------------- LIST -------------------------------------------------->
+    <template v-else>
+      <!-- loading skeleton -->
+      <q-card
+        v-if="loading"
+        flat
+        bordered
+        class="bg-dark-secondary"
+        style="border: 1px solid rgba(255, 255, 255, 0.2)"
+      >
+        <q-card-section
+          class="row justify-between items-center"
+          style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+        >
+          <div>
+            <div class="skeleton-line skeleton-line--md q-mb-sm"></div>
+            <div class="skeleton-line skeleton-line--sm"></div>
+          </div>
+        </q-card-section>
+        <q-card-section class="q-pa-none">
+          <div
+            v-for="n in 4"
+            :key="'skel-' + n"
+            class="row items-center q-px-md q-py-md"
+            :style="n !== 4 ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)' : ''"
+          >
+            <div class="col-1"><div class="skeleton-line skeleton-line--thumb-sm"></div></div>
+            <div class="col-2"><div class="skeleton-line skeleton-line--md"></div></div>
+            <div class="col-2"><div class="skeleton-line skeleton-line--md"></div></div>
+            <div class="col-3"><div class="skeleton-line skeleton-line--md"></div></div>
+            <div class="col-2"><div class="skeleton-line skeleton-line--sm"></div></div>
+            <div class="col-2 row justify-end"><div class="skeleton-line skeleton-line--sm"></div></div>
+          </div>
+        </q-card-section>
+      </q-card>
+
+      <!-- real list -->
+      <q-card
+        v-else
+        flat
+        bordered
+        class="bg-dark-secondary"
+        style="border: 1px solid rgba(255, 255, 255, 0.2)"
+      >
+        <q-card-section
+          class="row justify-between items-center"
+          style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+        >
+          <div>
+            <div class="font-size-responsive-md text-light text-bold">
+              All Sunglasses
+            </div>
+            <div class="text-caption text-dimmed">
+              {{ sunglasses.length }}
+              {{ sunglasses.length === 1 ? "frame" : "frames" }} in catalogue
+            </div>
+          </div>
+        </q-card-section>
+
+<q-card-section class="q-pa-none">
+  <!-- header row -->
+  <div
+    class="row items-center q-px-lg q-py-md"
+    style="border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
+  >
+    <div class="col-1 text-dimmed font-size-responsive-xs text-bold"></div>
+    <div class="col-2 text-dimmed font-size-responsive-xs text-bold">MODEL</div>
+    <div class="col-2 text-dimmed font-size-responsive-xs text-bold">ID</div>
+    <div class="col-4 text-dimmed font-size-responsive-xs text-bold">DESCRIPTION</div>
+    <div class="col-1 text-dimmed font-size-responsive-xs text-bold">PRICE</div>
+    <div class="col-1 text-dimmed font-size-responsive-xs text-bold text-center">STOCK</div>
+    <div class="col-1"></div>
+  </div>
+
+  <!-- data rows -->
+  <div
+    v-for="(sunglass, index) in sunglasses"
+    :key="sunglass._id"
+    class="row items-center q-px-lg q-py-lg sunglass-row"
+    :style="index !== sunglasses.length - 1 ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)' : ''"
+  >
+    <div class="col-1">
+      <q-img
+        :src="getImageUrl(sunglass.images[0].imageUrl)"
+        alt="Sunglass"
+        class="sunglass-thumb"
+      />
+    </div>
+
+    <div class="col-2 q-pr-sm">
+      <q-input v-if="editMode === sunglass._id" v-model="sunglass.model" dense outlined dark class="custom-input" input-style="color: white;" />
+      <div v-else class="font-size-responsive-sm text-light text-bold">{{ sunglass.model }}</div>
+    </div>
+
+    <div class="col-2 q-pr-sm">
+      <q-badge outline color="grey" text-color="grey" class="user-badge">
+        #{{ formatSunglassesId(sunglass) }}
+      </q-badge>
+    </div>
+
+    <div class="col-4 q-pr-md">
+      <q-input v-if="editMode === sunglass._id" v-model="sunglass.description" dense outlined dark type="textarea" rows="2" class="custom-input" input-style="color: white;" />
+      <div v-else class="font-size-responsive-xs text-dimmed limit-text-2">{{ sunglass.description }}</div>
+    </div>
+
+    <div class="col-1 q-pr-sm">
+      <q-input v-if="editMode === sunglass._id" v-model="sunglass.price" dense outlined dark type="number" prefix="R" class="custom-input" input-style="color: white;" />
+      <div v-else class="font-size-responsive-sm text-gradient-primary">R{{ sunglass.price }}</div>
+    </div>
+
+    <div class="col-1 row justify-center">
+      <q-input v-if="editMode === sunglass._id" v-model="sunglass.stock" dense outlined dark type="number" style="width: 70px" class="custom-input" input-style="color: white; text-align: center;" />
+      <div v-else class="row items-center" :class="sunglass.stock < 3 ? 'text-negative' : 'text-light'">
+        <div class="status-dot" :class="sunglass.stock < 3 ? 'status-dot--low' : 'status-dot--in-stock'"></div>
+        <span class="text-caption text-bold q-ml-sm">{{ sunglass.stock }}</span>
+      </div>
+    </div>
+
+    <div class="col-1 row justify-end">
+      <template v-if="editMode !== sunglass._id">
+        <q-btn round dense flat color="grey" icon="eva-more-vertical-outline" size="sm">
+          <q-menu anchor="bottom right" self="top right" class="row-actions-menu">
+            <q-list dense>
+              <q-item clickable v-close-popup @click="editMode = sunglass._id">
+                <q-item-section avatar><q-icon name="eva-edit-outline" size="18px" /></q-item-section>
+                <q-item-section>Edit</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup @click="deleteSunglasses(sunglass)">
+                <q-item-section avatar><q-icon name="eva-trash-2-outline" size="18px" color="negative" /></q-item-section>
+                <q-item-section class="text-negative">Delete</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </template>
+      <template v-else>
+        <q-btn rounded dense no-caps flat color="primary" text-color="primary" icon="eva-checkmark-outline" size="sm" @click="updateSunglasses(sunglass)" />
+        <q-btn rounded dense no-caps flat color="grey" text-color="grey" icon="eva-close-outline" size="sm" @click="cancelEdit" />
+      </template>
+    </div>
+  </div>
+
+  <!-- empty state -->
+  <div v-if="sunglasses.length === 0" class="column items-center q-py-xl q-px-md">
+    <q-icon name="fa-solid fa-glasses" color="primary" size="42px" />
+    <div class="font-size-responsive-md text-light text-bold q-mt-md">NO FRAMES YET</div>
+    <div class="text-caption text-dimmed q-mt-sm">Add your first frame to get started.</div>
+  </div>
+</q-card-section>
+      </q-card>
+    </template>
   </div>
 </template>
 
 <script>
-import SunglassesService from 'src/services/SunglassesService'
-import Helper from 'src/services/utils'
+import SunglassesService from "src/services/SunglassesService";
+import Helper from "src/services/utils";
 
 export default {
   data() {
@@ -104,165 +378,335 @@ export default {
       sunglasses: [],
       editMode: null,
       openAddSunglasses: null,
+      loading: true,
+
       colors: [
-        { label: 'Blue', value: 'blue' },
-        { label: 'Red', value: 'red' },
-        { label: 'Green', value: 'green' },
-        { label: 'Yellow', value: 'yellow' },
-        { label: 'Black', value: 'black' },
-        { label: 'White', value: 'white' },
-        { label: 'Purple', value: 'purple' },
-        { label: 'Orange', value: 'orange' },
-        { label: 'Pink', value: 'pink' },
-        { label: 'Brown', value: 'brown' },
-        { label: 'Gray', value: 'gray' },
-        { label: 'Cyan', value: 'cyan' },
-        { label: 'Magenta', value: 'magenta' },
-        { label: 'Lime', value: 'lime' },
-        { label: 'Teal', value: 'teal' },
-        { label: 'Navy', value: 'navy' },
-        { label: 'Olive', value: 'olive' },
-        { label: 'Maroon', value: 'maroon' },
-        { label: 'Gold', value: 'gold' },
-        { label: 'Silver', value: 'silver' }
+        { label: "Blue", value: "blue" },
+        { label: "Red", value: "red" },
+        { label: "Green", value: "green" },
+        { label: "Yellow", value: "yellow" },
+        { label: "Black", value: "black" },
+        { label: "White", value: "white" },
+        { label: "Purple", value: "purple" },
+        { label: "Orange", value: "orange" },
+        { label: "Pink", value: "pink" },
+        { label: "Brown", value: "brown" },
+        { label: "Gray", value: "gray" },
+        { label: "Cyan", value: "cyan" },
+        { label: "Magenta", value: "magenta" },
+        { label: "Lime", value: "lime" },
+        { label: "Teal", value: "teal" },
+        { label: "Navy", value: "navy" },
+        { label: "Olive", value: "olive" },
+        { label: "Maroon", value: "maroon" },
+        { label: "Gold", value: "gold" },
+        { label: "Silver", value: "silver" },
       ],
+
       sunglassesDetails: {
-        model: '',
-        description: '',
-        color: '',
-        price: '',
-        stock: '',
-        images: []
+        model: "",
+        description: "",
+        color: "",
+        price: "",
+        stock: "",
+        images: [],
       },
-      image1: null, image2: null
-    }
+
+      image1: null,
+      image2: null,
+    };
   },
+
   methods: {
-    validateText: Helper.validateText,                                                              // Validation functions
+    validateText: Helper.validateText,
     getImageUrl: Helper.getImageUrl,
+    formatSunglassesId: Helper.formatSunglassesId,
+
     validateFields() {
       const details = this.sunglassesDetails;
-      const requiredFields = ['model', 'description', 'color', 'price', 'stock', 'image1', 'image2']
-      const modelMaxChar = /^[A-Z][a-zA-Z ]{0,11}$/
+      const requiredFields = [
+        "model",
+        "description",
+        "color",
+        "price",
+        "stock",
+        "image1",
+        "image2",
+      ];
+      const modelMaxChar = /^[A-Z][a-zA-Z ]{0,11}$/;
 
       for (const field of requiredFields) {
         if (!details[field] && !this[field]) {
-          this.$q.notify({ type: 'negative', message: `Please fill in the ${field} field.` });
+          this.$q.notify({
+            type: "negative",
+            message: `Please fill in the ${field} field.`,
+          });
           return false;
         }
       }
-      // Validate the model name format
+
       if (!modelMaxChar.test(details.model)) {
-        this.$q.notify({ type: 'negative', message: 'Model name cannot exceed 12 characters, no special characters, and must start with a uppercase.' });
+        this.$q.notify({
+          type: "negative",
+          message:
+            "Model name cannot exceed 12 characters, no special characters, and must start with an uppercase.",
+        });
         return false;
       }
-      // Validate the description length by words
-      const words = details.description.trim().split(/\s+/).filter(word => word.length > 0);
-      const wordCount = words.length;
-      // console.log(`Description: "${details.description}"`);
-      // console.log(`Words:`, words);
-      // console.log(`Word count: ${wordCount}`);
-      if (wordCount > 50) {
-        this.$q.notify({ type: 'negative', message: 'Description must be 50 words or less.' });
+
+      const words = details.description
+        .trim()
+        .split(/\s+/)
+        .filter((word) => word.length > 0);
+
+      if (words.length > 50) {
+        this.$q.notify({
+          type: "negative",
+          message: "Description must be 50 words or less.",
+        });
         return false;
       }
+
       return true;
     },
-    async addSunglasses() {                                                                         // Register function
-      if (this.validateFields()) {
-        this.$q.dialog({
-          title: 'Add sunglasses',
-          color: 'primary',
+
+    async addSunglasses() {
+      if (!this.validateFields()) return;
+
+      this.$q
+        .dialog({
+          title: "Add sunglasses",
+          color: "primary",
           message: `You are about to add ${this.sunglassesDetails.model}, please ensure the front and side images are attached in the correct order, continue?`,
           cancel: true,
-          persistent: true
-        }).onOk(async () => {
-          const formData = new FormData()
+          persistent: true,
+        })
+        .onOk(async () => {
+          const formData = new FormData();
           for (const key in this.sunglassesDetails) {
-            if (key !== 'images') {
-              formData.append(key, this.sunglassesDetails[key])
+            if (key !== "images") {
+              formData.append(key, this.sunglassesDetails[key]);
             }
           }
-          if (this.image1) formData.append('images', this.image1)
-          if (this.image2) formData.append('images', this.image2)
+          if (this.image1) formData.append("images", this.image1);
+          if (this.image2) formData.append("images", this.image2);
 
-          const response = await SunglassesService.createSunglasses(formData)
+          const response = await SunglassesService.createSunglasses(formData);
           if (response) {
-            this.$q.notify({ type: 'positive', color: 'primary', message: `Addition successful!` })
-            this.onReset()
-            this.toggleAddSunglasses()
-            this.getAllSunglasses()
+            this.$q.notify({
+              type: "positive",
+              color: "primary",
+              message: `Addition successful!`,
+            });
+            this.onReset();
+            this.toggleAddSunglasses();
+            this.getAllSunglasses();
           } else {
-            this.$q.notify({ type: 'negative', message: 'Addition failed. Please try again.' })
+            this.$q.notify({
+              type: "negative",
+              message: "Addition failed. Please try again.",
+            });
           }
-        })
+        });
+    },
+
+    async getAllSunglasses() {
+      this.loading = true;
+      try {
+        const response = await SunglassesService.findAllSunglasses();
+        this.sunglasses = response || [];
+      } catch (error) {
+        console.error("Failed to fetch sunglasses:", error);
+        this.sunglasses = [];
       }
+      this.loading = false;
     },
-    async getAllSunglasses() {                                                                      // get all sunglasses
-      const response = await SunglassesService.findAllSunglasses()
-      this.sunglasses = response
-    },
-    async updateSunglasses(sunglasses) {                                                            // updates only details - no images
+
+    async updateSunglasses(sunglasses) {
       const updatedSunglasses = {
         model: sunglasses.model,
         description: sunglasses.description,
         color: sunglasses.color,
         price: sunglasses.price,
         stock: sunglasses.stock,
-        images: this.sunglasses.images
-      }
-      this.$q.dialog({
-        title: 'Update sunglasses', message: `You are about to update ${sunglasses.model}, continue?`, color: 'primary', cancel: true, persistent: true
-      }).onOk(async () => {
-        const response = await SunglassesService.updateSunglasses(sunglasses._id, updatedSunglasses)
-        if (response) {
-          this.$q.notify({ type: 'positive', color: 'primary', message: 'Update successful!' })
-          this.editMode = null
-        } else {
-          this.$q.notify({ type: 'negative', message: 'Update failed. Please try again.' })
-        }
-      }).onCancel(() => {
-        this.editMode = null
-        this.getAllSunglasses()
-        return
-      })
+        images: this.sunglasses.images,
+      };
+
+      this.$q
+        .dialog({
+          title: "Update sunglasses",
+          message: `You are about to update ${sunglasses.model}, continue?`,
+          color: "primary",
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(async () => {
+          const response = await SunglassesService.updateSunglasses(
+            sunglasses._id,
+            updatedSunglasses
+          );
+          if (response) {
+            this.$q.notify({
+              type: "positive",
+              color: "primary",
+              message: "Update successful!",
+            });
+            this.editMode = null;
+            this.getAllSunglasses();
+          } else {
+            this.$q.notify({
+              type: "negative",
+              message: "Update failed. Please try again.",
+            });
+          }
+        })
+        .onCancel(() => {
+          this.editMode = null;
+          this.getAllSunglasses();
+        });
     },
-    async deleteSunglasses(sunglasses) {                                                            // deletes function
-      this.$q.dialog({
-        title: 'Delete sunglasses', message: `You are about to delete ${sunglasses.model}, continue?`, color: 'primary', cancel: true, persistent: true
-      }).onOk(async () => {
-        const response = await SunglassesService.deleteSunglasses(sunglasses._id)
-        if (response) {
-          this.$q.notify({ type: 'positive', color: 'primary', message: 'Delete successful!' })
-          this.getAllSunglasses()
-        } else {
-          this.$q.notify({ type: 'negative', message: 'Delete failed. Please try again.' })
-        }
-      })
+
+    async deleteSunglasses(sunglasses) {
+      this.$q
+        .dialog({
+          title: "Delete sunglasses",
+          message: `You are about to delete ${sunglasses.model}, continue?`,
+          color: "primary",
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(async () => {
+          const response = await SunglassesService.deleteSunglasses(
+            sunglasses._id
+          );
+          if (response) {
+            this.$q.notify({
+              type: "positive",
+              color: "primary",
+              message: "Delete successful!",
+            });
+            this.getAllSunglasses();
+          } else {
+            this.$q.notify({
+              type: "negative",
+              message: "Delete failed. Please try again.",
+            });
+          }
+        });
     },
-    onReset() {                                                                                     // Reset function
+
+    cancelEdit() {
+      this.editMode = null;
+      this.getAllSunglasses();
+    },
+
+    onReset() {
       this.sunglassesDetails = {
-        model: '',
-        description: '',
-        color: '',
-        price: '',
-        stock: '',
-        images: []
-      }
-      this.image1 = null
-      this.image2 = null
+        model: "",
+        description: "",
+        color: "",
+        price: "",
+        stock: "",
+        images: [],
+      };
+      this.image1 = null;
+      this.image2 = null;
     },
-    toggleAddSunglasses() {                                                                         // toggle sunglasses button function
-      this.openAddSunglasses = this.openAddSunglasses === null ? true : null
+
+    toggleAddSunglasses() {
+      this.openAddSunglasses = this.openAddSunglasses === null ? true : null;
+      if (this.openAddSunglasses === null) this.onReset();
     },
   },
-  computed: {                                                                                       // toggle sunglasses button computed
-    buttonLabel() {
-      return this.openAddSunglasses === null ? '+' : '-'
-    }
+
+  created() {
+    this.getAllSunglasses();
   },
-  created() {                                                                                       // get all sunglasses
-    this.getAllSunglasses()
-  }
-}
+};
 </script>
+
+<style lang="sass" scoped>
+.admin-sunglasses-details
+  // wrapper
+
+.order-id-badge
+  font-family: 'Hind', sans-serif
+  font-weight: 700
+  letter-spacing: 0.05em
+  padding: 4px 10px
+  border-radius: 4px
+  max-width: 100%
+  display: inline-block
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+
+.status-dot
+  width: 8px
+  height: 8px
+  border-radius: 50%
+  display: inline-block
+
+.status-dot--in-stock
+  background-color: #22c55e
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15)
+
+.status-dot--low
+  background-color: #ef4444
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15)
+
+// input styles
+.custom-input
+  :deep(.q-field__control)
+    background-color: #121212
+    border-radius: 8px
+    box-shadow: none !important
+
+  :deep(.q-field__control:before)
+    border: 1px solid rgba(255, 255, 255, 0.1) !important
+
+  :deep(.q-field__control:hover:before)
+    border-color: rgba(255, 255, 255, 0.25) !important
+
+  :deep(.q-field__control:after)
+    border-color: transparent !important
+    box-shadow: none !important
+
+  :deep(.q-field--focused .q-field__control:before)
+    border-color: rgba(255, 255, 255, 0.5) !important
+
+  :deep(.q-field__native),
+  :deep(.q-field__input)
+    color: #ffffff !important
+
+  :deep(.q-field__marginal)
+    color: #9b9b9b
+
+.sunglass-thumb
+  width: 56px
+  height: 56px
+  border-radius: 6px
+  border: 1px solid rgba(255, 255, 255, 0.1)
+  background-color: #ffffff
+
+.sunglass-row
+  transition: background-color 0.15s ease
+
+  &:hover
+    background-color: rgba(255, 255, 255, 0.03)
+
+.row-actions-menu
+  background-color: #141414
+  border: 1px solid rgba(255, 255, 255, 0.12)
+  border-radius: 10px
+  min-width: 160px
+
+  .q-item
+    color: #e8e8e8
+    min-height: 40px
+    border-radius: 6px
+    margin: 2px 6px
+
+    &:hover
+      background-color: rgba(255, 255, 255, 0.06)
+</style>
