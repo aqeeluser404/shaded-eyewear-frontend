@@ -28,9 +28,7 @@
                 class="row items-center justify-between"
                 style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
               >
-                <p class="font-size-responsive-md archivo">
-                  HOW YOU'D LIKE IT
-                </p>
+                <p class="font-size-responsive-md archivo">HOW YOU'D LIKE IT</p>
               </q-card-section>
 
               <!----------------------------------- LOADING SKELETON ----------------------------------->
@@ -51,11 +49,17 @@
                         style="border-color: rgba(255, 255, 255, 0.15)"
                       >
                         <div class="row items-center q-mb-md">
-                          <div class="skeleton-line skeleton-line--avatar q-mr-sm"></div>
+                          <div
+                            class="skeleton-line skeleton-line--avatar q-mr-sm"
+                          ></div>
                           <div class="skeleton-line skeleton-line--md"></div>
                         </div>
-                        <div class="skeleton-line skeleton-line--full q-mb-sm"></div>
-                        <div class="skeleton-line skeleton-line--md q-mb-md"></div>
+                        <div
+                          class="skeleton-line skeleton-line--full q-mb-sm"
+                        ></div>
+                        <div
+                          class="skeleton-line skeleton-line--md q-mb-md"
+                        ></div>
                         <div class="skeleton-line skeleton-line--sm"></div>
                       </q-card>
                     </div>
@@ -255,9 +259,7 @@
                 class="row items-center justify-between"
                 style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
               >
-                <p class="font-size-responsive-md archivo">
-                  REVIEW YOUR ITEMS
-                </p>
+                <p class="font-size-responsive-md archivo">REVIEW YOUR ITEMS</p>
               </q-card-section>
 
               <!----------------------------------- LOADING SKELETON ----------------------------------->
@@ -275,12 +277,16 @@
                   <div class="col-md-10 col-12 row items-start">
                     <div class="col-md-2 col-4">
                       <div class="q-mr-md">
-                        <div class="skeleton-line skeleton-line--thumb-sm"></div>
+                        <div
+                          class="skeleton-line skeleton-line--thumb-sm"
+                        ></div>
                       </div>
                     </div>
 
                     <div class="col-md-10 col-8 column items-start">
-                      <div class="skeleton-line skeleton-line--md q-mb-sm"></div>
+                      <div
+                        class="skeleton-line skeleton-line--md q-mb-sm"
+                      ></div>
                       <div class="skeleton-line skeleton-line--sm"></div>
                     </div>
                   </div>
@@ -383,6 +389,12 @@ export default {
     };
   },
 
+  computed: {
+    isGuest() {
+      return Helper.isGuest(this.userDetails);
+    },
+  },
+
   created() {
     this.getUserDetails();
   },
@@ -457,7 +469,10 @@ export default {
           });
           return;
         }
-        if (this.userDetails.verification.isVerified === false) {
+        if (
+          !this.isGuest &&
+          this.userDetails.verification?.isVerified === false
+        ) {
           this.$q.notify({
             type: "negative",
             color: "red",
