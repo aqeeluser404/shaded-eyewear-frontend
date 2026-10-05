@@ -42,21 +42,15 @@
       >
         <!-- header with title + close button -->
         <q-card-section
-          class="row justify-between items-center q-px-md q-py-lg"
+          class="row justify-between items-center"
           style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
         >
-          <div class="row items-center q-gutter-md">
-            <div class="add-frame-icon">
-              <q-icon name="eva-plus-outline" size="22px" color="primary" />
+          <div>
+            <div class="font-size-responsive-md text-light text-bold">
+              Add Sunglasses
             </div>
-
-            <div>
-              <div class="font-size-responsive-md text-light text-bold">
-                Add Sunglasses
-              </div>
-              <div class="text-caption text-dimmed">
-                Upload a new frame to the store
-              </div>
+            <div class="text-caption text-dimmed">
+              Upload a new frame to the store
             </div>
           </div>
 
@@ -76,56 +70,69 @@
           <q-form
             @submit.prevent="addSunglasses"
             @reset="onReset"
-            class="q-gutter-lg"
+            class="q-gutter-md"
             enctype="multipart/form-data"
           >
-            <div class="row q-col-gutter-md">
+            <div class="row">
               <!-- Left column -->
-              <div class="col-12 col-md-6">
+              <div
+                class="col-12 col-md-6"
+                :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
+              >
                 <div class="overline-tight text-dimmed text-caption q-mb-xs">
                   MODEL NAME
                 </div>
-                <q-input
-                  v-model="sunglassesDetails.model"
-                  filled
-                  dark
-                  placeholder="e.g. Horizon"
-                  class="custom-input"
-                  input-style="color: white;"
-                  :rules="[(val) => !!val || 'Required']"
-                />
+                <div class="field-shell">
+                  <q-input
+                    filled
+                    dark
+                    v-model="sunglassesDetails.model"
+                    placeholder="e.g. Horizon"
+                    class="custom-input"
+                    input-style="color: white;"
+                    :rules="[(val) => !!val || 'Required']"
+                  />
+                </div>
 
-                <div class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md">
+                <div
+                  class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md"
+                >
                   DESCRIPTION
                 </div>
-                <q-input
-                  v-model="sunglassesDetails.description"
-                  filled
-                  dark
-                  type="textarea"
-                  rows="3"
-                  placeholder="Max 50 words"
-                  class="custom-input"
-                  input-style="color: white;"
-                  :rules="[(val) => !!val || 'Required']"
-                />
+                <div class="field-shell">
+                  <q-input
+                    filled
+                    dark
+                    v-model="sunglassesDetails.description"
+                    type="textarea"
+                    autogrow
+                    placeholder="Max 50 words"
+                    class="custom-input"
+                    input-style="color: white;"
+                    :rules="[(val) => !!val || 'Required']"
+                  />
+                </div>
 
-                <div class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md">
+                <div
+                  class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md"
+                >
                   COLOR
                 </div>
-                <q-select
-                  v-model="sunglassesDetails.color"
-                  :options="colors"
-                  option-label="label"
-                  option-value="value"
-                  emit-value
-                  map-options
-                  filled
-                  dark
-                  class="custom-input"
-                  popup-content-class="period-select-menu"
-                  :rules="[(val) => !!val || 'Required']"
-                />
+                <div class="field-shell">
+                  <q-select
+                    filled
+                    dark
+                    v-model="sunglassesDetails.color"
+                    :options="colors"
+                    option-label="label"
+                    option-value="value"
+                    emit-value
+                    map-options
+                    class="custom-input"
+                    popup-content-class="period-select-menu"
+                    :rules="[(val) => !!val || 'Required']"
+                  />
+                </div>
               </div>
 
               <!-- Right column -->
@@ -133,81 +140,73 @@
                 <div class="overline-tight text-dimmed text-caption q-mb-xs">
                   PRICE (ZAR)
                 </div>
-                <q-input
-                  v-model="sunglassesDetails.price"
-                  type="number"
-                  prefix="R"
-                  filled
-                  dark
-                  placeholder="0"
-                  class="custom-input"
-                  input-style="color: white;"
-                  :rules="[(val) => val > 0 || 'Price must be positive']"
-                />
+                <div class="field-shell">
+                  <q-input
+                    filled
+                    dark
+                    v-model="sunglassesDetails.price"
+                    type="number"
+                    prefix="R"
+                    placeholder="0"
+                    class="custom-input"
+                    input-style="color: white;"
+                    :rules="[(val) => val > 0 || 'Price must be positive']"
+                  />
+                </div>
 
-                <div class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md">
+                <div
+                  class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md"
+                >
                   STOCK
                 </div>
-                <q-select
-                  v-model="sunglassesDetails.stock"
-                  :options="[...Array(11).keys()].slice(1)"
-                  emit-value
-                  map-options
-                  filled
-                  dark
-                  class="custom-input"
-                  popup-content-class="period-select-menu"
-                  :rules="[(val) => !!val || 'Required']"
-                />
+                <div class="field-shell">
+                  <q-select
+                    filled
+                    dark
+                    v-model="sunglassesDetails.stock"
+                    :options="[...Array(11).keys()].slice(1)"
+                    emit-value
+                    map-options
+                    class="custom-input"
+                    popup-content-class="period-select-menu"
+                    :rules="[(val) => !!val || 'Required']"
+                  />
+                </div>
 
-                <div class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md">
+                <div
+                  class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md"
+                >
                   IMAGE — SIDE VIEW
                 </div>
-                <q-file
-                  v-model="image1"
-                  accept="image/*"
-                  filled
-                  dark
-                  class="custom-input"
-                  input-style="color: white;"
-                  :rules="[(val) => !!val || 'Required']"
-                />
+                <div class="field-shell">
+                  <q-file
+                    filled
+                    dark
+                    v-model="image1"
+                    accept="image/*"
+                    class="custom-input"
+                    input-style="color: white;"
+                    :rules="[(val) => !!val || 'Required']"
+                  />
+                </div>
 
-                <div class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md">
+                <div
+                  class="overline-tight text-dimmed text-caption q-mb-xs q-mt-md"
+                >
                   IMAGE — FRONT VIEW
                 </div>
-                <q-file
-                  v-model="image2"
-                  accept="image/*"
-                  filled
-                  dark
-                  class="custom-input"
-                  input-style="color: white;"
-                  :rules="[(val) => !!val || 'Required']"
-                />
+                <div class="field-shell">
+                  <q-file
+                    filled
+                    dark
+                    v-model="image2"
+                    accept="image/*"
+                    class="custom-input"
+                    input-style="color: white;"
+                    :rules="[(val) => !!val || 'Required']"
+                  />
+                </div>
               </div>
-            </div>
-
-            <div class="row items-center q-gutter-sm q-mt-md">
-              <q-btn
-                rounded
-                dense
-                no-caps
-                type="submit"
-                label="Add Sunglasses"
-                icon="eva-cloud-upload-outline"
-                text-color="dark"
-                class="btn-gradient-primary q-px-lg q-py-sm rounded-button text-subtitle1 text-bold"
-              />
-              <q-btn
-                rounded
-                dense
-                no-caps
-                flat
-                type="reset"
-                label="Reset"
-                class="custom-button text-subtitle1 text-dimmed q-px-lg q-py-sm"
-              />
             </div>
           </q-form>
         </q-card-section>
@@ -238,14 +237,28 @@
             v-for="n in 4"
             :key="'skel-' + n"
             class="row items-center q-px-md q-py-md"
-            :style="n !== 4 ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)' : ''"
+            :style="
+              n !== 4 ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)' : ''
+            "
           >
-            <div class="col-1"><div class="skeleton-line skeleton-line--thumb-sm"></div></div>
-            <div class="col-2"><div class="skeleton-line skeleton-line--md"></div></div>
-            <div class="col-2"><div class="skeleton-line skeleton-line--md"></div></div>
-            <div class="col-3"><div class="skeleton-line skeleton-line--md"></div></div>
-            <div class="col-2"><div class="skeleton-line skeleton-line--sm"></div></div>
-            <div class="col-2 row justify-end"><div class="skeleton-line skeleton-line--sm"></div></div>
+            <div class="col-1">
+              <div class="skeleton-line skeleton-line--thumb-sm"></div>
+            </div>
+            <div class="col-2">
+              <div class="skeleton-line skeleton-line--md"></div>
+            </div>
+            <div class="col-2">
+              <div class="skeleton-line skeleton-line--md"></div>
+            </div>
+            <div class="col-3">
+              <div class="skeleton-line skeleton-line--md"></div>
+            </div>
+            <div class="col-2">
+              <div class="skeleton-line skeleton-line--sm"></div>
+            </div>
+            <div class="col-2 row justify-end">
+              <div class="skeleton-line skeleton-line--sm"></div>
+            </div>
           </div>
         </q-card-section>
       </q-card>
@@ -273,96 +286,228 @@
           </div>
         </q-card-section>
 
-<q-card-section class="q-pa-none">
-  <!-- header row -->
-  <div
-    class="row items-center q-px-lg q-py-md"
-    style="border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
-  >
-    <div class="col-1 text-dimmed font-size-responsive-xs text-bold"></div>
-    <div class="col-2 text-dimmed font-size-responsive-xs text-bold">MODEL</div>
-    <div class="col-2 text-dimmed font-size-responsive-xs text-bold">ID</div>
-    <div class="col-4 text-dimmed font-size-responsive-xs text-bold">DESCRIPTION</div>
-    <div class="col-1 text-dimmed font-size-responsive-xs text-bold">PRICE</div>
-    <div class="col-1 text-dimmed font-size-responsive-xs text-bold text-center">STOCK</div>
-    <div class="col-1"></div>
-  </div>
+        <q-card-section class="q-pa-none">
+          <!-- header row -->
+          <div
+            class="row items-center q-px-lg q-py-md"
+            style="border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
+          >
+            <div
+              class="col-1 text-dimmed font-size-responsive-xs text-bold"
+            ></div>
+            <div class="col-2 text-dimmed font-size-responsive-xs text-bold">
+              MODEL
+            </div>
+            <div class="col-2 text-dimmed font-size-responsive-xs text-bold">
+              ID
+            </div>
+            <div class="col-4 text-dimmed font-size-responsive-xs text-bold">
+              DESCRIPTION
+            </div>
+            <div class="col-1 text-dimmed font-size-responsive-xs text-bold">
+              PRICE
+            </div>
+            <div
+              class="col-1 text-dimmed font-size-responsive-xs text-bold text-center"
+            >
+              STOCK
+            </div>
+            <div class="col-1"></div>
+          </div>
 
-  <!-- data rows -->
-  <div
-    v-for="(sunglass, index) in sunglasses"
-    :key="sunglass._id"
-    class="row items-center q-px-lg q-py-lg sunglass-row"
-    :style="index !== sunglasses.length - 1 ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)' : ''"
-  >
-    <div class="col-1">
-      <q-img
-        :src="getImageUrl(sunglass.images[0].imageUrl)"
-        alt="Sunglass"
-        class="sunglass-thumb"
-      />
-    </div>
+          <!-- data rows -->
+          <div
+            v-for="(sunglass, index) in sunglasses"
+            :key="sunglass._id"
+            class="row items-center q-px-lg q-py-lg sunglass-row"
+            :class="{ 'sunglass-row--editing': editMode === sunglass._id }"
+            :style="
+              index !== sunglasses.length - 1
+                ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)'
+                : ''
+            "
+          >
+            <div class="col-1">
+              <q-img
+                :src="getImageUrl(sunglass.images[0].imageUrl)"
+                alt="Sunglass"
+                class="sunglass-thumb"
+              />
+            </div>
 
-    <div class="col-2 q-pr-sm">
-      <q-input v-if="editMode === sunglass._id" v-model="sunglass.model" dense outlined dark class="custom-input" input-style="color: white;" />
-      <div v-else class="font-size-responsive-sm text-light text-bold">{{ sunglass.model }}</div>
-    </div>
+            <div class="col-2 q-pr-sm">
+              <q-input
+                v-if="editMode === sunglass._id"
+                v-model="sunglass.model"
+                dense
+                outlined
+                dark
+                class="custom-input"
+                input-style="color: white;"
+              />
+              <div v-else class="font-size-responsive-sm text-light text-bold">
+                {{ sunglass.model }}
+              </div>
+            </div>
 
-    <div class="col-2 q-pr-sm">
-      <q-badge outline color="grey" text-color="grey" class="user-badge">
-        #{{ formatSunglassesId(sunglass) }}
-      </q-badge>
-    </div>
+            <div class="col-2 q-pr-sm">
+              <q-badge
+                outline
+                color="grey"
+                text-color="grey"
+                class="user-badge"
+              >
+                #{{ formatSunglassesId(sunglass) }}
+              </q-badge>
+            </div>
 
-    <div class="col-4 q-pr-md">
-      <q-input v-if="editMode === sunglass._id" v-model="sunglass.description" dense outlined dark type="textarea" rows="2" class="custom-input" input-style="color: white;" />
-      <div v-else class="font-size-responsive-xs text-dimmed limit-text-2">{{ sunglass.description }}</div>
-    </div>
+            <div class="col-4 q-pr-md">
+              <q-input
+                v-if="editMode === sunglass._id"
+                v-model="sunglass.description"
+                dense
+                outlined
+                dark
+                type="textarea"
+                autogrow
+                class="custom-input"
+                input-style="color: white;"
+              />
+              <div
+                v-else
+                class="font-size-responsive-xs text-dimmed limit-text-2"
+              >
+                {{ sunglass.description }}
+              </div>
+            </div>
 
-    <div class="col-1 q-pr-sm">
-      <q-input v-if="editMode === sunglass._id" v-model="sunglass.price" dense outlined dark type="number" prefix="R" class="custom-input" input-style="color: white;" />
-      <div v-else class="font-size-responsive-sm text-gradient-primary">R{{ sunglass.price }}</div>
-    </div>
+            <div class="col-1 q-pr-sm">
+              <q-input
+                v-if="editMode === sunglass._id"
+                v-model="sunglass.price"
+                dense
+                outlined
+                dark
+                type="number"
+                prefix="R"
+                class="custom-input"
+                input-style="color: white;"
+              />
+              <div v-else class="font-size-responsive-sm text-gradient-primary">
+                R{{ sunglass.price }}
+              </div>
+            </div>
 
-    <div class="col-1 row justify-center">
-      <q-input v-if="editMode === sunglass._id" v-model="sunglass.stock" dense outlined dark type="number" style="width: 70px" class="custom-input" input-style="color: white; text-align: center;" />
-      <div v-else class="row items-center" :class="sunglass.stock < 3 ? 'text-negative' : 'text-light'">
-        <div class="status-dot" :class="sunglass.stock < 3 ? 'status-dot--low' : 'status-dot--in-stock'"></div>
-        <span class="text-caption text-bold q-ml-sm">{{ sunglass.stock }}</span>
-      </div>
-    </div>
+            <div class="col-1 row justify-center">
+              <q-input
+                v-if="editMode === sunglass._id"
+                v-model="sunglass.stock"
+                dense
+                outlined
+                dark
+                type="number"
+                style="width: 70px"
+                class="custom-input"
+                input-style="color: white; text-align: center;"
+              />
+              <div
+                v-else
+                class="row items-center"
+                :class="sunglass.stock < 3 ? 'text-negative' : 'text-light'"
+              >
+                <div
+                  class="status-dot q-mr-xs"
+                  :class="
+                    sunglass.stock < 3
+                      ? 'status-dot--low'
+                      : 'status-dot--in-stock'
+                  "
+                ></div>
+                <span class="font-size-responsive-sm text-dimmed q-ml-sm">{{
+                  sunglass.stock
+                }}</span>
+              </div>
+            </div>
 
-    <div class="col-1 row justify-end">
-      <template v-if="editMode !== sunglass._id">
-        <q-btn round dense flat color="grey" icon="eva-more-vertical-outline" size="sm">
-          <q-menu anchor="bottom right" self="top right" class="row-actions-menu">
-            <q-list dense>
-              <q-item clickable v-close-popup @click="editMode = sunglass._id">
-                <q-item-section avatar><q-icon name="eva-edit-outline" size="18px" /></q-item-section>
-                <q-item-section>Edit</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup @click="deleteSunglasses(sunglass)">
-                <q-item-section avatar><q-icon name="eva-trash-2-outline" size="18px" color="negative" /></q-item-section>
-                <q-item-section class="text-negative">Delete</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-        </q-btn>
-      </template>
-      <template v-else>
-        <q-btn rounded dense no-caps flat color="primary" text-color="primary" icon="eva-checkmark-outline" size="sm" @click="updateSunglasses(sunglass)" />
-        <q-btn rounded dense no-caps flat color="grey" text-color="grey" icon="eva-close-outline" size="sm" @click="cancelEdit" />
-      </template>
-    </div>
-  </div>
+            <div class="col-1 row justify-end">
+              <template v-if="editMode !== sunglass._id">
+                <q-btn
+                  round
+                  dense
+                  flat
+                  color="grey"
+                  icon="eva-more-vertical-outline"
+                  size="sm"
+                >
+                  <q-menu
+                    anchor="bottom right"
+                    self="top right"
+                    class="row-actions-menu bg-dark-secondary"
+                  >
+                    <q-list dense>
+                      <q-item
+                        clickable
+                        v-close-popup
+                        @click="editMode = sunglass._id"
+                      >
+                        <!-- <q-item-section avatar><q-icon name="eva-edit-outline" size="18px" /></q-item-section> -->
+                        <q-item-section>Edit</q-item-section>
+                      </q-item>
+                      <q-item
+                        clickable
+                        v-close-popup
+                        @click="deleteSunglasses(sunglass)"
+                      >
+                        <!-- <q-item-section avatar><q-icon name="eva-trash-2-outline" size="18px" color="negative" /></q-item-section> -->
+                        <q-item-section class="text-negative"
+                          >Delete</q-item-section
+                        >
+                      </q-item>
+                    </q-list>
+                  </q-menu>
+                </q-btn>
+              </template>
+              <template v-else>
+                <q-btn
+                  rounded
+                  dense
+                  no-caps
+                  flat
+                  color="primary"
+                  text-color="primary"
+                  icon="eva-checkmark-outline"
+                  size="sm"
+                  @click="updateSunglasses(sunglass)"
+                />
+                <q-btn
+                  rounded
+                  dense
+                  no-caps
+                  flat
+                  color="grey"
+                  text-color="grey"
+                  icon="eva-close-outline"
+                  size="sm"
+                  @click="cancelEdit"
+                />
+              </template>
+            </div>
+          </div>
 
-  <!-- empty state -->
-  <div v-if="sunglasses.length === 0" class="column items-center q-py-xl q-px-md">
-    <q-icon name="fa-solid fa-glasses" color="primary" size="42px" />
-    <div class="font-size-responsive-md text-light text-bold q-mt-md">NO FRAMES YET</div>
-    <div class="text-caption text-dimmed q-mt-sm">Add your first frame to get started.</div>
-  </div>
-</q-card-section>
+          <!-- empty state -->
+          <div
+            v-if="sunglasses.length === 0"
+            class="column items-center q-py-xl q-px-md"
+          >
+            <q-icon name="fa-solid fa-glasses" color="primary" size="42px" />
+            <div class="font-size-responsive-md text-light text-bold q-mt-md">
+              NO FRAMES YET
+            </div>
+            <div class="text-caption text-dimmed q-mt-sm">
+              Add your first frame to get started.
+            </div>
+          </div>
+        </q-card-section>
       </q-card>
     </template>
   </div>
@@ -695,8 +840,14 @@ export default {
   &:hover
     background-color: rgba(255, 255, 255, 0.03)
 
+  &.sunglass-row--editing
+    align-items: flex-start
+
+  &:hover
+    background-color: rgba(255, 255, 255, 0.03)
+
 .row-actions-menu
-  background-color: #141414
+  // background-color: #141414
   border: 1px solid rgba(255, 255, 255, 0.12)
   border-radius: 10px
   min-width: 160px
@@ -705,7 +856,7 @@ export default {
     color: #e8e8e8
     min-height: 40px
     border-radius: 6px
-    margin: 2px 6px
+    // margin: 2px
 
     &:hover
       background-color: rgba(255, 255, 255, 0.06)

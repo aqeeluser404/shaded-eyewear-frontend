@@ -1,386 +1,892 @@
 <template>
-  <div class="row q-pa-md justify-center q-gutter-md">
+  <div
+    class="admin-orders-details"
+    :class="$q.screen.gt.sm ? 'q-pl-lg' : 'q-pl-none'"
+  >
+    <!-- Heading -->
+    <section>
+      <div class="row justify-between items-start">
+        <div>
+          <div class="overline-tight text-dimmed text-caption">
+            ADMIN DASHBOARD
+          </div>
+          <div class="font-size-responsive-xl archivo text-light text-bold">
+            ORDERS
+          </div>
+        </div>
 
-    <!--------------------------------------------------------------------- UPCOMING PICKUPS SECTION -------------------------------------------------->
-    <q-card flat bordered class="q-pa-md col-12 col-md-3 full-height ">
-      <q-card-section>
-        <div class="font-size-responsive-lg"><b>Upcoming Pickups</b></div>
+        <q-select
+          v-model="selectedOrderType"
+          :options="orderTypes"
+          dense
+          outlined
+          dark
+          class="status-filter"
+          popup-content-class="period-select-menu"
+          @update:model-value="filterByOrderType"
+        />
+      </div>
+    </section>
+
+    <div class="section-spacer-sm"></div>
+
+    <!--------------------------------------------------------------------- STATUS CARDS -------------------------------------------------->
+    <template v-if="loading">
+      <div class="row q-col-gutter-md q-mb-lg">
+        <div
+          v-for="n in 3"
+          :key="'skel-card-' + n"
+          class="col-12 col-sm-6 col-md-4"
+        >
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-md"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
+            <div class="skeleton-line skeleton-line--sm q-mb-md"></div>
+            <div class="row justify-between items-center">
+              <div class="skeleton-line skeleton-line--md"></div>
+              <div class="skeleton-line skeleton-line--avatar"></div>
+            </div>
+          </q-card>
+        </div>
+      </div>
+    </template>
+
+    <template v-else>
+      <div class="row q-col-gutter-md q-mb-lg">
+        <!-- Awaiting collection -->
+        <div class="col-12 col-sm-6 col-md-4">
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-md status-card"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
+            <div
+              class="overline-tight text-dimmed text-caption q-mb-md"
+              style="letter-spacing: 0.15em"
+            >
+              AWAITING COLLECTION
+            </div>
+            <div class="row justify-between items-center">
+              <div class="text-caption text-dimmed">Ready for pickup</div>
+              <div
+                class="font-size-responsive-xxl archivo text-gradient-primary text-bold"
+              >
+                {{ statusCounts.awaitingCollection }}
+              </div>
+            </div>
+          </q-card>
+        </div>
+
+        <!-- In transit -->
+        <div class="col-12 col-sm-6 col-md-4">
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-md status-card"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
+            <div
+              class="overline-tight text-dimmed text-caption q-mb-md"
+              style="letter-spacing: 0.15em"
+            >
+              IN TRANSIT
+            </div>
+            <div class="row justify-between items-center">
+              <div class="text-caption text-dimmed">Delivery en route</div>
+              <div
+                class="font-size-responsive-xxl archivo text-gradient-primary text-bold"
+              >
+                N/A
+              </div>
+            </div>
+          </q-card>
+        </div>
+
+        <!-- Completed this month -->
+        <div class="col-12 col-sm-6 col-md-4">
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-md status-card"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
+            <div
+              class="overline-tight text-dimmed text-caption q-mb-md"
+              style="letter-spacing: 0.15em"
+            >
+              COMPLETED THIS MONTH
+            </div>
+            <div class="row justify-between items-center">
+              <div class="text-caption text-dimmed">Collected this month</div>
+              <div
+                class="font-size-responsive-xxl archivo text-gradient-primary text-bold"
+              >
+                {{ statusCounts.completedThisMonth }}
+              </div>
+            </div>
+          </q-card>
+        </div>
+      </div>
+    </template>
+
+    <!--------------------------------------------------------------------- UPCOMING PICKUPS -------------------------------------------------->
+    <template v-if="pendingPickups.length > 0">
+      <q-card
+        flat
+        bordered
+        class="bg-dark-secondary q-mb-lg"
+        style="border: 1px solid rgba(255, 255, 255, 0.2)"
+      >
+        <q-card-section
+          class="row justify-between items-center"
+          style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+        >
+          <div>
+            <div class="font-size-responsive-md text-light text-bold">
+              Upcoming Pickups
+            </div>
+            <div class="text-caption text-dimmed">
+              {{ pendingPickups.length }} order(s) awaiting collection
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-card-section class="q-pa-none">
+          <div
+            v-for="(order, index) in pendingPickups"
+            :key="order._id"
+            class="q-py-lg q-px-md"
+            :style="
+              index !== pendingPickups.length - 1
+                ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)'
+                : ''
+            "
+          >
+            <!-- top row: image + details + total -->
+            <div class="row items-center">
+              <div class="col-md-1 col-4">
+                <q-img
+                  v-if="order.sunglassesDetails && order.sunglassesDetails[0]"
+                  :src="
+                    getImageUrl(order.sunglassesDetails[0].images[0].imageUrl)
+                  "
+                  alt="Sunglass"
+                  class="border"
+                />
+              </div>
+
+              <div class="col-md-7 col-8 q-pl-md">
+                <div
+                  class="font-size-responsive-md archivo text-uppercase text-light"
+                >
+                  <b>{{
+                    capitalizeFirstLetter(
+                      order.sunglassesDetails?.[0]?.model || "Order"
+                    )
+                  }}</b>
+                </div>
+                <div class="text-caption text-dimmed q-mt-xs">
+                  Order #{{ formateOrderId(order) }} ·
+                  {{ formatDate(order.orderDate) }}
+                </div>
+                <div class="text-caption text-dimmed q-mt-xs">
+                  For {{ order.userFirstName }}
+                </div>
+              </div>
+
+              <div class="col-md-4 col-12 text-md-right q-mt-md q-mt-md-none">
+                <div class="text-caption text-dimmed">RECEIVE</div>
+                <div
+                  class="font-size-responsive-lg archivo text-gradient-primary"
+                >
+                  R {{ order.totalAmount }}.00
+                </div>
+              </div>
+            </div>
+
+            <!-- bottom row: actions -->
+            <div class="row items-center justify-end q-mt-md q-gutter-sm">
+              <q-btn
+                rounded
+                dense
+                no-caps
+                outline
+                color="grey"
+                text-color="grey"
+                label="View order"
+                icon-right="eva-arrow-forward-outline"
+                class="q-px-lg q-py-sm text-caption icon-btn text-bold"
+                @click="
+                  viewSunglassesDetails(order.sunglassesDetails?.[0]?._id)
+                "
+              />
+              <q-btn
+                rounded
+                dense
+                no-caps
+                label="Mark collected"
+                icon="eva-checkmark-outline"
+                text-color="dark"
+                class="btn-gradient-primary q-px-lg q-py-sm rounded-button text-caption text-bold"
+                @click="updatePickupOrder(order._id)"
+              />
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
+    </template>
+
+    <!--------------------------------------------------------------------- ORDERS TABLE -------------------------------------------------->
+    <q-card
+      flat
+      bordered
+      class="bg-dark-secondary"
+      style="border: 1px solid rgba(255, 255, 255, 0.2)"
+    >
+      <q-card-section
+        class="row justify-between items-center"
+        style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+      >
+        <div>
+          <div class="font-size-responsive-md text-light text-bold">
+            All Orders
+          </div>
+          <div class="text-caption text-dimmed">
+            {{ filteredList.length }} order(s)
+          </div>
+        </div>
+
+        <q-input
+          v-model="search"
+          placeholder="Search orders"
+          dense
+          outlined
+          dark
+          class="order-search"
+          @update:model-value="filterBySearch"
+        >
+          <template #prepend>
+            <q-icon name="eva-search-outline" size="18px" />
+          </template>
+        </q-input>
       </q-card-section>
 
-      <div v-for="order in ordersPickup" :key="order._id">
-        <q-card flat bordered v-if="order.status && order.status === 'paid' && order.orderType && order.orderType === 'pickup'" class="q-mb-md">
-          <q-card-section class="row justify-between flex-center">
-            <div>
-              <div class="text-caption">Order ID: #{{ order._id }}</div>
-              <div class="text-caption"><b>ORDERED {{ formatDate(order.orderDate) }}</b></div>
+      <q-card-section class="q-pa-none">
+        <!-- loading skeleton -->
+        <template v-if="loading">
+          <div
+            v-for="n in 4"
+            :key="'skel-row-' + n"
+            class="row items-center q-px-md q-py-md"
+            :style="
+              n !== 4 ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)' : ''
+            "
+          >
+            <div class="col-2">
+              <div class="skeleton-line skeleton-line--md"></div>
             </div>
-          </q-card-section>
-          <q-card-section v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0" class="q-gutter-sm">
-            <div v-for="sunglass in order.sunglassesDetails" :key="sunglass._id" class="row items-center cursor-pointer" @click="viewSunglassesDetails(sunglass._id)">
-              <q-item-section class="col-3 q-mr-md">
-                <q-img :src="getImageUrl(sunglass.images[0].imageUrl)" alt="Sunglass Image" class="border" style="max-width: 100px; max-height: 100px;" />
-              </q-item-section>
-              <q-item-section class="col-6">
-                <div class="font-size-responsive-md q-mb-sm"><b>{{ capitalizeFirstLetter(sunglass.model) }}</b> </div>
-                <div class="text-caption">Item(s): 1</div>
-                <div class="text-caption"><b>Price:</b> R {{ sunglass.price }}.00</div>
-              </q-item-section>
+            <div class="col-3">
+              <div class="skeleton-line skeleton-line--md"></div>
             </div>
-          </q-card-section>
-          <q-separator />
+            <div class="col-2">
+              <div class="skeleton-line skeleton-line--md"></div>
+            </div>
+            <div class="col-3">
+              <div class="skeleton-line skeleton-line--md"></div>
+            </div>
+            <div class="col-2 row justify-end">
+              <div class="skeleton-line skeleton-line--sm"></div>
+            </div>
+          </div>
+        </template>
 
-          <q-card-section>
-            <div class="text-caption">RECEIVE PAYMENT OF <span style="text-decoration: underline; color: black;">R {{ order.totalAmount }}.00</span></div>
-            <div class="text-caption q-mb-md">ORDER FOR <span style="text-decoration: underline; color: black;">{{ order.userFirstName }}</span></div>
-            <q-btn rounded dense color="black" text-color="white" icon="eva-shopping-bag-outline" label="Collected" @click="updatePickupOrder(order._id)" class="q-px-lg q-py-sm custom-button font-size-responsive-md" style="width: 100%;" />
-          </q-card-section>
-        </q-card>
-      </div>
-    </q-card>
+        <!-- real content -->
+        <template v-else>
+          <!-- header row -->
+          <div
+            class="row items-center q-px-md q-py-md"
+            style="border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
+          >
+            <div class="col-2 text-dimmed font-size-responsive-xs text-bold">
+              ORDER
+            </div>
+            <div class="col-3 text-dimmed font-size-responsive-xs text-bold">
+              CUSTOMER
+            </div>
+            <div class="col-2 text-dimmed font-size-responsive-xs text-bold">
+              TYPE
+            </div>
+            <div class="col-2 text-dimmed font-size-responsive-xs text-bold">
+              DATE
+            </div>
+            <div
+              class="col-2 text-dimmed font-size-responsive-xs text-bold text-center"
+            >
+              STATUS
+            </div>
+            <div class="col-1"></div>
+          </div>
 
-    <!--------------------------------------------------------------------- ORDERS SECTION SECTION -------------------------------------------------->
-    <q-card flat bordered class=" col-12 col-md-8 full-height">
-      <div class="q-pa-md">
+          <!-- data rows -->
+          <div
+            v-for="(order, index) in filteredList"
+            :key="order._id"
+            class="row items-center q-px-md q-py-md order-row"
+            :style="
+              index !== filteredList.length - 1
+                ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)'
+                : ''
+            "
+          >
+            <div class="col-2">
+              <q-badge
+                outline
+                color="grey"
+                text-color="grey"
+                class="order-id-badge"
+              >
+                #{{ formateOrderId(order) }}
+              </q-badge>
+            </div>
+            <div class="col-3 font-size-responsive-sm text-dimmed">
+              {{ order.userFirstName }}
+            </div>
+            <div class="col-2 font-size-responsive-sm text-dimmed">
+              {{ capitalizeFirstLetter(order.orderType) }}
+            </div>
+            <div class="col-2 font-size-responsive-sm text-dimmed">
+              {{ formatDate(order.orderDate) }}
+            </div>
+            <div class="col-2 row justify-center">
+              <div class="row items-center">
+                <div
+                  class="status-dot"
+                  :class="'status-dot--' + statusBucket(order.status)"
+                ></div>
+                <span
+                  class="text-caption text-bold q-ml-sm"
+                  :class="'text-' + statusColor(order.status)"
+                >
+                  {{ statusLabel(order.status) }}
+                </span>
+              </div>
+            </div>
 
-        <!-- chart for orders over time -->
-        <q-card-section>
-          <div class="font-size-responsive-lg"><b>Orders Over Time</b></div>
-        </q-card-section>
-        <q-card-section class="row">
-          <q-select
-            filled
-            v-model="selectedTimePeriod"
-            :options="timePeriods"
-            label="Select Time Period"
-            class="col-12 col-md-3"
-            @update:model-value="filterOrders"
-          />
-        </q-card-section>
-        <q-card-section class="canvas-container" >
-          <canvas ref="canvas"></canvas>
-        </q-card-section>
-      </div>
-      <q-separator />
+            <div class="col-1 row justify-end">
+              <!-- 3-dot menu -->
+              <q-btn
+                round
+                dense
+                flat
+                color="grey"
+                icon="eva-more-vertical-outline"
+                size="sm"
+              >
+                <q-menu
+                  anchor="bottom right"
+                  self="top right"
+                  class="row-actions-menu bg-dark-secondary"
+                >
+                  <q-list dense>
+                    <q-item
+                      v-if="
+                        order.status === 'paid' && order.orderType === 'pickup'
+                      "
+                      clickable
+                      v-close-popup
+                      @click="updatePickupOrder(order._id)"
+                    >
+                      <q-item-section>Mark collected</q-item-section>
+                    </q-item>
 
-      <!-- all orders table -->
-      <div class="q-pa-md">
-        <q-card-section>
-          <div class="font-size-responsive-lg"><b>All Orders</b></div>
-        </q-card-section>
-        <div class="q-pa-md row justify-center q-gutter-md">
-          <q-select
-            filled
-            v-model="selectedOrderType"
-            :options="orderTypes"
-            label="Order Type"
-            @update:model-value="filterByOrderType"
-            class="col-12 col-md-3"
-          />
-          <q-input filled v-model="search" placeholder="Search" @update:model-value="filterBySearch" class="col-12 col-md-8" />
-        </div>
-        <q-markup-table flat>
-          <thead>
-            <tr>
-              <th></th>
-              <th class="text-left">ORDER ID</th>
-              <th class="text-left">Customer Username</th>
-              <th class="text-left">Order Type</th>
-              <th class="text-left">Order Status</th>
-              <th class="text-left">Order Date</th>
-              <th class="text-left">Quick Tools</th>
-            </tr>
-          </thead>
-          <tbody v-for="(order, index) in filteredList" :key="order._id">
-            <tr :class="{ 'refunded': order.returns == 'returned item(s)' }">
-              <td class="text-left cursor-pointer">{{ index + 1 }}</td>
-              <td class="text-left cursor-pointer">#{{ order._id }}</td>
-              <td class="text-left cursor-pointer">{{ order.userFirstName }}</td>
-              <td class="text-left cursor-pointer">{{ capitalizeFirstLetter(order.orderType) }}</td>
-              <td class="text-left cursor-pointer">{{ capitalizeFirstLetter(order.status) }}</td>
-              <td class="text-left cursor-pointer">{{ formatDate(order.orderDate) }}</td>
-              <td class="text-left cursor-pointer">
-                <q-btn rounded dense icon="eva-trash-2-outline" class="custom-button q-pa-sm custom-button font-size-responsive-sm" color="negative" @click="deleteOrder(order._id)" />
-              </td>
-            </tr>
-          </tbody>
-        </q-markup-table>
-      </div>
+                    <q-item
+                      v-if="
+                        order.status === 'paid' &&
+                        order.orderType === 'delivery'
+                      "
+                      clickable
+                      v-close-popup
+                      @click="updateDeliveryOrder(order._id)"
+                    >
+                      <q-item-section>Mark delivered</q-item-section>
+                    </q-item>
+
+                    <q-item
+                      v-if="order.status === 'pending'"
+                      clickable
+                      v-close-popup
+                      @click="viewOrderDetails(order)"
+                    >
+                      <q-item-section>View details</q-item-section>
+                    </q-item>
+
+                    <q-separator
+                      v-if="
+                        order.status === 'paid' || order.status === 'pending'
+                      "
+                    />
+
+                    <q-item clickable v-close-popup @click="deleteOrder(order)">
+                      <q-item-section class="text-negative"
+                        >Delete</q-item-section
+                      >
+                    </q-item>
+                  </q-list>
+                </q-menu>
+              </q-btn>
+            </div>
+          </div>
+
+          <!-- empty state -->
+          <div
+            v-if="filteredList.length === 0"
+            class="column items-center q-py-xl q-px-md"
+          >
+            <q-icon
+              name="eva-shopping-bag-outline"
+              color="primary"
+              size="42px"
+            />
+            <div class="font-size-responsive-md text-light text-bold q-mt-md">
+              NO ORDERS FOUND
+            </div>
+            <div class="text-caption text-dimmed q-mt-sm">
+              Try adjusting your search or filters.
+            </div>
+          </div>
+        </template>
+      </q-card-section>
     </q-card>
   </div>
 </template>
 
 <script>
-import OrderService from 'src/services/OrderService'
-import UserService from 'src/services/UserService'
-import Helper from 'src/services/utils'
-import SunglassesService from 'src/services/SunglassesService'
-import { Chart, registerables } from 'chart.js';
-Chart.register(...registerables)
-import 'chartjs-adapter-date-fns'
+import OrderService from "src/services/OrderService";
+import UserService from "src/services/UserService";
+import Helper from "src/services/utils";
+import SunglassesService from "src/services/SunglassesService";
 
 export default {
   data() {
     return {
-      chart: null,
-      selectedTimePeriod: 'Today',
-      timePeriods: ['Today', 'Yesterday', 'This Week', 'This Month', 'This Year', 'All Time'],
-      search: '',
+      search: "",
+      loading: true,
       orders: [],
       ordersPickup: [],
       ordersDelivery: [],
-      filteredOrders: [],
       combinedList: [],
       filteredList: [],
-      selectedOrderType: 'All',
-      orderTypes: ['All', 'Pickup', 'Delivery']
-    }
+      selectedOrderType: "All",
+      orderTypes: ["All", "Pickup", "Delivery"],
+    };
   },
+
+  computed: {
+    statusCounts() {
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+
+      const awaitingCollection = this.orders.filter(
+        (o) => o.status === "paid" && o.orderType === "pickup"
+      ).length;
+
+      const completedThisMonth = this.orders.filter((o) => {
+        if (o.status !== "paid & picked up") return false;
+        const d = new Date(o.orderDate);
+        return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+      }).length;
+
+      return {
+        awaitingCollection,
+        completedThisMonth,
+      };
+    },
+
+    pendingPickups() {
+      return this.orders.filter(
+        (o) =>
+          o.status === "paid" &&
+          o.orderType === "pickup" &&
+          o.sunglassesDetails &&
+          o.sunglassesDetails.length > 0
+      );
+    },
+  },
+
   mounted() {
-    this.getAllOrders()
+    this.getAllOrders();
   },
-  beforeUnmount() {
-    this.destroyChart(); // Destroy the chart on unmount
-  },
-  watch: {
-    filterOrders() {
-      this.renderChart()
-    }
-  },
+
   methods: {
     formatDate: Helper.formatDate,
     capitalizeFirstLetter: Helper.capitalizeFirstLetter,
     getImageUrl: Helper.getImageUrl,
+    formateOrderId: Helper.formateOrderId,
+
     viewSunglassesDetails(id) {
-      Helper.viewSunglassesDetails(id, this.$router);
+      if (id) Helper.viewSunglassesDetails(id, this.$router);
     },
-    destroyChart() {
-      if (this.chart) {
-        this.chart.destroy();
-        this.chart = null;
-      }
+
+    statusLabel(status) {
+      const map = {
+        pending: "PENDING",
+        paid: "PAID",
+        "paid & picked up": "COLLECTED",
+        "paid & delivered": "DELIVERED",
+        refunded: "REFUNDED",
+      };
+      return map[status] || status?.toUpperCase() || "—";
     },
-    // Create or update the chart with filteredOrders
-    renderChart() {
-      const canvas = this.$refs.canvas;
-      if (!canvas) {
-        console.error("Canvas element not found!");
-        return;
-      }
 
-      const ctx = canvas.getContext("2d");
-      if (!ctx) {
-        console.error("Failed to get canvas context!");
-        return;
-      }
-
-      // Destroy existing chart
-      this.destroyChart();
-
-      // Prepare chart data
-      const orderCounts = this.filteredOrders.reduce((acc, order) => {
-        const date = new Date(order.orderDate)
-          .toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-        acc[date] = (acc[date] || 0) + 1;
-        return acc;
-      }, {});
-
-      const dates = Object.keys(orderCounts);
-      const counts = Object.values(orderCounts);
-
-      // Create the chart
-      this.chart = new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: dates,
-          datasets: [
-            {
-              label: "# of Orders",
-              data: counts,
-              backgroundColor: "rgba(75, 192, 192, 0.2)",
-              borderColor: "rgba(75, 192, 192, 1)",
-              borderWidth: 1,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          indexAxis: "y",
-          scales: {
-            x: {
-              beginAtZero: true,
-              ticks: {
-                stepSize: 1,
-                precision: 0
-              }
-            },
-          },
-        },
-      });
+    statusColor(status) {
+      const map = {
+        pending: "warning",
+        paid: "positive",
+        "paid & picked up": "collected",
+        "paid & delivered": "delivered",
+        refunded: "negative",
+      };
+      return map[status] || "grey";
     },
-    // Filter orders and update the chart
-    filterOrders() {
-      const now = new Date();
-      switch (this.selectedTimePeriod) {
-        case "Today":
-          this.filteredOrders = this.combinedList.filter(order => {
-            const orderDate = new Date(order.orderDate);
-            return orderDate.toDateString() === now.toDateString();
-          });
-          break;
-        case "Yesterday":
-          this.filteredOrders = this.combinedList.filter(order => {
-            const orderDate = new Date(order.orderDate);
-            const yesterday = new Date(now);
-            yesterday.setDate(now.getDate() - 1);
-            return orderDate.toDateString() === yesterday.toDateString();
-          });
-          break;
-        case "This Week":
-          this.filteredOrders = this.combinedList.filter(order => {
-            const orderDate = new Date(order.orderDate);
-            const startOfWeek = new Date(now);
-            startOfWeek.setDate(now.getDate() - now.getDay());
-            return orderDate >= startOfWeek && orderDate <= now;
-          });
-          break;
-        case "This Month":
-          this.filteredOrders = this.combinedList.filter(order => {
-            const orderDate = new Date(order.orderDate);
-            return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
-          });
-          break;
-        case "This Year":
-          this.filteredOrders = this.combinedList.filter(order => {
-            const orderDate = new Date(order.orderDate);
-            return orderDate.getFullYear() === now.getFullYear();
-          });
-          break;
-        case "All Time":
-        default:
-          this.filteredOrders = [...this.combinedList];
-          break;
-      }
 
-      // Render the chart with the new filteredOrders
-      this.renderChart();
+    statusBucket(status) {
+      const map = {
+        pending: "pending",
+        paid: "paid",
+        "paid & picked up": "collected",
+        "paid & delivered": "delivered",
+        refunded: "refunded",
+      };
+      return map[status] || "grey";
     },
+
     async getAllOrders() {
-      const response = await OrderService.findAllOrders()
-      this.orders = await Promise.all(response.map(async order => {
-        // find user by id
-        const user = await UserService.findUserById(order.user)
-        return {
-          ...order,
-          userFirstName: user.username,
-        }
-      }))
-      await this.getSunglasses()
-      this.ordersPickup = this.orders.filter(order => order.orderType === 'pickup' && order.status !== 'refunded')
-      this.ordersDelivery = this.orders.filter(order => order.orderType === 'delivery' && order.status !== 'refunded')
-      this.combinedList = [...this.ordersPickup, ...this.ordersDelivery]
-      this.filteredList = this.combinedList
-      this.filterOrders()
+      this.loading = true;
+      try {
+        const response = await OrderService.findAllOrders();
+
+        this.orders = await Promise.all(
+          (response || []).map(async (order) => {
+            const user = await UserService.findUserById(order.user).catch(
+              () => null
+            );
+            return {
+              ...order,
+              userFirstName: user?.username || "Unknown",
+            };
+          })
+        );
+
+        await this.getSunglasses();
+
+        this.ordersPickup = this.orders.filter(
+          (o) => o.orderType === "pickup" && o.status !== "refunded"
+        );
+        this.ordersDelivery = this.orders.filter(
+          (o) => o.orderType === "delivery" && o.status !== "refunded"
+        );
+
+        this.combinedList = [...this.ordersPickup, ...this.ordersDelivery];
+        this.filteredList = this.combinedList;
+      } catch (error) {
+        console.error("Failed to fetch orders:", error);
+        this.orders = [];
+        this.combinedList = [];
+        this.filteredList = [];
+      }
+      this.loading = false;
     },
+
     async getSunglasses() {
       for (const order of this.orders) {
         if (order.sunglasses && order.sunglasses.length > 0) {
-          order.sunglassesDetails = []
+          order.sunglassesDetails = [];
+          const seen = new Set();
           for (const sunglass of order.sunglasses) {
+            const id = String(sunglass._id);
+            if (seen.has(id)) continue;
+            seen.add(id);
             try {
-              const response = await SunglassesService.findSunglassesById(sunglass._id)
-              order.sunglassesDetails.push(response)
+              const response = await SunglassesService.findSunglassesById(
+                sunglass._id
+              );
+              if (response) order.sunglassesDetails.push(response);
             } catch (error) {
-              console.error(`Failed to fetch details for sunglasses with id ${sunglass._id}:`, error);
+              console.error(
+                `Failed to fetch sunglasses ${sunglass._id}:`,
+                error
+              );
             }
           }
         }
       }
     },
+
     filterByOrderType() {
-      if (this.selectedOrderType === 'All') {
-        this.filteredList = this.combinedList
-      } else if (this.selectedOrderType === 'Pickup') {
-        this.filteredList = this.ordersPickup
-      } else if (this.selectedOrderType === 'Delivery') {
-        this.filteredList = this.ordersDelivery
+      if (this.selectedOrderType === "All") {
+        this.filteredList = this.combinedList;
+      } else if (this.selectedOrderType === "Pickup") {
+        this.filteredList = this.ordersPickup;
+      } else if (this.selectedOrderType === "Delivery") {
+        this.filteredList = this.ordersDelivery;
       }
     },
+
     filterBySearch() {
-      if (this.search === '') {
-        this.selectedOrderType === 'All'
-        this.filterByOrderType()
-        return
+      if (this.search.trim() === "") {
+        this.filterByOrderType();
+        return;
       }
-      const searchTerm = this.search.toLowerCase()
-      this.filteredList = this.filteredList.filter(order =>
-        order.user.toLowerCase().includes(searchTerm) ||
-        order._id.toLowerCase().includes(searchTerm)
-      )
+
+      const term = this.search.toLowerCase();
+      const base =
+        this.selectedOrderType === "Pickup"
+          ? this.ordersPickup
+          : this.selectedOrderType === "Delivery"
+          ? this.ordersDelivery
+          : this.combinedList;
+
+      this.filteredList = base.filter(
+        (order) =>
+          order.userFirstName?.toLowerCase().includes(term) ||
+          order._id?.toLowerCase().includes(term)
+      );
     },
+
     async updatePickupOrder(id) {
-      this.$q.dialog({
-        title: 'Ordered Collected', message: `You are about to mark this order as collected. Do you want to continue?`, color: 'primary', cancel: true, persistent: true
-      }).onOk(async () => {
-        try {
-          const response = await OrderService.updatePickupOrder(id);
-          if (response) {
-            this.$q.notify({ type: 'positive', color: 'primary', message: 'Update successful!' });
-            this.getAllOrders(); // Refresh the orders list
-          } else {
-            this.$q.notify({ type: 'negative', message: 'Update failed. Please try again.' });
+      this.$q
+        .dialog({
+          title: "Mark as collected",
+          message: `You are about to mark this order as collected. Continue?`,
+          color: "primary",
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(async () => {
+          try {
+            const response = await OrderService.updatePickupOrder(id);
+            if (response) {
+              this.$q.notify({
+                type: "positive",
+                color: "primary",
+                message: "Update successful!",
+              });
+              this.getAllOrders();
+            } else {
+              this.$q.notify({
+                type: "negative",
+                message: "Update failed. Please try again.",
+              });
+            }
+          } catch (error) {
+            this.$q.notify({
+              type: "negative",
+              message: "Update failed. Please try again.",
+            });
           }
-        } catch (error) {
-          this.$q.notify({ type: 'negative', message: 'Update failed. Please try again.' });
-        }
-      })
+        });
     },
+
+    async updateDeliveryOrder(id) {
+      this.$q
+        .dialog({
+          title: "Mark as delivered",
+          message: `You are about to mark this order as delivered. Continue?`,
+          color: "primary",
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(async () => {
+          try {
+            const response = await OrderService.updateDeliveryOrder(id);
+            if (response) {
+              this.$q.notify({
+                type: "positive",
+                color: "primary",
+                message: "Update successful!",
+              });
+              this.getAllOrders();
+            } else {
+              this.$q.notify({
+                type: "negative",
+                message: "Update failed. Please try again.",
+              });
+            }
+          } catch (error) {
+            this.$q.notify({
+              type: "negative",
+              message: "Update failed. Please try again.",
+            });
+          }
+        });
+    },
+
     async deleteOrder(id) {
-      this.$q.dialog({
-        title: 'Delete order', message: `Warning: Deleting this order will remove all records of existing payments associated with it, continue?`, color: 'negative', cancel: true, persistent: true
-      }).onOk(async () => {
-        const order = await OrderService.findOrderById(id)
-        if (order.returns || order.returns === 'returned item(s)') {
-          this.$q.dialog({
-            title: 'Delete order', message: `This order has a refund associated with it. Deleting this order will also delete that refund, continue?`, color: 'primary', cancel: true, persistent: true
-          }).onOk(async () => {
-            const response = await OrderService.deleteOrder(order._id)
-            if(response) {
-              this.$q.notify({ type: 'positive', color: 'primary', message: 'Delete successful!' })
-              this.getAllOrders()
-            } else {
-              this.$q.notify({ type: 'negative', message: 'Delete failed. Please try again.' })
-              this.getAllOrders()
-            }
-          })
-        } else {
-          this.$q.dialog({
-            title: 'Delete order', message: `You are about to delete this order, continue?`, color: 'primary', cancel: true, persistent: true
-          }).onOk(async () => {
-            const response = await OrderService.deleteOrder(order._id)
-            if(response) {
-              this.$q.notify({ type: 'positive', color: 'primary', message: 'Delete successful!' })
-              this.getAllOrders()
-            } else {
-              this.$q.notify({ type: 'negative', message: 'Delete failed. Please try again.' })
-              this.getAllOrders()
-            }
-          })
-        }
-      })
-    }
+      const order = await OrderService.findOrderById(id);
+      const hasRefund = order?.returns === "returned item(s)";
+
+      const message = hasRefund
+        ? "This order has a refund associated with it. Deleting this order will also delete that refund. Continue?"
+        : "You are about to delete this order. Continue?";
+
+      this.$q
+        .dialog({
+          title: "Delete order",
+          message,
+          color: "negative",
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(async () => {
+          const response = await OrderService.deleteOrder(id);
+          if (response) {
+            this.$q.notify({
+              type: "positive",
+              color: "primary",
+              message: "Delete successful!",
+            });
+          } else {
+            this.$q.notify({
+              type: "negative",
+              message: "Delete failed. Please try again.",
+            });
+          }
+          this.getAllOrders();
+        });
+    },
   },
-}
+};
 </script>
 
-<style lang="sass">
-.canvas-container
-  position: relative
-  width: 100%
-  height: 50vh
+<style lang="sass" scoped>
+.status-card
+  transition: border-color 0.2s ease
 
-.canvas
-  width: 100% !important
-  height: 100% !important
+  &:hover
+    border-color: rgba(255, 255, 255, 0.35) !important
 
+.order-row
+  transition: background-color 0.15s ease
+
+  &:hover
+    background-color: rgba(255, 255, 255, 0.03)
+
+.order-id-badge
+  font-family: 'Hind', sans-serif
+  font-weight: 900
+  letter-spacing: 0.05em
+  padding: 4px 10px
+  border-radius: 4px
+  max-width: 100%
+  display: inline-block
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+
+.order-search
+  min-width: 260px
+
+  :deep(.q-field__control)
+    background-color: #121212
+    border-radius: 6px
+    box-shadow: none !important
+
+  :deep(.q-field__control:before)
+    border: 1px solid rgba(255, 255, 255, 0.2) !important
+
+  :deep(.q-field__control:hover:before)
+    border-color: rgba(255, 255, 255, 0.35) !important
+
+  :deep(.q-field__control:after)
+    border-color: transparent !important
+    box-shadow: none !important
+
+  :deep(.q-field--focused .q-field__control:before)
+    border-color: rgba(255, 255, 255, 0.5) !important
+
+  :deep(.q-field__native)
+    color: #f0f0f0
+
+  :deep(.q-field__marginal)
+    color: #9b9b9b
+
+.status-filter
+  min-width: 130px
+  font-size: 0.85rem
+
+  :deep(.q-field__control)
+    background-color: #121212
+    border-radius: 6px
+    box-shadow: none !important
+
+  :deep(.q-field__control:before)
+    border: 1px solid rgba(255, 255, 255, 0.2) !important
+
+  :deep(.q-field__control:after)
+    border-color: transparent !important
+    box-shadow: none !important
+
+  :deep(.q-field--focused .q-field__control:before)
+    border-color: rgba(255, 255, 255, 0.5) !important
+
+  :deep(.q-field__native)
+    color: #f0f0f0
+
+  :deep(.q-field__marginal)
+    color: #9b9b9b
+
+.status-dot
+  width: 8px
+  height: 8px
+  border-radius: 50%
+  display: inline-block
+
+.status-dot--pending
+  background-color: #fbbf24
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15)
+
+.status-dot--paid
+  background-color: #22c55e
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15)
+
+.status-dot--collected
+  background-color: #14b8a6
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15)
+
+.status-dot--delivered
+  background-color: #a855f7
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15)
+
+.status-dot--refunded
+  background-color: #ef4444
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15)
+
+.status-dot--grey
+  background-color: #9b9b9b
+
+.text-collected
+  color: #14b8a6 !important
+
+.text-delivered
+  color: #a855f7 !important
+
+.row-actions-menu
+  // background-color: #141414
+  border: 1px solid rgba(255, 255, 255, 0.12)
+  border-radius: 10px
+  min-width: 160px
+
+  .q-item
+    color: #e8e8e8
+    min-height: 40px
+    border-radius: 6px
+    // margin: 2px
+
+    &:hover
+      background-color: rgba(255, 255, 255, 0.06)
 </style>

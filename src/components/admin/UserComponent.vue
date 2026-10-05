@@ -88,13 +88,15 @@
         >
           <!-- header -->
           <q-card-section
-            class="row justify-between items-center q-px-md q-py-lg"
+            class="row justify-between items-center"
             style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
           >
             <div class="row items-center q-gutter-md">
               <q-avatar size="48px" class="user-avatar-initials">
-                {{ selectedUser.firstName?.charAt(0)
-                }}{{ selectedUser.lastName?.charAt(0) }}
+                <div>
+                  {{ selectedUser.firstName?.charAt(0)
+                  }}{{ selectedUser.lastName?.charAt(0) }}
+                </div>
               </q-avatar>
 
               <div>
@@ -955,7 +957,8 @@ export default {
   display: flex
   align-items: center
   justify-content: center
-  line-height: 1
+  div
+    transform: translateY(1px)
 
 
 .user-detail-row
