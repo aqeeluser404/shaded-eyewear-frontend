@@ -59,9 +59,9 @@
               rounded
             />
             <q-btn
-              to=""
+              @click="scrollToSection('about-section')"
               class="custom-button q-py-sm font-size-responsive-sm"
-              label="About"
+              label="Services"
               :ripple="false"
               no-caps
               flat
@@ -571,6 +571,33 @@ export default {
       setInterval(() => {
         this.nextText();
       }, 10000);
+    },
+    scrollToSection(sectionId) {
+      if (this.$route.path !== "/") {
+        this.$router.push("/").then(() => {
+          this.$nextTick(() => {
+            setTimeout(() => {
+              this.performScroll(sectionId);
+            }, 300);
+          });
+        });
+      } else {
+        this.performScroll(sectionId);
+      }
+    },
+    performScroll(sectionId) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const offset = window.innerHeight * 0.1;
+        const elementPosition =
+          element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
     },
     // async checkLoginStatus() {
     //   const isLoggedIn = await Helper.checkCookie();

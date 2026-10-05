@@ -109,6 +109,7 @@
       style="
         border-top: 1px solid rgba(255, 255, 255, 0.2);
       "
+      id="about-section"
     >
       <div class="section-spacer-md"></div>
 
