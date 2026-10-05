@@ -3,30 +3,37 @@
     <div class="login-shell row no-wrap">
       <!----------------------------------------------------------- LEFT PANEL (image placeholder) -------------------------------------------------->
       <div class="col-md-5 left-panel gt-sm">
-        <q-img
+        <!-- blurred backdrop layer -->
+        <!-- <q-img
           src="~src/assets/homepage/stock1.jpg"
-          class="left-image"
+          class="left-backdrop"
           fit="cover"
-        />
+        /> -->
 
-        <div class="left-overlay column justify-end q-pa-xl">
-          <div class="overline text-light q-mb-md">
-            <q-icon name="star" color="primary" size="16px" class="q-mr-xs" />
-            CAPE TOWN SUN CLUB
-          </div>
-          <div class="font-size-responsive-giant archivo text-light text-bold">
-            MADE FOR GLARE.
-          </div>
-          <div
-            class="font-size-responsive-giant archivo text-gradient-primary text-bold"
-          >
-            BUILT TO BE SEEN.
-          </div>
-          <div class="text-subtitle1 text-dimmed q-mt-md">
-            Keep your favourite frames, orders and collection details together
-            in one place.
-          </div>
+        <div class="left-image-frame">
+          <q-img
+            src="~src/assets/homepage/stock1.jpg"
+            class="left-image"
+            fit="cover"
+          />
+          <div class="left-overlay"></div>
         </div>
+
+        <!-- <div class="left-content column justify-end q-pa-xl">
+          <div class="glass-panel">
+            <div class="font-size-responsive-sm text-light">
+              "Ordered on a Tuesday, had them in Cape Town by Thursday. <br>They've been on
+              my face every sunny day since."
+            </div>
+
+            <div class="q-mt-sm">
+              <div class="font-size-responsive-sm text-light text-bold">
+                Jessica Rudal
+              </div>
+              <div class="text-caption text-dimmed">Customer since 2023</div>
+            </div>
+          </div>
+        </div> -->
       </div>
 
       <!----------------------------------------------------------- RIGHT PANEL (form) -------------------------------------------------->
@@ -43,21 +50,16 @@
                 icon="eva-arrow-back-outline"
                 class="custom-button icon-btn font-size-responsive-sm text-light text-dimmed"
               />
-              <!-- <div class="row items-center text-caption text-dimmed">
-                <q-icon name="lock_outline" size="14px" class="q-mr-xs" />
-                MEMBER ACCOUNT
-              </div> -->
             </div>
 
-            <!-- <div class="overline text-primary text-caption q-mb-sm">
-              WELCOME BACK
-            </div> -->
             <div
               class="font-size-responsive-xxl archivo text-light text-bold q-mb-md text-center"
             >
               WELCOME BACK
             </div>
-            <div class="font-size-responsive-sm text-dimmed q-mb-xl text-center">
+            <div
+              class="font-size-responsive-sm text-dimmed q-mb-xl text-center"
+            >
               Sign in to keep track of your orders
             </div>
 
@@ -74,11 +76,7 @@
                   class="custom-input"
                   input-style="color: white;"
                   :rules="[(val) => !!val || 'Email is required']"
-                >
-                  <!-- <template #prepend>
-                    <q-icon name="eva-email-outline" size="18px" />
-                  </template> -->
-                </q-input>
+                />
               </div>
 
               <div>
@@ -95,9 +93,6 @@
                   input-style="color: white;"
                   :rules="[(val) => !!val || 'Password is required']"
                 >
-                  <!-- <template #prepend>
-                    <q-icon name="eva-lock-outline" size="18px" />
-                  </template> -->
                   <template #append>
                     <q-icon
                       :name="
@@ -284,24 +279,86 @@ export default {
   min-height: 100vh
   background-color: #000000
 
-// ---------- LEFT PANEL ----------
-.left-panel
-  position: relative
-  overflow: hidden
-  background-color: #0a0a0a
-  min-height: 100vh
 
-.left-image
+
+// ---------- LEFT PANEL ----------
+.left-backdrop
   position: absolute
   inset: 0
   width: 100%
   height: 100%
+  filter: blur(15px) saturate(120%) brightness(1)
+  transform: scale(1.1)
+  z-index: 0
+
+  &::after
+    content: ''
+    position: absolute
+    inset: 0
+    background: radial-gradient(circle at 50% 50%, transparent 15%, rgba(0, 0, 0, 0.3) 40%, rgba(0, 0, 0, 0.7) 70%, rgba(0, 0, 0, 0.95) 100%)
+
+.left-panel
+  position: relative
+  display: flex
+  align-items: center
+  justify-content: center
+  min-height: 100vh
+  padding: 10px
+
+.left-image-frame
+  position: relative
+  width: 100%
+  height: 100%
+  border-radius: 30px
+  overflow: hidden
+  box-shadow: 0 60px 140px -20px rgba(0, 0, 0, 1)
+
+.left-image
+  width: 100%
+  height: 100%
+  animation: image-grow 12s ease-in-out infinite alternate
+
+@keyframes image-grow
+  from
+    transform: scale(1)
+  to
+    transform: scale(1.15)
 
 .left-overlay
   position: absolute
   inset: 0
   z-index: 2
-  background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.85) 100%)
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.3) 100%)
+
+.left-content
+  position: absolute
+  inset: 0
+  z-index: 3
+  padding: 48px
+  pointer-events: none
+  display: flex
+  align-items: flex-start
+  justify-content: flex-end
+
+.glass-panel
+  pointer-events: auto
+  width: fit-content
+  padding: 32px 28px
+  border-radius: 24px
+  background: rgba(10, 10, 10, 0.3)
+  backdrop-filter: blur(20px) saturate(140%)
+  -webkit-backdrop-filter: blur(20px) saturate(140%)
+  border: 1px solid rgba(255, 255, 255, 0.08)
+  box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.04)
+  position: relative
+  overflow: hidden
+
+  &::before
+    content: ''
+    position: absolute
+    inset: 0
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 40%)
+    pointer-events: none
 
 // ---------- RIGHT PANEL ----------
 .right-panel
@@ -321,7 +378,6 @@ export default {
 .overline
   letter-spacing: 0.15em
   font-weight: 600
-
 
 // ---------- INPUT STYLE ----------
 .outlined-checkbox
@@ -356,11 +412,9 @@ export default {
     box-shadow: 0 0 0 2px var(--q-primary)
     border-radius: 10px
 
-  // kill Quasar's built-in filled-input underline
   :deep(.q-field__control:after)
     display: none
 
-  // error state — same treatment as focus but red
   :deep(.q-field--error .q-field__control)
     box-shadow: 0 0 0 2px var(--negative, #c10015)
     border-radius: 10px
