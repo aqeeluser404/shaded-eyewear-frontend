@@ -4,6 +4,7 @@
     <section class="gradient-bg q-px-md text-light q-md-px-0">
       <div class="constrain">
         <div class="section-spacer-sm"></div>
+
         <div>
           <q-btn
             dense
@@ -135,7 +136,7 @@
                     class="q-px-xl q-py-md q-mr-md text-subtitle1 rounded-button text-bold"
                   />
                 </div>
-                <div class="text-subtitle1 text-dimmed">
+                <div class="font-size-responsive-sm text-dimmed">
                   {{ sunglasses.stock }} in stock
                 </div>
               </div>
@@ -143,7 +144,7 @@
               <div class="section-spacer-sm"></div>
 
               <div>
-                <div class="text-subtitle1 text-dimmed">
+                <div class="font-size-responsive-sm text-dimmed">
                   {{ sunglasses.description }}
                 </div>
               </div>
@@ -152,7 +153,7 @@
 
               <div class="font-size-responsive-md">
                 <div
-                  class="bg-transparent q-py-sm text-subtitle1 text-dimmed row justify-between items-center"
+                  class="bg-transparent q-py-sm font-size-responsive-sm text-dimmed row justify-between items-center"
                   style="
                     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
                     border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -162,21 +163,21 @@
                   <div>N/A</div>
                 </div>
                 <div
-                  class="bg-transparent q-py-sm text-subtitle1 text-dimmed row justify-between items-center"
+                  class="bg-transparent q-py-sm font-size-responsive-sm text-dimmed row justify-between items-center"
                   style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
                 >
                   <div>Lens</div>
                   <div>N/A</div>
                 </div>
                 <div
-                  class="bg-transparent q-py-sm text-subtitle1 text-dimmed row justify-between items-center"
+                  class="bg-transparent q-py-sm font-size-responsive-sm text-dimmed row justify-between items-center"
                   style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
                 >
                   <div>Fit</div>
                   <div>N/A</div>
                 </div>
                 <div
-                  class="bg-transparent q-py-sm text-subtitle1 text-dimmed row justify-between items-center"
+                  class="bg-transparent q-py-sm font-size-responsive-sm text-dimmed row justify-between items-center"
                   style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
                 >
                   <div>Weight</div>
@@ -188,7 +189,7 @@
 
               <div class="row items-center">
                 <q-icon name="eva-shield-outline" color="primary" size="24px" />
-                <span class="text-subtitle1 text-dimmed q-ml-sm">
+                <span class="font-size-responsive-sm text-dimmed q-ml-sm">
                   Deliveries made in Cape Town · pickup available in Kenwyn
                 </span>
               </div>

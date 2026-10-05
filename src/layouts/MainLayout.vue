@@ -3,20 +3,20 @@
     <div class="noise-overlay"></div>
 
     <div v-if="!cookieAccepted" class="cookie-consent-banner">
-      <div class="q-pa-lg bg-black text-white q-mb-sm">
-        <span class="font-size-responsive-xs"
-          >This website uses cookies to ensure you get the best
-          experience.</span
-        >
+      <div class="cookie-inner row items-center justify-between no-wrap">
+        <div class="cookie-text font-size-responsive-sm">
+          This website uses cookies to ensure you get the best experience.
+        </div>
         <q-btn
           rounded
-          dense
-          @click="acceptCookies"
+          no-caps
+          flat
           label="Accept"
           color="white"
-          class="q-px-md q-py-sm q-ml-lg font-size-responsive-xs"
-          flat
-        ></q-btn>
+          class="custom-button q-py-sm font-size-responsive-sm"
+          @click="acceptCookies"
+          :ripple="false"
+        />
       </div>
     </div>
 
@@ -129,10 +129,10 @@
               clickable
               v-close-popup
               @click="menuOpen = false"
-              to="/about"
+              to="/"
             >
               <q-item-section class="font-size-responsive-md"
-                >About</q-item-section
+                >Services</q-item-section
               >
             </q-item>
             <q-item
@@ -215,7 +215,7 @@
                     <router-link
                       to="/"
                       class="text-remove-decoration font-size-responsive-md archivo text-light"
-                      >ABOUT</router-link
+                      >Services</router-link
                     >
                   </div>
                   <div
@@ -825,17 +825,32 @@ export default {
   right: 0
   z-index: 9999
   width: 100%
-  display: flex
-  justify-content: center
-  align-items: center
   transform: translateY(100%)
   animation: slideIn 0.5s ease-out forwards
+
+.cookie-inner
+  background-color: #000000
+  color: #ffffff
+  padding: 20px 32px
+  gap: 24px
+  max-width: 650px
+  margin: 0 auto
+  border-radius: 12px 12px 0 0
+
+.cookie-text
+  flex: 1
+  min-width: 0
+
+.cookie-btn
+  flex-shrink: 0
+  padding: 6px 20px
 
 @keyframes slideIn
   from
     transform: translateY(100%)
   to
     transform: translateY(0)
+
 .text-carousel-toolbar
   background-color: #f5f5f5
   padding: 10px 0

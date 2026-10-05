@@ -40,10 +40,10 @@
 
         <q-item class="column sunglass-info">
           <div class="row items-start justify-between full-width no-wrap">
-            <div class="text-subtitle1 text-white text-bold sunglass-model">
+            <div class="font-size-responsive-sm text-white text-bold sunglass-model">
               {{ sunglass.model }}
             </div>
-            <div class="text-subtitle2 text-primary text-bold q-pl-sm">
+            <div class="font-size-responsive-sm text-primary text-bold q-pl-sm">
               R {{ sunglass.price }}.00
             </div>
           </div>

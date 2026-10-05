@@ -4,21 +4,23 @@
       class="bg-dark q-px-md text-light q-md-px-0"
     >
       <div class="section-spacer-sm"></div>
+
+
       <div class="constrain">
         <div class="overline text-dimmed text-caption">CATALOGUE</div>
         <div class="row justify-between">
-          <div class="font-size-responsive-giant archivo">EVERY FRAME</div>
+          <div class="font-size-responsive-giant archivo text-light">THE FULL RANGE</div>
         </div>
         <div class="section-spacer-xs"></div>
         <div>
-          <p class="text-subtitle1 text-dimmed">
+          <p class="font-size-responsive-sm text-dimmed">
             3 frames in stock. Each one polarised, UV400 and hand-checked
             <br class="break-desktop" />
             before dispatch.
           </p>
         </div>
 
-        <div class="section-spacer-xs"></div>
+        <div class="section-spacer-sm"></div>
         <div>
           <SunglassesList :search="search" />
         </div>

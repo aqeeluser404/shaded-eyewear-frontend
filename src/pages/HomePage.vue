@@ -11,21 +11,23 @@
           <q-card class="absolute-full" style="z-index: 1">
             <div class="full-height column justify-end items-start constrain">
               <div class="">
-                <div class="overline text-caption text-dimmed">
+                <div class="overline text-dimmed text-caption">
                   EST. 2023 · CAPE TOWN
                 </div>
-                <div class="section-spacer-sm"></div>
+                <div class="section-spacer-xs"></div>
                 <p class="font-size-responsive-hero archivo">
                   SHADE IS A <br />
-                  <span class="text-gradient-primary">DISCIPLINE</span>
+                  <span class="text-gradient-primary">DISCIPLINE.</span>
                 </p>
-                <div class="section-spacer-sm"></div>
-                <p class="text-subtitle1 text-dimmed">
+                <div class="section-spacer-sm large-screen-only"></div>
+                <div class="section-spacer-xs small-screen-only"></div>
+                <p class="font-size-responsive-md text-dimmed">
                   Small-run frames cut for the glare off Table Bay. Polarised,
                   UV400, and <br class="break-desktop" />
                   hand-checked before they leave Kenwyn.
                 </p>
-                <div class="section-spacer-sm"></div>
+                <div class="section-spacer-sm large-screen-only"></div>
+                <div class="section-spacer-xs small-screen-only"></div>
               </div>
 
               <div class="row justify-start items-center full-width">
@@ -40,7 +42,7 @@
                 />
 
                 <div
-                  class="col-sm-6 col-12 text-subtitle1 text-dimmed q-mt-md q-md-mt-0"
+                  class="col-sm-6 col-12 font-size-responsive-sm text-dimmed q-mt-md q-md-mt-0 large-screen-only"
                 >
                   Free delivery across Cape Town
                 </div>
@@ -57,7 +59,7 @@
                     <span
                       v-for="t in items"
                       :key="t"
-                      class="text-subtitle1 text-uppercase marquee-item"
+                      class="font-size-responsive-sm text-uppercase marquee-item"
                     >
                       <span class="text-bold q-mr-md">{{ t }}</span>
                       <span class="text-primary">✳</span>
@@ -81,11 +83,11 @@
           <div class="overline text-dimmed text-caption">THE COLLECTION</div>
           <div class="row justify-between">
             <div class="font-size-responsive-giant archivo text-light">
-              THREE FRAMES
+              FEATURED FRAMES
             </div>
             <q-btn
               to="/sunglasses"
-              class="custom-button q-py-sm font-size-responsive-sm text-light"
+              class="custom-button q-py-sm font-size-responsive-sm text-light break-desktop"
               label="View all"
               :ripple="false"
               no-caps
@@ -126,7 +128,7 @@
             <div class="font-size-responsive-md archivo q-mb-sm">
               PAID WITH YOCO
             </div>
-            <div class="text-subtitle1 text-dimmed">
+            <div class="font-size-responsive-sm text-dimmed">
               Card, EFT and instant payments, secured end to end at checkout.
             </div>
           </div>
@@ -144,7 +146,7 @@
             <div class="font-size-responsive-md archivo q-mb-sm">
               FAST AND RELIABLE
             </div>
-            <div class="text-subtitle1 text-dimmed">
+            <div class="font-size-responsive-sm text-dimmed">
               Cape Town deliveries within two working days, tracked all the way.
             </div>
           </div>
@@ -163,7 +165,7 @@
             <div class="font-size-responsive-md archivo q-mb-sm">
               DOORSTEP PICKUP
             </div>
-            <div class="text-subtitle1 text-dimmed">
+            <div class="font-size-responsive-sm text-dimmed">
               Collect at 65 Stockley Road, Kenwyn - open weekdays 08:00 to
               17:00.
             </div>
