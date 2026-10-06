@@ -92,8 +92,8 @@
 
             <!-- real content -->
             <template v-else>
-              <div class="overline text-dimmed text-caption">
-                SUNGLASSES DESCRIPTION
+              <div class="overline text-dimmed text-caption q-mb-xs">
+                DESCRIPTION
               </div>
 
               <div
@@ -108,7 +108,8 @@
                 R {{ sunglasses.price }}.00
               </div>
 
-              <div class="section-spacer-sm"></div>
+              <div class="section-spacer-sm large-screen-only"></div>
+              <div class="section-spacer-xs small-screen-only"></div>
 
               <div
                 class="row justify-start items-center font-size-responsive-sm"
@@ -141,7 +142,8 @@
                 </div>
               </div>
 
-              <div class="section-spacer-sm"></div>
+              <div class="section-spacer-sm large-screen-only"></div>
+              <div class="section-spacer-xs small-screen-only"></div>
 
               <div>
                 <div class="font-size-responsive-sm text-dimmed">
@@ -149,7 +151,8 @@
                 </div>
               </div>
 
-              <div class="section-spacer-sm"></div>
+              <div class="section-spacer-sm large-screen-only"></div>
+              <div class="section-spacer-xs small-screen-only"></div>
 
               <div class="font-size-responsive-md">
                 <div
@@ -185,7 +188,8 @@
                 </div>
               </div>
 
-              <div class="section-spacer-sm"></div>
+              <div class="section-spacer-sm large-screen-only"></div>
+              <div class="section-spacer-xs small-screen-only"></div>
 
               <div class="row items-center">
                 <q-icon name="eva-shield-outline" color="primary" size="24px" />

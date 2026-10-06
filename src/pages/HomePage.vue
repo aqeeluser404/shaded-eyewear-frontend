@@ -11,10 +11,9 @@
           <q-card class="absolute-full" style="z-index: 1">
             <div class="full-height column justify-end items-start constrain">
               <div class="">
-                <div class="overline text-dimmed text-caption">
+                <div class="overline text-dimmed text-caption q-mb-xs">
                   EST. 2023 · CAPE TOWN
                 </div>
-                <div class="section-spacer-xs"></div>
                 <p class="font-size-responsive-hero archivo">
                   SHADE IS A <br />
                   <span class="text-gradient-primary">DISCIPLINE.</span>
@@ -80,7 +79,7 @@
       <div class="section-spacer-md"></div>
       <div class="constrain">
         <div>
-          <div class="overline text-dimmed text-caption">THE COLLECTION</div>
+          <div class="overline text-dimmed text-caption q-mb-xs">THE COLLECTION</div>
           <div class="row justify-between">
             <div class="font-size-responsive-giant archivo text-light">
               FEATURED FRAMES
