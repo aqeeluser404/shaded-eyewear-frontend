@@ -108,13 +108,11 @@
                 R {{ sunglasses.price }}.00
               </div>
 
-              <div class="section-spacer-sm large-screen-only"></div>
-              <div class="section-spacer-xs small-screen-only"></div>
+              <div class="section-spacer-sm"></div>
 
-              <div
-                class="row justify-start items-center font-size-responsive-sm"
-              >
-                <div>
+              <!-- buttons -->
+              <div class="row items-center q-col-gutter-md">
+                <div class="col-12 col-md">
                   <q-btn
                     @click="addToCart"
                     color="white"
@@ -123,8 +121,11 @@
                     dense
                     no-caps
                     label="Add to cart"
-                    class="btn-gradient-primary q-px-xl q-py-md q-mr-md text-subtitle1 rounded-button text-bold"
+                    class="btn-gradient-primary q-px-lg q-py-md rounded-button text-bold full-width"
                   />
+                </div>
+
+                <div class="col-12 col-md">
                   <q-btn
                     @click="navigateToCart"
                     label="View cart"
@@ -134,11 +135,14 @@
                     outline
                     color="grey"
                     text-color="grey"
-                    class="q-px-xl q-py-md q-mr-md text-subtitle1 rounded-button text-bold"
+                    class="q-px-lg q-py-md rounded-button text-bold full-width"
                   />
                 </div>
-                <div class="font-size-responsive-sm text-dimmed">
-                  {{ sunglasses.stock }} in stock
+
+                <div class="col-12 col-md text-center text-md-left">
+                  <span class="font-size-responsive-sm text-dimmed">
+                    {{ sunglasses.stock }} in stock
+                  </span>
                 </div>
               </div>
 
@@ -151,8 +155,7 @@
                 </div>
               </div>
 
-              <div class="section-spacer-sm large-screen-only"></div>
-              <div class="section-spacer-xs small-screen-only"></div>
+              <div class="section-spacer-sm"></div>
 
               <div class="font-size-responsive-md">
                 <div
