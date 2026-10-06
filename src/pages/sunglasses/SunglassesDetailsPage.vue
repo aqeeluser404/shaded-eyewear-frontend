@@ -226,10 +226,11 @@
           <q-btn
             v-if="canScrollLeft"
             round
-            dense
+
             icon="eva-arrow-back-outline"
-            color="white"
-            class="scroll-arrow scroll-arrow--left"
+
+            color="text-dark"
+            class="scroll-arrow scroll-arrow--left bg-dark"
             @click="scrollRelated(-1)"
           />
 
@@ -674,7 +675,7 @@ export default {
   top: 50%
   transform: translateY(-50%)
   z-index: 2
-  background: rgba(0, 0, 0, 0.6)
+  // background: rgba(0, 0, 0, 0.6)
   backdrop-filter: blur(4px)
 
   &--left
