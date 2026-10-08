@@ -431,67 +431,9 @@ export default {
   &::-webkit-scrollbar-track
     background: transparent
 
-.constrain-more
-  max-width: 600px
-  margin: 0 auto
-
-.overline
-  letter-spacing: 0.15em
-  font-weight: 600
-
 // ---------- MOBILE ----------
 @media (max-width: 1023px)
   .right-panel
     padding-top: 48px
     padding-bottom: 48px
-
-// ---------- INPUT STYLE ----------
-.outlined-checkbox
-  :deep(.q-checkbox__bg)
-    border: 1px solid rgba(255, 255, 255, 0.4)
-    border-radius: 3px
-    background: transparent !important
-  :deep(.q-checkbox__inner--truthy .q-checkbox__bg)
-    border-color: var(--q-primary)
-
-.custom-input
-  :deep(.q-field__control)
-    background-color: #121212
-    border-radius: 10px
-    padding: 0 14px
-    transition: background-color 0.2s ease
-
-  :deep(.q-field__native),
-  :deep(.q-field__input)
-    color: #ffffff !important
-
-  :deep(.q-field__control:before)
-    border: 1px solid rgba(255, 255, 255, 0.1)
-    border-radius: 10px
-    transition: border-color 0.2s ease
-
-  :deep(.q-field__control:hover:before)
-    border-color: rgba(255, 255, 255, 0.25)
-
-  :deep(.q-field--focused .q-field__control)
-    background-color: #161616
-    box-shadow: 0 0 0 2px var(--q-primary)
-    border-radius: 10px
-
-  :deep(.q-field__control:after)
-    display: none
-
-  :deep(.q-field--error .q-field__control)
-    box-shadow: 0 0 0 2px var(--negative, #c10015)
-    border-radius: 10px
-
-  :deep(.q-field__prepend),
-  :deep(.q-field__append)
-    color: rgba(255, 255, 255, 0.45)
-
-  :deep(.q-field--focused .q-field__prepend)
-    color: var(--q-primary)
-
-  :deep(.q-field__marginal)
-    height: 52px
 </style>

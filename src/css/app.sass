@@ -152,20 +152,7 @@ p
 // =================================================================================
 // OVERLINE — two variants
 
-// Default overline — what you had originally (wider tracking, heavier weight)
 .overline
-  // display: inline-block
-  // color: #ffffff
-  // letter-spacing: 3px
-  // text-transform: uppercase
-  // font-weight: 500
-
-  // &::before
-  //   content: ''
-  //   display: block
-  //   width: 100%
-  //   height: 1px
-  //   background: rgba(255, 255, 255, 0.493)
   display: inline-block
   color: #ffffff
   letter-spacing: 0.15em
@@ -193,6 +180,20 @@ p
     width: 100%
     height: 1px
     background: rgba(255, 255, 255, 0.493)
+
+.overline-dark
+  display: inline-block
+  color: #ffffff
+  letter-spacing: 0.15em
+  text-transform: uppercase
+  font-weight: 600
+
+  &::before
+    content: ''
+    display: block
+    width: 100%
+    height: 1px
+    background: rgb(0, 0, 0)
 
 .border-right
   border-right: 1px solid rgba(255, 255, 255, 0.2)
@@ -328,6 +329,10 @@ p
   max-width: 600px
   margin: 0 auto
 
+.constrain-narrow
+  max-width: 460px
+  width: 100%
+  margin: 0 auto
 
 // =================================================================================
 // LAYOUT — spacers
@@ -385,7 +390,6 @@ p
   width: fit-content
   margin: auto
 
-
 // =================================================================================
 // FORMS — custom input
 
@@ -399,6 +403,13 @@ p
   .q-field__native,
   .q-field__input
     color: #ffffff !important
+    font-size: 0.9rem
+    font-weight: 400
+
+  .q-field__native::placeholder,
+  .q-field__input::placeholder
+    color: rgba(255, 255, 255, 0.4) !important
+    opacity: 1 !important
 
   .q-field__control:before
     border: 1px solid rgba(255, 255, 255, 0.1)
@@ -422,7 +433,30 @@ p
 
   .q-field__marginal
     height: 52px
+    min-height: 52px
+    display: flex
+    align-items: center
 
+  .q-field__append,
+  .q-field__prepend
+    padding: 0
+
+  // hide the error icon (the red circle that appeared on empty inputs)
+  .q-field--error .q-field__append .q-icon,
+  .q-field--error .q-field__prepend .q-icon
+    display: none
+
+// =================================================================================
+// FORMS — outlined checkbox
+
+.outlined-checkbox
+  .q-checkbox__bg
+    border: 1px solid rgba(255, 255, 255, 0.4)
+    border-radius: 3px
+    background: transparent !important
+
+  .q-checkbox__inner--truthy .q-checkbox__bg
+    border-color: var(--q-primary)
 
 // =================================================================================
 // BUTTONS

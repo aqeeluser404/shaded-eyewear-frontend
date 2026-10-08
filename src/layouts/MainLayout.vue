@@ -125,12 +125,7 @@
                 >Home</q-item-section
               >
             </q-item>
-            <q-item
-              clickable
-              v-close-popup
-              @click="menuOpen = false"
-              to="/"
-            >
+            <q-item clickable v-close-popup @click="menuOpen = false" to="/">
               <q-item-section class="font-size-responsive-md"
                 >Services</q-item-section
               >
@@ -178,217 +173,192 @@
     </div>
 
     <!----------------------------------------------------------- FOOTER SECTION -------------------------------------------------->
-    <q-footer
-      class="bg-dark text-white"
-      v-if="showHeader"
-      style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
-    >
+    <q-footer class="bg-dark text-white footer-shell" v-if="showHeader">
       <div class="section-spacer-md"></div>
-      <q-toolbar class="q-pa-none">
-        <q-toolbar-title>
-          <div class="row justify-center items-start constrain">
-            <!-- Developed By Section -->
+
+      <div class="constrain">
+        <div
+          class="row q-col-gutter-xl"
+          :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'"
+        >
+          <!-- ============================== SHORTCUT LINKS ============================== -->
+          <div class="col-12 col-md-4">
             <div
-              class="col-12 col-md-4 items-center"
-              :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'"
+              class="overline-tight text-dimmed text-caption q-mb-md q-mb-lg"
             >
-              <q-card flat class="bg-transparent q-mr-none q-mr-md-xl q-mb-xl">
-                <div class="overline text-dimmed text-caption">
-                  SHORTCUT LINKS
-                </div>
-                <div class="section-spacer-sm"></div>
-                <div class="font-size-responsive-md">
-                  <div
-                    class="bg-transparent q-py-sm"
-                    style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
-                  >
-                    <router-link
-                      to="/"
-                      class="text-remove-decoration font-size-responsive-md archivo text-light"
-                      >HOME</router-link
-                    >
-                  </div>
-                  <div
-                    class="bg-transparent q-py-sm"
-                    style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
-                  >
-                    <router-link
-                      to="/"
-                      class="text-remove-decoration font-size-responsive-md archivo text-light"
-                      >Services</router-link
-                    >
-                  </div>
-                  <div
-                    class="bg-transparent q-py-sm"
-                    style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
-                  >
-                    <router-link
-                      to="/"
-                      class="text-remove-decoration font-size-responsive-md archivo text-light"
-                      >CATALOGUE</router-link
-                    >
-                  </div>
-                  <div
-                    class="bg-transparent q-py-sm"
-                    style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
-                  >
-                    <router-link
-                      to="/"
-                      class="text-remove-decoration font-size-responsive-md archivo text-light"
-                      >CART</router-link
-                    >
-                  </div>
-                </div>
-              </q-card>
+              SHORTCUT LINKS
             </div>
 
-            <!-- Contact Section -->
-            <div
-              class="col-12 col-md-4"
-              :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'"
-            >
-              <q-card flat class="bg-transparent q-mr-none q-mr-md-xl q-mb-xl">
-                <div class="overline text-dimmed text-caption">
-                  SHORTCUT LINKS
-                </div>
-                <div class="section-spacer-sm"></div>
-                <div>
-                  <div class="font-size-responsive-sm">
-                    <q-form @submit="submitContactForm">
-                      <q-input
-                        filled
-                        label-color="white"
-                        color="white"
-                        v-model="userContact.firstName"
-                        placeholder="Your name"
-                        stack-label
-                        class="q-mb-sm font-size-responsive-sm"
-                        required
-                        style="background-color: #121212"
-                        input-style="color: white;"
-                      />
-                      <q-input
-                        filled
-                        label-color="white"
-                        color="white"
-                        v-model="userContact.email"
-                        placeholder="Your email"
-                        stack-label
-                        class="q-mb-sm font-size-responsive-sm"
-                        required
-                        style="background-color: #121212"
-                        input-style="color: white;"
-                      />
-                      <q-input
-                        filled
-                        label-color="white"
-                        color="white"
-                        v-model="message"
-                        placeholder="Message"
-                        type="textarea"
-                        stack-label
-                        class="font-size-responsive-sm"
-                        required
-                        style="background-color: #121212"
-                        input-style="color: white;"
-                      />
-                      <div class="section-spacer-xs"></div>
-                      <q-btn
-                        dense
-                        type="submit"
-                        label="Send Message"
-                        no-caps
-                        text-color="dark"
-                        class="btn-gradient-primary q-px-xl q-py-md q-mr-lg text-subtitle1 rounded-button text-bold"
-                      />
-                    </q-form>
-                  </div>
-                </div>
-              </q-card>
-            </div>
+            <div class="footer-link-list">
+              <router-link to="/" class="footer-link">
+                <span>Home</span>
+                <q-icon
+                  name="eva-arrow-forward-outline"
+                  size="14px"
+                  class="footer-link-arrow"
+                />
+              </router-link>
 
-            <!-- Follow Us Section -->
-            <div
-              class="col-12 col-md-4"
-              :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'"
-            >
-              <q-card flat class="bg-transparent q-mr-none q-mr-md-xl">
-                <div class="overline text-dimmed text-caption">FOLLOW US</div>
-                <div class="section-spacer-sm"></div>
+              <router-link to="/" class="footer-link">
+                <span>Services</span>
+                <q-icon
+                  name="eva-arrow-forward-outline"
+                  size="14px"
+                  class="footer-link-arrow"
+                />
+              </router-link>
 
-                <div
-                  class="row items-center justify-center mouse-cursor q-pa-md"
-                  style="border: 1px solid rgba(255, 255, 255, 0.2)"
-                  @click="openInstagram"
-                >
-                  <div class="col-md-2 row justify-start q-mr-sm">
-                    <q-icon name="mdi-instagram" color="primary" size="36px" />
-                    <!-- <q-btn  round icon="mdi-instagram" class="text-white font-size-responsive-lg"  /> -->
-                  </div>
-                  <div class="col-md-9">
-                    <p
-                      class="font-size-responsive-md archivo"
-                      style="opacity: 1"
-                    >
-                      <span class="hind font-size-responsive-lg">@</span
-                      >shadedeyewearza
-                    </p>
-                    <div
-                      class="text-subtitle1 text-dimmed q-mt-sm"
-                      style="opacity: 1"
-                    >
-                      New arrivals, drop and fit guides
-                    </div>
-                  </div>
-                </div>
+              <router-link to="/sunglasses" class="footer-link">
+                <span>Catalogue</span>
+                <q-icon
+                  name="eva-arrow-forward-outline"
+                  size="14px"
+                  class="footer-link-arrow"
+                />
+              </router-link>
 
-                <div class="section-spacer-sm"></div>
-                <div class="text-subtitle1 text-dimmed q-mb-sm">
-                  65 Stockley Road, Kenwyn,
-                </div>
-                <div class="text-subtitle1 text-dimmed q-mb-sm">
-                  Cape Town, 7779
-                </div>
-                <div class="text-subtitle1 text-dimmed">Open 08:00 – 17:00</div>
-              </q-card>
+              <router-link to="/cart" class="footer-link">
+                <span>Cart</span>
+                <q-icon
+                  name="eva-arrow-forward-outline"
+                  size="14px"
+                  class="footer-link-arrow"
+                />
+              </router-link>
             </div>
           </div>
 
-          <div class="section-spacer-sm large-screen-only"></div>
-          <div class="section-spacer-md small-screen-only"></div>
-
-          <section
-            class="bg-dark q-py-md"
-            style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
-          >
+          <!-- ============================== CONTACT FORM ============================== -->
+          <div class="col-12 col-md-4">
             <div
-              class="constrain row justify-between items-center q-px-md q-md-px-0"
+              class="overline-tight text-dimmed text-caption q-mb-md q-mb-lg"
             >
-              <div class="col-md-6 col-12 row items-center">
-                <q-avatar class="footer-avatar q-mr-xs">
-                  <img
-                    src="../assets/resources/logos/logo-white.png"
-                    alt="Logo"
-                  />
-                </q-avatar>
-                <span class="text-caption text-dimmed"
-                  >Shaded Eyewear ™ · Est. 2023 · Cape Town</span
-                >
-              </div>
-
-              <div class="col-md-6 col-12 text-caption text-dimmed">
-                Founded by Amaan Ebrahim · Built by
-                <a
-                  href="https://aqeel-dev-portfolio.web.app"
-                  target="_blank"
-                  style="text-decoration: none; color: inherit"
-                  >Aqeel Hanslo</a
-                >
-              </div>
+              GET IN TOUCH
             </div>
-          </section>
-        </q-toolbar-title>
-      </q-toolbar>
+
+            <q-form @submit="submitContactForm" class="q-gutter-sm">
+              <q-input
+                filled
+                dark
+                v-model="userContact.firstName"
+                placeholder="Your name"
+                class="custom-input"
+                input-style="color: white;"
+                :rules="[(val) => !!val || 'Required']"
+                lazy-rules
+              />
+
+              <q-input
+                filled
+                dark
+                v-model="userContact.email"
+                placeholder="Your email"
+                class="custom-input"
+                input-style="color: white;"
+                :rules="[(val) => !!val || 'Required']"
+                lazy-rules
+              />
+
+              <q-input
+                filled
+                dark
+                v-model="message"
+                placeholder="Message"
+                type="textarea"
+                rows="4"
+                class="custom-input"
+                input-style="color: white;"
+                :rules="[(val) => !!val || 'Required']"
+                lazy-rules
+              />
+              <q-btn
+                color="white"
+                text-color="dark"
+                rounded
+                dense
+                no-caps
+                label="Send Message"
+                class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold"
+              />
+            </q-form>
+          </div>
+
+          <!-- ============================== FOLLOW US ============================== -->
+          <div class="col-12 col-md-4">
+            <div
+              class="overline-tight text-dimmed text-caption q-mb-md q-mb-lg"
+            >
+              FOLLOW US
+            </div>
+
+            <!-- Instagram card -->
+            <div class="footer-social-card" @click="openInstagram">
+              <q-icon
+                name="mdi-instagram"
+                color="primary"
+                class="footer-social-icon font-size-responsive-xxl"
+              />
+              <div class="footer-social-content">
+                <div class="footer-social-handle">@shadedeyewearza</div>
+                <div
+                  class="footer-social-caption font-size-responsive-xs text-dimmed"
+                >
+                  New arrivals, drops and fit guides
+                </div>
+              </div>
+              <q-icon
+                name="eva-arrow-forward-outline"
+                size="16px"
+                class="footer-social-arrow"
+              />
+            </div>
+
+            <!-- Address -->
+            <div class="footer-address">
+              <div class="footer-address-line footer-address-hours">
+                Open 08:00 – 17:00
+              </div>
+              <div class="footer-address-line">65 Stockley Road, Kenwyn</div>
+              <div class="footer-address-line">Cape Town, 7779</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-spacer-md"></div>
+
+        <!-- ============================== BOTTOM BAR ============================== -->
+        <div
+          class="footer-bottom"
+          :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'"
+        >
+          <div class="section-spacer-xs"></div>
+          <div class="row justify-between items-center">
+            <div class="row items-center">
+              <q-avatar class="footer-avatar q-mr-sm">
+                <img
+                  src="../assets/resources/logos/logo-white.png"
+                  alt="Logo"
+                />
+              </q-avatar>
+              <span class="font-size-responsive-xs text-dimmed">
+                Shaded Eyewear ™ · Est. 2023 · Cape Town
+              </span>
+            </div>
+
+            <div class="font-size-responsive-xs text-dimmed">
+              Founded by Amaan Ebrahim · Built by
+              <a
+                href="https://aqeel-dev-portfolio.web.app"
+                target="_blank"
+                style="text-decoration: none; color: inherit"
+              >
+                Aqeel Hanslo
+              </a>
+            </div>
+          </div>
+          <div class="section-spacer-xs"></div>
+        </div>
+      </div>
     </q-footer>
   </q-layout>
 </template>
@@ -809,15 +779,6 @@ export default {
     &:last-child
       border-bottom: none
 
-    // &:first-child
-    //   border-top: 1px solid rgba(255, 255, 255, 0.2)
-
-.text-subtitle1
-  line-height: 1
-.custom-label
-  font-size: 0.1rem
-  color: white
-
 .cookie-consent-banner
   position: fixed
   bottom: 0
@@ -854,44 +815,113 @@ export default {
 .text-carousel-toolbar
   background-color: #f5f5f5
   padding: 10px 0
-.font-size-responsive-xl
-  @media (min-width: 1320px)
-    font-size: 1.25rem
-  @media (min-width: 1320px)
-    font-size: 1rem
-
-.font-size-responsive-xs
-  @media (min-width: 1320)
-    font-size: 0.75rem
 
 .responsive-avatar
-  width: clamp(2.5rem, 5vw, 3.125rem) // 36px to 50px
-  height: clamp(2.5rem, 5vw, 3.125rem) // 36px to 50px
+  width: clamp(2.5rem, 5vw, 3.125rem)
+  height: clamp(2.5rem, 5vw, 3.125rem)
 
 .responsive-avatar-2
-  width: clamp(1.2rem, 5vw, 3.125rem) // 30px to 50px
-  height: clamp(1.2rem, 5vw, 3.125rem) // 30px to 50px
+  width: clamp(1.2rem, 5vw, 3.125rem)
+  height: clamp(1.2rem, 5vw, 3.125rem)
 
 .brand-text
   white-space: nowrap
   overflow: hidden
   text-overflow: ellipsis
-  min-width: 0 // required for ellipsis to work inside a flex/row child
+  min-width: 0
 
-.custom-input
-  background-color: #121212
-  color: white !important
+.footer-shell
+  border-top: 1px solid rgba(255, 255, 255, 0.1)
 
-.custom-label
-  color: white
-  font-size: clamp(0.75rem, 2.5vw, 1.25rem)
+.footer-link-list
+  display: flex
+  flex-direction: column
 
-.custom-textarea
-  background-color: #121212
-  color: white !important
-  font-size: clamp(0.75rem, 2.5vw, 1.25rem)
+.footer-link
+  display: flex
+  align-items: center
+  justify-content: space-between
+  padding: 14px 0
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08)
+  color: #f0f0f0
+  text-decoration: none
+  font-size: 0.95rem
+  font-weight: 500
+  letter-spacing: 0.02em
+  transition: color 0.2s ease, padding-left 0.2s ease
 
-.no-border
-  border-top: none !important
-  box-shadow: none !important
+  &:last-child
+    border-bottom: none
+
+  &:hover
+    color: var(--q-primary)
+    padding-left: 4px
+
+    .footer-link-arrow
+      transform: translateX(4px)
+      opacity: 1
+
+.footer-link-arrow
+  opacity: 0
+  transition: transform 0.2s ease, opacity 0.2s ease
+
+.footer-social-card
+  display: flex
+  align-items: center
+  gap: 16px
+  padding: 16px
+  border: 1px solid rgba(255, 255, 255, 0.1)
+  border-radius: 12px
+  cursor: pointer
+  transition: border-color 0.2s ease, background-color 0.2s ease
+
+  &:hover
+    border-color: rgba(255, 255, 255, 0.25)
+    background-color: rgba(255, 255, 255, 0.03)
+
+    .footer-social-arrow
+      transform: translateX(4px)
+      opacity: 1
+
+.footer-social-icon
+  flex-shrink: 0
+
+.footer-social-content
+  flex: 1
+  min-width: 0
+
+// .footer-social-handle
+//   font-family: 'Archivo Black', sans-serif
+//   font-size: 0.85rem
+//   color: #f0f0f0
+//   letter-spacing: 0.02em
+//   white-space: nowrap
+//   overflow: hidden
+//   text-overflow: ellipsis
+
+// .footer-social-caption
+//   font-size: 0.75rem
+//   color: #9b9b9b
+//   margin-top: 2px
+
+.footer-social-arrow
+  flex-shrink: 0
+  opacity: 0
+  transition: transform 0.2s ease, opacity 0.2s ease
+
+.footer-address
+  margin-top: 20px
+
+.footer-address-line
+  font-size: 0.85rem
+  color: #9b9b9b
+  line-height: 1.6
+
+.footer-address-hours
+  color: #f0f0f0
+  font-weight: 500
+  margin-top: 8px
+
+.footer-bottom
+  border-top: 1px solid rgba(255, 255, 255, 0.08)
 </style>

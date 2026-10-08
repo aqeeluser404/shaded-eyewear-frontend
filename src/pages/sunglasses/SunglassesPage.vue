@@ -14,7 +14,7 @@
         <div class="section-spacer-xs"></div>
         <div>
           <p class="font-size-responsive-md text-dimmed">
-            3 frames in stock. Each one polarised, UV400 and hand-checked
+            Every frame is polarised, UV400-rated, and hand-checked
             <br class="break-desktop" />
             before dispatch.
           </p>

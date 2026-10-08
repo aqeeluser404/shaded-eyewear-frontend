@@ -121,7 +121,7 @@
                     dense
                     no-caps
                     label="Add to cart"
-                    class="btn-gradient-primary q-px-lg q-py-md rounded-button text-bold full-width"
+                    class="btn-gradient-primary text-subtitle1 q-px-lg q-py-md rounded-button text-bold full-width"
                   />
                 </div>
 
@@ -135,7 +135,7 @@
                     outline
                     color="grey"
                     text-color="grey"
-                    class="q-px-lg q-py-md rounded-button text-bold full-width"
+                    class="q-px-lg q-py-md rounded-button text-subtitle1 text-bold full-width"
                   />
                 </div>
 
@@ -146,8 +146,7 @@
                 </div>
               </div>
 
-              <div class="section-spacer-sm large-screen-only"></div>
-              <div class="section-spacer-xs small-screen-only"></div>
+              <div class="section-spacer-sm"></div>
 
               <div>
                 <div class="font-size-responsive-sm text-dimmed">
@@ -157,9 +156,9 @@
 
               <div class="section-spacer-sm"></div>
 
-              <div class="font-size-responsive-md">
+              <div class="font-size-responsive-sm">
                 <div
-                  class="bg-transparent q-py-sm font-size-responsive-sm text-dimmed row justify-between items-center"
+                  class="bg-transparent q-py-sm text-dimmed row justify-between items-center"
                   style="
                     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
                     border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -169,21 +168,21 @@
                   <div>N/A</div>
                 </div>
                 <div
-                  class="bg-transparent q-py-sm font-size-responsive-sm text-dimmed row justify-between items-center"
+                  class="bg-transparent q-py-sm text-dimmed row justify-between items-center"
                   style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
                 >
                   <div>Lens</div>
                   <div>N/A</div>
                 </div>
                 <div
-                  class="bg-transparent q-py-sm font-size-responsive-sm text-dimmed row justify-between items-center"
+                  class="bg-transparent q-py-sm text-dimmed row justify-between items-center"
                   style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
                 >
                   <div>Fit</div>
                   <div>N/A</div>
                 </div>
                 <div
-                  class="bg-transparent q-py-sm font-size-responsive-sm text-dimmed row justify-between items-center"
+                  class="bg-transparent q-py-sm text-dimmed row justify-between items-center"
                   style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
                 >
                   <div>Weight</div>
@@ -191,11 +190,10 @@
                 </div>
               </div>
 
-              <div class="section-spacer-sm large-screen-only"></div>
-              <div class="section-spacer-xs small-screen-only"></div>
+              <div class="section-spacer-sm"></div>
 
               <div class="row items-center">
-                <q-icon name="eva-shield-outline" color="primary" size="24px" />
+                <q-icon name="eva-shield-outline" color="primary" class="font-size-responsive-lg" />
                 <span class="font-size-responsive-sm text-dimmed q-ml-sm">
                   Deliveries made in Cape Town · pickup available in Kenwyn
                 </span>
@@ -209,13 +207,12 @@
 
     <!------------------------------------------------------------ RELATED PRODUCTS PANEL --------------------------------------------->
     <section
-      class="bg-dark q-px-md text-light q-md-px-0"
-      :class="$q.screen.gt.md ? 'q-md-mt-none' : 'q-mt-xl'"
+      class="bg-dark q-px-md text-light"
       style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
     >
       <div class="section-spacer-md"></div>
       <div class="constrain">
-        <div class="overline text-dimmed text-caption">You may also like</div>
+        <div class="overline text-dimmed text-caption q-mb-xs">You may also like</div>
         <div class="font-size-responsive-giant archivo text-light text-bold">
           Related frames
         </div>
@@ -226,9 +223,7 @@
           <q-btn
             v-if="canScrollLeft"
             round
-
             icon="eva-arrow-back-outline"
-
             color="text-dark"
             class="scroll-arrow scroll-arrow--left bg-dark"
             @click="scrollRelated(-1)"
@@ -286,7 +281,7 @@
                   <div class="text-caption text-dimmed related-description">
                     {{ sunglass.description }}
                   </div>
-                  <div class="text-gradient-primary archivo text-bold q-mt-xs">
+                  <div class="text-gradient-primary font-size-responsive-sm  archivo text-bold q-mt-xs">
                     R {{ sunglass.price }}.00
                   </div>
                 </div>
