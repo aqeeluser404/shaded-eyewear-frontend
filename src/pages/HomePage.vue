@@ -72,143 +72,66 @@
         </q-img>
       </div>
     </section>
+    <div class="section-spacer-lg"></div>
 
-    <!--------------------------------------------------------------------- ABOUT STUDIO SECTION -------------------------------------------------->
+    <!--------------------------------------------------------------------- WHO WE ARE SECTION -------------------------------------------------->
     <section class="q-px-md q-md-px-0">
       <div class="section-spacer-lg"></div>
-
       <div class="constrain">
-        <div class="row items-stretch q-col-gutter-x-xl">
-          <!-- LEFT: image -->
-          <div class="col-12 col-md-5">
-            <div class="about-image-wrap">
-              <q-img
-                src="~src/assets/homepage/hero2.jpg"
-                class="about-image"
-                fit="cover"
-              />
-              <div class="about-image-fade"></div>
-
-              <div class="about-badge">
-                <q-icon name="eva-shield-outline" color="primary" size="16px" />
-                <span class="q-ml-sm">HAND-CHECKED IN KENWYN</span>
-              </div>
+        <div class="row items-start justify-between q-col-gutter-xl">
+          <div class="col-12 col-md-6">
+            <div
+              class="font-size-responsive-giant archivo text-light text-bold q-mb-md"
+              style="line-height: 1.2"
+            >
+              We Collaborate With Brands And
+              <span class="text-gradient-primary">Designers</span>
+            </div>
+            <div class="font-size-responsive-md text-gradient-primary">
+              CURATED. NOT STOCKED
             </div>
           </div>
-
-          <!-- RIGHT: copy -->
-          <div
-            class="col-12 col-md-7"
-            :class="$q.screen.gt.md ? 'q-pl-xl' : 'q-mt-xl'"
-          >
-            <div class="overline text-dimmed text-caption q-mb-xs">
-              ABOUT THE STUDIO
+          <div class="col-12 col-md-6">
+            <div class="font-size-responsive-xxl archivo text-light text-bold">
+              Why Choose Us Over The Giants?
             </div>
-
-            <div
-              class="font-size-responsive-giant archivo text-light text-bold"
-            >
-              WHO WE ARE
-            </div>
-
             <div class="section-spacer-sm"></div>
-
+            <div class="font-size-responsive-md text-dimmed q-mb-sm" style="line-height: 1.7">
+              The sunglasses market is experiencing steady growth, driven by
+              factors such as increasing awareness of UV protection, changing
+              fashion trends, and a growing desire for outdoor activities. Our
+              target market consist of both male and female, who prioritize
+              quality, style, and affordability.
+            </div>
             <div class="font-size-responsive-md text-dimmed">
-              Great eyewear doesn't need a factory floor. Every Shaded pair is
-              cut, fitted and hand-checked in our Kenwyn studio, finished by the
-              same hands that started it all. We keep runs small on purpose:
-              fewer frames, more attention on each one.
-
-              <br /><br />That means tighter tolerances on the fit, better
-              control over the lens tint, and the freedom to scrap a pair that
-              isn't right instead of shipping it anyway.
+              Our product line will encompass a variety of styles, including
+              wayfarers, oval, geometric, semi-rimless and round sunglasses,
+              catering to different preferences. We will prioritize offering a
+              balance between trendy and timeless designs to appeal to a broad
+              customer base.
             </div>
 
             <div class="section-spacer-sm"></div>
 
-            <!-- feature list -->
-            <div>
-              <div
-                v-for="(f, i) in aboutFeatures"
-                :key="f.title"
-                class="row items-start q-py-md"
-                :style="
-                  i === 0
-                    ? 'border-top: 1px solid rgba(255, 255, 255, 0.08); border-bottom: 1px solid rgba(255, 255, 255, 0.08)'
-                    : 'border-bottom: 1px solid rgba(255, 255, 255, 0.08)'
-                "
-              >
-                <q-icon
-                  :name="f.icon"
-                  color="primary"
-                  size="20px"
-                  class="q-mr-md q-mt-xs"
+            <div class="row items-center q-gutter-md">
+              <div class="col-12 col-sm-auto">
+                <q-btn
+                  dense
+                  no-caps
+                  rounded
+                  flat
+                  to="/about"
+                  label="View Our Story"
+                  icon-right="eva-arrow-forward-outline"
+                  text-color="light"
+                  class="icon-btn text-subtitle1 custom-button"
                 />
-                <div>
-                  <div class="font-size-responsive-md text-light text-bold">
-                    {{ f.title }}
-                  </div>
-                  <div class="font-size-responsive-md text-dimmed q-mt-xs">
-                    {{ f.text }}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="section-spacer-md"></div>
-
-            <div>
-              <q-btn
-                dense
-                no-caps
-                rounded
-                to="/sunglasses"
-                label="Meet the frames"
-                icon-right="eva-arrow-forward-outline"
-                text-color="dark"
-                class="btn-gradient-primary icon-btn q-px-xl q-py-md text-subtitle1 text-bold"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="section-spacer-md"></div>
-
-        <!-- intro copy -->
-        <div
-          class="stat-intro text-light font-size-responsive-md text-center text-dimmed"
-        >
-          Started with a simple goal: to make eyewear that feels good to wear
-          every day. Every frame is cut, fitted, and hand-checked in our Kenwyn
-          studio - from the lens tint to the hinge tension.
-        </div>
-
-        <div class="section-spacer-sm"></div>
-
-        <!-- stat row -->
-        <div class="stat-inline text-center">
-          <div class="row justify-center items-start">
-            <div
-              v-for="(s, i) in stats"
-              :key="s.label"
-              class="col-4 col-md-auto stat-inline-item"
-              :class="i < stats.length - 1 ? 'stat-inline-item--bordered' : ''"
-            >
-              <div
-                class="font-size-responsive-xl archivo text-light text-bold"
-                style="line-height: 1"
-              >
-                {{ s.value }}
-              </div>
-              <div class="font-size-responsive-xs text-dimmed q-mt-xs">
-                {{ s.label }}
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="section-spacer-md"></div>
+      <div class="section-spacer-lg"></div>
     </section>
 
     <!--------------------------------------------------------------------- FRAMES SECTION -------------------------------------------------->
@@ -243,138 +166,54 @@
     </section>
 
     <!--------------------------------------------------------------------- SERVICES SECTION -------------------------------------------------->
-    <section class="q-px-md q-md-px-0" id="about-section">
-      <div class="section-spacer-lg"></div>
+    <section
+      class="q-px-md q-md-px-0 bg-dark"
+      style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
+      id="about-section"
+    >
+      <div class="section-spacer-md"></div>
 
       <div class="constrain">
-        <!-- section heading -->
-        <div class="q-mb-xl">
-          <!-- <div class="text-center overline text-dimmed text-caption q-mb-xs">
-            HOW WE OPERATE
-          </div> -->
-          <div
-            class="text-center font-size-responsive-giant archivo text-light text-bold"
-          >
-            OUR SERVICES
+        <div class="row items-end justify-between">
+          <div>
+            <div class="overline text-dimmed text-caption q-mb-xs">
+              WHAT WE OFFER
+            </div>
+            <div
+              class="font-size-responsive-giant archivo text-light text-bold"
+            >
+              OUR SERVICES
+            </div>
+          </div>
+          <div class="font-size-responsive-sm text-dimmed gt-sm">
+            What you get with every order.
           </div>
         </div>
 
-        <!-- cards -->
-        <div class="row q-col-gutter-lg">
-          <!-- 01 -->
-          <div class="col-12 col-md-4">
-            <div class="service-tile full-height">
-              <div class="row items-center justify-between q-mb-lg">
-                <q-icon name="eva-shield-outline" color="primary" size="28px" />
-                <div class="overline text-dimmed text-caption">01</div>
+        <div class="section-spacer-sm"></div>
+
+        <div class="services-grid">
+          <div
+            v-for="(s, i) in services"
+            :key="s.title"
+            class="service-cell bg-dark-secondary"
+          >
+            <div class="row items-center justify-between q-mb-lg">
+              <div class="service-icon">
+                <q-icon :name="s.icon" color="primary" size="20px" />
               </div>
-              <div class="font-size-responsive-md archivo text-light q-mb-sm">
-                PAID WITH YOCO
-              </div>
-              <div class="font-size-responsive-sm text-dimmed">
-                Card, EFT and instant payments, secured end to end at checkout.
+              <div
+                class="overline-tight text-dimmed text-caption service-index"
+              >
+                {{ String(i + 1).padStart(2, "0") }}
               </div>
             </div>
-          </div>
 
-          <!-- 02 -->
-          <div class="col-12 col-md-4">
-            <div class="service-tile full-height">
-              <div class="row items-center justify-between q-mb-lg">
-                <q-icon name="eva-car-outline" color="primary" size="28px" />
-                <div class="overline text-dimmed text-caption">02</div>
-              </div>
-              <div class="font-size-responsive-md archivo text-light q-mb-sm">
-                FAST AND RELIABLE
-              </div>
-              <div class="font-size-responsive-sm text-dimmed">
-                Cape Town deliveries within two working days, tracked all the
-                way.
-              </div>
+            <div class="font-size-responsive-md archivo text-light q-mb-sm">
+              {{ s.title }}
             </div>
-          </div>
-
-          <!-- 03 -->
-          <div class="col-12 col-md-4">
-            <div class="service-tile full-height">
-              <div class="row items-center justify-between q-mb-lg">
-                <q-icon
-                  name="eva-shopping-bag-outline"
-                  color="primary"
-                  size="28px"
-                />
-                <div class="overline text-dimmed text-caption">03</div>
-              </div>
-              <div class="font-size-responsive-md archivo text-light q-mb-sm">
-                DOORSTEP PICKUP
-              </div>
-              <div class="font-size-responsive-sm text-dimmed">
-                Collect at 65 Stockley Road, Kenwyn — open weekdays 08:00 to
-                17:00.
-              </div>
-            </div>
-          </div>
-
-          <!-- 04 -->
-          <div class="col-12 col-md-4">
-            <div class="service-tile full-height">
-              <div class="row items-center justify-between q-mb-lg">
-                <q-icon
-                  name="eva-shield-check-outline"
-                  color="primary"
-                  size="28px"
-                />
-                <div class="overline text-dimmed text-caption">04</div>
-              </div>
-              <div class="font-size-responsive-md archivo text-light q-mb-sm">
-                2 YEAR WARRANTY
-              </div>
-              <div class="font-size-responsive-sm text-dimmed">
-                Every frame is covered for two years against defects in
-                materials and craftsmanship.
-              </div>
-            </div>
-          </div>
-
-          <!-- 05 -->
-          <div class="col-12 col-md-4">
-            <div class="service-tile full-height">
-              <div class="row items-center justify-between q-mb-lg">
-                <q-icon
-                  name="eva-refresh-outline"
-                  color="primary"
-                  size="28px"
-                />
-                <div class="overline text-dimmed text-caption">05</div>
-              </div>
-              <div class="font-size-responsive-md archivo text-light q-mb-sm">
-                EASY RETURNS
-              </div>
-              <div class="font-size-responsive-sm text-dimmed">
-                Not the right fit? Return within 14 days for a full refund — no
-                questions asked.
-              </div>
-            </div>
-          </div>
-
-          <!-- 06 -->
-          <div class="col-12 col-md-4">
-            <div class="service-tile full-height">
-              <div class="row items-center justify-between q-mb-lg">
-                <q-icon
-                  name="eva-message-circle-outline"
-                  color="primary"
-                  size="28px"
-                />
-                <div class="overline text-dimmed text-caption">06</div>
-              </div>
-              <div class="font-size-responsive-md archivo text-light q-mb-sm">
-                DIRECT SUPPORT
-              </div>
-              <div class="font-size-responsive-sm text-dimmed">
-                Questions about fit, tint or warranty? Message us — a real
-                person replies, usually within a day.
-              </div>
+            <div class="font-size-responsive-sm text-dimmed service-text">
+              {{ s.text }}
             </div>
           </div>
         </div>
@@ -382,8 +221,6 @@
 
       <div class="section-spacer-lg"></div>
     </section>
-
-
 
     <!--------------------------------------------------------------------- LIMITED RUNS SECTION -------------------------------------------------->
     <section
@@ -425,161 +262,13 @@
         />
       </div>
     </section>
-
-    <!--------------------------------------------------------------------- REVIEWS SECTION -------------------------------------------------->
-    <section
-      class="q-px-md q-md-px-0 bg-dark"
-      style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
-    >
-      <div class="section-spacer-md"></div>
-
-      <div class="constrain">
-        <div>
-          <div class="overline text-dimmed text-caption q-mb-xs">
-            SUN-BLEACHED REVIEWS
-          </div>
-          <div class="font-size-responsive-giant archivo text-light">
-            OUR HAPPY CUSTOMERS
-          </div>
-        </div>
-
-        <div class="section-spacer-sm"></div>
-
-        <div class="row q-col-gutter-lg">
-          <div v-for="(review, i) in reviews" :key="i" class="col-12 col-md-4">
-            <q-card
-              flat
-              bordered
-              class="bg-dark-secondary full-height q-pa-lg"
-              style="
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                border-radius: 4px;
-              "
-            >
-              <!-- stars -->
-              <div class="row items-center">
-                <q-icon
-                  v-for="n in 5"
-                  :key="n"
-                  name="eva-star"
-                  color="primary"
-                  size="16px"
-                />
-              </div>
-
-              <!-- quote -->
-              <div class="font-size-responsive-sm text-dimmed q-mt-md">
-                "{{ review.text }}"
-              </div>
-
-              <!-- divider -->
-              <div
-                class="q-my-md"
-                style="height: 1px; background-color: rgba(255, 255, 255, 0.08)"
-              ></div>
-
-              <!-- author -->
-              <div class="font-size-responsive-sm archivo text-light">
-                {{ review.name }}
-              </div>
-              <div class="text-caption text-dimmed q-mt-xs">
-                {{ review.model }} · {{ review.location }}
-              </div>
-            </q-card>
-          </div>
-        </div>
-      </div>
-
-      <div class="section-spacer-md"></div>
-    </section>
-
-    <!-- <div style="background-color: #f5f5f5">
-      <div
-        class="q-pa-md about-us-height"
-        id="about-us"
-        style="background-color: #f5f5f5; border-radius: 10px"
-      >
-        <q-card-section
-          class="row items-center"
-          style="
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          "
-        >
-          <div class="col-12 col-md-6 row justify-center q-pa-md">
-            <q-img
-              src="~src/assets/homepage/insta1.jpg"
-              style="
-                width: 50%;
-                border-radius: 1%;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-              "
-            />
-          </div>
-          <div
-            class="col-12 col-md-5 font-size-responsive-md about-us-text"
-            style="padding: 20px"
-          >
-            <span class="font-size-responsive-hero anton-regular">About Us</span
-            ><br /><br />
-            <p style="color: #555">
-              Founded in 2023, Shaded Eyewear offers affordable, stylish glasses
-              for every season. Our mission is to provide high-quality eyewear
-              that complements any look, whether it's sunny summer days or cool
-              winter evenings. Our target market consist of both male and
-              female, who prioritize quality, style and affordability. Our
-              product line will encompass various styles, including wayfarers,
-              oval, geometric, semi-rimless and round sunglasses, catering to
-              different preferences. <br /><br />
-              We believe in making fashionable eyewear accessible to everyone,
-              without compromising on quality or style.
-            </p>
-          </div>
-        </q-card-section>
-      </div>
-    </div> -->
-
-    <!--------------------------------------------------------------------- IMAGE SECTION SECTION -------------------------------------------------->
-    <!-- <div class="row flex-center" style="position: relative">
-      <div class="col-12 col-md-6">
-        <q-img src="~src/assets/homepage/stock1.jpg" />
-      </div>
-      <div class="col-12 col-md-6">
-        <q-img src="~src/assets/homepage/stock3.png" />
-      </div>
-      <div
-        style="
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background-color: rgba(0, 0, 0, 0.3);
-        "
-      >
-        <div
-          class="font-size-responsive-hero"
-          style="color: white; text-align: center"
-        >
-          <p class="anton-regular">
-            FIND YOUR PERFECT FIT <br /><span
-              class="font-size-responsive-xxl caveat"
-              >With Shaded Eyewear</span
-            >
-          </p>
-        </div>
-      </div>
-    </div> -->
   </q-page>
 </template>
 
 <script>
 import SunglassesList from "src/components/user/SunglassesList.vue";
+import statGlare from "src/assets/homepage/stock1.jpg";
+import statStudio from "src/assets/homepage/stock3.png";
 
 export default {
   name: "HomePage",
@@ -592,6 +281,36 @@ export default {
         "Doorstep pickup",
         "2 year frame warranty",
         "Paid with Yoco",
+      ],
+      goalStats: [
+        {
+          value: "100%",
+          label: "Hand-checked before dispatch",
+          tag: "QUALITY",
+          icon: "eva-checkmark-circle-2-outline",
+          image: statGlare,
+          size: "tall",
+        },
+        {
+          value: "2 YEAR",
+          label: "Frame warranty",
+          tag: "COVERAGE",
+          icon: "eva-award-outline",
+        },
+        {
+          value: "4.9",
+          label: "Average review",
+          tag: "CUSTOMERS",
+          icon: "eva-star-outline",
+        },
+        {
+          value: "2023",
+          label: "Cut and fitted in Cape Town",
+          tag: "SINCE",
+          icon: "eva-pin-outline",
+          image: statStudio,
+          size: "wide",
+        },
       ],
       search: "",
 
@@ -611,11 +330,11 @@ export default {
           title: "Honest pricing",
           text: "Fair prices, no inflated markup.",
         },
-      ],
-      stats: [
-        { value: "2 YEAR", label: "FRAME WARRANTY" },
-        { value: "100%", label: "HAND-CHECKED BEFORE DISPATCH" },
-        { value: "4.9 STAR", label: "AVERAGE REVIEW" },
+        {
+          icon: "eva-pricetags-outline",
+          title: "Honest pricing",
+          text: "Fair prices, no inflated markup.",
+        },
       ],
 
       reviews: [
@@ -636,6 +355,39 @@ export default {
           name: "ROBYN V.",
           model: "Eclipse",
           location: "Sea Point",
+        },
+      ],
+
+      services: [
+        {
+          icon: "eva-credit-card-outline",
+          title: "PAID WITH YOCO",
+          text: "Card, EFT and instant payments, secured end to end at checkout.",
+        },
+        {
+          icon: "eva-car-outline",
+          title: "FAST AND RELIABLE",
+          text: "Cape Town deliveries within two working days, tracked all the way.",
+        },
+        {
+          icon: "eva-shopping-bag-outline",
+          title: "DOORSTEP PICKUP",
+          text: "Collect at 65 Stockley Road, Kenwyn — open weekdays 08:00 to 17:00.",
+        },
+        {
+          icon: "eva-award-outline",
+          title: "2 YEAR WARRANTY",
+          text: "Every frame is covered for two years against defects in materials and craftsmanship.",
+        },
+        {
+          icon: "eva-refresh-outline",
+          title: "EASY RETURNS",
+          text: "Not the right fit? Return within 14 days for a full refund — no questions asked.",
+        },
+        {
+          icon: "eva-message-circle-outline",
+          title: "DIRECT SUPPORT",
+          text: "Questions about fit, tint or warranty? Message us — a real person replies, usually within a day.",
         },
       ],
     };
@@ -659,10 +411,13 @@ export default {
   position: relative
   width: 100%
   height: 100vh
+  // max-height: 1024px
   overflow: hidden
+
 .hero-image
   width: 100%
   height: 100vh
+  // max-height: 1024px
   object-fit: cover
   display: block
   position: relative
@@ -826,53 +581,184 @@ export default {
   letter-spacing: 0.12em
 
 
-.service-tile
-  position: relative
-  padding: 28px
-  border-radius: 12px
-  background: rgba(255, 255, 255, 0.03)
-  border: 1px solid rgba(255, 255, 255, 0.08)
-  backdrop-filter: blur(12px)
-  -webkit-backdrop-filter: blur(12px)
-  transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease
+// ---------- SERVICES ----------
+.services-grid
+  display: grid
+  grid-template-columns: 1fr
+  gap: 16px
 
-  // corner highlight — the "glass catching light" effect
+  @media (min-width: 1024px)
+    grid-template-columns: repeat(3, 1fr)
+    gap: 24px
+
+.service-cell
+  position: relative
+  display: flex
+  flex-direction: column
+  padding: 28px
+  border-radius: 8px
+  border: 1px solid rgba(255, 255, 255, 0.12)
+  overflow: hidden
+  transition: border-color 0.25s ease, transform 0.25s ease
+
+  // accent line that draws across the top on hover
   &::before
     content: ''
     position: absolute
-    inset: 0
-    border-radius: 12px
-    pointer-events: none
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 40%)
+    top: 0
+    left: 0
+    width: 0
+    height: 2px
+    background: var(--q-primary)
+    transition: width 0.35s ease
 
   &:hover
-    background: rgba(255, 255, 255, 0.05)
-    border-color: rgba(255, 255, 255, 0.15)
+    border-color: rgba(255, 255, 255, 0.3)
     transform: translateY(-2px)
 
-// ---------- STAT STRIP ----------
-.stat-inline-item
-  padding: 0 40px
+    &::before
+      width: 100%
+
+    .service-icon
+      border-color: var(--q-primary)
+
+    .service-index
+      color: var(--q-primary) !important
+
+.service-icon
+  width: 40px
+  height: 40px
+  display: flex
+  align-items: center
+  justify-content: center
+  border-radius: 10px
+  border: 1px solid rgba(255, 255, 255, 0.12)
+  transition: border-color 0.25s ease
+
+.service-index
+  transition: color 0.25s ease
+
+.service-text
+  max-width: 340px
+  line-height: 1.55
+
+.feature-point
+  position: relative
+  padding-left: 20px
+  border-left: 2px solid var(--q-primary)
+  padding-top: 4px
+  padding-bottom: 4px
+
+.about-text-col
+  @media (min-width: 1024px)
+    padding-left: 80px
 
   @media (max-width: 1023px)
-    padding: 0 16px
+    margin-top: 40px
 
-.stat-inline-item--bordered
-  border-right: 1px solid rgba(255, 255, 255, 0.1)
+// ---------- BENTO STATS ----------
+.bento-grid
+  display: grid
+  grid-template-columns: 1fr
+  grid-auto-rows: minmax(190px, auto)
+  gap: 16px
 
-.stat-intro
-  max-width: 900px
-  margin: 0 auto
+  @media (min-width: 600px)
+    grid-template-columns: repeat(2, 1fr)
+    grid-auto-rows: minmax(170px, auto)
+    gap: 24px
 
-.stat-inline-item
-  padding: 0 40px
+.bento-tile
+  position: relative
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  padding: 24px
+  border-radius: 8px
+  border: 1px solid rgba(255, 255, 255, 0.12)
+  overflow: hidden
+  isolation: isolate
+  transition: border-color 0.25s ease, transform 0.25s ease
 
-  @media (max-width: 1023px)
-    padding: 0 16px
+  // accent line that draws across the top on hover
+  &::before
+    content: ''
+    position: absolute
+    top: 0
+    left: 0
+    width: 0
+    height: 2px
+    z-index: 3
+    background: var(--q-primary)
+    transition: width 0.35s ease
 
-.stat-inline-item--bordered
-  border-right: 1px solid rgba(255, 255, 255, 0.1)
+  &:hover
+    border-color: rgba(255, 255, 255, 0.3)
+    transform: translateY(-2px)
 
-  @media (max-width: 1023px)
-    border-right: none
+    &::before
+      // width: 100%
+
+  @media (min-width: 600px)
+    &.bento-tile--tall
+      grid-row: span 2
+
+    &.bento-tile--wide
+      grid-column: span 2
+
+.bento-bg
+  position: absolute
+  inset: 0
+  width: 100%
+  height: 100%
+  object-fit: cover
+  z-index: 0
+  transition: transform 0.6s ease
+
+.bento-tile:hover .bento-bg
+  transform: scale(1.05)
+
+// darkens the photo so the text stays readable on any image
+.bento-scrim
+  position: absolute
+  inset: 0
+  z-index: 1
+  pointer-events: none
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.88) 100%)
+
+.bento-top,
+.bento-bottom
+  position: relative
+  z-index: 2
+
+.bento-icon
+  width: 40px
+  height: 40px
+  display: flex
+  align-items: center
+  justify-content: center
+  border-radius: 10px
+  border: 1px solid rgba(255, 255, 255, 0.15)
+
+.bento-value
+  line-height: 1.1
+
+.bento-watermark
+  position: absolute
+  right: -12px
+  bottom: -12px
+  z-index: 0
+  font-size: 150px
+  color: rgba(255, 255, 255, 0.04)
+  transform: rotate(-12deg)
+  pointer-events: none
+
+.bento-tile--image
+  .bento-icon
+    background: rgba(10, 10, 10, 0.4)
+    backdrop-filter: blur(8px)
+    -webkit-backdrop-filter: blur(8px)
+
+  .text-dimmed
+    color: rgba(255, 255, 255, 0.78) !important
 </style>

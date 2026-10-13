@@ -208,6 +208,30 @@
                 </div>
               </div>
             </div>
+
+  <!-- ACTION BUTTONS -->
+  <div class="row items-center q-gutter-sm q-mt-lg">
+    <q-btn
+      rounded
+      dense
+      no-caps
+      type="submit"
+      label="Save frame"
+      icon="eva-cloud-upload-outline"
+      text-color="dark"
+      class="btn-gradient-primary icon-btn q-px-lg q-py-sm rounded-button text-subtitle1 text-bold"
+    />
+
+    <q-btn
+      rounded
+      dense
+      no-caps
+      flat
+      type="reset"
+      label="Reset"
+      class="custom-button text-subtitle1 text-dimmed q-px-lg q-py-sm"
+    />
+  </div>
           </q-form>
         </q-card-section>
       </q-card>
