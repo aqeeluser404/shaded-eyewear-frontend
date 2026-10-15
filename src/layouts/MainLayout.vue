@@ -336,7 +336,7 @@
             <div class="row items-center">
               <q-avatar class="footer-avatar q-mr-sm">
                 <img
-                  src="../assets/resources/logos/logo-white.png"
+                  src="../assets/brand/logo-white.png"
                   alt="Logo"
                 />
               </q-avatar>
@@ -367,8 +367,8 @@
 import OrderService from "src/services/OrderService";
 import UserService from "src/services/UserService";
 import Helper from "src/services/utils";
-import logoWhite from "../assets/resources/logos/logo-white.png";
-import logoBlack from "../assets/resources/logos/logo-black.png";
+import logoWhite from "../assets/brand/logo-white.png";
+import logoBlack from "../assets/brand/logo-black.png";
 import EmailService from "src/services/EmailService";
 import UniversalMenu from "src/components/elements/UniversalMenu.vue";
 import CartButton from "src/components/elements/CartButton.vue";

@@ -1,6 +1,6 @@
 <template>
   <q-page>                                                                                                     <!-- constrains -->
-    <q-img src="~src/assets/abstract5.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
+    <q-img src="~src/assets/brand/bg1.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
 
       <div class="absolute-full text-black">
         <div class="row justify-center items-center" style="height: 100%;">

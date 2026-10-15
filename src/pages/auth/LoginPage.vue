@@ -12,7 +12,7 @@
 
         <div class="left-image-frame">
           <q-img
-            src="~src/assets/homepage/stock1.jpg"
+            src="~src/assets/gallery/persons/g2.jpg"
             class="left-image"
             fit="cover"
           />

@@ -4,7 +4,7 @@
     <section>
       <div class="hero-wrapper">
         <q-img
-          src="~src/assets/homepage/hero.jfif"
+          src="~src/assets/gallery/persons/hero.jfif"
           alt="Hero Image"
           class="hero-image"
         >

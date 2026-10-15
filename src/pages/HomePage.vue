@@ -4,7 +4,7 @@
     <section>
       <div class="hero-wrapper">
         <q-img
-          src="~src/assets/homepage/hero.jfif"
+          src="~src/assets/gallery/persons/hero.jfif"
           alt="Hero Image"
           class="hero-image"
         >
@@ -79,24 +79,28 @@
       <div class="section-spacer-lg"></div>
       <div class="constrain">
         <div class="row items-start justify-between q-col-gutter-xl">
-          <div class="col-12 col-md-6">
+          <div class="col-12 col-md-7">
             <div
               class="font-size-responsive-giant archivo text-light text-bold q-mb-md"
-              style="line-height: 1.2"
+              style="line-height: 1"
             >
-              We Collaborate With Brands And
-              <span class="text-gradient-primary">Designers</span>
+              WE PARTNER <br />
+              WITH BRANDS AND
+              <span class="text-gradient-primary">DESIGNERS</span>
             </div>
-            <div class="font-size-responsive-md text-gradient-primary">
-              CURATED. NOT STOCKED
+            <div class="font-size-responsive-sm text-gradient-primary">
+              BUILT TO LAST
             </div>
           </div>
-          <div class="col-12 col-md-6">
+          <div class="col-12 col-md-5">
             <div class="font-size-responsive-xxl archivo text-light text-bold">
               Why Choose Us Over The Giants?
             </div>
             <div class="section-spacer-sm"></div>
-            <div class="font-size-responsive-md text-dimmed q-mb-sm" style="line-height: 1.7">
+            <div
+              class="font-size-responsive-md text-dimmed q-mb-sm"
+              style="line-height: 1.7"
+            >
               The sunglasses market is experiencing steady growth, driven by
               factors such as increasing awareness of UV protection, changing
               fashion trends, and a growing desire for outdoor activities. Our
@@ -256,7 +260,7 @@
       <div class="limited-runs-visual">
         <div class="limited-runs-disc"></div>
         <img
-          src="~src/assets/homepage/sunglasses-2.png"
+          src="~src/assets/gallery/glasses/s2.png"
           alt="Aviator sunglasses"
           class="limited-runs-image"
         />
@@ -281,6 +285,15 @@ export default {
         "Doorstep pickup",
         "2 year frame warranty",
         "Paid with Yoco",
+      ],
+
+      gallery: [
+        "~src/assets/gallery/persons/g1.jpg",
+        "~src/assets/gallery/persons/g2.jpg",
+        "~src/assets/gallery/persons/g3.png",
+        "~src/assets/gallery/persons/g1.jpg",
+        "~src/assets/gallery/persons/g2.jpg",
+        "~src/assets/gallery/persons/g3.png",
       ],
       goalStats: [
         {
@@ -761,4 +774,37 @@ export default {
 
   .text-dimmed
     color: rgba(255, 255, 255, 0.78) !important
+
+
+
+// ---------- GALLERY ----------
+.gallery-grid
+  display: grid
+  grid-template-columns: repeat(3, 1fr)
+  gap: 16px
+
+  @media (max-width: 1023px)
+    grid-template-columns: repeat(2, 1fr)
+
+  @media (max-width: 600px)
+    grid-template-columns: 1fr
+
+.gallery-tile
+  position: relative
+  aspect-ratio: 1
+  border-radius: 16px
+  overflow: hidden
+  background: #1a1a1a
+
+.gallery-image
+  width: 100%
+  height: 100%
+  // force the greyscale look from the reference
+  filter: grayscale(100%) contrast(1.05) brightness(0.85)
+  transition: filter 0.4s ease, transform 0.6s ease
+
+  // hover: lift the greyscale and gently scale
+  .gallery-tile:hover &
+    filter: grayscale(0%) contrast(1) brightness(1)
+    transform: scale(1.04)
 </style>
