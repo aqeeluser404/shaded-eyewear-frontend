@@ -138,6 +138,39 @@
       <div class="section-spacer-lg"></div>
     </section>
 
+    <!--------------------------------------------------------------------- GREYSCALE GALLERY SECTION -------------------------------------------------->
+    <section class="q-px-md q-md-px-0">
+      <div class="section-spacer-xl"></div>
+
+      <div class="constrain">
+<div class="gallery-grid">
+  <div
+    v-for="(img, i) in gallery"
+    :key="i"
+    class="gallery-tile"
+    :class="`gallery-tile--${i + 1}`"
+  >
+    <img :src="img" class="gallery-image" alt="" />
+  </div>
+</div>
+
+        <!-- CTA -->
+        <div class="row justify-center q-mt-xl">
+          <q-btn
+            dense
+            no-caps
+            to="/sunglasses"
+            label="Learn More"
+            color="grey-7"
+            text-color="light"
+            class="gallery-cta q-px-xl q-py-sm text-subtitle1 text-bold"
+          />
+        </div>
+      </div>
+
+      <div class="section-spacer-xl"></div>
+    </section>
+
     <!--------------------------------------------------------------------- FRAMES SECTION -------------------------------------------------->
     <section class="q-px-md q-md-px-0">
       <div class="section-spacer-lg"></div>
@@ -271,8 +304,8 @@
 
 <script>
 import SunglassesList from "src/components/user/SunglassesList.vue";
-import statGlare from "src/assets/homepage/stock1.jpg";
-import statStudio from "src/assets/homepage/stock3.png";
+import statGlare from "src/assets/gallery/glasses/s3.jpg";
+import statStudio from "src/assets/gallery/glasses/s1.png";
 
 export default {
   name: "HomePage",
@@ -288,12 +321,12 @@ export default {
       ],
 
       gallery: [
-        "~src/assets/gallery/persons/g1.jpg",
-        "~src/assets/gallery/persons/g2.jpg",
-        "~src/assets/gallery/persons/g3.png",
-        "~src/assets/gallery/persons/g1.jpg",
-        "~src/assets/gallery/persons/g2.jpg",
-        "~src/assets/gallery/persons/g3.png",
+        new URL("src/assets/gallery/persons/g6.jpg", import.meta.url).href,
+        new URL("src/assets/gallery/persons/g2.jpg", import.meta.url).href,
+        new URL("src/assets/gallery/persons/g3.png", import.meta.url).href,
+        new URL("src/assets/gallery/persons/g4.jpg", import.meta.url).href,
+        new URL("src/assets/gallery/persons/g1.jpg", import.meta.url).href,
+        new URL("src/assets/gallery/persons/g5.jpg", import.meta.url).href,
       ],
       goalStats: [
         {
@@ -777,34 +810,85 @@ export default {
 
 
 
-// ---------- GALLERY ----------
+// ---------- GREYSCALE GALLERY ----------
 .gallery-grid
   display: grid
   grid-template-columns: repeat(3, 1fr)
-  gap: 16px
+  gap: 32px
+
+  margin: 0 auto
 
   @media (max-width: 1023px)
-    grid-template-columns: repeat(2, 1fr)
+    gap: 20px
 
   @media (max-width: 600px)
-    grid-template-columns: 1fr
+    grid-template-columns: repeat(2, 1fr)
+    gap: 16px
 
 .gallery-tile
   position: relative
   aspect-ratio: 1
-  border-radius: 16px
+  border-radius: 24px
   overflow: hidden
-  background: #1a1a1a
+  background: #0a0a0a
+
+  @media (max-width: 600px)
+    border-radius: 16px
 
 .gallery-image
   width: 100%
   height: 100%
-  // force the greyscale look from the reference
-  filter: grayscale(100%) contrast(1.05) brightness(0.85)
-  transition: filter 0.4s ease, transform 0.6s ease
+  object-fit: cover
+  object-position: var(--pos, 50% 50%)
+  transform: scale(var(--zoom, 1))
+  filter: grayscale(100%) contrast(1.05) brightness(0.95)
+  transition: filter 0.4s ease
 
-  // hover: lift the greyscale and gently scale
   .gallery-tile:hover &
     filter: grayscale(0%) contrast(1) brightness(1)
-    transform: scale(1.04)
+
+// ---------- UNIQUE IMAGE POSITIONS ----------
+// --pos:  X% Y%   → which point of the photo is pinned to the tile
+//                   0% 0% = top-left, 50% 50% = centre, 100% 100% = bottom-right
+// --zoom: number  → 1 = no zoom, 1.25 = 25% zoom in
+
+.gallery-tile--1 .gallery-image
+  --pos: 50% 50%
+  --zoom: 1
+
+.gallery-tile--2 .gallery-image
+  --pos: 50% 50%
+  --zoom: 1
+
+.gallery-tile--3 .gallery-image
+  --pos: 50% 50%
+  --zoom: 1
+
+.gallery-tile--4 .gallery-image
+  --pos: 50% 50%
+  --zoom: 1
+
+// bottom middle → zoom in a bit
+.gallery-tile--5 .gallery-image
+  --pos: 60% 50%
+  --zoom: 1.25
+
+// bottom right → move the crop down (show more of the top of the photo)
+.gallery-tile--6 .gallery-image
+  --pos: 50% 35%
+  --zoom: 1.03
+
+// CTA button — square corners to match the reference
+.gallery-cta
+  border-radius: 0 !important
+  border: 1px solid rgba(255, 255, 255, 0.6) !important
+  background: transparent !important
+  letter-spacing: 0.15em
+  text-transform: uppercase
+  font-size: 0.85rem
+  transition: background-color 0.25s ease, border-color 0.25s ease
+
+  &:hover
+    background: rgba(255, 255, 255, 0.08) !important
+    border-color: rgba(255, 255, 255, 0.9) !important
 </style>
