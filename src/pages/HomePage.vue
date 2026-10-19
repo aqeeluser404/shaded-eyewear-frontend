@@ -79,19 +79,23 @@
       <div class="section-spacer-lg"></div>
       <div class="constrain">
         <div class="row items-start justify-between q-col-gutter-xl">
-          <div class="col-12 col-md-7">
+          <div>
             <div
               class="font-size-responsive-giant archivo text-light text-bold q-mb-md"
-              style="line-height: 1"
+              style="line-height: 1.2"
             >
-              WE PARTNER <br />
-              WITH BRANDS AND
+              WE PARTNER WITH <br />
+              BRANDS AND
               <span class="text-gradient-primary">DESIGNERS</span>
             </div>
-            <div class="font-size-responsive-sm text-gradient-primary">
+            <div
+              class="statement-label font-size-responsive-sm text-gradient-primary"
+            >
               BUILT TO LAST
             </div>
           </div>
+
+          <div class="col-12 col-md-7"></div>
           <div class="col-12 col-md-5">
             <div class="font-size-responsive-xxl archivo text-light text-bold">
               Why Choose Us Over The Giants?
@@ -99,7 +103,7 @@
             <div class="section-spacer-sm"></div>
             <div
               class="font-size-responsive-md text-dimmed q-mb-sm"
-              style="line-height: 1.7"
+              style="line-height: 1.5"
             >
               The sunglasses market is experiencing steady growth, driven by
               factors such as increasing awareness of UV protection, changing
@@ -107,7 +111,10 @@
               target market consist of both male and female, who prioritize
               quality, style, and affordability.
             </div>
-            <div class="font-size-responsive-md text-dimmed">
+            <div
+              class="font-size-responsive-md text-dimmed"
+              style="line-height: 1.5"
+            >
               Our product line will encompass a variety of styles, including
               wayfarers, oval, geometric, semi-rimless and round sunglasses,
               catering to different preferences. We will prioritize offering a
@@ -115,7 +122,7 @@
               customer base.
             </div>
 
-            <div class="section-spacer-sm"></div>
+            <!-- <div class="section-spacer-sm"></div>
 
             <div class="row items-center q-gutter-md">
               <div class="col-12 col-sm-auto">
@@ -131,28 +138,70 @@
                   class="icon-btn text-subtitle1 custom-button"
                 />
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
       <div class="section-spacer-lg"></div>
     </section>
 
+    <!--------------------------------------------------------------------- DIVIDING SECTION -------------------------------------------------->
+    <section class="q-px-md q-md-px-0">
+      <div class="section-spacer-lg"></div>
+
+      <div class="constrain text-center">
+        <div
+          class="font-size-responsive-xxxl archivo text-gradient-primary text-bold"
+        >
+          01
+        </div>
+
+        <q-separator color="grey-8" class="statement-rule" />
+
+        <div
+          class="statement-text font-size-responsive-xxxl archivo text-light text-bold"
+        >
+          We cut and finish sunglasses by hand in Kenwyn, so every frame
+          <span class="text-gradient-primary">feels made for you.</span>
+        </div>
+        <div class="section-spacer-sm"></div>
+
+        <router-link
+          to="/sunglasses"
+          class="statement-cta column items-center text-remove-decoration"
+        >
+          <q-icon
+            name="fa-solid fa-arrow-down-long"
+            size="40px"
+            color="white"
+            class="statement-arrow"
+          />
+          <span
+            class="statement-label font-size-responsive-sm text-light text-bold q-mt-xl"
+          >
+            VIEW THE COLLECTION
+          </span>
+        </router-link>
+      </div>
+
+      <div class="section-spacer-lg"></div>
+    </section>
+
     <!--------------------------------------------------------------------- GREYSCALE GALLERY SECTION -------------------------------------------------->
     <section class="q-px-md q-md-px-0">
-      <div class="section-spacer-xl"></div>
+      <div class="section-spacer-lg"></div>
 
       <div class="constrain">
-<div class="gallery-grid">
-  <div
-    v-for="(img, i) in gallery"
-    :key="i"
-    class="gallery-tile"
-    :class="`gallery-tile--${i + 1}`"
-  >
-    <img :src="img" class="gallery-image" alt="" />
-  </div>
-</div>
+        <div class="gallery-grid">
+          <div
+            v-for="(img, i) in gallery"
+            :key="i"
+            class="gallery-tile"
+            :class="`gallery-tile--${i + 1}`"
+          >
+            <img :src="img" class="gallery-image" alt="" />
+          </div>
+        </div>
 
         <!-- CTA -->
         <div class="row justify-center q-mt-xl">
@@ -168,7 +217,7 @@
         </div>
       </div>
 
-      <div class="section-spacer-xl"></div>
+      <div class="section-spacer-lg"></div>
     </section>
 
     <!--------------------------------------------------------------------- FRAMES SECTION -------------------------------------------------->
@@ -328,35 +377,11 @@ export default {
         new URL("src/assets/gallery/persons/g1.jpg", import.meta.url).href,
         new URL("src/assets/gallery/persons/g5.jpg", import.meta.url).href,
       ],
-      goalStats: [
-        {
-          value: "100%",
-          label: "Hand-checked before dispatch",
-          tag: "QUALITY",
-          icon: "eva-checkmark-circle-2-outline",
-          image: statGlare,
-          size: "tall",
-        },
-        {
-          value: "2 YEAR",
-          label: "Frame warranty",
-          tag: "COVERAGE",
-          icon: "eva-award-outline",
-        },
-        {
-          value: "4.9",
-          label: "Average review",
-          tag: "CUSTOMERS",
-          icon: "eva-star-outline",
-        },
-        {
-          value: "2023",
-          label: "Cut and fitted in Cape Town",
-          tag: "SINCE",
-          icon: "eva-pin-outline",
-          image: statStudio,
-          size: "wide",
-        },
+      whyStats: [
+        { value: "UV400", label: "Lens protection" },
+        { value: "5", label: "Frame styles" },
+        { value: "14 days", label: "Easy returns" },
+        { value: "2 YEAR", label: "Frame warranty" },
       ],
       search: "",
 
@@ -702,113 +727,6 @@ export default {
   @media (max-width: 1023px)
     margin-top: 40px
 
-// ---------- BENTO STATS ----------
-.bento-grid
-  display: grid
-  grid-template-columns: 1fr
-  grid-auto-rows: minmax(190px, auto)
-  gap: 16px
-
-  @media (min-width: 600px)
-    grid-template-columns: repeat(2, 1fr)
-    grid-auto-rows: minmax(170px, auto)
-    gap: 24px
-
-.bento-tile
-  position: relative
-  display: flex
-  flex-direction: column
-  justify-content: space-between
-  padding: 24px
-  border-radius: 8px
-  border: 1px solid rgba(255, 255, 255, 0.12)
-  overflow: hidden
-  isolation: isolate
-  transition: border-color 0.25s ease, transform 0.25s ease
-
-  // accent line that draws across the top on hover
-  &::before
-    content: ''
-    position: absolute
-    top: 0
-    left: 0
-    width: 0
-    height: 2px
-    z-index: 3
-    background: var(--q-primary)
-    transition: width 0.35s ease
-
-  &:hover
-    border-color: rgba(255, 255, 255, 0.3)
-    transform: translateY(-2px)
-
-    &::before
-      // width: 100%
-
-  @media (min-width: 600px)
-    &.bento-tile--tall
-      grid-row: span 2
-
-    &.bento-tile--wide
-      grid-column: span 2
-
-.bento-bg
-  position: absolute
-  inset: 0
-  width: 100%
-  height: 100%
-  object-fit: cover
-  z-index: 0
-  transition: transform 0.6s ease
-
-.bento-tile:hover .bento-bg
-  transform: scale(1.05)
-
-// darkens the photo so the text stays readable on any image
-.bento-scrim
-  position: absolute
-  inset: 0
-  z-index: 1
-  pointer-events: none
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.88) 100%)
-
-.bento-top,
-.bento-bottom
-  position: relative
-  z-index: 2
-
-.bento-icon
-  width: 40px
-  height: 40px
-  display: flex
-  align-items: center
-  justify-content: center
-  border-radius: 10px
-  border: 1px solid rgba(255, 255, 255, 0.15)
-
-.bento-value
-  line-height: 1.1
-
-.bento-watermark
-  position: absolute
-  right: -12px
-  bottom: -12px
-  z-index: 0
-  font-size: 150px
-  color: rgba(255, 255, 255, 0.04)
-  transform: rotate(-12deg)
-  pointer-events: none
-
-.bento-tile--image
-  .bento-icon
-    background: rgba(10, 10, 10, 0.4)
-    backdrop-filter: blur(8px)
-    -webkit-backdrop-filter: blur(8px)
-
-  .text-dimmed
-    color: rgba(255, 255, 255, 0.78) !important
-
-
 
 // ---------- GREYSCALE GALLERY ----------
 .gallery-grid
@@ -829,8 +747,9 @@ export default {
   position: relative
   aspect-ratio: 1
   border-radius: 24px
-  overflow: hidden
+  overflow: hidden // clips the zoomed image to the tile, so only the picture grows
   background: #0a0a0a
+  isolation: isolate // keeps the rounded clipping solid while the image scales
 
   @media (max-width: 600px)
     border-radius: 16px
@@ -840,11 +759,14 @@ export default {
   height: 100%
   object-fit: cover
   object-position: var(--pos, 50% 50%)
-  transform: scale(var(--zoom, 1))
+  transform: scale(var(--zoom, 1)) // your per-tile crop, unchanged
+  scale: 1 // hover zoom lives here and stacks on top of the crop
   filter: grayscale(100%) contrast(1.05) brightness(0.95)
-  transition: filter 0.4s ease
+  transition: filter 0.4s ease, scale 0.6s cubic-bezier(0.22, 1, 0.36, 1)
+  will-change: scale
 
   .gallery-tile:hover &
+    scale: 1.12
     filter: grayscale(0%) contrast(1) brightness(1)
 
 // ---------- UNIQUE IMAGE POSITIONS ----------
@@ -891,4 +813,23 @@ export default {
   &:hover
     background: rgba(255, 255, 255, 0.08) !important
     border-color: rgba(255, 255, 255, 0.9) !important
+
+
+.statement-rule
+  max-width: 800px
+  margin: 32px auto
+
+.statement-text
+  max-width: 900px
+  margin: 0 auto
+  line-height: 1.25
+
+.statement-label
+  letter-spacing: 0.2em
+
+.statement-arrow
+  transition: transform 0.25s ease
+
+.statement-cta:hover .statement-arrow
+  transform: translateY(6px)
 </style>
