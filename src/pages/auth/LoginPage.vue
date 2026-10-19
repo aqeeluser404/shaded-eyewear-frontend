@@ -12,7 +12,7 @@
 
         <div class="left-image-frame">
           <q-img
-            src="~src/assets/gallery/persons/g2.jpg"
+            src="~src/assets/gallery/persons/g10.jpg"
             class="left-image"
             fit="cover"
           />
@@ -40,7 +40,7 @@
       <div class="col-md-7 col-12 right-panel column justify-center q-pa-xl">
         <div class="full-width">
           <div class="constrain-more">
-            <div class="row justify-between items-center q-mb-xl">
+            <div class="q-mb-xl">
               <q-btn
                 dense
                 no-caps
@@ -48,7 +48,7 @@
                 label="Back to shop"
                 to="/sunglasses"
                 icon="eva-arrow-back-outline"
-                class="custom-button icon-btn font-size-responsive-sm text-light text-dimmed"
+                class="custom-button icon-btn font-size-responsive-sm text-light"
               />
             </div>
 

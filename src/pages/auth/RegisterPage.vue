@@ -5,7 +5,7 @@
       <div class="col-md-5 left-panel gt-sm">
         <div class="left-image-frame">
           <q-img
-            src="~src/assets/gallery/persons/g2.jpg"
+            src="~src/assets/gallery/persons/g10.jpg"
             class="left-image"
             fit="cover"
           />

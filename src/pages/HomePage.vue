@@ -99,67 +99,76 @@
             class="col-12 col-md-7"
             :class="$q.screen.gt.md ? 'q-pr-xl' : 'q-mb-xl'"
           >
-            <q-carousel
-              ref="showcase"
-              v-model="slide"
-              animated
-              infinite
-              swipeable
-              :autoplay="hovering ? false : 5000"
-              transition-prev="fade"
-              transition-next="fade"
-              :height="$q.screen.gt.sm ? '520px' : '380px'"
-              class="showcase-carousel"
-              @mouseenter="hovering = true"
-              @mouseleave="hovering = false"
+            <div
+              class="showcase-wrap"
+              :style="{ '--glow-color': activeGlowColor }"
             >
-              <q-carousel-slide
-                v-for="s in showcase"
-                :key="s.name"
-                :name="s.name"
-                class="showcase-slide column no-wrap justify-end"
-                :style="{
-                  backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.92) 100%), url(${s.image})`,
-                }"
+              <q-carousel
+                ref="showcase"
+                v-model="slide"
+                animated
+                infinite
+                swipeable
+                :autoplay="hovering ? false : 5000"
+                transition-prev="fade"
+                transition-next="fade"
+                :height="$q.screen.gt.sm ? '520px' : '380px'"
+                class="showcase-carousel"
+                @mouseenter="hovering = true"
+                @mouseleave="hovering = false"
               >
-                <div class="">
-                  <div class="q-mb-sm font-size-responsive-sm text-gradient-primary statement-label">{{ s.tag }}</div>
-                  <!-- <div
+                <q-carousel-slide
+                  v-for="s in showcase"
+                  :key="s.name"
+                  :name="s.name"
+                  class="showcase-slide column no-wrap justify-end"
+                  :style="{
+                    backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.92) 100%), url(${s.image})`,
+                  }"
+                >
+                  <div class="">
+                    <div
+                      class="q-mb-sm font-size-responsive-sm text-gradient-primary statement-label"
+                    >
+                      {{ s.tag }}
+                    </div>
+                    <!-- <div
                     class="q-mb-sm font-size-responsive-md text-dimmed"
                   >
                     {{ s.title }}
                   </div> -->
-                  <div class="font-size-responsive-md text-light">
-                    {{ s.text }}
+                    <div class="font-size-responsive-md text-light">
+                      {{ s.text }}
+                    </div>
                   </div>
-                </div>
-              </q-carousel-slide>
+                </q-carousel-slide>
 
-              <template #control>
-                <q-carousel-control position="top-right" :offset="[24, 24]">
-                  <div class="showcase-controls">
-                    <q-btn
-                      round
-                      dense
-                      flat
-                      size="sm"
-                      color="white"
-                      icon="eva-arrow-back-outline"
-                      @click="$refs.showcase.previous()"
-                    />
-                    <q-btn
-                      round
-                      dense
-                      flat
-                      size="sm"
-                      color="white"
-                      icon="eva-arrow-forward-outline"
-                      @click="$refs.showcase.next()"
-                    />
-                  </div>
-                </q-carousel-control>
-              </template>
-            </q-carousel>
+                <template #control>
+                  <q-carousel-control position="top-right" :offset="[24, 24]">
+                    <div class="showcase-controls">
+                      <q-btn
+                        round
+                        dense
+                        flat
+                        size="sm"
+                        color="white"
+                        icon="eva-arrow-back-outline"
+                        @click="$refs.showcase.previous()"
+                      />
+                      <q-btn
+                        round
+                        dense
+                        flat
+                        size="sm"
+                        color="white"
+                        icon="eva-arrow-forward-outline"
+                        @click="$refs.showcase.next()"
+                      />
+                    </div>
+                  </q-carousel-control>
+                </template>
+              </q-carousel>
+            </div>
           </div>
           <div class="col-12 col-md-5">
             <div class="font-size-responsive-xxl archivo text-light text-bold">
@@ -539,6 +548,7 @@ export default {
           tag: "POLARISED UV400",
           title: "Built for Table Bay glare.",
           text: "Lenses tuned for the Cape light, not a factory default.",
+          color: "rgba(137, 207, 240, 0.45)", // baby blue
         },
         {
           name: "studio",
@@ -546,6 +556,7 @@ export default {
           tag: "SMALL RUNS",
           title: "Cut and fitted in Kenwyn.",
           text: "Every release is a small batch, finished by hand.",
+          color: "rgba(167, 139, 250, 0.4)", // soft violet
         },
         {
           name: "frames",
@@ -553,6 +564,7 @@ export default {
           tag: "HAND-CHECKED",
           title: "Inspected before it ships.",
           text: "From the lens tint to the hinge tension.",
+          color: "rgba(249, 115, 22, 0.45)", // warm orange
         },
       ],
     };
@@ -564,6 +576,10 @@ export default {
     slideNumber() {
       const i = this.showcase.findIndex((s) => s.name === this.slide);
       return String(i + 1).padStart(2, "0");
+    },
+    activeGlowColor() {
+      const current = this.showcase.find((s) => s.name === this.slide);
+      return current ? current.color : "transparent";
     },
   },
   methods: {
@@ -970,4 +986,30 @@ export default {
   border: 1px solid rgba(255, 255, 255, 0.15)
   backdrop-filter: blur(12px)
   -webkit-backdrop-filter: blur(12px)
+
+@property --glow-color
+  syntax: '<color>'
+  inherits: true
+  initial-value: transparent
+
+.showcase-wrap
+  position: relative
+  isolation: isolate
+  transition: --glow-color 0.8s ease-in-out   // animates the variable itself
+
+  &::before
+    content: ''
+    position: absolute
+    inset: 10% -14% -10% 4%
+    z-index: -1
+    pointer-events: none
+    border-radius: 50%
+    background: radial-gradient(ellipse at 60% 50%, var(--glow-color) 0%, transparent 70%)
+    filter: blur(90px)
+    // no transition here anymore
+
+  @media (max-width: 1023px)
+    &::before
+      inset: -6% -4%
+      filter: blur(40px)
 </style>
