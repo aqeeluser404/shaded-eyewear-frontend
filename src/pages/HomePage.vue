@@ -77,7 +77,7 @@
     <!--------------------------------------------------------------------- WHO WE ARE SECTION -------------------------------------------------->
     <section class="q-px-md q-md-px-0">
       <div class="section-spacer-lg"></div>
-      <div class="constrain">
+      <div class="constrain" id="about-section">
         <div class="row items-start justify-between q-col-gutter-xl">
           <div>
             <div
@@ -95,15 +95,80 @@
             </div>
           </div>
 
-          <div class="col-12 col-md-7"></div>
+          <div
+            class="col-12 col-md-7"
+            :class="$q.screen.gt.md ? 'q-pr-xl' : 'q-mb-xl'"
+          >
+            <q-carousel
+              ref="showcase"
+              v-model="slide"
+              animated
+              infinite
+              swipeable
+              :autoplay="hovering ? false : 5000"
+              transition-prev="fade"
+              transition-next="fade"
+              :height="$q.screen.gt.sm ? '520px' : '380px'"
+              class="showcase-carousel"
+              @mouseenter="hovering = true"
+              @mouseleave="hovering = false"
+            >
+              <q-carousel-slide
+                v-for="s in showcase"
+                :key="s.name"
+                :name="s.name"
+                class="showcase-slide column no-wrap justify-end"
+                :style="{
+                  backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.92) 100%), url(${s.image})`,
+                }"
+              >
+                <div class="">
+                  <div class="q-mb-sm font-size-responsive-sm text-gradient-primary statement-label">{{ s.tag }}</div>
+                  <!-- <div
+                    class="q-mb-sm font-size-responsive-md text-dimmed"
+                  >
+                    {{ s.title }}
+                  </div> -->
+                  <div class="font-size-responsive-md text-light">
+                    {{ s.text }}
+                  </div>
+                </div>
+              </q-carousel-slide>
+
+              <template #control>
+                <q-carousel-control position="top-right" :offset="[24, 24]">
+                  <div class="showcase-controls">
+                    <q-btn
+                      round
+                      dense
+                      flat
+                      size="sm"
+                      color="white"
+                      icon="eva-arrow-back-outline"
+                      @click="$refs.showcase.previous()"
+                    />
+                    <q-btn
+                      round
+                      dense
+                      flat
+                      size="sm"
+                      color="white"
+                      icon="eva-arrow-forward-outline"
+                      @click="$refs.showcase.next()"
+                    />
+                  </div>
+                </q-carousel-control>
+              </template>
+            </q-carousel>
+          </div>
           <div class="col-12 col-md-5">
             <div class="font-size-responsive-xxl archivo text-light text-bold">
               Why Choose Us Over The Giants?
             </div>
             <div class="section-spacer-sm"></div>
             <div
-              class="font-size-responsive-md text-dimmed q-mb-sm"
-              style="line-height: 1.5"
+              class="font-size-responsive-md text-dimmed q-mb-md"
+              style="line-height: 1.6"
             >
               The sunglasses market is experiencing steady growth, driven by
               factors such as increasing awareness of UV protection, changing
@@ -113,7 +178,7 @@
             </div>
             <div
               class="font-size-responsive-md text-dimmed"
-              style="line-height: 1.5"
+              style="line-height: 1.6"
             >
               Our product line will encompass a variety of styles, including
               wayfarers, oval, geometric, semi-rimless and round sunglasses,
@@ -184,12 +249,12 @@
         </router-link>
       </div>
 
-      <div class="section-spacer-lg"></div>
+      <div class="section-spacer-md"></div>
     </section>
 
     <!--------------------------------------------------------------------- GREYSCALE GALLERY SECTION -------------------------------------------------->
     <section class="q-px-md q-md-px-0">
-      <div class="section-spacer-lg"></div>
+      <!-- <div class="section-spacer-lg"></div> -->
 
       <div class="constrain">
         <div class="gallery-grid">
@@ -208,7 +273,7 @@
           <q-btn
             dense
             no-caps
-            to="/sunglasses"
+            @click="scrollTo"
             label="Learn More"
             color="grey-7"
             text-color="light"
@@ -228,7 +293,7 @@
           <div class="overline text-dimmed text-caption q-mb-xs">
             THE COLLECTION
           </div>
-          <div class="row justify-between">
+          <div class="row justify-between items-start">
             <div class="font-size-responsive-giant archivo text-light">
               FEATURED FRAMES
             </div>
@@ -255,11 +320,10 @@
     <section
       class="q-px-md q-md-px-0 bg-dark"
       style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
-      id="about-section"
     >
       <div class="section-spacer-md"></div>
 
-      <div class="constrain">
+      <div class="constrain" id="service-section">
         <div class="row items-end justify-between">
           <div>
             <div class="overline text-dimmed text-caption q-mb-xs">
@@ -355,6 +419,10 @@
 import SunglassesList from "src/components/user/SunglassesList.vue";
 import statGlare from "src/assets/gallery/glasses/s3.jpg";
 import statStudio from "src/assets/gallery/glasses/s1.png";
+
+import showcaseGlare from "src/assets/gallery/persons/g7.jpg";
+import showcaseStudio from "src/assets/gallery/persons/g8.jpg";
+import showcaseFrames from "src/assets/gallery/persons/g10.jpg";
 
 export default {
   name: "HomePage",
@@ -461,10 +529,42 @@ export default {
           text: "Questions about fit, tint or warranty? Message us — a real person replies, usually within a day.",
         },
       ],
+
+      slide: "glare",
+      hovering: false,
+      showcase: [
+        {
+          name: "glare",
+          image: showcaseGlare,
+          tag: "POLARISED UV400",
+          title: "Built for Table Bay glare.",
+          text: "Lenses tuned for the Cape light, not a factory default.",
+        },
+        {
+          name: "studio",
+          image: showcaseStudio,
+          tag: "SMALL RUNS",
+          title: "Cut and fitted in Kenwyn.",
+          text: "Every release is a small batch, finished by hand.",
+        },
+        {
+          name: "frames",
+          image: showcaseFrames,
+          tag: "HAND-CHECKED",
+          title: "Inspected before it ships.",
+          text: "From the lens tint to the hinge tension.",
+        },
+      ],
     };
   },
   components: {
     SunglassesList,
+  },
+  computed: {
+    slideNumber() {
+      const i = this.showcase.findIndex((s) => s.name === this.slide);
+      return String(i + 1).padStart(2, "0");
+    },
   },
   methods: {
     scrollToAboutUs() {
@@ -832,4 +932,42 @@ export default {
 
 .statement-cta:hover .statement-arrow
   transform: translateY(6px)
+
+.showcase-carousel
+  border-radius: 0 !important
+  border: 1px solid rgba(255, 255, 255, 0.1)
+  background: #0a0a0a
+
+.showcase-slide
+  padding: 28px
+
+.showcase-caption
+  max-width: 440px
+
+.showcase-tag
+  font-size: 0.7rem
+  font-weight: 600
+  letter-spacing: 0.15em
+  color: var(--q-primary)
+  margin-bottom: 8px
+
+.showcase-title
+  line-height: 1.15
+
+.showcase-text
+  margin-top: 10px
+  line-height: 1.5
+  color: rgba(255, 255, 255, 0.8)
+
+.showcase-controls
+  display: inline-flex
+  align-items: center
+  // gap: 8px
+  // padding: 4px 8px 4px 16px
+  padding: 8px
+  border-radius: 999px
+  background: rgba(10, 10, 10, 0.45)
+  border: 1px solid rgba(255, 255, 255, 0.15)
+  backdrop-filter: blur(12px)
+  -webkit-backdrop-filter: blur(12px)
 </style>

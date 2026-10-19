@@ -61,6 +61,15 @@
             <q-btn
               @click="scrollToSection('about-section')"
               class="custom-button q-py-sm font-size-responsive-sm"
+              label="About"
+              :ripple="false"
+              no-caps
+              flat
+              rounded
+            />
+            <q-btn
+              @click="scrollToSection('service-section')"
+              class="custom-button q-py-sm font-size-responsive-sm"
               label="Services"
               :ripple="false"
               no-caps
