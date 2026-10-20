@@ -294,8 +294,8 @@
             round
             dense
             icon="eva-arrow-forward-outline"
-            color="white"
-            class="scroll-arrow scroll-arrow--right"
+            color="text-dark"
+            class="scroll-arrow scroll-arrow--right bg-dark"
             @click="scrollRelated(1)"
           />
         </div>
@@ -624,12 +624,11 @@ export default {
   -webkit-overflow-scrolling: touch
   scroll-behavior: smooth
 
-  scrollbar-width: thin
+  // hide the scrollbar but keep scrolling working
+  scrollbar-width: none          // Firefox
+  -ms-overflow-style: none       // old Edge / IE
   &::-webkit-scrollbar
-    height: 6px
-  &::-webkit-scrollbar-thumb
-    background: rgba(255, 255, 255, 0.15)
-    border-radius: 999px
+    display: none                // Chrome, Safari, new Edge
 
 .related-card
   border: 1px solid rgba(255, 255, 255, 0.1)

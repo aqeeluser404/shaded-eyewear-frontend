@@ -282,7 +282,6 @@
           <q-btn
             dense
             no-caps
-            @click="scrollTo"
             label="Learn More"
             color="grey-7"
             text-color="light"
@@ -319,7 +318,11 @@
         </div>
         <div class="section-spacer-sm"></div>
         <div>
-          <SunglassesList :search="search" />
+          <SunglassesList
+            :search="search"
+            mode="featured"
+            :featuredNames="['Eclipse', 'Meridian', 'Atlantic']"
+          />
         </div>
       </div>
       <div class="section-spacer-lg"></div>
@@ -330,42 +333,27 @@
       class="q-px-md q-md-px-0 bg-dark"
       style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
     >
-      <div class="section-spacer-md"></div>
+      <div class="section-spacer-lg"></div>
 
       <div class="constrain" id="service-section">
-        <div class="row items-end justify-between">
-          <div>
-            <div class="overline text-dimmed text-caption q-mb-xs">
-              WHAT WE OFFER
-            </div>
-            <div
-              class="font-size-responsive-giant archivo text-light text-bold"
-            >
-              OUR SERVICES
-            </div>
-          </div>
-          <div class="font-size-responsive-sm text-dimmed gt-sm">
-            What you get with every order.
-          </div>
+        <div
+          class="font-size-responsive-giant archivo text-light text-bold q-mb-md"
+          style="line-height: 1.2"
+        >
+          OUR <span class="text-gradient-primary">SERVICES</span>
+        </div>
+        <div
+          class="statement-label font-size-responsive-sm text-gradient-primary"
+        >
+          WHAT YOU GET WITH EVERY ORDER
         </div>
 
         <div class="section-spacer-sm"></div>
 
         <div class="services-grid">
-          <div
-            v-for="(s, i) in services"
-            :key="s.title"
-            class="service-cell bg-dark-secondary"
-          >
-            <div class="row items-center justify-between q-mb-lg">
-              <div class="service-icon">
-                <q-icon :name="s.icon" color="primary" size="20px" />
-              </div>
-              <div
-                class="overline-tight text-dimmed text-caption service-index"
-              >
-                {{ String(i + 1).padStart(2, "0") }}
-              </div>
+          <div v-for="s in services" :key="s.title" class="service-cell">
+            <div class="service-icon q-mb-lg">
+              <q-icon :name="s.icon" size="22px" />
             </div>
 
             <div class="font-size-responsive-md archivo text-light q-mb-sm">
@@ -508,37 +496,36 @@ export default {
 
       services: [
         {
-          icon: "eva-credit-card-outline",
+          icon: "fa-solid fa-credit-card",
           title: "PAID WITH YOCO",
           text: "Card, EFT and instant payments, secured end to end at checkout.",
         },
         {
-          icon: "eva-car-outline",
+          icon: "fa-solid fa-truck-fast",
           title: "FAST AND RELIABLE",
           text: "Cape Town deliveries within two working days, tracked all the way.",
         },
         {
-          icon: "eva-shopping-bag-outline",
+          icon: "fa-solid fa-store",
           title: "DOORSTEP PICKUP",
-          text: "Collect at 65 Stockley Road, Kenwyn — open weekdays 08:00 to 17:00.",
+          text: "Collect at 65 Stockley Road, Kenwyn - open weekdays 08:00 to 17:00.",
         },
         {
-          icon: "eva-award-outline",
+          icon: "fa-solid fa-shield-halved",
           title: "2 YEAR WARRANTY",
           text: "Every frame is covered for two years against defects in materials and craftsmanship.",
         },
         {
-          icon: "eva-refresh-outline",
+          icon: "fa-solid fa-rotate-left",
           title: "EASY RETURNS",
-          text: "Not the right fit? Return within 14 days for a full refund — no questions asked.",
+          text: "Not the right fit? Return within 14 days for a full refund - no questions asked.",
         },
         {
-          icon: "eva-message-circle-outline",
+          icon: "fa-solid fa-headset",
           title: "DIRECT SUPPORT",
-          text: "Questions about fit, tint or warranty? Message us — a real person replies, usually within a day.",
+          text: "Questions about fit, tint or warranty? Message us - a real person replies, usually within a day.",
         },
       ],
-
       slide: "glare",
       hovering: false,
       showcase: [
@@ -772,62 +759,58 @@ export default {
 .services-grid
   display: grid
   grid-template-columns: 1fr
-  gap: 16px
+  gap: 24px
+
+  @media (min-width: 600px)
+    grid-template-columns: repeat(2, 1fr)
 
   @media (min-width: 1024px)
     grid-template-columns: repeat(3, 1fr)
-    gap: 24px
 
 .service-cell
   position: relative
   display: flex
   flex-direction: column
-  padding: 28px
-  border-radius: 8px
-  border: 1px solid rgba(255, 255, 255, 0.12)
+  align-items: center
+  text-align: center            // flip to left-aligned: remove this and align-items
+  padding: 40px 32px
+  background-color: rgba(255, 255, 255, 0.03)
+  border: 1px solid rgba(255, 255, 255, 0.1)
+  border-radius: 16px
   overflow: hidden
-  transition: border-color 0.25s ease, transform 0.25s ease
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease
 
-  // accent line that draws across the top on hover
-  &::before
-    content: ''
-    position: absolute
-    top: 0
-    left: 0
-    width: 0
-    height: 2px
-    background: var(--q-primary)
-    transition: width 0.35s ease
-
+  // same hover as the product cards
   &:hover
-    border-color: rgba(255, 255, 255, 0.3)
-    transform: translateY(-2px)
-
-    &::before
-      width: 100%
+    border-color: color-mix(in srgb, var(--q-primary) 60%, transparent)
+    background-color: rgba(255, 255, 255, 0.05)
+    transform: translateY(-4px)
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--q-primary) 25%, transparent), 0 24px 40px -20px color-mix(in srgb, var(--q-primary) 45%, transparent)
 
     .service-icon
-      border-color: var(--q-primary)
-
-    .service-index
-      color: var(--q-primary) !important
+      transform: translateY(-2px)
+      background-color: color-mix(in srgb, var(--q-primary) 20%, transparent)
+      border-color: color-mix(in srgb, var(--q-primary) 55%, transparent)
+      box-shadow: 0 0 28px color-mix(in srgb, var(--q-primary) 35%, transparent)
 
 .service-icon
-  width: 40px
-  height: 40px
+  position: relative
+  z-index: 1
+  width: 56px
+  height: 56px
   display: flex
   align-items: center
   justify-content: center
-  border-radius: 10px
+  border-radius: 50%
+  color: var(--q-primary)
   border: 1px solid rgba(255, 255, 255, 0.12)
-  transition: border-color 0.25s ease
-
-.service-index
-  transition: color 0.25s ease
+  // flat tint = identical glow on every side
+  background-color: color-mix(in srgb, var(--q-primary) 12%, transparent)
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease
 
 .service-text
-  max-width: 340px
-  line-height: 1.55
+  max-width: 300px
+  line-height: 1.6
 
 .feature-point
   position: relative
