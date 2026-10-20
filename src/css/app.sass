@@ -652,3 +652,34 @@ $skeleton-shimmer: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255
 .no-radius-right
   border-top-right-radius: 0 !important
   border-bottom-right-radius: 0 !important
+
+
+// ==========================================
+// GLOBAL UI DIALOG STYLES
+// ==========================================
+.ui-dialog
+  background: #111111 !important
+  color: #ffffff !important
+  border: 1px solid rgba(255, 255, 255, 0.1)
+  border-radius: 16px
+  min-width: 320px
+  max-width: 90vw
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.8)
+
+  .q-dialog__title
+    font-weight: 500
+    font-size: 1.25rem
+    letter-spacing: 0.02em
+    font-family: 'Archivo', sans-serif
+    padding-bottom: 8px
+
+  .q-dialog__message
+    color: rgba(255, 255, 255, 0.7) !important
+    font-size: 0.95rem
+    line-height: 1.6
+    padding-bottom: 16px
+
+  .q-card__actions
+    padding: 8px 16px 16px 16px
+    justify-content: flex-end
+    gap: 8px

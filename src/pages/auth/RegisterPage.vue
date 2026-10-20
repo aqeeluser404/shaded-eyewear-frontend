@@ -204,6 +204,7 @@
 <script>
 import UserService from "src/services/UserService";
 import Helper from "src/services/utils";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   name: "RegisterPage",

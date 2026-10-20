@@ -30,7 +30,7 @@
     </div>
 
     <!-- image sits outside .constrain so it can bleed to the section edge -->
-    <div class="limited-runs-visual">
+    <div class="limited-runs-visual large-screen-only">
       <div class="limited-runs-disc"></div>
       <img
         src="~src/assets/gallery/glasses/s2.png"

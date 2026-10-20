@@ -173,6 +173,7 @@
 
 <script>
 import UserService from "src/services/UserService";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   name: "LoginPage",
@@ -185,6 +186,7 @@ export default {
       },
       rememberMe: false,
       showPassword: false,
+      guestLoading: false,
     };
   },
 
@@ -197,18 +199,12 @@ export default {
         );
 
         if (response) {
-          this.$q.notify({
-            type: "positive",
-            color: "primary",
-            message: "Login successful!",
-          });
-          window.location.href = "/";
+          UiAlerts.success("Login successful!");
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 2000);
         } else {
-          this.$q.notify({
-            type: "negative",
-            color: "red",
-            message: "Login failed. Please try again!",
-          });
+          UiAlerts.error("Login failed. Please try again!");
           this.onReset();
         }
       } catch (error) {
@@ -216,59 +212,41 @@ export default {
           error.response &&
           (error.response.status === 401 || error.response.status === 400)
         ) {
-          this.$q.notify({
-            type: "negative",
-            color: "red",
-            message: "Login failed. Incorrect username or password.",
-          });
+          UiAlerts.error("Login failed. Incorrect username or password.");
         } else {
-          this.$q.notify({
-            type: "negative",
-            color: "red",
-            message: "Login failed. Please try again!",
-          });
+          UiAlerts.error("Login failed. Please try again!");
         }
         this.onReset();
       }
     },
 
     async loginAsGuest() {
+      this.guestLoading = true;
       try {
         const response = await UserService.guestLogin();
 
         if (response) {
-          this.$q.notify({
-            type: "positive",
-            color: "primary",
-            message: "Logged in as guest",
-          });
-          window.location.href = "/";
+          UiAlerts.success("Logged in as guest");
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 2000);
         } else {
-          this.$q.notify({
-            type: "negative",
-            color: "red",
-            message: "Guest login failed. Please try again!",
-          });
+          UiAlerts.error("Guest login failed. Please try again!");
         }
       } catch (error) {
         if (error.response && error.response.status === 429) {
-          this.$q.notify({
-            type: "negative",
-            color: "red",
-            message: "Too many guest logins. Please try again later.",
-          });
+          UiAlerts.error("Too many guest logins. Please try again later.");
         } else {
-          this.$q.notify({
-            type: "negative",
-            color: "red",
-            message: "Guest login failed. Please try again!",
-          });
+          UiAlerts.error("Guest login failed. Please try again!");
         }
+      } finally {
+        this.guestLoading = false;
       }
     },
 
     onReset() {
-      (this.user.usernameOrEmail = ""), (this.user.password = "");
+      this.user.usernameOrEmail = "";
+      this.user.password = "";
     },
   },
 };
