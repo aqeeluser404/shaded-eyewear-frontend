@@ -224,6 +224,14 @@
                 dark
                 color="primary"
                 class="period-select"
+                popup-content-class="period-menu"
+                :popup-content-style="{
+                  boxShadow: 'none',
+                  background: '#111111',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '12px',
+                  marginTop: '6px',
+                }"
                 @update:model-value="computeCharts"
               />
             </div>
@@ -941,4 +949,9 @@ export default {
 // fallback
 .status-dot--grey
   background-color: #9b9b9b
+
+.period-menu
+  .q-item--active
+    color: var(--q-primary)
+    background-color: rgba(255, 255, 255, 0.06)
 </style>

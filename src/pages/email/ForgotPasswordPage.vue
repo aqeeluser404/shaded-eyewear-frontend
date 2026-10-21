@@ -1,50 +1,87 @@
 <template>
-  <q-page>
-    <q-img src="~src/assets/brand/bg1.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
-      <div class="absolute-full column justify-center items-center text-black">
-        <q-card bordered flat class="q-pa-lg">
-          <div class="column">
-            <p class="font-size-responsive-xxxl anton-regular q-mb-md">Forgot Password</p>
-            <br>
-            <q-input filled label-color=black color="black" v-model="email" label="Email to reset your password" style="width: 100%;" class="q-mb-md" />
-            <q-btn rounded @click="ForgotPassword" icon="eva-email-outline" color="black" text-color="white" label="Send Code" class="custom-button q-py-sm q-px-lg font-size-responsive-md q-mb-md" />
-            <q-btn rounded to='auth/login' color="white" text-color="black" label="Return to Login" class="custom-button q-py-sm q-px-lg font-size-responsive-md" />
-          </div>
-        </q-card>
+  <AuthCard
+    icon="fa-solid fa-key"
+    title="FORGOT PASSWORD"
+    subtitle="Enter the email on your account and we'll send you a code to reset your password."
+  >
+    <q-form @submit="onSubmit" class="q-gutter-md">
+      <div>
+        <div class="overline text-dimmed text-caption q-mb-xs">
+          EMAIL ADDRESS
+        </div>
+        <q-input
+          filled
+          dark
+          autofocus
+          type="email"
+          autocomplete="email"
+          v-model="email"
+          placeholder="you@example.com"
+          class="custom-input"
+          input-style="color: white;"
+          :rules="[
+            (val) => !!val || 'Email is required',
+            (val) => /.+@.+\..+/.test(val) || 'Enter a valid email',
+          ]"
+        />
       </div>
-    </q-img>
-  </q-page>
+
+      <q-btn
+        rounded
+        no-caps
+        label="Send code"
+        type="submit"
+        text-color="dark"
+        class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mt-md"
+        style="width: 100%"
+        :loading="loading"
+      />
+    </q-form>
+  </AuthCard>
 </template>
 
 <script>
-import EmailService from 'src/services/EmailService'
+import AuthCard from "src/components/elements/AuthCard.vue";
+import EmailService from "src/services/EmailService";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   name: "ForgotPasswordPage",
 
+  components: { AuthCard },
+
   data() {
     return {
-      email: ''
-    }
+      email: "",
+      loading: false,
+    };
   },
+
   methods: {
-    async ForgotPassword() {
-      if (this.email === '' || null) {
-        this.$q.notify({ type: 'negative', message: 'Please fill in the email field.' })
-      } else {
-        const response = await EmailService.ForgotPassword(this.email)
+    async onSubmit() {
+      this.loading = true;
+      try {
+        const response = await EmailService.ForgotPassword(this.email.trim());
+
         if (response) {
-          this.$q.notify({ type: 'positive', color: 'primary', message: 'An email has been sent to reset your password!' })
-          this.$router.push('/')
+          UiAlerts.success(
+            "Email sent",
+            "Check your inbox to reset your password."
+          );
+
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 2000);
+
         } else {
-          this.$q.notify({ type: 'negative', message: 'Sending email failed. Please try again.' })
-          this.onReset()
+          UiAlerts.error("Sending email failed. Please try again.");
         }
+      } catch (error) {
+        UiAlerts.error("Sending email failed. Please try again.");
+      } finally {
+        this.loading = false;
       }
     },
-    onReset() {
-      this.email = ''
-    }
-  }
-}
+  },
+};
 </script>

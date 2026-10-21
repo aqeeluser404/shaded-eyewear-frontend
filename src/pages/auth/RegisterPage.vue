@@ -242,56 +242,31 @@ export default {
       ];
 
       if (requiredFields.every((key) => details[key] === "")) {
-        this.$q.notify({
-          type: "negative",
-          message: "Please fill in all the fields.",
-        });
+        UiAlerts.error("Please fill in all the fields.");
         return false;
       }
       if (details.firstName && !this.validateText(details.firstName)) {
-        this.$q.notify({
-          type: "negative",
-          message:
-            "First name must be at least 5 characters long and start with an uppercase.",
-        });
+        UiAlerts.error("First name must be at least 5 characters long and start with an uppercase.");
         return false;
       }
       if (details.lastName && !this.validateText(details.lastName)) {
-        this.$q.notify({
-          type: "negative",
-          message:
-            "Last name must be at least 5 characters long and start with an uppercase.",
-        });
+        UiAlerts.error("Last name must be at least 5 characters long and start with an uppercase.");
         return false;
       }
       if (details.email && !this.validateEmail(details.email)) {
-        this.$q.notify({
-          type: "negative",
-          message: "Please enter a valid email address.",
-        });
+        UiAlerts.error("Please enter a valid email address.");
         return false;
       }
       if (details.phone && !this.validatePhone(details.phone)) {
-        this.$q.notify({
-          type: "negative",
-          message: "Please enter a valid 10-digit phone number.",
-        });
+        UiAlerts.error("Please enter a valid 10-digit phone number.");
         return false;
       }
       if (details.username && !this.validateUsername(details.username)) {
-        this.$q.notify({
-          type: "negative",
-          message:
-            "Username must be 3-15 characters long and contain only letters and numbers.",
-        });
+        UiAlerts.error("Username must be 3-15 characters long and contain only letters and numbers.");
         return false;
       }
       if (details.password && !this.validatePassword(details.password)) {
-        this.$q.notify({
-          type: "negative",
-          message:
-            "Password must be at least 8 characters long and include at least one letter and one number.",
-        });
+        UiAlerts.error("Password must be at least 8 characters long and include at least one letter and one number.");
         return false;
       }
       return true;
@@ -302,17 +277,12 @@ export default {
         if (this.validateFields()) {
           const response = await UserService.register(this.user);
           if (response) {
-            this.$q.notify({
-              type: "positive",
-              color: "primary",
-              message: "Please check your email to verify your account.",
-            });
-            this.$router.push("/auth/login");
+            UiAlerts.success("Please check your email to verify your account.");
+            setTimeout(() => {
+              this.$router.push("/auth/login");
+            }, 2000);
           } else {
-            this.$q.notify({
-              type: "negative",
-              message: "Registration failed. Please try again!",
-            });
+            UiAlerts.error("Registration failed. Please try again!");
             this.onReset();
           }
         }
@@ -321,17 +291,9 @@ export default {
           error.response &&
           (error.response.status === 401 || error.response.status === 400)
         ) {
-          this.$q.notify({
-            type: "negative",
-            color: "red",
-            message: "Username or Email already exists. Please try again!",
-          });
+          UiAlerts.error("Username or Email already exists. Please try again!");
         } else {
-          this.$q.notify({
-            type: "negative",
-            color: "red",
-            message: "Registration failed. Please try again!",
-          });
+          UiAlerts.error("Registration failed. Please try again!");
         }
       }
     },

@@ -1,45 +1,84 @@
 <template>
-  <q-page>
-    <q-img src="~src/assets/brand/bg1.jpg" alt="Hero Image" style="width: 100%; height: 100vh;" >
-      <div class="absolute-full column justify-center items-center text-black">
-        <q-card bordered flat class="q-pa-lg">
-          <div class="column text-center">
-            <p class="font-size-responsive-xxxl anton-regular q-mb-md">Resend Verification Email</p>
-            <br>
-            <q-input filled v-model="email" label="Enter email for the verification code" style="width: 100%;" class="q-mb-md"/>
-            <q-btn rounded @click="resendVerificationEmail" icon="eva-email-outline " color="black" text-color="white" label="Send Verification" class="q-py-sm q-px-lg custom-button font-size-responsive-md" />
-          </div>
-          <p class="text-h6 caveat " v-if="message">
-            <br>
-            {{ message }}
-          </p>
-        </q-card>
+  <AuthCard
+    icon="fa-solid fa-envelope"
+    title="RESEND VERIFICATION"
+    subtitle="Enter your email and we'll send you a new verification link."
+  >
+    <q-form @submit="onSubmit" class="q-gutter-md">
+      <div>
+        <div class="overline text-dimmed text-caption q-mb-xs">
+          EMAIL ADDRESS
+        </div>
+        <q-input
+          filled
+          dark
+          autofocus
+          type="email"
+          autocomplete="email"
+          v-model="email"
+          placeholder="you@example.com"
+          class="custom-input"
+          input-style="color: white;"
+          :rules="[
+            (val) => !!val || 'Email is required',
+            (val) => /.+@.+\..+/.test(val) || 'Enter a valid email',
+          ]"
+        />
       </div>
-    </q-img>
-  </q-page>
+
+      <q-btn
+        rounded
+        no-caps
+        label="Send verification"
+        type="submit"
+        text-color="dark"
+        class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mt-md"
+        style="width: 100%"
+        :loading="loading"
+      />
+    </q-form>
+  </AuthCard>
 </template>
 
 <script>
-import EmailService from '../../services/EmailService';
+import AuthCard from "src/components/elements/AuthCard.vue";
+import EmailService from "src/services/EmailService";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
+  name: "ResendVerificationPage",
+
+  components: { AuthCard },
+
   data() {
     return {
-      email: '',
-      message: ''
-    }
+      email: "",
+      loading: false,
+    };
   },
+
   methods: {
-    async resendVerificationEmail() {
-      const response = await EmailService.resendVerificationEmail(this.email)
-      if (response) {
-        this.$q.notify({ type: 'positive', color: 'primary', message: 'Verification email resent successfully!' })
-        this.message = 'Verification email resent successfully!'
-      } else {
-        this.$q.notify({ type: 'negative', message: 'Error resending verification email.' })
-        this.message = 'Error resending verification email.'
+    async onSubmit() {
+      this.loading = true;
+      try {
+        const response = await EmailService.resendVerificationEmail(
+          this.email.trim()
+        );
+
+        if (response) {
+          UiAlerts.success(
+            "Verification email sent",
+            "Check your inbox for the new link."
+          );
+        } else {
+          UiAlerts.error("Error resending verification email.");
+        }
+      } catch (error) {
+        UiAlerts.error("Error resending verification email.");
+      } finally {
+        this.loading = false;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

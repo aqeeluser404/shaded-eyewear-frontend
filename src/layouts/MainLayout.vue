@@ -245,7 +245,11 @@
               GET IN TOUCH
             </div>
 
-            <q-form @submit="submitContactForm" class="q-gutter-sm">
+            <q-form
+              ref="contactForm"
+              @submit.prevent="submitContactForm"
+              class="q-gutter-sm"
+            >
               <q-input
                 filled
                 dark
@@ -280,7 +284,9 @@
                 :rules="[(val) => !!val || 'Required']"
                 lazy-rules
               />
+
               <q-btn
+                type="submit"
                 color="white"
                 text-color="dark"
                 rounded
@@ -344,10 +350,7 @@
           <div class="row justify-between items-center">
             <div class="row items-center">
               <q-avatar class="footer-avatar q-mr-sm">
-                <img
-                  src="../assets/brand/logo-white.png"
-                  alt="Logo"
-                />
+                <img src="../assets/brand/logo-white.png" alt="Logo" />
               </q-avatar>
               <span class="font-size-responsive-xs text-dimmed">
                 Shaded Eyewear ™ · Est. 2023 · Cape Town
@@ -381,6 +384,7 @@ import logoBlack from "../assets/brand/logo-black.png";
 import EmailService from "src/services/EmailService";
 import UniversalMenu from "src/components/elements/UniversalMenu.vue";
 import CartButton from "src/components/elements/CartButton.vue";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   name: "MainLayout",
@@ -633,9 +637,9 @@ export default {
         const userDetails = await UserService.findUserById(user._id);
 
         if (token === userDetails.loginInfo.loginToken) {
-          await this.fetchUserDetails(); // wait for userDetails to actually populate
+          await this.fetchUserDetails();
           this.isLoggedIn = true;
-          await this.getCurrentOrder(); // only now try to resolve the cart order
+          await this.getCurrentOrder();
         } else {
           this.isLoggedIn = false;
           this.handleLogout();
@@ -655,35 +659,28 @@ export default {
       this.userDetails = response;
     },
     async logout() {
-      this.$q
-        .dialog({
-          title: "Logout",
-          message: `You are about to logout, continue?`,
-          color: "primary",
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(async () => {
-          if (this.order._id) {
-            this.cancelOrder();
-          }
-          const response = await UserService.logout(this.userDetails._id);
-          if (response) {
-            this.$q.notify({
-              type: "positive",
-              color: "primary",
-              message: "You have successfully logged out!",
-            });
+      UiAlerts.confirm(
+        "Are you logging out?",
+        "You can always log back in at any time. If you just want to switch accounts, you can do so on the login screen.",
+        "Log out",
+        "primary",
+        "eva-log-out-outline"
+      ).onOk(async () => {
+        if (this.order._id) {
+          this.cancelOrder();
+        }
+        const response = await UserService.logout(this.userDetails._id);
+        if (response) {
+          UiAlerts.success("You have successfully logged out!");
+          this.isLoggedIn = false;
+          setTimeout(() => {
             this.$router.push("/");
-            this.isLoggedIn = false;
             window.location.reload();
-          } else {
-            this.$q.notify({
-              type: "negative",
-              message: "Logout failed. Please try again.",
-            });
-          }
-        });
+          }, 2000);
+        } else {
+          UiAlerts.error("Logout failed. Please try again.");
+        }
+      });
     },
     async getCurrentOrder() {
       let orderId = localStorage.getItem("currentOrderId");
@@ -719,10 +716,7 @@ export default {
       if (this.isLoggedIn == true) {
         this.$router.push("/user/dashboard");
       } else {
-        this.$q.notify({
-          type: "negative",
-          message: "Please login to continue.",
-        });
+        UiAlerts.error("Please login to continue.");
       }
     },
     async cancelOrder() {
@@ -732,28 +726,33 @@ export default {
       window.open("https://www.instagram.com/shadedeyewearza/", "_blank");
     },
     async submitContactForm() {
+      const isValid = await this.$refs.contactForm.validate();
+
+      if (!isValid) {
+        UiAlerts.error("Please fill in all required fields.");
+        return;
+      }
+
       try {
         const response = await EmailService.GetInContact(
           this.userContact,
           this.message
         );
+
         if (response) {
-          this.$q.notify({
-            type: "positive",
-            color: "primary",
-            message: "Message sent successfully!",
-          });
-          this.userContact.firstName = "";
-          this.userContact.email = "";
-          this.message = "";
+          UiAlerts.success("Message sent successfully!");
+
+          setTimeout(() => {
+            this.userContact.firstName = "";
+            this.userContact.email = "";
+            this.message = "";
+            this.$refs.contactForm.resetValidation();
+          }, 500);
         } else {
-          this.$q.notify({
-            type: "negative",
-            message: "Error sending message.",
-          });
+          UiAlerts.error("Error sending message.");
         }
       } catch (error) {
-        this.$q.notify({ type: "negative", message: "Error sending message." });
+        UiAlerts.error("Error sending message.");
       }
     },
   },

@@ -657,29 +657,50 @@ $skeleton-shimmer: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255
 // ==========================================
 // GLOBAL UI DIALOG STYLES
 // ==========================================
-.ui-dialog
+.ui-dialog.q-card,
+.ui-dialog .q-card
   background: #111111 !important
   color: #ffffff !important
   border: 1px solid rgba(255, 255, 255, 0.1)
-  border-radius: 16px
-  min-width: 320px
+  border-radius: 16px !important   // same as your product and service cards
+  box-shadow: none !important      // kills Quasar's white dark-mode glow
+  min-width: 340px
   max-width: 90vw
-  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.8)
+  padding: 16px
 
+.ui-dialog
   .q-dialog__title
-    font-weight: 500
-    font-size: 1.25rem
-    letter-spacing: 0.02em
-    font-family: 'Archivo', sans-serif
-    padding-bottom: 8px
+    display: none // Hides the default title
 
   .q-dialog__message
-    color: rgba(255, 255, 255, 0.7) !important
-    font-size: 0.95rem
-    line-height: 1.6
-    padding-bottom: 16px
+    padding: 0 !important
 
   .q-card__actions
-    padding: 8px 16px 16px 16px
-    justify-content: flex-end
-    gap: 8px
+    padding: 0 16px 16px 16px
+    display: flex
+    flex-direction: column-reverse // flips the buttons
+
+.q-notification
+  border-radius: 12px
+  box-shadow: none
+
+.ui-toast
+  background: #111111 !important
+  border: 1px solid rgba(255, 255, 255, 0.1)
+  padding: 6px 8px
+
+  .q-btn
+    transition: color 0.2s ease, transform 0.15s ease
+    &:hover
+      color: #ffffff !important
+    &:active
+      transform: scale(0.9)
+    &:focus-visible
+      outline: 1px solid rgba(255, 255, 255, 0.4)
+      outline-offset: 2px
+
+    .q-focus-helper
+      display: none
+
+  .q-notification__caption
+    color: rgba(255, 255, 255, 0.6)
