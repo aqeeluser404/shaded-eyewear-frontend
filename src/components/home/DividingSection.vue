@@ -13,7 +13,7 @@
       <q-separator color="grey-8" class="statement-rule" />
 
       <div
-        class="statement-text font-size-responsive-xxxl archivo text-light text-bold"
+        class="statement-text font-size-responsive-xxxl archivo text-light text-bold line-height-1-2"
       >
         We cut and finish sunglasses by hand in Kenwyn, so every frame
         <span class="text-gradient-primary">feels made for you.</span>
@@ -33,12 +33,13 @@
         <span
           class="statement-label font-size-responsive-sm text-light text-bold q-mt-xl"
         >
-          VIEW THE COLLECTION
+          IT IS A LIFESTYLE
         </span>
       </router-link>
     </div>
 
-    <div class="section-spacer-md"></div>
+    <div class="section-spacer-md large-screen-only"></div>
+    <div class="section-spacer-sm small-screen-only"></div>
   </section>
 </template>
 
@@ -56,7 +57,7 @@ export default {
 .statement-text
   max-width: 900px
   margin: 0 auto
-  line-height: 1.25
+  // line-height: 1.25
 
 .statement-label
   letter-spacing: 0.2em

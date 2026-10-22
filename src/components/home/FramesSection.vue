@@ -4,7 +4,7 @@
     <div class="section-spacer-lg"></div>
     <div class="constrain">
       <div>
-        <div class="overline text-dimmed text-caption q-mb-xs">
+        <div class="overline text-dimmed text-caption q-mb-sm">
           THE COLLECTION
         </div>
         <div class="row justify-between items-start">

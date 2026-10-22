@@ -1,13 +1,14 @@
 <template>
   <!--------------------------------------------------------------------- WHO WE ARE SECTION -------------------------------------------------->
   <section class="q-px-md q-md-px-0">
+
     <div class="section-spacer-lg"></div>
+
     <div class="constrain" id="about-section">
       <div class="row items-start justify-between q-col-gutter-xl">
         <div>
           <div
-            class="font-size-responsive-giant archivo text-light text-bold q-mb-md"
-            style="line-height: 1.2"
+            class="font-size-responsive-giant archivo text-light text-bold q-mb-md line-height-1-2"
           >
             WE PARTNER WITH <br />
             BRANDS AND
@@ -22,7 +23,7 @@
 
         <div
           class="col-12 col-md-7"
-          :class="$q.screen.gt.md ? 'q-pr-xl' : 'q-mb-xl'"
+          :class="$q.screen.gt.md ? 'q-pr-xl' : 'q-mb-md'"
         >
           <div
             class="showcase-wrap"
@@ -54,11 +55,11 @@
               >
                 <div class="">
                   <div
-                    class="q-mb-sm font-size-responsive-sm text-gradient-primary statement-label"
+                    class="q-mb-sm font-size-responsive-md text-gradient-primary statement-label"
                   >
                     {{ s.tag }}
                   </div>
-                  <div class="font-size-responsive-md text-light">
+                  <div class="font-size-responsive-md text-dimmed">
                     {{ s.text }}
                   </div>
                 </div>
@@ -98,8 +99,7 @@
           </div>
           <div class="section-spacer-sm"></div>
           <div
-            class="font-size-responsive-md text-dimmed q-mb-md"
-            style="line-height: 1.6"
+            class="font-size-responsive-md text-dimmed q-mb-md line-height-1-6"
           >
             The sunglasses market is experiencing steady growth, driven by
             factors such as increasing awareness of UV protection, changing
@@ -108,8 +108,7 @@
             quality, style, and affordability.
           </div>
           <div
-            class="font-size-responsive-md text-dimmed"
-            style="line-height: 1.6"
+            class="font-size-responsive-md text-dimmed line-height-1-6"
           >
             Our product line will encompass a variety of styles, including
             wayfarers, oval, geometric, semi-rimless and round sunglasses,

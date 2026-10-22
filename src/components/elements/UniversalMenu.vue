@@ -22,76 +22,101 @@
       @mouseleave="hover ? delayedClose() : null"
       class="universal-menu bg-dark"
     >
-    <div class="row q-col-gutter-md q-pa-md">
-      <!-- First column -->
-      <div class="col">
-        <q-list dense>
-          <template v-for="(item, idx) in firstColumnItems" :key="'col1-' + idx">
-            <q-item
-              v-if="!item.hidden"
-              clickable
-              v-close-popup
-              :disable="item.disabled"
-              :class="item.negative ? 'text-negative' : ''"
-              @click="handleAction(item)"
-              class="nav-hover custom-button font-size-responsive-sm"
-            >
-              <q-item-section avatar v-if="item.icon">
-                <q-icon
-                  :name="item.icon"
-                  size="xs"
-                  :color="item.negative ? 'negative' : item.color || 'primary'"
-                />
-              </q-item-section>
-              <q-item-section>{{ item.label }}</q-item-section>
-            </q-item>
-            <q-separator v-if="item.separatorAfter" />
-          </template>
-        </q-list>
-      </div>
+      <div class="row q-col-gutter-md q-pa-md">
+        <!-- First column -->
+        <div class="col">
+          <q-list dense>
+            <!-- loading: shimmer rows instead of items -->
+            <template v-if="loading">
+              <q-item v-for="n in skeletonCount" :key="'skel-' + n">
+                <q-item-section>
+                  <div
+                    class="skeleton-line"
+                    :class="n === 1 ? 'skeleton-line--md' : 'skeleton-line--sm'"
+                  ></div>
+                </q-item-section>
+              </q-item>
+            </template>
+            <template v-else>
+              <template
+                v-for="(item, idx) in firstColumnItems"
+                :key="'col1-' + idx"
+              >
+                <q-item
+                  v-if="!item.hidden"
+                  clickable
+                  v-close-popup
+                  :disable="item.disabled"
+                  :class="item.negative ? 'text-negative' : ''"
+                  @click="handleAction(item)"
+                  class="nav-hover custom-button font-size-responsive-sm"
+                >
+                  <q-item-section avatar v-if="item.icon">
+                    <q-icon
+                      :name="item.icon"
+                      size="xs"
+                      :color="
+                        item.negative ? 'negative' : item.color || 'primary'
+                      "
+                    />
+                  </q-item-section>
+                  <q-item-section>{{ item.label }}</q-item-section>
+                </q-item>
+                <q-separator v-if="item.separatorAfter" />
+              </template>
+            </template>
+          </q-list>
+        </div>
 
-      <!-- Second column (only if items exist) -->
-      <div class="col" v-if="secondColumnItems.length > 0">
-        <q-list dense>
-          <template v-for="(item, idx) in secondColumnItems" :key="'col2-' + idx">
-            <q-item
-              v-if="!item.hidden"
-              clickable
-              v-close-popup
-              :disable="item.disabled"
-              :class="item.negative ? 'text-negative' : ''"
-              @click="handleAction(item)"
-              class="nav-hover"
+        <!-- Second column (only if items exist) -->
+        <div class="col" v-if="!loading && secondColumnItems.length > 0">
+          <q-list dense>
+            <template
+              v-for="(item, idx) in secondColumnItems"
+              :key="'col2-' + idx"
             >
-              <q-item-section side v-if="item.icon">
-                <q-icon
-                  :name="item.icon"
-                  size="xs"
-                  :color="item.negative ? 'negative' : item.color || 'primary'"
-                />
-              </q-item-section>
-              <q-item-section>{{ item.label }}</q-item-section>
-            </q-item>
-            <q-separator v-if="item.separatorAfter" />
-          </template>
-        </q-list>
+              <q-item
+                v-if="!item.hidden"
+                clickable
+                v-close-popup
+                :disable="item.disabled"
+                :class="item.negative ? 'text-negative' : ''"
+                @click="handleAction(item)"
+                class="nav-hover"
+              >
+                <q-item-section side v-if="item.icon">
+                  <q-icon
+                    :name="item.icon"
+                    size="xs"
+                    :color="
+                      item.negative ? 'negative' : item.color || 'primary'
+                    "
+                  />
+                </q-item-section>
+                <q-item-section>{{ item.label }}</q-item-section>
+              </q-item>
+              <q-separator v-if="item.separatorAfter" />
+            </template>
+          </q-list>
+        </div>
       </div>
-    </div>
     </q-menu>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref } from "vue";
 
 export default {
-  name: 'UniversalMenu',
+  name: "UniversalMenu",
   props: {
     items: { type: Array, required: true },
     hover: { type: Boolean, default: false },
-    anchor: { type: String, default: 'bottom right' },
-    self: { type: String, default: 'top right' },
-    offset: { type: Array, default: () => [0, 8] }
+    anchor: { type: String, default: "bottom right" },
+    self: { type: String, default: "top right" },
+    offset: { type: Array, default: () => [0, 8] },
+    loading: { type: Boolean, default: false },
+    skeletonCount: { type: Number, default: 2 },
   },
   setup() {
     const triggerRef = ref(null);
@@ -100,33 +125,32 @@ export default {
   data() {
     return {
       isOpen: false,
-      timeout: null
+      timeout: null,
     };
   },
-computed: {
-  visibleItems() {
-    return this.items.filter(item => !item.hidden);
+  computed: {
+    visibleItems() {
+      return this.items.filter((item) => !item.hidden);
+    },
+    firstColumnItems() {
+      if (this.visibleItems.length < 6) {
+        return this.visibleItems;
+      }
+      return this.visibleItems.slice(0, 5);
+    },
+    secondColumnItems() {
+      if (this.visibleItems.length < 6) {
+        return [];
+      }
+      return this.visibleItems.slice(5);
+    },
   },
-  firstColumnItems() {
-    if (this.visibleItems.length < 6) {
-      return this.visibleItems;
-    }
-    return this.visibleItems.slice(0, 5);
-  },
-  secondColumnItems() {
-    if (this.visibleItems.length < 6) {
-      return [];
-    }
-    return this.visibleItems.slice(5);
-  }
-},
-
 
   methods: {
     handleAction(item) {
       if (item.to) {
         this.$router.push(item.to);
-      } else if (typeof item.handler === 'function') {
+      } else if (typeof item.handler === "function") {
         item.handler();
       }
     },
@@ -139,8 +163,8 @@ computed: {
     },
     delayedClose() {
       this.timeout = setTimeout(() => (this.isOpen = false), 150);
-    }
-  }
+    },
+  },
 };
 </script>
 

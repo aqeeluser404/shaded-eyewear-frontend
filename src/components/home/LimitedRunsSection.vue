@@ -9,11 +9,11 @@
       <div class="row items-center">
         <!-- left: copy -->
         <div class="col-12 col-md-7 limited-runs-copy">
-          <div class="overline-dark text-dark text-caption q-mb-xs">
+          <div class="overline-dark text-dark text-caption q-mb-sm">
             LIMITED RUNS
           </div>
-          <div class="font-size-responsive-giant archivo text-dark text-bold">
-            BEST FRAMES IN YOUR TOWN.
+          <div class="font-size-responsive-giant archivo text-dark line-height-1-2">
+            BEST FRAMES IN TOWN.
           </div>
           <div class="section-spacer-xs"></div>
           <div

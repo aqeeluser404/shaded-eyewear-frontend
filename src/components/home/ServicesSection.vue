@@ -8,8 +8,7 @@
 
     <div class="constrain" id="service-section">
       <div
-        class="font-size-responsive-giant archivo text-light text-bold q-mb-md"
-        style="line-height: 1.2"
+        class="font-size-responsive-giant archivo text-light text-bold q-mb-md line-height-1-2"
       >
         OUR <span class="text-gradient-primary">SERVICES</span>
       </div>
@@ -30,7 +29,7 @@
           <div class="font-size-responsive-md archivo text-light q-mb-sm">
             {{ s.title }}
           </div>
-          <div class="font-size-responsive-sm text-dimmed service-text">
+          <div class="font-size-responsive-sm text-dimmed service-text line-height-1-6">
             {{ s.text }}
           </div>
         </div>
@@ -135,5 +134,4 @@ export default {
 
 .service-text
   max-width: 300px
-  line-height: 1.6
 </style>

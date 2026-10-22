@@ -93,8 +93,8 @@
           <CartButton :count="cartItemCount" />
 
           <UniversalMenu
-            v-if="isLoggedIn !== null"
             :items="profileItems"
+            :loading="isLoggedIn === null"
             :hover="false"
             class="large-screen-only"
             :offset="[0, 19]"
@@ -150,25 +150,38 @@
               >
             </q-item>
 
-            <q-separator v-if="isLoggedIn !== null" class="nav-divider" />
+            <q-separator class="nav-divider" />
 
-            <q-item
-              v-for="item in profileItems"
-              :key="item.label"
-              clickable
-              v-close-popup
-              :to="item.to"
-              @click="
-                () => {
-                  if (item.handler) item.handler();
-                  menuOpen = false;
-                }
-              "
-            >
-              <q-item-section class="font-size-responsive-md">{{
-                item.label
-              }}</q-item-section>
-            </q-item>
+            <template v-if="isLoggedIn === null">
+              <q-item v-for="n in 2" :key="'nav-skel-' + n">
+                <q-item-section>
+                  <div
+                    class="skeleton-line"
+                    :class="n === 1 ? 'skeleton-line--md' : 'skeleton-line--sm'"
+                  ></div>
+                </q-item-section>
+              </q-item>
+            </template>
+
+            <template v-else>
+              <q-item
+                v-for="item in profileItems"
+                :key="item.label"
+                clickable
+                v-close-popup
+                :to="item.to"
+                @click="
+                  () => {
+                    if (item.handler) item.handler();
+                    menuOpen = false;
+                  }
+                "
+              >
+                <q-item-section class="font-size-responsive-md">{{
+                  item.label
+                }}</q-item-section>
+              </q-item>
+            </template>
           </q-list>
         </Teleport>
       </q-toolbar>
@@ -192,14 +205,12 @@
         >
           <!-- ============================== SHORTCUT LINKS ============================== -->
           <div class="col-12 col-md-4">
-            <div
-              class="overline-tight text-dimmed text-caption q-mb-md q-mb-lg"
-            >
+            <div class="overline-tight text-dimmed text-caption q-mb-lg">
               SHORTCUT LINKS
             </div>
 
             <div class="footer-link-list">
-              <router-link to="/" class="footer-link">
+              <router-link to="/" class="footer-link font-size-responsive-sm">
                 <span>Home</span>
                 <q-icon
                   name="eva-arrow-forward-outline"
@@ -208,7 +219,16 @@
                 />
               </router-link>
 
-              <router-link to="/" class="footer-link">
+              <router-link to="/" class="footer-link font-size-responsive-sm">
+                <span>About</span>
+                <q-icon
+                  name="eva-arrow-forward-outline"
+                  size="14px"
+                  class="footer-link-arrow"
+                />
+              </router-link>
+
+              <router-link to="/" class="footer-link font-size-responsive-sm">
                 <span>Services</span>
                 <q-icon
                   name="eva-arrow-forward-outline"
@@ -217,7 +237,10 @@
                 />
               </router-link>
 
-              <router-link to="/sunglasses" class="footer-link">
+              <router-link
+                to="/sunglasses"
+                class="footer-link font-size-responsive-sm"
+              >
                 <span>Catalogue</span>
                 <q-icon
                   name="eva-arrow-forward-outline"
@@ -226,7 +249,10 @@
                 />
               </router-link>
 
-              <router-link to="/cart" class="footer-link">
+              <router-link
+                to="/cart"
+                class="footer-link font-size-responsive-sm"
+              >
                 <span>Cart</span>
                 <q-icon
                   name="eva-arrow-forward-outline"
@@ -239,9 +265,7 @@
 
           <!-- ============================== CONTACT FORM ============================== -->
           <div class="col-12 col-md-4">
-            <div
-              class="overline-tight text-dimmed text-caption q-mb-md q-mb-lg"
-            >
+            <div class="overline-tight text-dimmed text-caption q-mb-lg">
               GET IN TOUCH
             </div>
 
@@ -257,8 +281,6 @@
                 placeholder="Your name"
                 class="custom-input"
                 input-style="color: white;"
-                :rules="[(val) => !!val || 'Required']"
-                lazy-rules
               />
 
               <q-input
@@ -268,8 +290,6 @@
                 placeholder="Your email"
                 class="custom-input"
                 input-style="color: white;"
-                :rules="[(val) => !!val || 'Required']"
-                lazy-rules
               />
 
               <q-input
@@ -281,8 +301,6 @@
                 rows="4"
                 class="custom-input"
                 input-style="color: white;"
-                :rules="[(val) => !!val || 'Required']"
-                lazy-rules
               />
 
               <q-btn
@@ -293,7 +311,7 @@
                 dense
                 no-caps
                 label="Send Message"
-                class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold"
+                class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mt-md"
               />
             </q-form>
           </div>
@@ -307,34 +325,41 @@
             </div>
 
             <!-- Instagram card -->
-            <div class="footer-social-card" @click="openInstagram">
-              <q-icon
-                name="mdi-instagram"
-                color="primary"
-                class="footer-social-icon font-size-responsive-xxl"
-              />
-              <div class="footer-social-content">
-                <div class="footer-social-handle">@shadedeyewearza</div>
-                <div
-                  class="footer-social-caption font-size-responsive-xs text-dimmed"
-                >
+            <div class="footer-card footer-card--link" @click="openInstagram">
+              <div class="footer-icon">
+                <q-icon name="mdi-instagram" size="22px" />
+              </div>
+              <div class="col">
+                <div class="font-size-responsive-sm archivo text-light text-bold">
+                  @shadedeyewearza
+                </div>
+                <div class="font-size-responsive-xs text-dimmed">
                   New arrivals, drops and fit guides
                 </div>
               </div>
               <q-icon
                 name="eva-arrow-forward-outline"
                 size="16px"
-                class="footer-social-arrow"
+                class="footer-card-arrow"
               />
             </div>
 
-            <!-- Address -->
-            <div class="footer-address">
-              <div class="footer-address-line footer-address-hours">
-                Open 08:00 – 17:00
+            <!-- Address card -->
+            <div class="footer-card q-mt-md">
+              <div class="footer-icon">
+                <q-icon name="fa-solid fa-location-dot" size="18px" />
               </div>
-              <div class="footer-address-line">65 Stockley Road, Kenwyn</div>
-              <div class="footer-address-line">Cape Town, 7779</div>
+              <div class="col">
+                <div class="font-size-responsive-sm text-light text-bold">
+                  Open 08:00 – 17:00
+                </div>
+                <div class="font-size-responsive-xs text-dimmed">
+                  65 Stockley Road, Kenwyn
+                </div>
+                <div class="font-size-responsive-xs text-dimmed">
+                  Cape Town, 7779
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -853,7 +878,6 @@ export default {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08)
   color: #f0f0f0
   text-decoration: none
-  font-size: 0.95rem
   font-weight: 500
   letter-spacing: 0.02em
   transition: color 0.2s ease, padding-left 0.2s ease
@@ -873,62 +897,43 @@ export default {
   opacity: 0
   transition: transform 0.2s ease, opacity 0.2s ease
 
-.footer-social-card
+.footer-card
   display: flex
   align-items: center
   gap: 16px
-  padding: 16px
+  padding: 20px
+  background-color: rgba(255, 255, 255, 0.03)
   border: 1px solid rgba(255, 255, 255, 0.1)
-  border-radius: 12px
+  border-radius: 16px
+  transition: border-color 0.3s ease, transform 0.3s ease, background-color 0.3s ease
+
+.footer-card--link
   cursor: pointer
-  transition: border-color 0.2s ease, background-color 0.2s ease
 
   &:hover
-    border-color: rgba(255, 255, 255, 0.25)
-    background-color: rgba(255, 255, 255, 0.03)
+    border-color: color-mix(in srgb, var(--q-primary) 60%, transparent)
+    background-color: rgba(255, 255, 255, 0.05)
+    transform: translateY(-4px)
 
-    .footer-social-arrow
+    .footer-card-arrow
       transform: translateX(4px)
       opacity: 1
 
-.footer-social-icon
+.footer-icon
   flex-shrink: 0
+  width: 44px
+  height: 44px
+  display: flex
+  align-items: center
+  justify-content: center
+  border-radius: 50%
+  border: 1px solid rgba(255, 255, 255, 0.12)
+  color: var(--q-primary)
 
-.footer-social-content
-  flex: 1
-  min-width: 0
-
-// .footer-social-handle
-//   font-family: 'Archivo Black', sans-serif
-//   font-size: 0.85rem
-//   color: #f0f0f0
-//   letter-spacing: 0.02em
-//   white-space: nowrap
-//   overflow: hidden
-//   text-overflow: ellipsis
-
-// .footer-social-caption
-//   font-size: 0.75rem
-//   color: #9b9b9b
-//   margin-top: 2px
-
-.footer-social-arrow
+.footer-card-arrow
   flex-shrink: 0
   opacity: 0
   transition: transform 0.2s ease, opacity 0.2s ease
-
-.footer-address
-  margin-top: 20px
-
-.footer-address-line
-  font-size: 0.85rem
-  color: #9b9b9b
-  line-height: 1.6
-
-.footer-address-hours
-  color: #f0f0f0
-  font-weight: 500
-  margin-top: 8px
 
 .footer-bottom
   border-top: 1px solid rgba(255, 255, 255, 0.08)

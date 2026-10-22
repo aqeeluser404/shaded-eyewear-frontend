@@ -10,7 +10,7 @@
         <q-card class="absolute-full" style="z-index: 1">
           <div class="full-height column justify-end items-start constrain">
             <div class="">
-              <div class="overline text-dimmed text-caption q-mb-xs">
+              <div class="overline text-dimmed text-caption q-mb-sm">
                 EST. 2023 · CAPE TOWN
               </div>
               <p class="font-size-responsive-hero archivo">
@@ -19,7 +19,7 @@
               </p>
               <div class="section-spacer-sm large-screen-only"></div>
               <div class="section-spacer-xs small-screen-only"></div>
-              <p class="font-size-responsive-md text-dimmed">
+              <p class="font-size-responsive-md text-dimmed line-height-1-6">
                 Small-run frames cut for the glare off Table Bay. Polarised,
                 UV400, and <br class="break-desktop" />
                 hand-checked before they leave Kenwyn.
@@ -95,13 +95,13 @@ export default {
 .hero-wrapper
   position: relative
   width: 100%
-  height: 100vh
+  height: 100dvh
   // max-height: 1024px
   overflow: hidden
 
 .hero-image
   width: 100%
-  height: 100vh
+  height: 100dvh
   // max-height: 1024px
   object-fit: cover
   display: block
