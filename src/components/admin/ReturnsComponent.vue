@@ -463,6 +463,7 @@ import OrderService from "src/services/OrderService";
 import UserService from "src/services/UserService";
 import Helper from "src/services/utils";
 import SunglassesService from "src/services/SunglassesService";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   data() {
@@ -522,7 +523,6 @@ export default {
 
         await this.getSunglasses();
 
-        // Your original logic — kept intact
         const filteredOrders = this.orders.filter(
           (order) =>
             order.status === "paid & picked up" ||
@@ -607,42 +607,28 @@ export default {
         });
 
         if (this.selectedSunglasses.length === 0) {
-          this.$q.notify({
-            type: "negative",
-            message: "Choose a pair of sunglasses to refund.",
-          });
+          UiAlerts.error("Choose a pair of sunglasses to refund.");
           return;
         }
 
-        this.$q
-          .dialog({
-            title: "Refund Order",
-            message: `You are about to refund ${firstName}'s order, continue?`,
-            color: "primary",
-            cancel: true,
-            persistent: true,
-          })
-          .onOk(async () => {
-            const response = await OrderService.refundOrder(
-              this.selectedOrder._id,
-              sunglassesToRefund
-            );
-            if (response) {
-              this.$q.notify({
-                type: "positive",
-                color: "primary",
-                message: "Refund successful!",
-              });
-              this.getAllOrders();
-              this.selectedSunglasses = [];
-              this.selectedOrder = null;
-            } else {
-              this.$q.notify({
-                type: "negative",
-                message: "Refund failed. Please try again.",
-              });
-            }
-          });
+        UiAlerts.confirm(
+          "Refund Order",
+          `You are about to refund ${firstName}'s order, continue?`,
+          "Refund Order"
+        ).onOk(async () => {
+          const response = await OrderService.refundOrder(
+            this.selectedOrder._id,
+            sunglassesToRefund
+          );
+          if (response) {
+            UiAlerts.success("Refund successful!");
+            this.getAllOrders();
+            this.selectedSunglasses = [];
+            this.selectedOrder = null;
+          } else {
+            UiAlerts.error("Refund failed. Please try again.");
+          }
+        });
       } catch (error) {
         console.error("Refund failed:", error);
       }
@@ -650,10 +636,7 @@ export default {
 
     openDetails(order) {
       if (order.status === "refunded" || order.returns) {
-        this.$q.notify({
-          type: "negative",
-          message: "This order has already been issued a refund.",
-        });
+        UiAlerts.error("This order has already been issued a refund.");
         return;
       }
       this.selectedOrder = order;

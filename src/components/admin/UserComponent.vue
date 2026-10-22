@@ -266,6 +266,13 @@
                         dark
                         class="edit-user-type"
                         popup-content-class="period-select-menu"
+                        :popup-content-style="{
+                          boxShadow: 'none',
+                          background: '#111111',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          borderRadius: '12px',
+                          marginTop: '6px',
+                        }"
                       />
                       <div v-else class="font-size-responsive-sm text-light">
                         {{ row.value }}
@@ -481,6 +488,13 @@
               dark
               class="status-filter"
               popup-content-class="period-select-menu"
+              :popup-content-style="{
+                boxShadow: 'none',
+                background: '#111111',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                marginTop: '6px',
+              }"
               @update:model-value="applyFilters"
             />
           </q-card-section>
@@ -595,6 +609,7 @@
 import UserService from "src/services/UserService";
 import Helper from "src/services/utils";
 import OrderService from "src/services/OrderService";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   data() {
@@ -824,40 +839,28 @@ export default {
       };
 
       if (currentUser._id === userId) {
-        this.$q.notify({
-          type: "negative",
-          message: "You cannot change your usertype!",
-        });
+        UiAlerts.error("You cannot change your usertype!");
         return;
       }
 
-      this.$q
-        .dialog({
-          title: "Update user",
-          message: `You are about to update ${updatedUser.username}, continue?`,
-          color: "primary",
-          cancel: true,
-          persistent: true,
-        })
+      UiAlerts.confirm(
+        "Update user",
+        `You are about to update ${updatedUser.username}, continue?`,
+        "Update User"
+      )
         .onOk(async () => {
           const response = await UserService.updateUserDetails(
             userId,
             updatedUser
           );
+
           if (response) {
-            this.$q.notify({
-              type: "positive",
-              color: "primary",
-              message: "Update successful!",
-            });
+            UiAlerts.success("Update successful!");
             this.editMode = null;
             this.selectedUser = null;
             this.getAllUsers();
           } else {
-            this.$q.notify({
-              type: "negative",
-              message: "Update failed. Please try again.",
-            });
+            UiAlerts.error("Update failed. Please try again.");
           }
         })
         .onCancel(() => {
@@ -874,38 +877,25 @@ export default {
       const currentUser = await UserService.FindUserByToken();
 
       if (currentUser._id === userId) {
-        this.$q.notify({
-          type: "negative",
-          message: "You cannot delete yourself!",
-        });
+        UiAlerts.error("You cannot delete yourself!");
         return;
       }
 
-      this.$q
-        .dialog({
-          title: "Delete user",
-          message: `You are about to delete ${username}, continue?`,
-          color: "primary",
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(async () => {
-          const response = await UserService.deleteUser(userId);
-          if (response) {
-            this.$q.notify({
-              type: "positive",
-              color: "primary",
-              message: "Delete successful!",
-            });
-            this.selectedUser = null;
-            this.getAllUsers();
-          } else {
-            this.$q.notify({
-              type: "negative",
-              message: "Delete failed. Please try again.",
-            });
-          }
-        });
+      UiAlerts.confirmDelete(
+        "Delete user",
+        `You are about to delete ${username}, continue?`,
+        "Delete User"
+      ).onOk(async () => {
+        const response = await UserService.deleteUser(userId);
+
+        if (response) {
+          UiAlerts.success("Delete successful!");
+          this.selectedUser = null;
+          this.getAllUsers();
+        } else {
+          UiAlerts.error("Delete failed. Please try again.");
+        }
+      });
     },
 
     async openDetails(user) {

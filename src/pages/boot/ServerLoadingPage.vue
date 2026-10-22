@@ -13,6 +13,17 @@
             : `Still waking up the server… (attempt ${attempt}/${maxAttempts})`
         }}
       </div>
+
+      <q-linear-progress
+        indeterminate
+        rounded
+        size="2px"
+        color="primary"
+        track-color="grey-9"
+        class="q-mt-lg"
+        style="width: 240px; max-width: 70vw"
+      />
+      <!-- <div class="overline text-dimmed text-caption q-mt-md">CONNECTING</div> -->
     </q-card>
   </q-page>
 </template>

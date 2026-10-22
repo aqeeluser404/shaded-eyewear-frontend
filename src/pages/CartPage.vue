@@ -57,7 +57,9 @@
                   <div class="col-md-10 col-12 row items-start">
                     <div class="col-md-2 col-4">
                       <div class="q-mr-md">
-                        <div class="skeleton-line skeleton-line--thumb-sm"></div>
+                        <div
+                          class="skeleton-line skeleton-line--thumb-sm"
+                        ></div>
                       </div>
                     </div>
 
@@ -271,6 +273,7 @@ import UserService from "src/services/UserService";
 import OrderService from "src/services/OrderService";
 import SunglassesService from "src/services/SunglassesService";
 import Logger from "src/services/Logger";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   data() {
@@ -294,36 +297,34 @@ export default {
     },
 
     async cancelOrder(orderId) {
-      this.$q
-        .dialog({
-          title: "Confirm",
-          message: `You are about to empty your cart, continue?`,
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(async () => {
-          this.$q.loading.show({
-            message: "Emptying cart...",
-          });
-          try {
-            await OrderService.cancelOrder(orderId);
-            await OrderService.deleteOrder(orderId);
+      UiAlerts.confirmDelete(
+        "Empty Cart",
+        "You are about to empty your cart. Are you sure you want to continue?",
+        "Empty Cart"
+      ).onOk(async () => {
+        this.$q.loading.show({
+          message: "Emptying cart...",
+        });
 
-            localStorage.removeItem("currentOrderId");
-            this.order = {};
-            window.location.reload();
-          } catch (error) {
-            console.error(error);
-            this.$q.notify({
-              type: "negative",
-              message: "Could not empty cart. Please try again.",
-            });
-          } finally {
-            this.$q.loading.hide();
-          }
-        })
-        .onCancel(() => {})
-        .onDismiss(() => {});
+        try {
+          await OrderService.cancelOrder(orderId);
+          await OrderService.deleteOrder(orderId);
+
+          localStorage.removeItem("currentOrderId");
+          this.order = {};
+          window.location.reload();
+          UiAlerts.success("Cart emptied successfully.");
+
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 2000);
+        } catch (error) {
+          console.error(error);
+          UiAlerts.error("Could not empty cart. Please try again.");
+        } finally {
+          this.$q.loading.hide();
+        }
+      });
     },
 
     async getCurrentOrder() {
@@ -390,11 +391,7 @@ export default {
         await this.getCurrentOrder();
       } else {
         this.loading = false;
-        this.$q.notify({
-          type: "info",
-          color: "gradient-primary",
-          message: "Please login to view your cart",
-        });
+        UiAlerts.info("Please login to view your cart");
       }
     },
   },

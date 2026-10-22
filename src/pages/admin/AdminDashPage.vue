@@ -4,9 +4,6 @@
       <div class="section-spacer-sm"></div>
       <div class="constrain">
         <div style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
-          <!-- <div class="overline-tight text-dimmed text-caption">
-            SHADED EYEWEAR
-          </div> -->
           <div class="row justify-between items-center">
             <div
               class="font-size-responsive-giant archivo col-md-8 col-12"
@@ -14,16 +11,19 @@
             >
               Command Center
             </div>
-            <q-btn
-              rounded
-              no-caps
-              outline
-              label="Back to site"
-              color="grey"
-              text-color="grey"
-              to="/"
-              class="q-px-lg q-py-sm text-subtitle1 rounded-button text-bold"
-            />
+
+            <div class="row items-center q-gutter-sm">
+              <q-btn
+                rounded
+                no-caps
+                outline
+                label="Back to site"
+                color="grey"
+                text-color="grey"
+                to="/"
+                class="q-px-lg q-py-sm text-subtitle1 rounded-button text-bold"
+              />
+            </div>
           </div>
           <div class="section-spacer-xs"></div>
         </div>
@@ -34,91 +34,71 @@
           <!-------------------------------------------------------- SIDEBAR -------------------------------------------------------->
           <div
             class="bg-transparent sidebar-collapsible"
-            :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
+            :class="[
+              $q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none',
+              { 'is-expanded': sidebarOpen },
+            ]"
           >
             <div class="sidebar-menu-list">
+              <!-- ALL TABS NOW USE THE SAME HANDLER -->
               <q-item
                 clickable
                 class="menu-item"
-                :class="{
-                  'menu-item--active':
-                    currentPageComponent === 'OverviewComponent',
-                }"
-                @click="changePage('Overview', 'OverviewComponent')"
+                :class="{ 'menu-item--active': currentPageComponent === 'OverviewComponent' }"
+                @click="handleTabClick('Overview', 'OverviewComponent')"
               >
                 <q-item-section avatar>
                   <q-icon name="eva-grid-outline" size="18px" />
                 </q-item-section>
-                <q-item-section class="text-subtitle1 menu-label"
-                  >Overview</q-item-section
-                >
+                <q-item-section class="text-subtitle1 menu-label">Overview</q-item-section>
               </q-item>
 
               <q-item
                 clickable
                 class="menu-item"
-                :class="{
-                  'menu-item--active': currentPageComponent === 'UserComponent',
-                }"
-                @click="changePage('Customers', 'UserComponent')"
+                :class="{ 'menu-item--active': currentPageComponent === 'UserComponent' }"
+                @click="handleTabClick('Customers', 'UserComponent')"
               >
                 <q-item-section avatar>
                   <q-icon name="eva-people-outline" size="18px" />
                 </q-item-section>
-                <q-item-section class="text-subtitle1 menu-label"
-                  >Customers</q-item-section
-                >
+                <q-item-section class="text-subtitle1 menu-label">Customers</q-item-section>
               </q-item>
 
               <q-item
                 clickable
                 class="menu-item"
-                :class="{
-                  'menu-item--active':
-                    currentPageComponent === 'SunglassesComponent',
-                }"
-                @click="changePage('Inventory', 'SunglassesComponent')"
+                :class="{ 'menu-item--active': currentPageComponent === 'SunglassesComponent' }"
+                @click="handleTabClick('Inventory', 'SunglassesComponent')"
               >
                 <q-item-section avatar>
                   <q-icon name="fa-solid fa-glasses" size="16px" />
                 </q-item-section>
-                <q-item-section class="text-subtitle1 menu-label"
-                  >Inventory</q-item-section
-                >
+                <q-item-section class="text-subtitle1 menu-label">Inventory</q-item-section>
               </q-item>
 
               <q-item
                 clickable
                 class="menu-item"
-                :class="{
-                  'menu-item--active':
-                    currentPageComponent === 'OrdersComponent',
-                }"
-                @click="changePage('Orders', 'OrdersComponent')"
+                :class="{ 'menu-item--active': currentPageComponent === 'OrdersComponent' }"
+                @click="handleTabClick('Orders', 'OrdersComponent')"
               >
                 <q-item-section avatar>
                   <q-icon name="eva-clipboard-outline" size="18px" />
                 </q-item-section>
-                <q-item-section class="text-subtitle1 menu-label"
-                  >Orders</q-item-section
-                >
+                <q-item-section class="text-subtitle1 menu-label">Orders</q-item-section>
               </q-item>
 
               <q-item
                 clickable
                 class="menu-item"
-                :class="{
-                  'menu-item--active':
-                    currentPageComponent === 'ReturnsComponent',
-                }"
-                @click="changePage('Return', 'ReturnsComponent')"
+                :class="{ 'menu-item--active': currentPageComponent === 'ReturnsComponent' }"
+                @click="handleTabClick('Return', 'ReturnsComponent')"
               >
                 <q-item-section avatar>
                   <q-icon name="eva-calendar-outline" size="18px" />
                 </q-item-section>
-                <q-item-section class="text-subtitle1 menu-label"
-                  >Returns</q-item-section
-                >
+                <q-item-section class="text-subtitle1 menu-label">Returns</q-item-section>
               </q-item>
               <div class="section-spacer-sm"></div>
             </div>
@@ -174,14 +154,25 @@ export default {
       userDetails: {},
       currentPageTitle: "Overview",
       currentPageComponent: "OverviewComponent",
+      sidebarOpen: false,
     };
   },
 
   methods: {
     capitalizeFirstLetter: Helper.capitalizeFirstLetter,
-    changePage(title, component) {
-      this.currentPageTitle = title;
-      this.currentPageComponent = component;
+
+    // Unified handler for all tabs
+    handleTabClick(title, component) {
+      // 1. If we are clicking a DIFFERENT tab, switch the page and OPEN the sidebar
+      if (this.currentPageComponent !== component) {
+        this.currentPageTitle = title;
+        this.currentPageComponent = component;
+        this.sidebarOpen = true;
+      }
+      // 2. If we click the tab we are ALREADY on, just toggle the sidebar open/closed
+      else {
+        this.sidebarOpen = !this.sidebarOpen;
+      }
     },
 
     async fetchUserDetails() {
@@ -202,12 +193,8 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-// =================================================================================
-// SHELL LAYOUT — row stacks on mobile, side-by-side on desktop
-
 .admin-shell-row
   flex-wrap: wrap
-
   @media (min-width: 1024px)
     flex-wrap: nowrap
 
@@ -215,13 +202,8 @@ export default {
   flex: 1 1 auto
   min-width: 0
 
-
-// =================================================================================
-// SIDEBAR — icon tabs on mobile, collapsible rail on desktop
-
 .sidebar-collapsible
-  // ---------- MOBILE (default, no media query) ----------
-  // everything here applies below 1024px
+  // ---------- MOBILE ----------
   flex: 1 1 100%
   max-width: 100%
   border-bottom: 1px solid rgba(255, 255, 255, 0.2)
@@ -258,7 +240,6 @@ export default {
       padding: 0
       margin: 0
 
-    // hide the whole label section on mobile
     .q-item__section:not(.q-item__section--avatar)
       display: none !important
 
@@ -268,14 +249,14 @@ export default {
     border-bottom: 2px solid var(--q-primary)
     padding-left: 0 !important
 
-  // ---------- DESKTOP (>= 1024px) ----------
-  // overrides everything above
+  // ---------- DESKTOP ----------
   @media (min-width: 1024px)
     flex: 0 0 64px
     max-width: 64px
     border-right: 1px solid rgba(255, 255, 255, 0.2)
     border-bottom: none
-    transition: flex 0.28s ease
+    overflow: hidden
+    transition: flex 0.28s ease, max-width 0.28s ease
 
     .sidebar-menu-list
       display: block
@@ -288,11 +269,9 @@ export default {
     .sidebar-user-block
       display: block
 
-    // UNDO the mobile label hiding
     .menu-item .q-item__section:not(.q-item__section--avatar)
       display: block !important
 
-    // UNDO the mobile icon centering
     .menu-item
       flex: initial
       padding: 0 16px !important
@@ -308,7 +287,6 @@ export default {
         padding: initial
         margin: initial
 
-    // labels: visible but collapsed until hover
     .menu-label
       display: block
       opacity: 0
@@ -322,7 +300,7 @@ export default {
       border-bottom: none
       padding-left: calc(16px - 3px) !important
 
-    &:hover
+    &.is-expanded
       flex: 0 0 240px
       max-width: 240px
 

@@ -23,6 +23,13 @@
           dark
           class="status-filter"
           popup-content-class="period-select-menu"
+          :popup-content-style="{
+            boxShadow: 'none',
+            background: '#111111',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '12px',
+            marginTop: '6px',
+          }"
           @update:model-value="filterByOrderType"
         />
       </div>
@@ -469,6 +476,7 @@ import OrderService from "src/services/OrderService";
 import UserService from "src/services/UserService";
 import Helper from "src/services/utils";
 import SunglassesService from "src/services/SunglassesService";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   data() {
@@ -659,71 +667,45 @@ export default {
     },
 
     async updatePickupOrder(id) {
-      this.$q
-        .dialog({
-          title: "Mark as collected",
-          message: `You are about to mark this order as collected. Continue?`,
-          color: "primary",
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(async () => {
-          try {
-            const response = await OrderService.updatePickupOrder(id);
-            if (response) {
-              this.$q.notify({
-                type: "positive",
-                color: "primary",
-                message: "Update successful!",
-              });
-              this.getAllOrders();
-            } else {
-              this.$q.notify({
-                type: "negative",
-                message: "Update failed. Please try again.",
-              });
-            }
-          } catch (error) {
-            this.$q.notify({
-              type: "negative",
-              message: "Update failed. Please try again.",
-            });
+      UiAlerts.confirm(
+        "Mark as collected",
+        "You are about to mark this order as collected. Continue?",
+        "Mark Collected"
+      ).onOk(async () => {
+        try {
+          const response = await OrderService.updatePickupOrder(id);
+
+          if (response) {
+            UiAlerts.success("Update successful!");
+            this.getAllOrders();
+          } else {
+            UiAlerts.error("Update failed. Please try again.");
           }
-        });
+        } catch (error) {
+          UiAlerts.error("Update failed. Please try again.");
+        }
+      });
     },
 
     async updateDeliveryOrder(id) {
-      this.$q
-        .dialog({
-          title: "Mark as delivered",
-          message: `You are about to mark this order as delivered. Continue?`,
-          color: "primary",
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(async () => {
-          try {
-            const response = await OrderService.updateDeliveryOrder(id);
-            if (response) {
-              this.$q.notify({
-                type: "positive",
-                color: "primary",
-                message: "Update successful!",
-              });
-              this.getAllOrders();
-            } else {
-              this.$q.notify({
-                type: "negative",
-                message: "Update failed. Please try again.",
-              });
-            }
-          } catch (error) {
-            this.$q.notify({
-              type: "negative",
-              message: "Update failed. Please try again.",
-            });
+      UiAlerts.confirm(
+        "Mark as delivered",
+        "You are about to mark this order as delivered. Continue?",
+        "Mark Delivered"
+      ).onOk(async () => {
+        try {
+          const response = await OrderService.updateDeliveryOrder(id);
+
+          if (response) {
+            UiAlerts.success("Update successful!");
+            this.getAllOrders();
+          } else {
+            UiAlerts.error("Update failed. Please try again.");
           }
-        });
+        } catch (error) {
+          UiAlerts.error("Update failed. Please try again.");
+        }
+      });
     },
 
     async deleteOrder(id) {
@@ -734,30 +716,19 @@ export default {
         ? "This order has a refund associated with it. Deleting this order will also delete that refund. Continue?"
         : "You are about to delete this order. Continue?";
 
-      this.$q
-        .dialog({
-          title: "Delete order",
-          message,
-          color: "negative",
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(async () => {
+      UiAlerts.confirmDelete("Delete Order", message, "Delete Order").onOk(
+        async () => {
           const response = await OrderService.deleteOrder(id);
+
           if (response) {
-            this.$q.notify({
-              type: "positive",
-              color: "primary",
-              message: "Delete successful!",
-            });
+            UiAlerts.success("Delete successful!");
           } else {
-            this.$q.notify({
-              type: "negative",
-              message: "Delete failed. Please try again.",
-            });
+            UiAlerts.error("Delete failed. Please try again.");
           }
+
           this.getAllOrders();
-        });
+        }
+      );
     },
   },
 };

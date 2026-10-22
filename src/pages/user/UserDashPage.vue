@@ -19,6 +19,7 @@
             color="grey"
             text-color="grey"
             class="q-px-lg q-py-sm text-subtitle1 rounded-button text-bold"
+            :loading="loggingOut"
             @click="logout"
           />
         </div>
@@ -28,7 +29,10 @@
 
         <div class="row justify-start full-width dashboard-shell-row">
           <!-------------------------------------------------------- SIDEBAR / TABS -------------------------------------------------------->
-          <div class="bg-transparent sidebar-collapsible col-12 col-md-3" :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'">
+          <div
+            class="bg-transparent sidebar-collapsible col-12 col-md-3"
+            :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
+          >
             <div class="sidebar-menu-list">
               <q-item
                 clickable
@@ -100,6 +104,7 @@ import OrdersComponent from "src/components/user/OrdersComponent.vue";
 import ReturnsComponent from "src/components/user/ReturnsComponent.vue";
 import Helper from "../../services/utils";
 import UserService from "src/services/UserService";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   beforeRouteEnter: Helper.beforeRouteEnterUser,
@@ -111,6 +116,7 @@ export default {
   data() {
     return {
       currentPageComponent: "ProfileComponent",
+      loggingOut: false,
     };
   },
   methods: {
@@ -118,44 +124,37 @@ export default {
       this.currentPageComponent = componentName;
     },
     async logout() {
-      this.$q
-        .dialog({
-          title: "Logout",
-          message: `You are about to logout, continue?`,
-          color: "primary",
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(async () => {
-          try {
-            const user = await UserService.FindUserByToken();
-            const response = await UserService.logout(user._id);
+      UiAlerts.confirm(
+        "Are you logging out?",
+        "You can always log back in at any time. If you just want to switch accounts, you can do so on the login screen.",
+        "Log out",
+        "primary",
+        "eva-log-out-outline"
+      ).onOk(async () => {
+        this.loggingOut = true;
 
-            if (response) {
-              localStorage.removeItem("currentOrderId");
+        try {
+          const user = await UserService.FindUserByToken();
+          const response = await UserService.logout(user._id);
 
-              this.$q.notify({
-                type: "positive",
-                color: "primary",
-                message: "You have successfully logged out!",
-              });
+          if (response) {
+            localStorage.removeItem("currentOrderId");
+            UiAlerts.success("You have successfully logged out.");
 
+            setTimeout(() => {
               this.$router.push("/");
               window.location.reload();
-            } else {
-              this.$q.notify({
-                type: "negative",
-                message: "Logout failed. Please try again.",
-              });
-            }
-          } catch (error) {
-            console.error("Logout failed:", error);
-            this.$q.notify({
-              type: "negative",
-              message: "Logout failed. Please try again.",
-            });
+            }, 2000);
+          } else {
+            UiAlerts.error("Logout failed. Please try again.");
+            this.loggingOut = false;
           }
-        });
+        } catch (error) {
+          console.error("Logout failed:", error);
+          UiAlerts.error("Logout failed. Please try again.");
+          this.loggingOut = false;
+        }
+      });
     },
   },
 };

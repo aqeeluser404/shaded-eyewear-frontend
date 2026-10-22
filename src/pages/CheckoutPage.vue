@@ -351,6 +351,7 @@ import OrderService from "src/services/OrderService";
 import PayService from "src/services/PayService";
 import SunglassesService from "src/services/SunglassesService";
 import Helper from "../services/utils";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   beforeRouteEnter: Helper.beforeRouteEnterUser,
@@ -424,33 +425,24 @@ export default {
       const updatedUser = {
         location: this.userAddress.location,
       };
-      this.$q
-        .dialog({
-          title: "Confirm",
-          message: `You are about to update your address, continue?`,
-          color: "primary",
-          cancel: true,
-          persistent: true,
-        })
+      UiAlerts.confirm(
+        "Confirm",
+        "You are about to update your address, continue?",
+        "Update Address"
+      )
         .onOk(async () => {
           const isValid = await this.validateAddress();
+
           if (isValid) {
             await UserService.updateUserDetails(
               this.userDetails._id,
               updatedUser
             );
-            this.$q.notify({
-              type: "positive",
-              color: "primary",
-              message: "Update successful!",
-            });
+            UiAlerts.success("Update successful!");
             this.getUserDetails();
             this.addAddressPanel = false;
           } else {
-            this.$q.notify({
-              type: "negative",
-              message: "Update failed. Please try again.",
-            });
+            UiAlerts.error("Update failed. Please try again.");
           }
         })
         .onCancel(() => {
@@ -462,22 +454,14 @@ export default {
     async initiatePayment() {
       try {
         if (this.orderType === null) {
-          this.$q.notify({
-            type: "negative",
-            color: "red",
-            message: "Please choose your order type.",
-          });
+          UiAlerts.error("Please choose your order type.");
           return;
         }
         if (
           !this.isGuest &&
           this.userDetails.verification?.isVerified === false
         ) {
-          this.$q.notify({
-            type: "negative",
-            color: "red",
-            message: "Please verify your email before continuing.",
-          });
+          UiAlerts.error("Please verify your email before continuing.");
           return;
         }
         if (this.orderType === "pickup") {

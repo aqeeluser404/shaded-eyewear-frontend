@@ -243,6 +243,7 @@
 import EmailService from "src/services/EmailService";
 import UserService from "src/services/UserService";
 import Helper from "src/services/utils";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   name: "ProfileComponent",
@@ -282,10 +283,7 @@ export default {
       const changed = this.changedFields;
 
       if (changed.length === 0) {
-        this.$q.notify({
-          type: "info",
-          message: "No changes to save.",
-        });
+        UiAlerts.info("No changes to save.");
         return false;
       }
 
@@ -318,10 +316,7 @@ export default {
       // Required check — only on changed fields
       for (const key of changed) {
         if (!this.userDetails[key]) {
-          this.$q.notify({
-            type: "negative",
-            message: "Please fill in all the fields.",
-          });
+          UiAlerts.error("Please fill in all the fields.");
           return false;
         }
       }
@@ -330,10 +325,7 @@ export default {
       for (const key of changed) {
         const v = validators[key];
         if (v && !v.fn(this.userDetails[key])) {
-          this.$q.notify({
-            type: "negative",
-            message: v.message,
-          });
+          UiAlerts.error(v.message);
           return false;
         }
       }
@@ -344,61 +336,45 @@ export default {
     async updateUser() {
       if (!this.validateChangedFields()) return;
 
-      this.$q
-        .dialog({
-          title: "Confirm",
-          message: `You are about to update: ${this.changedFields.join(
-            ", "
-          )}. Continue?`,
-          color: "primary",
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(async () => {
-          this.saving = true;
+      UiAlerts.confirm(
+        "Confirm Update",
+        `You are about to update: ${this.changedFields.join(", ")}. Continue?`,
+        "Update Details"
+      ).onOk(async () => {
+        this.saving = true;
 
-          // Only send changed fields + fields the backend always expects
-          const updatedUser = {
-            userType: this.userDetails.userType,
-            location: this.userDetails.location,
-            loginInfo: this.userDetails.loginInfo,
-            order: this.userDetails.order,
-          };
+        // Only send changed fields + fields the backend always expects
+        const updatedUser = {
+          userType: this.userDetails.userType,
+          location: this.userDetails.location,
+          loginInfo: this.userDetails.loginInfo,
+          order: this.userDetails.order,
+        };
 
-          for (const key of this.changedFields) {
-            updatedUser[key] = this.userDetails[key];
+        for (const key of this.changedFields) {
+          updatedUser[key] = this.userDetails[key];
+        }
+
+        try {
+          const response = await UserService.updateUserDetails(
+            this.userDetails._id,
+            updatedUser
+          );
+          if (response) {
+            UiAlerts.success("Update successful!");
+            this.getUserDetails();
+          } else {
+            UiAlerts.error("Update failed. Please try again.");
           }
-
-          try {
-            const response = await UserService.updateUserDetails(
-              this.userDetails._id,
-              updatedUser
-            );
-            if (response) {
-              this.$q.notify({
-                type: "positive",
-                color: "primary",
-                message: "Update successful!",
-              });
-              this.getUserDetails();
-            } else {
-              this.$q.notify({
-                type: "negative",
-                message: "Update failed. Please try again.",
-              });
-            }
-          } catch (error) {
-            this.$q.notify({
-              type: "negative",
-              message: "Update failed. Please try again.",
-            });
-          } finally {
-            this.saving = false;
-          }
-        })
-        .onCancel(() => {
-          this.getUserDetails();
-        });
+        } catch (error) {
+          UiAlerts.error("Update failed. Please try again.");
+        } finally {
+          this.saving = false;
+        }
+      })
+      .onCancel(() => {
+        this.getUserDetails();
+      });
     },
 
     async resendVerificationEmail() {
@@ -407,18 +383,11 @@ export default {
           this.userDetails.email
         );
         if (response) {
-          this.$q.notify({
-            type: "positive",
-            color: "primary",
-            message: "Please check your email for the verification link.",
-          });
+          UiAlerts.success("Verification email sent!", "Please check your email for the verification link.");
           this.getUserDetails();
         }
       } catch (error) {
-        this.$q.notify({
-          type: "negative",
-          message: "Error resending verification email.",
-        });
+        UiAlerts.error("Error resending verification email.");
       }
     },
 

@@ -311,6 +311,7 @@ import UserService from "src/services/UserService";
 import OrderService from "src/services/OrderService";
 import Helper from "src/services/utils";
 import CryptoJS from "crypto-js";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   name: "SunglassesDetailsPage",
@@ -453,10 +454,7 @@ export default {
     },
     async addToCart() {
       if (!this.userTokenDetails._id) {
-        this.$q.notify({
-          type: "negative",
-          message: "Please login to continue.",
-        });
+        UiAlerts.error("Please login to continue.");
         return;
       }
 
@@ -475,18 +473,11 @@ export default {
             await this.createOrder();
           }
         }
-        this.$q.notify({
-          type: "positive",
-          color: "primary",
-          message: `Added to cart`,
-        });
+        UiAlerts.success("Added to cart.");
         await this.fetchSunglassesDetails();
       } catch (error) {
         console.error("Error adding to cart:", error);
-        this.$q.notify({
-          type: "negative",
-          message: "Could not add to cart. Please try again.",
-        });
+        UiAlerts.error("Could not add to cart. Please try again.");
       } finally {
         this.$q.loading.hide();
       }

@@ -671,7 +671,7 @@ export default {
         }
         const response = await UserService.logout(this.userDetails._id);
         if (response) {
-          UiAlerts.success("You have successfully logged out!");
+          UiAlerts.success("You have successfully logged out.");
           this.isLoggedIn = false;
           setTimeout(() => {
             this.$router.push("/");

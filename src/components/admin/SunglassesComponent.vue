@@ -540,6 +540,7 @@
 <script>
 import SunglassesService from "src/services/SunglassesService";
 import Helper from "src/services/utils";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   data() {
@@ -606,20 +607,15 @@ export default {
 
       for (const field of requiredFields) {
         if (!details[field] && !this[field]) {
-          this.$q.notify({
-            type: "negative",
-            message: `Please fill in the ${field} field.`,
-          });
+          UiAlerts.error(`Please fill in the ${field} field.`);
           return false;
         }
       }
 
       if (!modelMaxChar.test(details.model)) {
-        this.$q.notify({
-          type: "negative",
-          message:
-            "Model name cannot exceed 12 characters, no special characters, and must start with an uppercase.",
-        });
+        UiAlerts.error(
+          "Model name cannot exceed 12 characters, no special characters, and must start with an uppercase."
+        );
         return false;
       }
 
@@ -629,10 +625,7 @@ export default {
         .filter((word) => word.length > 0);
 
       if (words.length > 50) {
-        this.$q.notify({
-          type: "negative",
-          message: "Description must be 50 words or less.",
-        });
+        UiAlerts.error("Description must be 50 words or less.");
         return false;
       }
 
@@ -642,41 +635,30 @@ export default {
     async addSunglasses() {
       if (!this.validateFields()) return;
 
-      this.$q
-        .dialog({
-          title: "Add sunglasses",
-          color: "primary",
-          message: `You are about to add ${this.sunglassesDetails.model}, please ensure the front and side images are attached in the correct order, continue?`,
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(async () => {
-          const formData = new FormData();
-          for (const key in this.sunglassesDetails) {
-            if (key !== "images") {
-              formData.append(key, this.sunglassesDetails[key]);
-            }
+      UiAlerts.confirm(
+        "Add sunglasses",
+        `You are about to add ${this.sunglassesDetails.model}, please ensure the front and side images are attached in the correct order, continue?`,
+        "Add Sunglasses"
+      ).onOk(async () => {
+        const formData = new FormData();
+        for (const key in this.sunglassesDetails) {
+          if (key !== "images") {
+            formData.append(key, this.sunglassesDetails[key]);
           }
-          if (this.image1) formData.append("images", this.image1);
-          if (this.image2) formData.append("images", this.image2);
+        }
+        if (this.image1) formData.append("images", this.image1);
+        if (this.image2) formData.append("images", this.image2);
 
-          const response = await SunglassesService.createSunglasses(formData);
-          if (response) {
-            this.$q.notify({
-              type: "positive",
-              color: "primary",
-              message: `Addition successful!`,
-            });
-            this.onReset();
-            this.toggleAddSunglasses();
-            this.getAllSunglasses();
-          } else {
-            this.$q.notify({
-              type: "negative",
-              message: "Addition failed. Please try again.",
-            });
-          }
-        });
+        const response = await SunglassesService.createSunglasses(formData);
+        if (response) {
+          UiAlerts.success("Addition successful!");
+          this.onReset();
+          this.toggleAddSunglasses();
+          this.getAllSunglasses();
+        } else {
+          UiAlerts.error("Addition failed. Please try again.");
+        }
+      });
     },
 
     async getAllSunglasses() {
@@ -701,67 +683,45 @@ export default {
         images: this.sunglasses.images,
       };
 
-      this.$q
-        .dialog({
-          title: "Update sunglasses",
-          message: `You are about to update ${sunglasses.model}, continue?`,
-          color: "primary",
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(async () => {
-          const response = await SunglassesService.updateSunglasses(
-            sunglasses._id,
-            updatedSunglasses
-          );
-          if (response) {
-            this.$q.notify({
-              type: "positive",
-              color: "primary",
-              message: "Update successful!",
-            });
-            this.editMode = null;
-            this.getAllSunglasses();
-          } else {
-            this.$q.notify({
-              type: "negative",
-              message: "Update failed. Please try again.",
-            });
-          }
-        })
-        .onCancel(() => {
+      UiAlerts.confirm(
+        "Update sunglasses",
+        `You are about to update ${sunglasses.model}, continue?`,
+        "Update Sunglasses"
+      ).onOk(async () => {
+        const response = await SunglassesService.updateSunglasses(
+          sunglasses._id,
+          updatedSunglasses
+        );
+        if (response) {
+          UiAlerts.success("Update successful!");
           this.editMode = null;
           this.getAllSunglasses();
-        });
+        } else {
+          UiAlerts.error("Update failed. Please try again.");
+        }
+      })
+      .onCancel(() => {
+        this.editMode = null;
+        this.getAllSunglasses();
+      });
     },
 
     async deleteSunglasses(sunglasses) {
-      this.$q
-        .dialog({
-          title: "Delete sunglasses",
-          message: `You are about to delete ${sunglasses.model}, continue?`,
-          color: "primary",
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(async () => {
-          const response = await SunglassesService.deleteSunglasses(
-            sunglasses._id
-          );
-          if (response) {
-            this.$q.notify({
-              type: "positive",
-              color: "primary",
-              message: "Delete successful!",
-            });
-            this.getAllSunglasses();
-          } else {
-            this.$q.notify({
-              type: "negative",
-              message: "Delete failed. Please try again.",
-            });
-          }
-        });
+      UiAlerts.confirmDelete(
+        "Delete sunglasses",
+        `You are about to delete ${sunglasses.model}, continue?`,
+        "Delete Sunglasses"
+      ).onOk(async () => {
+        const response = await SunglassesService.deleteSunglasses(
+          sunglasses._id
+        );
+        if (response) {
+          UiAlerts.success("Delete successful!");
+          this.getAllSunglasses();
+        } else {
+          UiAlerts.error("Delete failed. Please try again.");
+        }
+      });
     },
 
     cancelEdit() {

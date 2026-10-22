@@ -330,6 +330,7 @@ import UserService from "src/services/UserService";
 import OrderService from "src/services/OrderService";
 import SunglassesService from "src/services/SunglassesService";
 import Helper from "src/services/utils";
+import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
   data() {
@@ -366,110 +367,70 @@ export default {
     },
 
     isReturnEligible(order) {
-      // Must be paid or collected — not pending, not already returned
       if (order.status !== "paid" && order.status !== "paid & picked up") {
         return false;
       }
-
-      // Not already flagged as returned
       if (order.returns === "returned item(s)") {
         return false;
       }
-
-      // Within the 14-day return window
       const daysSinceOrder =
         (Date.now() - new Date(order.orderDate).getTime()) /
         (1000 * 60 * 60 * 24);
       if (daysSinceOrder > 14) {
         return false;
       }
-
       return true;
     },
 
     async startReturn(order) {
-      this.$q
-        .dialog({
-          title: "Request a return",
-          message: `Would you like to request a return for order #${this.formateOrderId(
-            order
-          )}? We'll email you the next steps.`,
-          cancel: true,
-          persistent: true,
-          ok: {
-            label: "Request return",
-            color: "primary",
-            rounded: true,
-            noCaps: true,
-          },
-          cancel: {
-            label: "Keep order",
-            color: "grey",
-            flat: true,
-            rounded: true,
-            noCaps: true,
-          },
-        })
-        .onOk(async () => {
-          try {
-            // Send every sunglass in the order as the items to refund.
-            // Adjust if you want per-item returns.
-            const sunglassesToRefund = order.sunglasses || [];
+      // Using the custom helper to keep your specific button labels
+      UiAlerts.custom(
+        "Request a return",
+        `Would you like to request a return for order #${this.formateOrderId(
+          order
+        )}? We'll email you the next steps.`,
+        "Request return",
+        "primary",
+        "Keep order"
+      ).onOk(async () => {
+        try {
+          const sunglassesToRefund = order.sunglasses || [];
 
-            const response = await OrderService.refundOrder(
-              order._id,
-              sunglassesToRefund
-            );
+          const response = await OrderService.refundOrder(
+            order._id,
+            sunglassesToRefund
+          );
 
-            if (response) {
-              this.$q.notify({
-                type: "positive",
-                color: "primary",
-                message: "Return requested. Check your email for next steps.",
-              });
-              this.getAllMyOrders();
-            } else {
-              this.$q.notify({
-                type: "negative",
-                message: "Could not process return. Please try again.",
-              });
-            }
-          } catch (error) {
-            console.error("Return request failed:", error);
-            this.$q.notify({
-              type: "negative",
-              message: "Could not process return. Please try again.",
-            });
+          if (response) {
+            UiAlerts.success("Return requested. Check your email for next steps.");
+            this.getAllMyOrders();
+          } else {
+            UiAlerts.error("Could not process return. Please try again.");
           }
-        });
+        } catch (error) {
+          console.error("Return request failed:", error);
+          UiAlerts.error("Could not process return. Please try again.");
+        }
+      });
     },
 
     async cancelOrder(orderId) {
-      this.$q
-        .dialog({
-          title: "Confirm",
-          message: `You are about to delete your order, continue?`,
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(async () => {
-          const response = await OrderService.cancelOrder(orderId);
-          if (response) {
-            await OrderService.deleteOrder(orderId);
-            localStorage.removeItem("currentOrderId");
-            this.getAllMyOrders();
-            this.$q.notify({
-              type: "positive",
-              color: "primary",
-              message: "Cancel successful!",
-            });
-          } else {
-            this.$q.notify({
-              type: "negative",
-              message: "Cancel failed. Please try again.",
-            });
-          }
-        });
+      // Using the destructive helper since we are deleting the order
+      UiAlerts.confirmDelete(
+        "Cancel Order",
+        "You are about to delete your order, continue?",
+        "Delete Order"
+      ).onOk(async () => {
+        const response = await OrderService.cancelOrder(orderId);
+        if (response) {
+          await OrderService.deleteOrder(orderId);
+          localStorage.removeItem("currentOrderId");
+          this.getAllMyOrders();
+          UiAlerts.success("Cancel successful!");
+        } else {
+          UiAlerts.error("Cancel failed. Please try again.");
+        }
+      });
     },
 
     async getAllMyOrders() {
