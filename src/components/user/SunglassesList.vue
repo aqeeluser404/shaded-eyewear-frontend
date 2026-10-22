@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-start flex-wrap sunglasses-grid">
     <!------------------------------------------------ LOADING SKELETON ------------------------------------------------>
-     <template v-if="loading">
+    <template v-if="loading">
       <q-card
         v-for="n in skeletonCount"
         :key="'skel-' + n"
@@ -14,7 +14,7 @@
 
         <q-item class="column sunglass-info">
           <div class="row items-start justify-between full-width no-wrap">
-            <div class="skeleton-line skeleton-line--md "></div>
+            <div class="skeleton-line skeleton-line--md"></div>
             <div class="skeleton-line skeleton-line--sm"></div>
           </div>
         </q-item>
@@ -70,100 +70,117 @@
 </template>
 
 <script>
-import SunglassesService from 'src/services/SunglassesService'
-import Helper from 'src/services/utils'
+import SunglassesService from "src/services/SunglassesService";
+import Helper from "src/services/utils";
 
 export default {
-  name: 'SunglassesList',
+  name: "SunglassesList",
 
   props: {
+    // Renamed internally to avoid conflicts with our fallback data
+    sunglassesData: {
+      type: Array,
+      default: () => [],
+    },
     search: {
       type: String,
-      default: ''
+      default: "",
     },
     limit: {
       type: Number,
-      default: null
+      default: null,
     },
-    // ADDED: The mode toggle ('all' or 'featured')
     mode: {
       type: String,
-      default: 'all',
-      validator: (value) => ['all', 'featured'].includes(value)
+      default: "all",
     },
-    // ADDED: The array of model names to show when mode === 'featured'
     featuredNames: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
 
   data() {
     return {
-      sunglasses: [],
+      // Use a different name for the internal fetched data
+      fetchedSunglasses: [],
       loading: true,
-      skeletonCount: 3
-    }
+      skeletonCount: 3,
+    };
   },
 
   computed: {
+    // Master list: Use passed data if it exists, otherwise use fetched data
+    masterList() {
+      return this.sunglassesData.length > 0
+        ? this.sunglassesData
+        : this.fetchedSunglasses;
+    },
+
     filteredSunglasses() {
-      let result = this.sunglasses
-      // 1. If mode is 'featured', filter by the provided names array first
-      if (this.mode === 'featured' && this.featuredNames.length > 0) {
-        result = result.filter(sunglass =>
-          this.featuredNames.includes(sunglass.model)
-        )
+      let result = this.masterList;
+
+      // Apply featured mode if needed
+      if (this.mode === "featured" && this.featuredNames.length > 0) {
+        result = result.filter((s) => this.featuredNames.includes(s.model));
       }
 
-      // 2. Apply the search filter on top of the result
+      // Apply search (fallback if parent didn't handle it)
       if (this.search) {
-        const term = this.search.toLowerCase()
-        result = result.filter(sunglass =>
-          sunglass.model.toLowerCase().includes(term) ||
-          sunglass.description.toLowerCase().includes(term)
-        )
+        const term = this.search.toLowerCase();
+        result = result.filter(
+          (s) =>
+            s.model.toLowerCase().includes(term) ||
+            s.description.toLowerCase().includes(term)
+        );
       }
 
-      return result
+      return result;
     },
 
     displayedSunglasses() {
       if (this.limit) {
-        return this.filteredSunglasses.slice(0, this.limit)
+        return this.filteredSunglasses.slice(0, this.limit);
       }
-      return this.filteredSunglasses
-    }
+      return this.filteredSunglasses;
+    },
   },
 
   methods: {
     getImageUrl: Helper.getImageUrl,
     capitalizeFirstLetter: Helper.capitalizeFirstLetter,
     viewSunglassesDetails(id) {
-      Helper.viewSunglassesDetails(id, this.$router)
+      Helper.viewSunglassesDetails(id, this.$router);
     },
     async fetchSunglasses() {
-      this.loading = true
-      try {
-        const response = await SunglassesService.findAllSunglasses()
-        this.sunglasses = response || []
+      // If the parent passed data, we don't need to fetch anything!
+      if (this.sunglassesData.length > 0) {
+        this.loading = false;
+        this.skeletonCount = this.sunglassesData.length;
+        return;
+      }
 
-        // If featured mode, only load 3 skeletons. Otherwise, load actual count.
-        if (this.mode === 'featured') {
-          this.skeletonCount = 3
+      // Otherwise, fetch from API (used for Homepage featured items)
+      this.loading = true;
+      try {
+        const response = await SunglassesService.findAllSunglasses();
+        this.fetchedSunglasses = response || [];
+
+        if (this.mode === "featured") {
+          this.skeletonCount = 3;
         } else {
-          this.skeletonCount = Math.max(this.sunglasses.length, 1)
+          this.skeletonCount = Math.max(this.fetchedSunglasses.length, 1);
         }
       } finally {
-        this.loading = false
+        this.loading = false;
       }
-    }
+    },
   },
 
   created() {
-    this.fetchSunglasses()
-  }
-}
+    this.fetchSunglasses();
+  },
+};
 </script>
 
 <style lang="sass" scoped>
