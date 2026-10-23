@@ -92,7 +92,7 @@
 
             <!-- real content -->
             <template v-else>
-              <div class="overline text-dimmed text-caption q-mb-xs">
+              <div class="overline text-dimmed text-caption q-mb-sm">
                 DESCRIPTION
               </div>
 
@@ -149,7 +149,9 @@
               <div class="section-spacer-sm"></div>
 
               <div>
-                <div class="font-size-responsive-sm text-dimmed">
+                <div
+                  class="font-size-responsive-md text-dimmed line-height-1-6"
+                >
                   {{ sunglasses.description }}
                 </div>
               </div>
@@ -193,7 +195,11 @@
               <div class="section-spacer-sm"></div>
 
               <div class="row items-center">
-                <q-icon name="eva-shield-outline" color="primary" class="font-size-responsive-lg" />
+                <q-icon
+                  name="eva-shield-outline"
+                  color="primary"
+                  class="font-size-responsive-lg"
+                />
                 <span class="font-size-responsive-sm text-dimmed q-ml-sm">
                   Deliveries made in Cape Town · pickup available in Kenwyn
                 </span>
@@ -212,8 +218,10 @@
     >
       <div class="section-spacer-md"></div>
       <div class="constrain">
-        <div class="overline text-dimmed text-caption q-mb-xs">You may also like</div>
-        <div class="font-size-responsive-giant archivo text-light text-bold">
+        <div class="overline text-dimmed text-caption q-mb-sm">
+          You may also like
+        </div>
+        <div class="font-size-responsive-xxxl archivo text-light text-bold">
           Related frames
         </div>
 
@@ -223,9 +231,9 @@
           <q-btn
             v-if="canScrollLeft"
             round
+            dense
             icon="eva-arrow-back-outline"
-            color="text-dark"
-            class="scroll-arrow scroll-arrow--left bg-dark"
+            class="scroll-arrow scroll-arrow--left btn-gradient-primary"
             @click="scrollRelated(-1)"
           />
 
@@ -274,14 +282,19 @@
 
                 <div class="column q-pl-md related-info">
                   <div
-                    class="font-size-responsive-md archivo text-light text-bold"
+                    class="font-size-responsive-md text-light text-bold"
                   >
                     {{ sunglass.model }}
                   </div>
-                  <div class="text-caption text-dimmed related-description">
+                  <div
+                    class="text-caption text-dimmed related-description"
+                    :title="sunglass.description"
+                  >
                     {{ sunglass.description }}
                   </div>
-                  <div class="text-gradient-primary font-size-responsive-sm  archivo text-bold q-mt-xs">
+                  <div
+                    class="text-gradient-primary text-caption archivo text-bold q-mt-xs"
+                  >
                     R {{ sunglass.price }}.00
                   </div>
                 </div>
@@ -294,8 +307,7 @@
             round
             dense
             icon="eva-arrow-forward-outline"
-            color="text-dark"
-            class="scroll-arrow scroll-arrow--right bg-dark"
+            class="scroll-arrow scroll-arrow--right btn-gradient-primary"
             @click="scrollRelated(1)"
           />
         </div>
@@ -650,24 +662,31 @@ export default {
   min-width: 0
 
 .related-description
+  display: -webkit-box
+  -webkit-line-clamp: 2 // Limits the text to exactly 2 lines
+  -webkit-box-orient: vertical
   overflow: hidden
   text-overflow: ellipsis
-  white-space: nowrap
-  max-width: 100%
+  white-space: normal // Forces the text to wrap instead of cutting off on one line
+  line-height: 1.6
+  margin-top: 4px
 
 .scroll-arrow
   position: absolute
   top: 50%
   transform: translateY(-50%)
   z-index: 2
-  // background: rgba(0, 0, 0, 0.6)
-  backdrop-filter: blur(4px)
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5)
+
+  // FORCE THE ICON TO BE PURE BLACK
+  :deep(.q-icon)
+    color: #000000 !important
 
   &--left
-    left: -8px
+    left: -16px
 
   &--right
-    right: -8px
+    right: -16px
 
 .gallery-stage--loading
   background: transparent

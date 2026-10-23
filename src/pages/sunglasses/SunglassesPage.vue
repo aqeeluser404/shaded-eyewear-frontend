@@ -36,12 +36,13 @@
             before dispatch.
           </p>
 
-          <div class="section-spacer-sm"></div>
+          <div class="section-spacer-sm large-screen-only"></div>
+          <div class="section-spacer-xs small-screen-only"></div>
 
           <!-- SEARCH AND PRICE FILTER ROW -->
-          <div class="row q-col-gutter-sm items-center">
+          <div class="row items-center full-width">
             <!-- Search -->
-            <div class="col-12 col-sm-7">
+            <div class="col-12 col-sm-4">
               <q-input
                 v-model="search"
                 placeholder="Search frames"
@@ -49,6 +50,7 @@
                 outlined
                 dark
                 class="customer-search full-width"
+                :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
               >
                 <template #prepend>
                   <q-icon name="eva-search-outline" size="18px" />
@@ -57,8 +59,9 @@
             </div>
 
             <!-- Price Filter -->
-            <div class="col-12 col-sm-5">
+            <div class="col-12 col-sm-2">
               <q-select
+                :class="$q.screen.gt.sm ? 'q-mt-none' : 'q-mt-sm'"
                 v-model="selectedPriceRange"
                 :options="priceOptions"
                 option-label="label"
@@ -96,6 +99,10 @@
         </div>
       </div>
       <div class="section-spacer-md"></div>
+    </section>
+
+    <section>
+
     </section>
   </q-page>
 </template>
