@@ -134,10 +134,31 @@
                 >Home</q-item-section
               >
             </q-item>
-            <q-item clickable v-close-popup @click="menuOpen = false" to="/">
-              <q-item-section class="font-size-responsive-md"
-                >Services</q-item-section
-              >
+            <q-item
+              clickable
+              @click="
+                () => {
+                  menuOpen = false;
+                  scrollToSection('about-section');
+                }
+              "
+            >
+              <q-item-section class="font-size-responsive-md">
+                About
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              @click="
+                () => {
+                  menuOpen = false;
+                  scrollToSection('service-section');
+                }
+              "
+            >
+              <q-item-section class="font-size-responsive-md">
+                Services
+              </q-item-section>
             </q-item>
             <q-item
               clickable
@@ -219,23 +240,31 @@
                 />
               </router-link>
 
-              <router-link to="/" class="footer-link font-size-responsive-sm">
+              <!-- About Link -->
+              <a
+                @click="scrollToSection('about-section')"
+                class="footer-link font-size-responsive-sm cursor-pointer"
+              >
                 <span>About</span>
                 <q-icon
                   name="eva-arrow-forward-outline"
                   size="14px"
                   class="footer-link-arrow"
                 />
-              </router-link>
+              </a>
 
-              <router-link to="/" class="footer-link font-size-responsive-sm">
+              <!-- Services Link -->
+              <a
+                @click="scrollToSection('service-section')"
+                class="footer-link font-size-responsive-sm cursor-pointer"
+              >
                 <span>Services</span>
                 <q-icon
                   name="eva-arrow-forward-outline"
                   size="14px"
                   class="footer-link-arrow"
                 />
-              </router-link>
+              </a>
 
               <router-link
                 to="/sunglasses"
@@ -330,7 +359,9 @@
                 <q-icon name="mdi-instagram" size="22px" />
               </div>
               <div class="col">
-                <div class="font-size-responsive-sm archivo text-light text-bold">
+                <div
+                  class="font-size-responsive-sm archivo text-light text-bold"
+                >
                   @shadedeyewearza
                 </div>
                 <div class="font-size-responsive-xs text-dimmed">
@@ -372,17 +403,27 @@
           :class="$q.screen.gt.md ? 'q-px-none' : 'q-px-md'"
         >
           <div class="section-spacer-xs"></div>
-          <div class="row justify-between items-center">
-            <div class="row items-center">
+          <div class="row justify-between items-center q-col-gutter-y-sm">
+            <!-- Left Side: Logo + Brand -->
+            <div
+              class="col-12 col-md-auto row items-center justify-center justify-md-start"
+            >
               <q-avatar class="footer-avatar q-mr-sm">
                 <img src="../assets/brand/logo-white.png" alt="Logo" />
               </q-avatar>
-              <span class="font-size-responsive-xs text-dimmed">
+
+              <span
+                class="text-caption text-dimmed"
+                style="line-height: 1; margin-top: 2px"
+              >
                 Shaded Eyewear ™ · Est. 2023 · Cape Town
               </span>
             </div>
 
-            <div class="font-size-responsive-xs text-dimmed">
+            <!-- Right Side: Credits -->
+            <div
+              class="col-12 col-md-auto text-center text-md-right text-caption text-dimmed"
+            >
               Founded by Amaan Ebrahim · Built by
               <a
                 href="https://aqeel-dev-portfolio.web.app"
@@ -937,4 +978,5 @@ export default {
 
 .footer-bottom
   border-top: 1px solid rgba(255, 255, 255, 0.08)
+
 </style>

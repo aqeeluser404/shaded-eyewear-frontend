@@ -46,7 +46,7 @@
                 no-caps
                 flat
                 label="Back to shop"
-                to="/sunglasses"
+                to="/"
                 icon="eva-arrow-back-outline"
                 class="custom-button icon-btn font-size-responsive-sm text-light"
               />
