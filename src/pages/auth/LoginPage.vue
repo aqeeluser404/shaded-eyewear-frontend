@@ -3,13 +3,6 @@
     <div class="login-shell row no-wrap">
       <!----------------------------------------------------------- LEFT PANEL (image placeholder) -------------------------------------------------->
       <div class="col-md-5 left-panel gt-sm">
-        <!-- blurred backdrop layer -->
-        <!-- <q-img
-          src="~src/assets/homepage/stock1.jpg"
-          class="left-backdrop"
-          fit="cover"
-        /> -->
-
         <div class="left-image-frame">
           <q-img
             src="~src/assets/gallery/persons/g10.jpg"
@@ -18,22 +11,6 @@
           />
           <div class="left-overlay"></div>
         </div>
-
-        <!-- <div class="left-content column justify-end q-pa-xl">
-          <div class="glass-panel">
-            <div class="font-size-responsive-sm text-light">
-              "Ordered on a Tuesday, had them in Cape Town by Thursday. <br>They've been on
-              my face every sunny day since."
-            </div>
-
-            <div class="q-mt-sm">
-              <div class="font-size-responsive-sm text-light text-bold">
-                Jessica Rudal
-              </div>
-              <div class="text-caption text-dimmed">Customer since 2023</div>
-            </div>
-          </div>
-        </div> -->
       </div>
 
       <!----------------------------------------------------------- RIGHT PANEL (form) -------------------------------------------------->
@@ -53,17 +30,19 @@
             </div>
 
             <div
-              class="font-size-responsive-xxl archivo text-light text-bold q-mb-md text-center"
+              class="font-size-responsive-xxxl archivo text-light text-bold q-mb-md text-center"
             >
               WELCOME BACK
             </div>
             <div
-              class="font-size-responsive-sm text-dimmed q-mb-xl text-center"
+              class="font-size-responsive-md text-dimmed q-mb-xl text-center"
             >
               Sign in to keep track of your orders
             </div>
 
-            <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+            <div class="section-spacer-xs"></div>
+
+            <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-lg">
               <div>
                 <div class="overline text-dimmed text-caption q-mb-xs">
                   EMAIL ADDRESS
@@ -75,7 +54,6 @@
                   placeholder="you@example.com"
                   class="custom-input"
                   input-style="color: white;"
-                  :rules="[(val) => !!val || 'Email is required']"
                 />
               </div>
 
@@ -91,7 +69,6 @@
                   :type="showPassword ? 'text' : 'password'"
                   class="custom-input"
                   input-style="color: white;"
-                  :rules="[(val) => !!val || 'Password is required']"
                 >
                   <template #append>
                     <q-icon
@@ -105,63 +82,67 @@
                 </q-input>
               </div>
 
-              <div class="row justify-between items-center">
-                <q-checkbox
-                  v-model="rememberMe"
-                  label="Remember me"
-                  dense
-                  color="primary"
-                  class="text-dimmed text-subtitle1 outlined-checkbox"
+              <div class="">
+                <div class="section-spacer-xs"></div>
+                <div class="row justify-between items-center">
+                  <q-checkbox
+                    v-model="rememberMe"
+                    label="Remember me"
+                    dense
+                    color="primary"
+                    align="center"
+                    class="text-dimmed font-size-responsive-sm outlined-checkbox"
+                  />
+                  <router-link
+                    to="/forgot-password"
+                    class="text-dimmed font-size-responsive-sm"
+                    style="text-decoration: none"
+                  >
+                    Forgot password?
+                  </router-link>
+                </div>
+
+                <q-btn
+                  rounded
+                  no-caps
+                  label="Sign in"
+                  type="submit"
+                  text-color="dark"
+                  class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mt-sm q-mb-md"
+                  style="width: 100%"
                 />
-                <router-link
-                  to="/forgot-password"
-                  class="text-dimmed text-subtitle1"
-                  style="text-decoration: none"
-                >
-                  Forgot password?
-                </router-link>
-              </div>
 
-              <q-btn
-                rounded
-                no-caps
-                label="Sign in"
-                type="submit"
-                text-color="dark"
-                class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mt-md"
-                style="width: 100%"
-              />
+                <!-- Divider -->
+                <div class="row items-center q-mb-md">
+                  <q-separator color="grey-9" class="col" />
+                  <div class="text-caption text-dimmed q-px-md">OR</div>
+                  <q-separator color="grey-9" class="col" />
+                </div>
 
-              <!-- Divider -->
-              <div class="row items-center">
-                <q-separator color="grey-9" class="col" />
-                <div class="text-caption text-dimmed q-px-md">OR</div>
-                <q-separator color="grey-9" class="col" />
-              </div>
+                <!-- Guest + register -->
+                <q-btn
+                  rounded
+                  no-caps
+                  outline
+                  color="grey"
+                  text-color="grey"
+                  label="Continue as guest"
+                  class="q-px-xl q-py-md rounded-button text-subtitle1 q-mb-md"
+                  style="width: 100%"
+                  @click="loginAsGuest"
+                  :loading="guestLoading"
+                />
 
-              <!-- Guest + register -->
-              <q-btn
-                rounded
-                no-caps
-                outline
-                color="grey"
-                text-color="grey"
-                label="Continue as guest"
-                class="q-px-xl q-py-md rounded-button text-subtitle1 q-mb-md"
-                style="width: 100%"
-                @click="loginAsGuest"
-                :loading="guestLoading"
-              />
-
-              <div class="text-center text-subtitle1 text-dimmed">
-                New to Shaded Eyewear?
-                <router-link
-                  to="/auth/register"
-                  class="text-primary"
-                  style="text-decoration: none"
-                >
-                  Create an account
-                </router-link>
+                <div class="text-center font-size-responsive-sm text-dimmed">
+                  New to Shaded Eyewear?
+                  <router-link
+                    to="/auth/register"
+                    class="text-primary"
+                    style="text-decoration: none"
+                  >
+                    Create an account
+                  </router-link>
+                </div>
               </div>
             </q-form>
           </div>
@@ -345,4 +326,14 @@ export default {
   .right-panel
     padding-top: 48px
     padding-bottom: 48px
+
+.outlined-checkbox
+  :deep(.q-checkbox__inner)
+    // This centers the actual square box
+    display: flex
+    align-items: center
+
+  :deep(.q-checkbox__label)
+    // This ensures the text doesn't drop below the baseline
+    line-height: 1
 </style>

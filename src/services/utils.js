@@ -147,12 +147,14 @@ class Helper {
           { withCredentials: true }
         );
         return response.data || null;
-      } else {
-        console.log(`Cookie ${name} not found`);
-        return null;
       }
+      return null;
     } catch (error) {
-      console.error("Error fetching token from backend:", error);
+      // 401/404 just means "not logged in", so don't log it as an error
+      const status = error.response?.status;
+      if (status !== 401 && status !== 404) {
+        console.error("Error fetching token from backend:", error);
+      }
       return null;
     }
   }

@@ -11,57 +11,30 @@
           />
           <div class="left-overlay"></div>
         </div>
-
-        <!-- <div class="left-content column justify-end q-pa-xl">
-          <div class="glass-panel">
-            <div class="font-size-responsive-sm text-light">
-              "Ordered on a Tuesday, had them in Cape Town by Thursday. <br>They've been on
-              my face every sunny day since."
-            </div>
-
-            <div class="q-mt-sm">
-              <div class="font-size-responsive-sm text-light text-bold">
-                Jessica Rudal
-              </div>
-              <div class="text-caption text-dimmed">Customer since 2023</div>
-            </div>
-          </div>
-        </div> -->
       </div>
 
       <!----------------------------------------------------------- RIGHT PANEL (form) -------------------------------------------------->
       <div class="col-md-7 col-12 right-panel column q-pa-xl">
         <div class="full-width" style="margin: auto 0">
           <div class="constrain-more">
-            <!-- <div class="section-spacer-xs"></div>
-            <div class="row justify-between items-center q-mb-xl">
-              <q-btn
-                dense
-                no-caps
-                flat
-                label="Back to login"
-                to="/auth/login"
-                icon="eva-arrow-back-outline"
-                class="custom-button icon-btn font-size-responsive-sm text-light text-dimmed"
-              />
-            </div> -->
-
             <div
-              class="font-size-responsive-xxl archivo text-light text-bold q-mb-md text-center"
+              class="font-size-responsive-xxxl archivo text-light text-bold q-mb-md text-center"
             >
               CREATE AN ACCOUNT
             </div>
             <div
-              class="font-size-responsive-sm text-dimmed q-mb-xl text-center"
+              class="font-size-responsive-md text-dimmed q-mb-xl text-center"
             >
               You are few moments away from getting started!
             </div>
 
-            <q-form @submit="onSubmit" class="q-gutter-md">
+            <div class="section-spacer-xs"></div>
+
+            <q-form @submit="onSubmit" class="q-gutter-lg">
               <div class="row">
                 <div
                   class="col-12 col-md-6"
-                  :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
+                  :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none q-mb-lg'"
                 >
                   <div class="overline text-dimmed text-caption q-mb-xs">
                     FIRST NAME
@@ -73,7 +46,6 @@
                     placeholder="Jane"
                     class="custom-input"
                     input-style="color: white;"
-                    :rules="[(val) => !!val || 'First name is required']"
                   />
                 </div>
 
@@ -88,7 +60,6 @@
                     placeholder="Doe"
                     class="custom-input"
                     input-style="color: white;"
-                    :rules="[(val) => !!val || 'Last name is required']"
                   />
                 </div>
               </div>
@@ -96,7 +67,7 @@
               <div class="row">
                 <div
                   class="col-12 col-md-6"
-                  :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
+                  :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none q-mb-lg'"
                 >
                   <div class="overline text-dimmed text-caption q-mb-xs">
                     USERNAME
@@ -108,7 +79,6 @@
                     placeholder="janedoe"
                     class="custom-input"
                     input-style="color: white;"
-                    :rules="[(val) => !!val || 'Username is required']"
                   />
                 </div>
 
@@ -123,7 +93,6 @@
                     placeholder="you@example.com"
                     class="custom-input"
                     input-style="color: white;"
-                    :rules="[(val) => !!val || 'Email is required']"
                   />
                 </div>
               </div>
@@ -139,7 +108,6 @@
                   placeholder="082 123 4567"
                   class="custom-input"
                   input-style="color: white;"
-                  :rules="[(val) => !!val || 'Required']"
                 />
               </div>
 
@@ -155,7 +123,6 @@
                   :type="showPassword ? 'text' : 'password'"
                   class="custom-input"
                   input-style="color: white;"
-                  :rules="[(val) => !!val || 'Required']"
                 >
                   <template #append>
                     <q-icon
@@ -167,29 +134,32 @@
                 </q-input>
               </div>
 
-              <div class="text-dimmed text-subtitle1">
-                By signing up you agree to Shaded Eyewear's Terms of Service.
-              </div>
+              <div>
+                <div class="section-spacer-xs"></div>
+                <div class="text-dimmed font-size-responsive-sm text-center">
+                  By signing up you agree to Shaded Eyewear's Terms of Service.
+                </div>
 
-              <q-btn
-                rounded
-                no-caps
-                label="Create your account"
-                type="submit"
-                text-color="dark"
-                class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mt-md"
-                style="width: 100%"
-              />
+                <q-btn
+                  rounded
+                  no-caps
+                  label="Create your account"
+                  type="submit"
+                  text-color="dark"
+                  class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mt-md q-mb-md"
+                  style="width: 100%"
+                />
 
-              <div class="text-center text-subtitle1 text-dimmed q-mt-md">
-                Already a member?
-                <router-link
-                  to="/auth/login"
-                  class="text-primary"
-                  style="text-decoration: none"
-                >
-                  Sign in
-                </router-link>
+                <div class="text-center font-size-responsive-sm text-dimmed">
+                  Already a member?
+                  <router-link
+                    to="/auth/login"
+                    class="text-primary"
+                    style="text-decoration: none"
+                  >
+                    Sign in
+                  </router-link>
+                </div>
               </div>
             </q-form>
 
@@ -246,11 +216,15 @@ export default {
         return false;
       }
       if (details.firstName && !this.validateText(details.firstName)) {
-        UiAlerts.error("First name must be at least 5 characters long and start with an uppercase.");
+        UiAlerts.error(
+          "First name must be at least 5 characters long and start with an uppercase."
+        );
         return false;
       }
       if (details.lastName && !this.validateText(details.lastName)) {
-        UiAlerts.error("Last name must be at least 5 characters long and start with an uppercase.");
+        UiAlerts.error(
+          "Last name must be at least 5 characters long and start with an uppercase."
+        );
         return false;
       }
       if (details.email && !this.validateEmail(details.email)) {
@@ -262,11 +236,15 @@ export default {
         return false;
       }
       if (details.username && !this.validateUsername(details.username)) {
-        UiAlerts.error("Username must be 3-15 characters long and contain only letters and numbers.");
+        UiAlerts.error(
+          "Username must be 3-15 characters long and contain only letters and numbers."
+        );
         return false;
       }
       if (details.password && !this.validatePassword(details.password)) {
-        UiAlerts.error("Password must be at least 8 characters long and include at least one letter and one number.");
+        UiAlerts.error(
+          "Password must be at least 8 characters long and include at least one letter and one number."
+        );
         return false;
       }
       return true;

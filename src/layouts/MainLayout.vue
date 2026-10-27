@@ -360,11 +360,11 @@
               </div>
               <div class="col">
                 <div
-                  class="font-size-responsive-sm archivo text-light text-bold"
+                  class="font-size-responsive-sm archivo text-light text-bold q-mb-xs"
                 >
                   @shadedeyewearza
                 </div>
-                <div class="font-size-responsive-xs text-dimmed">
+                <div class="text-caption text-dimmed">
                   New arrivals, drops and fit guides
                 </div>
               </div>
@@ -381,14 +381,14 @@
                 <q-icon name="fa-solid fa-location-dot" size="18px" />
               </div>
               <div class="col">
-                <div class="font-size-responsive-sm text-light text-bold">
-                  Open 08:00 – 17:00
+                <div class="font-size-responsive-sm text-light text-bold q-mb-xs">
+                  Open 08:00AM – 5:00PM
                 </div>
-                <div class="font-size-responsive-xs text-dimmed">
-                  65 Stockley Road, Kenwyn
+                <div class="text-caption text-dimmed">
+                  [Street Address]
                 </div>
-                <div class="font-size-responsive-xs text-dimmed">
-                  Cape Town, 7779
+                <div class="text-caption text-dimmed">
+                  Cape Town, South Africa
                 </div>
               </div>
             </div>

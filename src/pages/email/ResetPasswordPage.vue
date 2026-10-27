@@ -4,7 +4,7 @@
     title="RESET PASSWORD"
     subtitle="Choose a new password for your account."
   >
-    <q-form @submit="onSubmit" class="q-gutter-md">
+    <q-form @submit="onSubmit" class="">
       <div>
         <div class="overline text-dimmed text-caption q-mb-xs">
           NEW PASSWORD
@@ -20,12 +20,6 @@
           hint="At least 8 characters, with a letter and a number"
           class="custom-input"
           input-style="color: white;"
-          :rules="[
-            (val) => !!val || 'Password is required',
-            (val) =>
-              validatePassword(val) ||
-              'Use at least 8 characters with a letter and a number',
-          ]"
         >
           <template #append>
             <q-icon
@@ -43,7 +37,7 @@
         label="Change password"
         type="submit"
         text-color="dark"
-        class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mt-md"
+        class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mt-lg"
         style="width: 100%"
         :loading="loading"
       />

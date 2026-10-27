@@ -11,6 +11,7 @@
     </div>
 
     <q-menu
+      v-if="ready"
       v-model="isOpen"
       :target="triggerRef"
       :anchor="anchor"
@@ -105,7 +106,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 export default {
   name: "UniversalMenu",
@@ -120,7 +121,13 @@ export default {
   },
   setup() {
     const triggerRef = ref(null);
-    return { triggerRef };
+    const ready = ref(false);
+
+    onMounted(() => {
+      ready.value = true;
+    });
+
+    return { triggerRef, ready };
   },
   data() {
     return {

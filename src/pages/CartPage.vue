@@ -381,15 +381,29 @@ export default {
     },
 
     async getUserDetails() {
-      const token = await Helper.getCookie("token");
-      if (token) {
+      try {
+        const hasCookie = await Helper.checkCookie();
+        const token = hasCookie ? await Helper.getCookie("token") : null;
+
+        if (!token) {
+          this.loading = false;
+          UiAlerts.info("Please login to view your cart");
+          return;
+        }
+
         const id = await UserService.FindUserByToken();
+        if (!id?._id) {
+          this.loading = false;
+          UiAlerts.info("Please login to view your cart");
+          return;
+        }
+
         this.userTokenDetails = id;
-        const user = await UserService.findUserById(this.userTokenDetails._id);
-        this.userDetails = user;
+        this.userDetails = await UserService.findUserById(id._id);
 
         await this.getCurrentOrder();
-      } else {
+      } catch (error) {
+        // expired or invalid token: treat as logged out
         this.loading = false;
         UiAlerts.info("Please login to view your cart");
       }

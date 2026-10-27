@@ -281,9 +281,7 @@
                 </div>
 
                 <div class="column q-pl-md related-info">
-                  <div
-                    class="font-size-responsive-md text-light text-bold"
-                  >
+                  <div class="font-size-responsive-md text-light text-bold">
                     {{ sunglass.model }}
                   </div>
                   <div
@@ -529,13 +527,21 @@ export default {
       }
     },
     async getUserDetails() {
-      const token = await Helper.getCookie("token");
+      try {
+        const hasCookie = await Helper.checkCookie();
+        if (!hasCookie) return;
 
-      if (token) {
+        const token = await Helper.getCookie("token");
+        if (!token) return;
+
         const id = await UserService.FindUserByToken();
+        if (!id?._id) return;
+
         this.userTokenDetails = id;
-        const user = await UserService.findUserById(this.userTokenDetails._id);
-        this.userDetails = user;
+        this.userDetails = await UserService.findUserById(id._id);
+      } catch (error) {
+        this.userTokenDetails = { _id: "", username: "", userType: "" };
+        this.userDetails = {};
       }
     },
     updateMainImage(image) {

@@ -4,7 +4,7 @@
     title="RESEND VERIFICATION"
     subtitle="Enter your email and we'll send you a new verification link."
   >
-    <q-form @submit="onSubmit" class="q-gutter-md">
+    <q-form @submit="onSubmit" class="">
       <div>
         <div class="overline text-dimmed text-caption q-mb-xs">
           EMAIL ADDRESS
@@ -19,10 +19,6 @@
           placeholder="you@example.com"
           class="custom-input"
           input-style="color: white;"
-          :rules="[
-            (val) => !!val || 'Email is required',
-            (val) => /.+@.+\..+/.test(val) || 'Enter a valid email',
-          ]"
         />
       </div>
 
@@ -32,7 +28,7 @@
         label="Send verification"
         type="submit"
         text-color="dark"
-        class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mt-md"
+        class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mt-lg"
         style="width: 100%"
         :loading="loading"
       />
