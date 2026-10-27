@@ -5,7 +5,9 @@
         <div class="section-spacer-sm"></div>
 
         <div>
-          <div class="overline text-dimmed text-caption">STEP 1 OF 2</div>
+          <div class="overline text-dimmed text-caption q-mb-sm">
+            STEP 1 OF 2
+          </div>
           <div class="font-size-responsive-giant archivo text-light text-bold">
             YOUR CART
           </div>
@@ -98,7 +100,10 @@
                   "
                   @click="viewSunglassesDetails(sunglass._id)"
                 >
-                  <div class="col-md-10 col-12 row items-start">
+                  <!-- Product Info Column -->
+                  <div
+                    class="col-12 col-md-10 row items-start q-mb-sm q-mb-md-none"
+                  >
                     <div class="col-md-2 col-4">
                       <div class="q-mr-md">
                         <q-img
@@ -109,20 +114,23 @@
                       </div>
                     </div>
 
-                    <div class="col-md-10 col-8 column items-start">
+                    <div class="col-md-9 col-8 column items-start">
                       <div
                         class="font-size-responsive-md archivo text-uppercase"
                       >
                         <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
                       </div>
-                      <div class="text-subtitle1 text-dimmed limit-text-2">
+                      <div
+                        class="font-size-responsive-sm q-mt-sm text-dimmed limit-text-2"
+                      >
                         {{ capitalizeFirstLetter(sunglass.description) }}
                       </div>
                     </div>
                   </div>
 
+                  <!-- Price Column -->
                   <div
-                    class="col-md-2 col-12 text-gradient-primary archivo text-center"
+                    class="col-12 col-md-2 text-gradient-primary archivo text-right text-md-center font-size-responsive-sm"
                   >
                     R {{ sunglass.price }}.00
                   </div>

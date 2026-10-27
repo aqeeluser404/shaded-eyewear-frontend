@@ -121,6 +121,8 @@
                     dense
                     no-caps
                     label="Add to cart"
+                    :loading="loadingUser"
+                    :disable="loadingUser"
                     class="btn-gradient-primary text-subtitle1 q-px-lg q-py-md rounded-button text-bold full-width"
                   />
                 </div>
@@ -329,6 +331,7 @@ export default {
   data() {
     return {
       loadingRelated: true, // related products
+      loadingUser: true,
 
       // ORDER DATA STRUCTURE
       orderData: {
@@ -542,6 +545,8 @@ export default {
       } catch (error) {
         this.userTokenDetails = { _id: "", username: "", userType: "" };
         this.userDetails = {};
+      } finally {
+        this.loadingUser = false; // <-- TURNS OFF WHEN DONE
       }
     },
     updateMainImage(image) {
