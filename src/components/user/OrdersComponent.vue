@@ -239,6 +239,15 @@
                 <template v-else-if="order.status === 'paid & picked up'">
                   COLLECTED BY {{ order.userFirstName }}
                 </template>
+
+                <template v-else-if="order.returns === 'refund requested'">
+                  <span class="text-warning"
+                    >REFUND REQUESTED · AWAITING ADMIN APPROVAL</span
+                  >
+                </template>
+                <template v-else-if="order.returns === 'returned item(s)'">
+                  <span class="text-negative">REFUNDED</span>
+                </template>
               </div>
 
               <div class="order-footer-actions">
@@ -367,28 +376,59 @@ export default {
     },
 
     isReturnEligible(order) {
-      if (order.status !== "paid" && order.status !== "paid & picked up") {
+      if (order.status !== "paid & picked up") return false;
+
+      // Hide button if they already requested a refund or it's refunded
+      if (
+        order.returns === "refund requested" ||
+        order.returns === "returned item(s)"
+      ) {
         return false;
       }
-      if (order.returns === "returned item(s)") {
-        return false;
-      }
+
       const daysSinceOrder =
         (Date.now() - new Date(order.orderDate).getTime()) /
         (1000 * 60 * 60 * 24);
-      if (daysSinceOrder > 14) {
-        return false;
-      }
-      return true;
+      return daysSinceOrder <= 14;
     },
 
+    // async startReturn(order) {
+    //   UiAlerts.custom(
+    //     "Request a return",
+    //     `Would you like to request a return for order #${this.formateOrderId(
+    //       order
+    //     )}? We'll email you the next steps.`,
+    //     "Request return",
+    //     "primary",
+    //     "Keep order"
+    //   ).onOk(async () => {
+    //     try {
+    //       const sunglassesToRefund = order.sunglasses || [];
+
+    //       const response = await OrderService.refundOrder(
+    //         order._id,
+    //         sunglassesToRefund
+    //       );
+
+    //       if (response) {
+    //         UiAlerts.success("Return requested. Check your email for next steps.");
+    //         this.getAllMyOrders();
+    //       } else {
+    //         UiAlerts.error("Could not process return. Please try again.");
+    //       }
+    //     } catch (error) {
+    //       console.error("Return request failed:", error);
+    //       UiAlerts.error("Could not process return. Please try again.");
+    //     }
+    //   });
+    // },
+
     async startReturn(order) {
-      // Using the custom helper to keep your specific button labels
       UiAlerts.custom(
         "Request a return",
         `Would you like to request a return for order #${this.formateOrderId(
           order
-        )}? We'll email you the next steps.`,
+        )}? An admin will review this request and email you the next steps.`,
         "Request return",
         "primary",
         "Keep order"
@@ -396,13 +436,15 @@ export default {
         try {
           const sunglassesToRefund = order.sunglasses || [];
 
-          const response = await OrderService.refundOrder(
+          const response = await OrderService.requestRefund(
             order._id,
             sunglassesToRefund
           );
 
           if (response) {
-            UiAlerts.success("Return requested. Check your email for next steps.");
+            UiAlerts.success(
+              "Return requested. We will notify you once it's approved."
+            );
             this.getAllMyOrders();
           } else {
             UiAlerts.error("Could not process return. Please try again.");
@@ -415,7 +457,6 @@ export default {
     },
 
     async cancelOrder(orderId) {
-      // Using the destructive helper since we are deleting the order
       UiAlerts.confirmDelete(
         "Cancel Order",
         "You are about to delete your order, continue?",
@@ -475,15 +516,31 @@ export default {
       for (const order of this.orders) {
         if (order.sunglasses && order.sunglasses.length > 0) {
           order.sunglassesDetails = [];
-          for (const sunglass of order.sunglasses) {
+
+          // Group duplicate items by ID before fetching
+          const groupedItems = {};
+          order.sunglasses.forEach((item) => {
+            const idStr = String(item._id);
+            if (groupedItems[idStr]) {
+              groupedItems[idStr].quantity += item.quantity || 1;
+            } else {
+              groupedItems[idStr] = {
+                _id: item._id,
+                quantity: item.quantity || 1,
+              };
+            }
+          });
+
+          for (const key in groupedItems) {
             try {
-              const response = await SunglassesService.findSunglassesById(
-                sunglass._id
-              );
-              order.sunglassesDetails.push(response);
+              const response = await SunglassesService.findSunglassesById(key);
+              if (response) {
+                response.quantity = groupedItems[key].quantity; // Attach grouped quantity
+                order.sunglassesDetails.push(response);
+              }
             } catch (error) {
               console.error(
-                `Failed to fetch details for sunglasses with id ${sunglass._id}:`,
+                `Failed to fetch details for sunglasses with id ${key}:`,
                 error
               );
             }

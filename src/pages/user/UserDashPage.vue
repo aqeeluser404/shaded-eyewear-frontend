@@ -3,25 +3,32 @@
     <section class="bg-dark q-px-md text-light q-md-px-0">
       <div class="section-spacer-sm"></div>
       <div class="constrain">
-        <div class="overline text-dimmed text-caption">USER ACCOUNT</div>
+        <div class="overline text-dimmed text-caption q-mb-sm">
+          USER ACCOUNT
+        </div>
         <div class="row justify-between items-center">
+          <!-- Title -->
           <div
             class="font-size-responsive-giant archivo col-md-6 col-12"
             :class="$q.screen.gt.sm ? 'q-mb-none' : 'q-mb-md'"
           >
-            YOUR SHADE.
+            MY ACCOUNT
           </div>
-          <q-btn
-            rounded
-            no-caps
-            outline
-            label="Sign out of account"
-            color="grey"
-            text-color="grey"
-            class="q-px-lg q-py-sm text-subtitle1 rounded-button text-bold"
-            :loading="loggingOut"
-            @click="logout"
-          />
+
+          <!-- Sign Out Button -->
+          <div class="col-12 col-md-auto">
+            <q-btn
+              rounded
+              no-caps
+              outline
+              label="Sign out of account"
+              color="grey"
+              text-color="grey"
+              class="q-px-lg q-py-sm text-subtitle1 rounded-button text-bold full-width"
+              :loading="loggingOut"
+              @click="logout"
+            />
+          </div>
         </div>
 
         <div class="section-spacer-md large-screen-only"></div>

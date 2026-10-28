@@ -5,7 +5,9 @@
         <div class="section-spacer-sm"></div>
 
         <div>
-          <div class="overline text-dimmed text-caption">STEP 2 OF 2</div>
+          <div class="overline text-dimmed text-caption q-mb-sm">
+            STEP 2 OF 2
+          </div>
           <div class="font-size-responsive-giant archivo text-light text-bold">
             COLLECT
           </div>
@@ -15,7 +17,7 @@
         <div class="row justify-between items-start">
           <!-------------------------------------------------------- LEFT: ORDER TYPE -------------------------------------------------------->
           <div
-            class="col-12 col-md-7"
+            class="col-12 col-md-8"
             :class="$q.screen.gt.md ? 'q-mb-none' : 'q-mb-lg'"
           >
             <q-card
@@ -91,7 +93,7 @@
                         }"
                         @click="togglePickupPanel"
                       >
-                        <div class="row items-center q-mb-md">
+                        <div class="row items-center q-mb-sm">
                           <q-radio
                             :model-value="orderType"
                             val="pickup"
@@ -106,13 +108,15 @@
                           </div>
                         </div>
 
-                        <div class="text-subtitle1 text-dimmed q-mb-sm">
-                          65 Stockley Road<br />
-                          Kenwyn, Cape Town, 7779
+                        <div
+                          class="font-size-responsive-sm text-dimmed q-mb-md line-height-1-6"
+                        >
+                          [Street Address]<br />
+                          Cape Town, South Africa
                         </div>
 
-                        <div class="text-caption text-primary">
-                          <b>OPEN WEEKDAYS 08:00 – 17:00</b>
+                        <div class="text-caption statement-label text-primary">
+                          <b>OPEN WEEKDAYS 08:00 - 17:00</b>
                         </div>
                       </q-card>
                     </div>
@@ -128,7 +132,7 @@
                         }"
                         @click="toggleDeliveryPanel"
                       >
-                        <div class="row items-center q-mb-md">
+                        <div class="row items-center q-mb-sm">
                           <q-radio
                             :model-value="orderType"
                             val="delivery"
@@ -143,12 +147,14 @@
                           </div>
                         </div>
 
-                        <div class="text-subtitle1 text-dimmed q-mb-sm">
-                          Courier to your address<br />
-                          Tracked, 1–2 working days
+                        <div
+                          class="font-size-responsive-sm text-dimmed q-mb-md line-height-1-6"
+                        >
+                          Courier to your address <br />
+                          tracked, 1 - 2 working days
                         </div>
 
-                        <div class="text-caption text-primary">
+                        <div class="text-caption text-primary statement-label">
                           <b>FREE ON ORDERS OVER R 400</b>
                         </div>
                       </q-card>
@@ -157,10 +163,10 @@
                 </q-card-section>
 
                 <q-card-section>
-                  <div class="font-size-responsive-md archivo q-mb-sm">
+                  <div class="font-size-responsive-sm archivo q-mb-md">
                     PICKUP INSTRUCTIONS
                   </div>
-                  <p class="text-subtitle1 text-dimmed">
+                  <p class="font-size-responsive-sm text-dimmed">
                     Bring the order ID from your confirmation email. If anything
                     changes, message us through the contact form and we'll hold
                     your frame for seven days. Thank you for shopping with us.
@@ -171,7 +177,7 @@
           </div>
 
           <!-------------------------------------------------------- RIGHT: SUMMARY + ITEMS -------------------------------------------------------->
-          <div class="col-12 col-md-5">
+          <div class="col-12 col-md-4">
             <q-card
               flat
               bordered
@@ -238,8 +244,7 @@
                       rounded
                       dense
                       flat
-                      icon="eva-lock-outline"
-                      class="q-px-lg q-py-sm custom-button text-subtitle1"
+                      class="custom-button icon-btn text-subtitle1 text-light"
                       label="Secure Checkout"
                       no-caps
                     />
@@ -300,11 +305,12 @@
                   order.sunglassesDetails.length > 0 &&
                   currentOrderId !== null
                 "
+                class="q-px-none q-py-none"
               >
                 <div
                   v-for="(sunglass, index) in order.sunglassesDetails"
                   :key="sunglass._id"
-                  class="row justify-between items-center cursor-pointer q-py-lg q-px-md"
+                  class="row justify-start items-center cursor-pointer q-py-lg q-px-md"
                   :style="
                     index !== order.sunglassesDetails.length - 1
                       ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
@@ -312,26 +318,23 @@
                   "
                   @click="viewSunglassesDetails(sunglass._id)"
                 >
-                  <div class="col-md-10 col-12 row items-start">
-                    <div class="col-md-2 col-4">
-                      <div class="q-mr-md">
-                        <q-img
-                          :src="getImageUrl(sunglass.images[0].imageUrl)"
-                          alt="Sunglass Image"
-                          class="border"
-                        />
-                      </div>
-                    </div>
+                  <div class="col-auto">
+                    <q-img
+                      :src="getImageUrl(sunglass.images[0].imageUrl)"
+                      alt="Sunglass Image"
+                      class="border"
+                      style="width: 70px; border-radius: 4px"
+                    />
+                  </div>
 
-                    <div class="col-md-10 col-8 column items-start">
-                      <div
-                        class="font-size-responsive-md archivo text-uppercase"
-                      >
-                        <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
-                      </div>
-                      <div class="text-subtitle1 text-dimmed">
-                        {{ sunglass.quantity }} x R {{ sunglass.price }}.00
-                      </div>
+                  <div class="col column items-start q-pl-md">
+                    <div
+                      class="font-size-responsive-sm archivo text-uppercase q-mb-xs"
+                    >
+                      <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
+                    </div>
+                    <div class="font-size-responsive-xs text-dimmed">
+                      {{ sunglass.quantity }} x R {{ sunglass.price }}.00
                     </div>
                   </div>
                 </div>
@@ -511,27 +514,20 @@ export default {
 
     async getSunglasses() {
       if (this.order.sunglasses && this.order.sunglasses.length > 0) {
-        const quantityMap = {};
-        this.order.sunglasses.forEach((sunglass) => {
-          const id = String(sunglass._id);
-          quantityMap[id] = (quantityMap[id] || 0) + 1;
-        });
-
         this.order.sunglassesDetails = [];
-        const seenIds = new Set();
 
+        // Since the backend now guarantees unique items in the array,
+        // we can just loop through them directly!
         for (const sunglass of this.order.sunglasses) {
-          const id = String(sunglass._id);
-          if (seenIds.has(id)) continue;
-          seenIds.add(id);
-
           try {
             const response = await SunglassesService.findSunglassesById(
               sunglass._id
             );
             if (response && response.images && response.images.length > 0) {
               response.image = this.getImageUrl(response.images[0]);
-              response.quantity = quantityMap[id];
+
+              response.quantity = sunglass.quantity || 1;
+
               this.order.sunglassesDetails.push(response);
             } else {
               console.error(
@@ -574,5 +570,28 @@ export default {
 .option-card--selected:hover {
   border-color: #ff9800;
   background-color: rgba(255, 152, 0, 0.05);
+}
+
+.option-card {
+  transition: all 0.2s ease;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.option-card:not(.option-card--selected):hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.option-card--selected,
+.option-card--selected:hover {
+  border-color: #ff9800;
+  background-color: rgba(255, 152, 0, 0.05);
+}
+
+:deep(.q-radio__inner) {
+  color: #9b9b9b !important; /* Light grey */
+}
+
+:deep(.q-radio__inner--truthy) {
+  color: var(--q-primary) !important; /* Orange */
 }
 </style>

@@ -17,7 +17,7 @@
         <div class="row justify-between items-start">
           <!-------------------------------------------------------- LEFT: ORDER DETAILS -------------------------------------------------------->
           <div
-            class="col-12 col-md-7"
+            class="col-12 col-md-8"
             :class="$q.screen.gt.md ? 'q-mb-none' : 'q-mb-lg'"
           >
             <q-card
@@ -46,16 +46,7 @@
 
               <!----------------------------------- LOADING SKELETON ----------------------------------->
               <div v-if="loading">
-                <div
-                  v-for="n in 1"
-                  :key="'skel-item-' + n"
-                  class="row justify-between items-center q-py-lg q-px-md"
-                  :style="
-                    n !== 1
-                      ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
-                      : ''
-                  "
-                >
+                <div class="row justify-between items-center q-py-lg q-px-md">
                   <div class="col-md-10 col-12 row items-start">
                     <div class="col-md-2 col-4">
                       <div class="q-mr-md">
@@ -64,7 +55,6 @@
                         ></div>
                       </div>
                     </div>
-
                     <div class="col-md-10 col-8 column items-start">
                       <div
                         class="skeleton-line skeleton-line--md q-mb-sm"
@@ -72,7 +62,6 @@
                       <div class="skeleton-line skeleton-line--full"></div>
                     </div>
                   </div>
-
                   <div
                     class="col-md-2 col-12 row justify-center q-mt-md q-mt-md-none"
                   >
@@ -92,47 +81,85 @@
                 <div
                   v-for="(sunglass, index) in order.sunglassesDetails"
                   :key="sunglass._id"
-                  class="row justify-between items-center cursor-pointer q-py-lg q-px-md"
+                  class="q-py-lg q-px-md"
                   :style="
                     index !== order.sunglassesDetails.length - 1
                       ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
                       : ''
                   "
-                  @click="viewSunglassesDetails(sunglass._id)"
                 >
-                  <!-- Product Info Column -->
-                  <div
-                    class="col-12 col-md-10 row items-start q-mb-sm q-mb-md-none"
-                  >
-                    <div class="col-md-2 col-4">
-                      <div class="q-mr-md">
-                        <q-img
-                          :src="getImageUrl(sunglass.images[0].imageUrl)"
-                          alt="Sunglass Image"
-                          class="border"
-                        />
-                      </div>
+                  <div class="row items-start">
+                    <!-- Product Image -->
+                    <div class="col-auto">
+                      <q-img
+                        :src="getImageUrl(sunglass.images[0].imageUrl)"
+                        alt="Sunglass Image"
+                        class="border cursor-pointer"
+                        style="width: 110px; border-radius: 6px;"
+                        @click="viewSunglassesDetails(sunglass._id)"
+                      />
                     </div>
 
-                    <div class="col-md-9 col-8 column items-start">
-                      <div
-                        class="font-size-responsive-md archivo text-uppercase"
-                      >
-                        <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
+                    <!-- Product Details -->
+                    <div class="col q-pl-md column justify-between" style="min-height: 100px;">
+                      <div>
+                        <div
+                          class="font-size-responsive-sm archivo text-uppercase cursor-pointer"
+                          @click="viewSunglassesDetails(sunglass._id)"
+                        >
+                          <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
+                        </div>
+                        <div class="font-size-responsive-sm q-mt-sm text-dimmed limit-text-2">
+                          {{ capitalizeFirstLetter(sunglass.description) }}
+                        </div>
                       </div>
-                      <div
-                        class="font-size-responsive-sm q-mt-sm text-dimmed limit-text-2"
-                      >
-                        {{ capitalizeFirstLetter(sunglass.description) }}
+
+                      <!-- Controls Row -->
+                      <div class="row items-center justify-between q-mt-sm">
+
+                        <!-- Left side: Quantity Pill + Trash -->
+                        <div class="row items-center">
+                          <!-- Quantity Pill -->
+                          <div class="quantity-pill row items-center no-wrap q-px-sm q-py-xs">
+                            <q-btn
+                              round dense flat
+                              icon="eva-minus-outline"
+                              color="grey" size="sm"
+                              class="q-pa-none"
+                              @click="updateQuantity(sunglass, sunglass.quantity - 1)"
+                              :disable="sunglass.quantity <= 1 || updatingQty"
+                            />
+                            <span class="archivo text-light q-mx-sm" style="min-width: 16px; text-align: center; font-size: 13px;">
+                              {{ sunglass.quantity }}
+                            </span>
+                            <q-btn
+                              round dense flat
+                              icon="eva-plus-outline"
+                              color="grey" size="sm"
+                              class="q-pa-none"
+                              @click="updateQuantity(sunglass, sunglass.quantity + 1)"
+                              :disable="updatingQty"
+                            />
+                          </div>
+
+                          <!-- Trash Icon -->
+                          <q-btn
+                            flat dense round
+                            icon="eva-trash-2-outline"
+                            color="grey-7" size="sm"
+                            class="q-ml-md q-pa-none"
+                            @click="removeItem(sunglass)"
+                            :disable="updatingQty"
+                          />
+                        </div>
+
+                        <!-- Right side: Price -->
+                        <div class="text-gradient-primary archivo font-size-responsive-sm text-bold large-screen-only">
+                          R {{ sunglass.price * sunglass.quantity }}.00
+                        </div>
+
                       </div>
                     </div>
-                  </div>
-
-                  <!-- Price Column -->
-                  <div
-                    class="col-12 col-md-2 text-gradient-primary archivo text-right text-md-center font-size-responsive-sm"
-                  >
-                    R {{ sunglass.price }}.00
                   </div>
                 </div>
               </div>
@@ -140,11 +167,9 @@
               <!----------------------------------- EMPTY ----------------------------------->
               <div v-else class="column items-center q-py-xl q-px-md">
                 <div class="section-spacer-sm"></div>
-
-                <div class="text-subtitle1 text-dimmed q-mb-md">
+                <div class="font-size-responsive-sm text-dimmed q-mb-md">
                   Your cart is empty.
                 </div>
-
                 <div>
                   <q-btn
                     rounded
@@ -163,7 +188,7 @@
           </div>
 
           <!-------------------------------------------------------- RIGHT: CART SUMMARY -------------------------------------------------------->
-          <div class="col-12 col-md-5">
+          <div class="col-12 col-md-4">
             <q-card
               flat
               bordered
@@ -178,17 +203,14 @@
               </q-card-section>
 
               <div class="q-py-lg q-px-md">
-                <!----------------------------------- TOTALS ----------------------------------->
                 <q-card-section
                   class="row items-end justify-between q-pa-none q-mb-md"
                 >
-                  <!-- skeleton totals -->
                   <template v-if="loading">
                     <div class="skeleton-line skeleton-line--md"></div>
                     <div class="skeleton-line skeleton-line--md"></div>
                   </template>
 
-                  <!-- real totals -->
                   <template v-else>
                     <div class="overline text-dimmed text-caption">
                       <b>TOTAL:</b> {{ order.totalItems || 0 }} item(s)
@@ -202,7 +224,6 @@
                 </q-card-section>
 
                 <div class="column items-center">
-                  <!-- skeleton buttons -->
                   <template v-if="loading">
                     <div
                       class="skeleton-line skeleton-line--btn q-mb-sm"
@@ -214,7 +235,6 @@
                     ></div>
                   </template>
 
-                  <!-- real buttons -->
                   <template v-else>
                     <q-btn
                       rounded
@@ -225,7 +245,9 @@
                       label="Proceed to checkout"
                       class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold q-mb-sm"
                       style="width: 100%"
-                      :disable="currentOrderId === null"
+                      :disable="
+                        currentOrderId === null || order.totalItems === 0
+                      "
                     />
                     <q-btn
                       rounded
@@ -241,26 +263,26 @@
               </div>
             </q-card>
 
-            <!-- qualities panel (static, no loading needed) -->
+            <!-- qualities panel -->
             <q-card
               flat
               bordered
               class="bg-dark-secondary q-pa-sm"
               style="border: 1px solid rgba(255, 255, 255, 0.2)"
             >
-              <q-card-section class="row items-center text-subtitle1">
+              <q-card-section class="row items-center font-size-responsive-sm">
                 <q-icon name="credit_card" color="primary" class="q-mr-md" />
                 <div style="opacity: 0.9" class="text-dimmed">
                   Payments made with Yoco
                 </div>
               </q-card-section>
-              <q-card-section class="row items-center text-subtitle1">
+              <q-card-section class="row items-center font-size-responsive-sm">
                 <q-icon name="local_shipping" color="primary" class="q-mr-md" />
                 <div style="opacity: 0.9" class="text-dimmed">
                   Fast and reliable
                 </div>
               </q-card-section>
-              <q-card-section class="row items-center text-subtitle1">
+              <q-card-section class="row items-center font-size-responsive-sm">
                 <q-icon name="store" color="primary" class="q-mr-md" />
                 <div style="opacity: 0.9" class="text-dimmed">
                   Pickup at our doorstep available
@@ -280,7 +302,6 @@ import Helper from "../services/utils";
 import UserService from "src/services/UserService";
 import OrderService from "src/services/OrderService";
 import SunglassesService from "src/services/SunglassesService";
-import Logger from "src/services/Logger";
 import { UiAlerts } from "src/services/UiAlerts";
 
 export default {
@@ -291,6 +312,7 @@ export default {
       userDetails: {},
       userTokenDetails: { _id: "", username: "", userType: "" },
       loading: true,
+      updatingQty: false,
     };
   },
 
@@ -304,28 +326,83 @@ export default {
       Helper.viewSunglassesDetails(id, this.$router);
     },
 
+    async updateQuantity(sunglass, newQuantity) {
+      if (newQuantity < 1 || this.updatingQty) return;
+
+      this.updatingQty = true;
+
+      try {
+        // 1. Build the clean array from the UI details (guaranteed to be unique)
+        const cleanSunglassesArray = this.order.sunglassesDetails.map((s) => {
+          if (String(s._id) === String(sunglass._id)) {
+            return { _id: s._id, quantity: newQuantity };
+          }
+          return { _id: s._id, quantity: s.quantity };
+        });
+
+        // 2. Send to backend
+        const payload = {
+          sunglasses: cleanSunglassesArray,
+          user: this.userDetails._id,
+        };
+
+        await OrderService.updateOrder(this.currentOrderId, payload);
+
+        // 3. Refresh
+        await this.getCurrentOrder();
+      } catch (error) {
+        console.error("Error updating quantity:", error);
+        UiAlerts.error("Could not update quantity.");
+        await this.getCurrentOrder();
+      } finally {
+        this.updatingQty = false;
+      }
+    },
+
+    async removeItem(sunglass) {
+      if (this.updatingQty) return;
+
+      if (this.order.sunglassesDetails.length === 1) {
+        this.cancelOrder(this.order._id);
+        return;
+      }
+
+      this.updatingQty = true;
+      try {
+        const cleanSunglassesArray = this.order.sunglassesDetails
+          .filter((s) => String(s._id) !== String(sunglass._id))
+          .map((s) => ({ _id: s._id, quantity: s.quantity }));
+
+        const payload = {
+          sunglasses: cleanSunglassesArray,
+          user: this.userDetails._id,
+        };
+
+        await OrderService.updateOrder(this.currentOrderId, payload);
+        await this.getCurrentOrder();
+        UiAlerts.success("Item removed.");
+      } catch (error) {
+        console.error("Error removing item:", error);
+        UiAlerts.error("Could not remove item.");
+        await this.getCurrentOrder();
+      } finally {
+        this.updatingQty = false;
+      }
+    },
+
     async cancelOrder(orderId) {
       UiAlerts.confirmDelete(
         "Empty Cart",
         "You are about to empty your cart. Are you sure you want to continue?",
         "Empty Cart"
       ).onOk(async () => {
-        this.$q.loading.show({
-          message: "Emptying cart...",
-        });
-
+        this.$q.loading.show({ message: "Emptying cart..." });
         try {
           await OrderService.cancelOrder(orderId);
           await OrderService.deleteOrder(orderId);
-
           localStorage.removeItem("currentOrderId");
           this.order = {};
           window.location.reload();
-          UiAlerts.success("Cart emptied successfully.");
-
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 2000);
         } catch (error) {
           console.error(error);
           UiAlerts.error("Could not empty cart. Please try again.");
@@ -350,39 +427,40 @@ export default {
           throw new Error("Order not found");
         }
       } catch (error) {
-        if (error.response && error.response.status === 500) {
-          console.error("Server error: ", error);
-        } else {
-          console.error("Error: ", error);
-        }
         localStorage.removeItem("currentOrderId");
         this.currentOrderId = null;
       }
-
       this.loading = false;
     },
 
     async getSunglasses() {
       if (this.order.sunglasses && this.order.sunglasses.length > 0) {
         this.order.sunglassesDetails = [];
-        for (const sunglass of this.order.sunglasses) {
+
+        // Group items by ID to absolutely guarantee no duplicates in the UI
+        const groupedItems = {};
+        this.order.sunglasses.forEach((item) => {
+          const idStr = String(item._id);
+          if (groupedItems[idStr]) {
+            groupedItems[idStr].quantity += item.quantity || 1;
+          } else {
+            groupedItems[idStr] = {
+              _id: item._id,
+              quantity: item.quantity || 1,
+            };
+          }
+        });
+
+        for (const key in groupedItems) {
           try {
-            const response = await SunglassesService.findSunglassesById(
-              sunglass._id
-            );
+            const response = await SunglassesService.findSunglassesById(key);
             if (response && response.images && response.images.length > 0) {
               response.image = this.getImageUrl(response.images[0]);
+              response.quantity = groupedItems[key].quantity;
               this.order.sunglassesDetails.push(response);
-            } else {
-              console.error(
-                `No images found for sunglasses with id ${sunglass._id}`
-              );
             }
           } catch (error) {
-            console.error(
-              `Failed to fetch details for sunglasses with id ${sunglass._id}:`,
-              error
-            );
+            console.error(`Failed to fetch details for ${key}:`, error);
           }
         }
       }
@@ -411,7 +489,6 @@ export default {
 
         await this.getCurrentOrder();
       } catch (error) {
-        // expired or invalid token: treat as logged out
         this.loading = false;
         UiAlerts.info("Please login to view your cart");
       }
@@ -423,3 +500,11 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.quantity-pill
+  border: 1px solid rgba(255, 255, 255, 0.2)
+  border-radius: 999px
+  background-color: transparent
+  height: 32px
+</style>

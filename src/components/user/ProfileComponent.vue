@@ -3,12 +3,13 @@
     class="personal-details"
     :class="$q.screen.gt.sm ? 'q-pl-lg' : 'q-pl-none'"
   >
+    <div class="section-spacer-xs small-screen-only"></div>
     <div>
       <div class="font-size-responsive-xl archivo text-light text-bold">
         PERSONAL DETAILS
       </div>
-      <div class="text-subtitle1 text-dimmed q-mt-sm">
-        These fields are illustrative and are not saved.
+      <div class="font-size-responsive-sm text-dimmed q-mt-sm">
+        Keep your details up to date. Email changes require verification.
       </div>
     </div>
 
@@ -19,16 +20,13 @@
       <div class="row">
         <div
           class="col-12 col-md-6"
-          :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
+          :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none q-mb-md'"
         >
           <div class="overline-tight text-dimmed text-caption q-mb-xs">
             FIRST NAME
           </div>
           <div class="field-shell">
-            <div
-              v-if="loading"
-              class="skeleton-line skeleton-line--input"
-            ></div>
+            <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
             <q-input
               v-else
               filled
@@ -47,10 +45,7 @@
             LAST NAME
           </div>
           <div class="field-shell">
-            <div
-              v-if="loading"
-              class="skeleton-line skeleton-line--input"
-            ></div>
+            <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
             <q-input
               v-else
               filled
@@ -69,7 +64,7 @@
       <div class="row">
         <div
           class="col-12 col-md-6"
-          :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none'"
+          :class="$q.screen.gt.sm ? 'q-pr-md' : 'q-pr-none q-mb-md'"
         >
           <div class="row items-center justify-between q-mb-xs">
             <div class="overline-tight text-dimmed text-caption">
@@ -82,42 +77,24 @@
               <!-- Guest -->
               <template v-if="isGuest">
                 <span class="text-primary">Demo Guest Address</span>
-                <q-icon
-                  color="primary"
-                  name="eva-info-outline"
-                  size="14px"
-                  class="q-ml-xs"
-                />
+                <q-icon color="primary" name="eva-info-outline" size="14px" class="q-ml-xs" />
               </template>
 
               <!-- Verified -->
               <template v-else-if="userDetails.verification.isVerified">
                 <span class="text-secondary">Verified</span>
-                <q-icon
-                  color="secondary"
-                  name="eva-checkmark-circle-2-outline"
-                  size="14px"
-                  class="q-ml-xs"
-                />
+                <q-icon color="secondary" name="eva-checkmark-circle-2-outline" size="14px" class="q-ml-xs" />
               </template>
 
               <!-- Not verified -->
               <template v-else>
                 <span class="text-negative">Not Verified</span>
-                <q-icon
-                  color="negative"
-                  name="eva-alert-circle-outline"
-                  size="14px"
-                  class="q-ml-xs"
-                />
+                <q-icon color="negative" name="eva-alert-circle-outline" size="14px" class="q-ml-xs" />
               </template>
             </div>
           </div>
           <div class="field-shell">
-            <div
-              v-if="loading"
-              class="skeleton-line skeleton-line--input"
-            ></div>
+            <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
             <q-input
               v-else
               filled
@@ -142,19 +119,11 @@
               class="row items-center text-caption"
             >
               <span class="text-primary">Demo Guest Number</span>
-              <q-icon
-                color="primary"
-                name="eva-info-outline"
-                size="14px"
-                class="q-ml-xs"
-              />
+              <q-icon color="primary" name="eva-info-outline" size="14px" class="q-ml-xs" />
             </div>
           </div>
           <div class="field-shell">
-            <div
-              v-if="loading"
-              class="skeleton-line skeleton-line--input"
-            ></div>
+            <div v-if="loading" class="skeleton-line skeleton-line--input"></div>
             <q-input
               v-else
               filled
@@ -201,39 +170,53 @@
       </div>
 
       <!-- Actions -->
-      <div class="row items-center q-gutter-md q-mt-md">
-        <div v-if="loading" class="skeleton-line skeleton-line--btn"></div>
-        <q-btn
-          v-else
-          rounded
-          no-caps
-          label="Save changes"
-          type="submit"
-          text-color="dark"
-          class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold"
-          :loading="saving"
-          :disable="changedFields.length === 0"
-        />
+      <div class="row items-center q-mt-md">
 
-        <template v-if="loading">
-          <div class="skeleton-line skeleton-line--btn"></div>
-        </template>
-        <q-btn
-          v-else-if="
-            userDetails &&
-            userDetails.verification &&
-            !userDetails.verification.isVerified
-          "
-          rounded
-          no-caps
-          outline
-          label="Verify email"
-          color="grey"
-          text-color="grey"
-          class="q-px-xl q-py-md rounded-button text-subtitle1 text-bold"
-          @click="resendVerificationEmail"
-          :disable="isGuest"
-        />
+        <!-- Save Changes Column -->
+        <div class="col-12 col-md-auto q-mb-md q-mb-md-none q-mr-md">
+          <!-- Loading State -->
+          <div v-if="loading" class="skeleton-line skeleton-line--btn"></div>
+
+          <!-- Button State -->
+          <q-btn
+            v-else
+            rounded
+            no-caps
+            label="Save changes"
+            type="submit"
+            text-color="dark"
+            class="btn-gradient-primary q-px-xl q-py-md rounded-button text-subtitle1 text-bold full-width"
+            :loading="saving"
+            :disable="changedFields.length === 0"
+          />
+        </div>
+
+        <!-- Verify Email Column -->
+        <div class="col-12 col-md-auto" v-if="
+          userDetails &&
+          userDetails.verification &&
+          !userDetails.verification.isVerified
+        "
+        >
+          <!-- Loading State -->
+          <div v-if="loading" class="skeleton-line skeleton-line--btn"></div>
+
+          <!-- Button State -->
+          <q-btn
+            v-else
+            rounded
+            no-caps
+            outline
+            label="Verify email"
+            color="grey"
+            text-color="grey"
+            class="q-px-xl q-py-md rounded-button text-subtitle1 text-bold full-width"
+            @click="resendVerificationEmail"
+            :disable="isGuest"
+          />
+        </div>
+
+
       </div>
     </q-form>
   </div>

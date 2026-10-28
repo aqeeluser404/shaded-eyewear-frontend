@@ -330,23 +330,20 @@ export default {
 
   data() {
     return {
-      loadingRelated: true, // related products
+      loadingRelated: true,
       loadingUser: true,
 
-      // ORDER DATA STRUCTURE
       orderData: {
         sunglasses: [{ _id: "", quantity: 1 }],
         user: "",
       },
       currentOrderId: localStorage.getItem("currentOrderId") || null,
 
-      // GET DATA
       sunglasses: {},
       allSunglasses: [],
       userDetails: {},
       userTokenDetails: { _id: "", username: "", userType: "" },
 
-      // CAROUSEL
       currentSlide: 0,
       itemsPerPage: 3,
 
@@ -357,6 +354,7 @@ export default {
       canScrollRight: false,
     };
   },
+
   computed: {
     visibleSunglasses() {
       const start = this.currentSlide * this.itemsPerPage;
@@ -373,15 +371,19 @@ export default {
       return visibleItems;
     },
   },
+
   beforeMount() {
     this.fetchSunglassesDetails();
     this.fetchAllSunglasses();
     this.updateItemsPerPage();
     window.addEventListener("resize", this.updateItemsPerPage);
   },
+
   beforeUnmount() {
     window.removeEventListener("resize", this.updateItemsPerPage);
+    window.removeEventListener("resize", this.updateScrollState);
   },
+
   watch: {
     "$route.params.id": "fetchSunglassesDetails",
     sunglasses: {
@@ -399,6 +401,7 @@ export default {
       }
     },
   },
+
   methods: {
     scrollRelated(direction) {
       const el = this.$refs.relatedScroll;
@@ -412,7 +415,7 @@ export default {
       if (!el) return;
       const { scrollLeft, scrollWidth, clientWidth } = el;
 
-      this.canScrollLeft = scrollLeft > 4; // small threshold avoids flicker at exact 0
+      this.canScrollLeft = scrollLeft > 4;
       this.canScrollRight = scrollLeft < scrollWidth - clientWidth - 4;
     },
 
@@ -476,16 +479,16 @@ export default {
       });
 
       try {
-        if (!this.currentOrderId) {
-          await this.createOrder();
+        const existingOrder = this.currentOrderId
+          ? await OrderService.findOrderById(this.currentOrderId)
+          : null;
+
+        if (existingOrder) {
+          await this.updateExistingOrder(existingOrder);
         } else {
-          const orderExists = await this.checkOrderExists(this.currentOrderId);
-          if (orderExists) {
-            await this.updateOrder();
-          } else {
-            await this.createOrder();
-          }
+          await this.createOrder();
         }
+
         UiAlerts.success("Added to cart.");
         await this.fetchSunglassesDetails();
       } catch (error) {
@@ -495,17 +498,49 @@ export default {
         this.$q.loading.hide();
       }
     },
-    async checkOrderExists(orderId) {
-      if (!orderId) {
-        return false;
-      }
+
+    async updateExistingOrder(existingOrder) {
       try {
-        const response = await OrderService.findOrderById(orderId);
-        return response !== null;
+        // 1. Create a dictionary of existing items to clean up duplicates
+        const itemsMap = {};
+
+        if (existingOrder.sunglasses && existingOrder.sunglasses.length > 0) {
+          existingOrder.sunglasses.forEach((item) => {
+            const idStr = String(item._id);
+            if (itemsMap[idStr]) {
+              itemsMap[idStr] += item.quantity || 1;
+            } else {
+              itemsMap[idStr] = item.quantity || 1;
+            }
+          });
+        }
+
+        // 2. Add +1 to the current product
+        const productId = String(this.sunglasses._id);
+        if (itemsMap[productId]) {
+          itemsMap[productId] += 1;
+        } else {
+          itemsMap[productId] = 1;
+        }
+
+        // 3. Convert back to array
+        const mergedSunglassesArray = Object.keys(itemsMap).map((id) => ({
+          _id: id,
+          quantity: itemsMap[id],
+        }));
+
+        // 4. Send clean array to backend
+        const payload = {
+          sunglasses: mergedSunglassesArray,
+          user: this.userDetails._id,
+        };
+
+        await OrderService.updateOrder(this.currentOrderId, payload);
       } catch (error) {
-        return false;
+        console.error("Error updating order:", error);
       }
     },
+
     async createOrder() {
       this.orderData.user = this.userDetails._id;
       this.orderData.sunglasses[0]._id = this.sunglasses._id;
@@ -520,15 +555,7 @@ export default {
         console.error("Error creating order: ", error);
       }
     },
-    async updateOrder() {
-      const orderId = this.currentOrderId;
-      try {
-        this.orderData.sunglasses[0]._id = this.sunglasses._id;
-        await OrderService.updateOrder(orderId, this.orderData);
-      } catch (error) {
-        console.error("Error updating order:", error);
-      }
-    },
+
     async getUserDetails() {
       try {
         const hasCookie = await Helper.checkCookie();
@@ -546,13 +573,15 @@ export default {
         this.userTokenDetails = { _id: "", username: "", userType: "" };
         this.userDetails = {};
       } finally {
-        this.loadingUser = false; // <-- TURNS OFF WHEN DONE
+        this.loadingUser = false;
       }
     },
+
     updateMainImage(image) {
       this.mainImage = image;
     },
   },
+
   mounted() {
     this.$nextTick(() => {
       this.updateScrollState();
@@ -560,9 +589,6 @@ export default {
     });
   },
 
-  beforeUnmount() {
-    window.removeEventListener("resize", this.updateScrollState);
-  },
   created() {
     this.getUserDetails();
   },
@@ -632,17 +658,16 @@ export default {
   gap: 24px
   overflow-x: auto
   scroll-snap-type: x proximity
-  padding-top: 8px    // room for the hover lift
+  padding-top: 8px
   padding-bottom: 8px
-  margin-top: -8px    // cancel the extra top padding visually
+  margin-top: -8px
   -webkit-overflow-scrolling: touch
   scroll-behavior: smooth
 
-  // hide the scrollbar but keep scrolling working
-  scrollbar-width: none          // Firefox
-  -ms-overflow-style: none       // old Edge / IE
+  scrollbar-width: none
+  -ms-overflow-style: none
   &::-webkit-scrollbar
-    display: none                // Chrome, Safari, new Edge
+    display: none
 
 .related-card
   border: 1px solid rgba(255, 255, 255, 0.1)
@@ -674,11 +699,11 @@ export default {
 
 .related-description
   display: -webkit-box
-  -webkit-line-clamp: 2 // Limits the text to exactly 2 lines
+  -webkit-line-clamp: 2
   -webkit-box-orient: vertical
   overflow: hidden
   text-overflow: ellipsis
-  white-space: normal // Forces the text to wrap instead of cutting off on one line
+  white-space: normal
   line-height: 1.6
   margin-top: 4px
 
@@ -689,7 +714,6 @@ export default {
   z-index: 2
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5)
 
-  // FORCE THE ICON TO BE PURE BLACK
   :deep(.q-icon)
     color: #000000 !important
 

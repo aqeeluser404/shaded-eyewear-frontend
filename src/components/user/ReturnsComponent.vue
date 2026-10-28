@@ -4,7 +4,9 @@
     :class="$q.screen.gt.sm ? 'q-pl-lg' : 'q-pl-none'"
   >
     <!--------------------------------------------------------------------- HAS RETURNS -------------------------------------------------->
-    <section v-if="loading || ordersRefunded.length > 0">
+    <section
+      v-if="loading || ordersRefunded.length > 0 || pendingRequests.length > 0"
+    >
       <!-- Heading -->
       <div>
         <div class="font-size-responsive-xl archivo text-light text-bold">
@@ -248,95 +250,243 @@
 
       <!------------------------------------------ RETURNS LIST ------------------------------------------>
       <div v-else class="q-pb-md q-gutter-md">
-        <q-card
-          v-for="order in ordersRefunded"
-          :key="order._id"
-          flat
-          bordered
-          class="bg-dark-secondary order-list-card cursor-pointer"
-          style="border: 1px solid rgba(255, 255, 255, 0.2)"
-          @click="openReturnDetails(order)"
-        >
-          <!-- meta -->
-          <q-card-section
-            class="row justify-between items-center order-meta-row"
-            style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+        <div v-if="pendingRequests.length > 0" class="q-mb-lg">
+          <div
+            class="overline-tight text-warning text-bold text-caption q-mb-md"
           >
-            <div class="col-4">
-              <div class="overline-tight text-dimmed text-caption q-mb-xs">
-                ORDER ID
-              </div>
-              <div>
-                <q-badge
-                  outline
-                  color="grey"
-                  text-color="grey"
-                  class="order-id-badge"
-                >
-                  #{{ formateOrderId(order.originalOrder || order) }}
-                </q-badge>
-              </div>
-            </div>
-
-            <div class="col-4 row justify-center">
-              <div>
-                <div class="overline-tight text-dimmed text-caption q-mb-xs">
-                  RETURNED
-                </div>
-                <div class="text-subtitle1 text-dimmed">
-                  {{ formatDate(order.orderDate) }}
-                </div>
-              </div>
-            </div>
-
-            <div class="col-4 text-right">
-              <div class="overline-tight text-dimmed text-caption q-mb-xs">
-                REFUNDED
-              </div>
-              <div class="text-subtitle1 archivo text-gradient-primary">
-                R {{ order.totalAmount }}.00
-              </div>
-            </div>
-          </q-card-section>
-
-          <!-- items -->
-          <q-card-section
-            v-if="order.sunglassesDetails && order.sunglassesDetails.length > 0"
-            class="q-pa-none"
+            PENDING REQUESTS · {{ pendingRequests.length }}
+          </div>
+          <q-card
+            v-for="order in pendingRequests"
+            :key="order._id"
+            flat
+            bordered
+            class="bg-dark-secondary order-list-card"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
           >
-            <div
-              v-for="(sunglass, index) in order.sunglassesDetails"
-              :key="sunglass._id"
-              class="row items-center q-py-lg q-px-md"
-              :style="
-                index !== order.sunglassesDetails.length - 1
-                  ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
-                  : ''
-              "
+            <!-- meta -->
+            <q-card-section
+              class="row justify-between items-center order-meta-row"
+              style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
             >
-              <div class="col-md-1 col-6">
-                <q-img
-                  :src="getImageUrl(sunglass.images[0].imageUrl)"
-                  alt="Sunglass"
-                  class="border"
-                />
+              <div class="col-4">
+                <div class="overline-tight text-dimmed text-caption q-mb-xs">
+                  ORDER ID
+                </div>
+                <div>
+                  <q-badge
+                    outline
+                    color="grey"
+                    text-color="grey"
+                    class="order-id-badge"
+                  >
+                    #{{ formateOrderId(order) }}
+                  </q-badge>
+                </div>
               </div>
 
-              <div class="col-md-7 col-6 q-pl-md">
+              <div class="col-4 row justify-center">
+                <div>
+                  <div class="overline-tight text-dimmed text-caption q-mb-xs">
+                    REQUESTED
+                  </div>
+                  <div class="text-subtitle1 text-dimmed">
+                    {{ formatDate(order.orderDate) }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-4 text-right">
+                <div class="overline-tight text-dimmed text-caption q-mb-xs">
+                  EXPECTED REFUND
+                </div>
+                <div class="text-subtitle1 archivo text-gradient-primary">
+                  R {{ order.totalAmount }}.00
+                </div>
+              </div>
+            </q-card-section>
+
+            <!-- items -->
+            <q-card-section
+              v-if="
+                order.sunglassesDetails && order.sunglassesDetails.length > 0
+              "
+              class="q-pa-none"
+            >
+              <div
+                v-for="(sunglass, index) in order.sunglassesDetails"
+                :key="sunglass._id"
+                class="row items-center q-py-lg q-px-md"
+                :style="
+                  index !== order.sunglassesDetails.length - 1
+                    ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
+                    : ''
+                "
+              >
+                <div class="col-md-1 col-6">
+                  <q-img
+                    :src="getImageUrl(sunglass.images[0].imageUrl)"
+                    alt="Sunglass"
+                    class="border"
+                  />
+                </div>
+
+                <div class="col-md-7 col-6 q-pl-md">
+                  <div
+                    class="font-size-responsive-md archivo text-uppercase text-light"
+                  >
+                    <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
+                  </div>
+                  <div class="text-subtitle1 text-dimmed">
+                    R {{ sunglass.price }}.00
+                  </div>
+                  <div class="text-caption text-dimmed q-mt-xs">
+                    Qty {{ sunglass.quantity || 1 }}
+                  </div>
+                </div>
+              </div>
+            </q-card-section>
+
+            <!-- footer -->
+            <q-card-section
+              class="order-footer"
+              style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
+            >
+              <div class="overline-tight text-warning text-bold text-caption">
+                AWAITING ADMIN APPROVAL
+              </div>
+              <div class="order-footer-actions">
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+
+        <div v-if="ordersRefunded.length > 0">
+          <div
+            class="overline-tight text-dimmed text-bold text-caption q-mb-md"
+          >
+            COMPLETED · {{ ordersRefunded.length }}
+          </div>
+          <q-card
+            v-for="order in ordersRefunded"
+            :key="order._id"
+            flat
+            bordered
+            class="bg-dark-secondary order-list-card cursor-pointer"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+            @click="openReturnDetails(order)"
+          >
+            <!-- meta -->
+            <q-card-section
+              class="row justify-between items-center order-meta-row"
+              style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+            >
+              <div class="col-4">
+                <div class="overline-tight text-dimmed text-caption q-mb-xs">
+                  ORDER ID
+                </div>
+                <div>
+                  <q-badge
+                    outline
+                    color="grey"
+                    text-color="grey"
+                    class="order-id-badge"
+                  >
+                    #{{ formateOrderId(order.originalOrder || order) }}
+                  </q-badge>
+                </div>
+              </div>
+
+              <div class="col-4 row justify-center">
+                <div>
+                  <div class="overline-tight text-dimmed text-caption q-mb-xs">
+                    RETURNED
+                  </div>
+                  <div class="text-subtitle1 text-dimmed">
+                    {{ formatDate(order.orderDate) }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-4 text-right">
+                <div class="overline-tight text-dimmed text-caption q-mb-xs">
+                  REFUNDED
+                </div>
+                <div class="text-subtitle1 archivo text-gradient-primary">
+                  R {{ order.totalAmount }}.00
+                </div>
+              </div>
+            </q-card-section>
+
+            <!-- items -->
+            <q-card-section
+              v-if="
+                order.sunglassesDetails && order.sunglassesDetails.length > 0
+              "
+              class="q-pa-none"
+            >
+              <div
+                v-for="(sunglass, index) in order.sunglassesDetails"
+                :key="sunglass._id"
+                class="row items-center q-py-lg q-px-md"
+                :style="
+                  index !== order.sunglassesDetails.length - 1
+                    ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
+                    : ''
+                "
+              >
+                <div class="col-md-1 col-6">
+                  <q-img
+                    :src="getImageUrl(sunglass.images[0].imageUrl)"
+                    alt="Sunglass"
+                    class="border"
+                  />
+                </div>
+
+                <div class="col-md-7 col-6 q-pl-md">
+                  <div
+                    class="font-size-responsive-md archivo text-uppercase text-light"
+                  >
+                    <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
+                  </div>
+                  <div class="text-subtitle1 text-dimmed">
+                    R {{ sunglass.price }}.00
+                  </div>
+                  <div class="text-caption text-dimmed q-mt-xs">
+                    Qty {{ sunglass.quantity || 1 }}
+                  </div>
+                </div>
+
                 <div
-                  class="font-size-responsive-md archivo text-uppercase text-light"
+                  class="col-md-3 col-12 row justify-end q-mt-lg q-mt-md-none"
                 >
-                  <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
-                </div>
-                <div class="text-subtitle1 text-dimmed">
-                  R {{ sunglass.price }}.00
-                </div>
-                <div class="text-caption text-dimmed q-mt-xs">
-                  Qty {{ sunglass.quantity || 1 }}
+                  <q-btn
+                    rounded
+                    dense
+                    no-caps
+                    outline
+                    color="grey"
+                    text-color="grey"
+                    label="View details"
+                    icon-right="eva-arrow-forward-outline"
+                    class="q-px-lg q-py-sm text-caption icon-btn text-bold"
+                    @click.stop="openReturnDetails(order)"
+                  />
                 </div>
               </div>
+            </q-card-section>
 
-              <div class="col-md-3 col-12 row justify-end q-mt-lg q-mt-md-none">
+            <!-- footer -->
+            <q-card-section
+              class="order-footer"
+              style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
+            >
+              <div class="overline-tight text-dimmed text-caption">
+                RETURNED BY
+                {{ capitalizeFirstLetter(order.userFirstName) }}
+              </div>
+
+              <div class="order-footer-actions">
                 <q-btn
                   rounded
                   dense
@@ -344,41 +494,15 @@
                   outline
                   color="grey"
                   text-color="grey"
-                  label="View details"
+                  label="View refund"
                   icon-right="eva-arrow-forward-outline"
                   class="q-px-lg q-py-sm text-caption icon-btn text-bold"
                   @click.stop="openReturnDetails(order)"
                 />
               </div>
-            </div>
-          </q-card-section>
-
-          <!-- footer -->
-          <q-card-section
-            class="order-footer"
-            style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
-          >
-            <div class="overline-tight text-dimmed text-caption">
-              RETURNED BY
-              {{ capitalizeFirstLetter(order.userFirstName) }}
-            </div>
-
-            <div class="order-footer-actions">
-              <q-btn
-                rounded
-                dense
-                no-caps
-                outline
-                color="grey"
-                text-color="grey"
-                label="View refund"
-                icon-right="eva-arrow-forward-outline"
-                class="q-px-lg q-py-sm text-caption icon-btn text-bold"
-                @click.stop="openReturnDetails(order)"
-              />
-            </div>
-          </q-card-section>
-        </q-card>
+            </q-card-section>
+          </q-card>
+        </div>
       </div>
     </section>
 
@@ -435,6 +559,8 @@ import Helper from "src/services/utils";
 export default {
   data() {
     return {
+      allReturns: [],
+      pendingRequests: [],
       ordersRefunded: [],
       selectedReturn: null,
       userDetails: {},
@@ -465,9 +591,10 @@ export default {
       this.loading = true;
       try {
         const response =
-          (await OrderService.findAllMyReturns(this.userDetails._id)) || [];
+          (await OrderService.findAllMyOrders(this.userDetails._id)) || [];
 
-        this.ordersRefunded = await Promise.all(
+        // 2. Format them with user names
+        const formattedOrders = await Promise.all(
           response.map(async (order) => {
             const user = await UserService.findUserById(order.user).catch(
               () => null
@@ -478,17 +605,35 @@ export default {
             };
           })
         );
+
+        // 3. Filter to only keep orders that have a return status
+        this.allReturns = formattedOrders.filter(
+          (o) =>
+            o.returns === "refund requested" || o.returns === "returned item(s)"
+        );
+
+        // 4. Fetch sunglasses details for ONLY the filtered returns
+        await this.getSunglasses();
+
+        // 5. Split them into the two UI categories
+        this.pendingRequests = this.allReturns.filter(
+          (o) => o.returns === "refund requested"
+        );
+
+        this.ordersRefunded = this.allReturns.filter(
+          (o) => o.returns === "returned item(s)"
+        );
       } catch (error) {
         console.error("Error fetching returns:", error);
+        this.allReturns = [];
+        this.pendingRequests = [];
         this.ordersRefunded = [];
       }
-
-      await this.getSunglasses();
       this.loading = false;
     },
 
     async getSunglasses() {
-      for (const order of this.ordersRefunded) {
+      for (const order of this.allReturns) {
         if (order.sunglasses && order.sunglasses.length > 0) {
           order.sunglassesDetails = [];
           for (const sunglass of order.sunglasses) {

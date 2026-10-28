@@ -290,20 +290,13 @@
                 ITEMS TO REFUND
               </div>
 
+              <!-- Loop through the products in the order -->
               <div
                 v-for="(sunglass, index) in selectedOrder.sunglassesDetails"
                 :key="index"
                 class="row items-center q-pa-sm return-item-row"
               >
-                <q-checkbox
-                  v-model="selectedSunglasses"
-                  :val="getUniqueIdentifier(sunglass._id, index)"
-                  color="primary"
-                  class="q-mr-md"
-                  @update:model-value="toggleSunglassSelection(sunglass._id, index)"
-                />
-
-                <div class="col-2">
+                <div class="col-3">
                   <q-img
                     :src="getImageUrl(sunglass.images[0].imageUrl)"
                     class="border"
@@ -319,10 +312,41 @@
                     R {{ sunglass.price }}.00
                   </div>
                 </div>
+
+                <!-- Quantity Badge -->
+                <div class="col-auto">
+                  <q-badge color="grey-8" text-color="white" class="q-px-sm q-py-xs">
+                    Qty: {{ sunglass.quantity || 1 }}
+                  </q-badge>
+                </div>
               </div>
             </q-card-section>
 
             <q-card-section style="border-top: 1px solid rgba(255, 255, 255, 0.1)">
+              <div class="text-caption text-dimmed q-mb-md">
+                The customer has requested to return these items.
+                Approving will return the stock and process the payment refund.
+              </div>
+
+              <div class="row items-center q-gutter-sm">
+                <q-btn
+                  rounded dense no-caps
+                  label="Approve Refund"
+                  icon="eva-checkmark-outline"
+                  text-color="dark"
+                  class="btn-gradient-primary q-px-lg q-py-sm rounded-button text-subtitle1 text-bold"
+                  @click="logReturn(selectedOrder.userFirstName)"
+                />
+                <q-btn
+                  rounded dense no-caps flat
+                  label="Close"
+                  class="custom-button text-subtitle1 text-dimmed q-px-lg q-py-sm"
+                  @click="closeDetails"
+                />
+              </div>
+            </q-card-section>
+
+            <!-- <q-card-section style="border-top: 1px solid rgba(255, 255, 255, 0.1)">
               <div class="text-caption text-dimmed q-mb-md">
                 Once a refund has been processed for an order, further refunds
                 for the same order cannot be issued unless a new order is placed.
@@ -344,7 +368,7 @@
                   @click="closeDetails"
                 />
               </div>
-            </q-card-section>
+            </q-card-section> -->
           </q-card>
 
           <!-- Return details -->
@@ -511,41 +535,33 @@ export default {
 
         this.orders = await Promise.all(
           (response || []).map(async (order) => {
-            const user = await UserService.findUserById(order.user).catch(
-              () => null
-            );
-            return {
-              ...order,
-              userFirstName: user?.username || "Unknown",
-            };
+            const user = await UserService.findUserById(order.user).catch(() => null);
+            return { ...order, userFirstName: user?.username || "Unknown" };
           })
         );
 
         await this.getSunglasses();
 
+        // Filter to ONLY show orders with some kind of return status
         const filteredOrders = this.orders.filter(
           (order) =>
-            order.status === "paid & picked up" ||
-            order.status === "refunded"
-        );
-
-        this.currentOrders = filteredOrders.filter(
-          (order) =>
-            order.status === "paid & picked up" ||
+            order.returns === "refund requested" ||
             order.returns === "returned item(s)"
         );
 
+        // The Queue: Only show ones that are STILL REQUESTED
+        this.currentOrders = filteredOrders.filter(
+          (order) => order.returns === "refund requested"
+        );
+
+        // History: Only show ones that are COMPLETED
         this.ordersRefunded = filteredOrders.filter(
-          (order) => order.status === "refunded"
+          (order) => order.returns === "returned item(s)"
         );
 
         this.filteredOrders = this.currentOrders;
       } catch (error) {
         console.error("Error fetching orders:", error);
-        this.orders = [];
-        this.currentOrders = [];
-        this.ordersRefunded = [];
-        this.filteredOrders = [];
       }
       this.loading = false;
     },
@@ -601,25 +617,35 @@ export default {
 
     async logReturn(firstName) {
       try {
-        const sunglassesToRefund = this.selectedSunglasses.map((identifier) => {
-          const [id] = identifier.split("_");
-          return { _id: id, quantity: 1 };
-        });
+        // 1. Determine which items to refund
+        let sunglassesToRefund = [];
 
-        if (this.selectedSunglasses.length === 0) {
-          UiAlerts.error("Choose a pair of sunglasses to refund.");
+        if (this.selectedSunglasses.length > 0) {
+          // Admin manually selected specific items
+          sunglassesToRefund = this.selectedSunglasses.map((identifier) => {
+            const [id] = identifier.split("_");
+            return { _id: id, quantity: 1 };
+          });
+        } else {
+          // Default to what the customer originally requested
+          sunglassesToRefund = this.selectedOrder.requestedRefunds || [];
+        }
+
+        if (sunglassesToRefund.length === 0) {
+          UiAlerts.error("No items selected for refund.");
           return;
         }
 
         UiAlerts.confirm(
-          "Refund Order",
-          `You are about to refund ${firstName}'s order, continue?`,
-          "Refund Order"
+          "Approve Refund",
+          `You are about to approve and process the refund for ${firstName}'s order. This will return stock and finalize the refund.`,
+          "Approve Refund"
         ).onOk(async () => {
           const response = await OrderService.refundOrder(
             this.selectedOrder._id,
             sunglassesToRefund
           );
+
           if (response) {
             UiAlerts.success("Refund successful!");
             this.getAllOrders();
@@ -635,8 +661,9 @@ export default {
     },
 
     openDetails(order) {
-      if (order.status === "refunded" || order.returns) {
-        UiAlerts.error("This order has already been issued a refund.");
+      // Only block if it's fully refunded, NOT if it's just requested
+      if (order.returns === "returned item(s)") {
+        UiAlerts.error("This order has already been refunded.");
         return;
       }
       this.selectedOrder = order;

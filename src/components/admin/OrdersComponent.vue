@@ -41,9 +41,9 @@
     <template v-if="loading">
       <div class="row q-col-gutter-md q-mb-lg">
         <div
-          v-for="n in 3"
+          v-for="n in 4"
           :key="'skel-card-' + n"
-          class="col-12 col-sm-6 col-md-4"
+          class="col-12 col-sm-6 col-md-3"
         >
           <q-card
             flat
@@ -63,8 +63,33 @@
 
     <template v-else>
       <div class="row q-col-gutter-md q-mb-lg">
+        <!-- Pending Payments -->
+        <div class="col-12 col-sm-6 col-md-3">
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-md status-card"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
+            <div
+              class="overline-tight text-dimmed text-caption q-mb-md"
+              style="letter-spacing: 0.15em"
+            >
+              PENDING PAYMENTS
+            </div>
+            <div class="row justify-between items-center">
+              <div class="text-caption text-dimmed">Awaiting checkout</div>
+              <div
+                class="font-size-responsive-xxl archivo text-warning text-bold"
+              >
+                {{ statusCounts.pendingPayments }}
+              </div>
+            </div>
+          </q-card>
+        </div>
+
         <!-- Awaiting collection -->
-        <div class="col-12 col-sm-6 col-md-4">
+        <div class="col-12 col-sm-6 col-md-3">
           <q-card
             flat
             bordered
@@ -89,7 +114,7 @@
         </div>
 
         <!-- In transit -->
-        <div class="col-12 col-sm-6 col-md-4">
+        <div class="col-12 col-sm-6 col-md-3">
           <q-card
             flat
             bordered
@@ -114,7 +139,7 @@
         </div>
 
         <!-- Completed this month -->
-        <div class="col-12 col-sm-6 col-md-4">
+        <div class="col-12 col-sm-6 col-md-3">
           <q-card
             flat
             bordered
@@ -140,6 +165,82 @@
       </div>
     </template>
 
+    <!--------------------------------------------------------------------- PENDING CARTS -------------------------------------------------->
+    <template v-if="pendingCarts.length > 0">
+      <q-card
+        flat
+        bordered
+        class="bg-dark-secondary q-mb-lg"
+        style="border: 1px solid rgba(255, 255, 255, 0.2)"
+      >
+        <q-card-section
+          class="row justify-between items-center"
+          style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+        >
+          <div>
+            <div class="font-size-responsive-md text-light text-bold">
+              Pending Carts
+            </div>
+            <div class="text-caption text-dimmed">
+              {{ pendingCarts.length }} order(s) awaiting payment
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-card-section class="q-pa-none">
+          <div
+            v-for="(order, index) in pendingCarts"
+            :key="order._id"
+            class="q-py-lg q-px-md"
+            :style="
+              index !== pendingCarts.length - 1
+                ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)'
+                : ''
+            "
+          >
+            <div class="row items-center">
+              <div class="col-md-1 col-4">
+                <q-img
+                  v-if="order.sunglassesDetails && order.sunglassesDetails[0]"
+                  :src="
+                    getImageUrl(order.sunglassesDetails[0].images[0].imageUrl)
+                  "
+                  alt="Sunglass"
+                  class="border"
+                />
+              </div>
+
+              <div class="col-md-7 col-8 q-pl-md">
+                <div
+                  class="font-size-responsive-md archivo text-uppercase text-light"
+                >
+                  <b>{{
+                    capitalizeFirstLetter(
+                      order.sunglassesDetails?.[0]?.model || "Order"
+                    )
+                  }}</b>
+                </div>
+                <div class="text-caption text-dimmed q-mt-xs">
+                  Order #{{ formateOrderId(order) }} ·
+                  {{ formatDate(order.orderDate) }}
+                </div>
+                <div class="text-caption text-dimmed q-mt-xs">
+                  For {{ order.userFirstName }}
+                </div>
+              </div>
+
+              <div class="col-md-4 col-12 text-md-right q-mt-md q-mt-md-none">
+                <div class="text-caption text-dimmed">POTENTIAL VALUE</div>
+                <div class="font-size-responsive-lg archivo text-warning">
+                  R {{ order.totalAmount }}.00
+                </div>
+              </div>
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
+    </template>
+
     <!--------------------------------------------------------------------- UPCOMING PICKUPS -------------------------------------------------->
     <template v-if="pendingPickups.length > 0">
       <q-card
@@ -157,7 +258,7 @@
               Upcoming Pickups
             </div>
             <div class="text-caption text-dimmed">
-              {{ pendingPickups.length }} order(s) awaiting collection
+              {{ pendingPickups.length }} order(s) paid & awaiting collection
             </div>
           </div>
         </q-card-section>
@@ -372,19 +473,18 @@
               <div class="row items-center">
                 <div
                   class="status-dot"
-                  :class="'status-dot--' + statusBucket(order.status)"
+                  :class="'status-dot--' + statusBucket(order)"
                 ></div>
                 <span
                   class="text-caption text-bold q-ml-sm"
-                  :class="'text-' + statusColor(order.status)"
+                  :class="'text-' + statusColor(order)"
                 >
-                  {{ statusLabel(order.status) }}
+                  {{ statusLabel(order) }}
                 </span>
               </div>
             </div>
 
             <div class="col-1 row justify-end">
-              <!-- 3-dot menu -->
               <q-btn
                 round
                 dense
@@ -409,7 +509,6 @@
                     >
                       <q-item-section>Mark collected</q-item-section>
                     </q-item>
-
                     <q-item
                       v-if="
                         order.status === 'paid' &&
@@ -421,23 +520,16 @@
                     >
                       <q-item-section>Mark delivered</q-item-section>
                     </q-item>
-
-                    <q-item
-                      v-if="order.status === 'pending'"
-                      clickable
-                      v-close-popup
-                      @click="viewOrderDetails(order)"
-                    >
-                      <q-item-section>View details</q-item-section>
-                    </q-item>
-
                     <q-separator
                       v-if="
                         order.status === 'paid' || order.status === 'pending'
                       "
                     />
-
-                    <q-item clickable v-close-popup @click="deleteOrder(order)">
+                    <q-item
+                      clickable
+                      v-close-popup
+                      @click="deleteOrder(order._id, order)"
+                    >
                       <q-item-section class="text-negative"
                         >Delete</q-item-section
                       >
@@ -499,10 +591,17 @@ export default {
       const currentMonth = now.getMonth();
       const currentYear = now.getFullYear();
 
+      // Count carts that are unpaid
+      const pendingPayments = this.orders.filter(
+        (o) => o.status === "pending"
+      ).length;
+
+      // Count paid pickups not yet collected
       const awaitingCollection = this.orders.filter(
         (o) => o.status === "paid" && o.orderType === "pickup"
       ).length;
 
+      // Count collected this month
       const completedThisMonth = this.orders.filter((o) => {
         if (o.status !== "paid & picked up") return false;
         const d = new Date(o.orderDate);
@@ -510,9 +609,14 @@ export default {
       }).length;
 
       return {
+        pendingPayments,
         awaitingCollection,
         completedThisMonth,
       };
+    },
+
+    pendingCarts() {
+      return this.orders.filter((o) => o.status === "pending");
     },
 
     pendingPickups() {
@@ -540,7 +644,10 @@ export default {
       if (id) Helper.viewSunglassesDetails(id, this.$router);
     },
 
-    statusLabel(status) {
+    statusLabel(order) {
+      if (order.returns === "refund requested") return "REFUND REQ.";
+      if (order.returns === "returned item(s)") return "REFUNDED";
+
       const map = {
         pending: "PENDING",
         paid: "PAID",
@@ -548,10 +655,13 @@ export default {
         "paid & delivered": "DELIVERED",
         refunded: "REFUNDED",
       };
-      return map[status] || status?.toUpperCase() || "—";
+      return map[order.status] || order.status?.toUpperCase() || "—";
     },
 
-    statusColor(status) {
+    statusColor(order) {
+      if (order.returns === "refund requested") return "warning";
+      if (order.returns === "returned item(s)") return "negative";
+
       const map = {
         pending: "warning",
         paid: "positive",
@@ -559,10 +669,13 @@ export default {
         "paid & delivered": "delivered",
         refunded: "negative",
       };
-      return map[status] || "grey";
+      return map[order.status] || "grey";
     },
 
-    statusBucket(status) {
+    statusBucket(order) {
+      if (order.returns === "refund requested") return "pending";
+      if (order.returns === "returned item(s)") return "refunded";
+
       const map = {
         pending: "pending",
         paid: "paid",
@@ -570,33 +683,29 @@ export default {
         "paid & delivered": "delivered",
         refunded: "refunded",
       };
-      return map[status] || "grey";
+      return map[order.status] || "grey";
     },
 
     async getAllOrders() {
       this.loading = true;
       try {
         const response = await OrderService.findAllOrders();
+        const validOrders = (response || []).filter((o) => o.totalAmount >= 0);
 
         this.orders = await Promise.all(
-          (response || []).map(async (order) => {
+          validOrders.map(async (order) => {
             const user = await UserService.findUserById(order.user).catch(
               () => null
             );
-            return {
-              ...order,
-              userFirstName: user?.username || "Unknown",
-            };
+            return { ...order, userFirstName: user?.username || "Unknown" };
           })
         );
 
         await this.getSunglasses();
 
-        this.ordersPickup = this.orders.filter(
-          (o) => o.orderType === "pickup" && o.status !== "refunded"
-        );
+        this.ordersPickup = this.orders.filter((o) => o.orderType === "pickup");
         this.ordersDelivery = this.orders.filter(
-          (o) => o.orderType === "delivery" && o.status !== "refunded"
+          (o) => o.orderType === "delivery"
         );
 
         this.combinedList = [...this.ordersPickup, ...this.ordersDelivery];
@@ -614,21 +723,28 @@ export default {
       for (const order of this.orders) {
         if (order.sunglasses && order.sunglasses.length > 0) {
           order.sunglassesDetails = [];
-          const seen = new Set();
-          for (const sunglass of order.sunglasses) {
-            const id = String(sunglass._id);
-            if (seen.has(id)) continue;
-            seen.add(id);
+          const groupedItems = {};
+          order.sunglasses.forEach((item) => {
+            const idStr = String(item._id);
+            if (groupedItems[idStr]) {
+              groupedItems[idStr].quantity += item.quantity || 1;
+            } else {
+              groupedItems[idStr] = {
+                _id: item._id,
+                quantity: item.quantity || 1,
+              };
+            }
+          });
+
+          for (const key in groupedItems) {
             try {
-              const response = await SunglassesService.findSunglassesById(
-                sunglass._id
-              );
-              if (response) order.sunglassesDetails.push(response);
+              const response = await SunglassesService.findSunglassesById(key);
+              if (response) {
+                response.quantity = groupedItems[key].quantity;
+                order.sunglassesDetails.push(response);
+              }
             } catch (error) {
-              console.error(
-                `Failed to fetch sunglasses ${sunglass._id}:`,
-                error
-              );
+              console.error(`Failed to fetch sunglasses ${key}:`, error);
             }
           }
         }
@@ -674,7 +790,6 @@ export default {
       ).onOk(async () => {
         try {
           const response = await OrderService.updatePickupOrder(id);
-
           if (response) {
             UiAlerts.success("Update successful!");
             this.getAllOrders();
@@ -695,7 +810,6 @@ export default {
       ).onOk(async () => {
         try {
           const response = await OrderService.updateDeliveryOrder(id);
-
           if (response) {
             UiAlerts.success("Update successful!");
             this.getAllOrders();
@@ -708,9 +822,8 @@ export default {
       });
     },
 
-    async deleteOrder(id) {
-      const order = await OrderService.findOrderById(id);
-      const hasRefund = order?.returns === "returned item(s)";
+    async deleteOrder(orderId, orderData) {
+      const hasRefund = orderData?.returns === "returned item(s)";
 
       const message = hasRefund
         ? "This order has a refund associated with it. Deleting this order will also delete that refund. Continue?"
@@ -718,14 +831,12 @@ export default {
 
       UiAlerts.confirmDelete("Delete Order", message, "Delete Order").onOk(
         async () => {
-          const response = await OrderService.deleteOrder(id);
-
+          const response = await OrderService.deleteOrder(orderId);
           if (response) {
             UiAlerts.success("Delete successful!");
           } else {
             UiAlerts.error("Delete failed. Please try again.");
           }
-
           this.getAllOrders();
         }
       );
@@ -735,15 +846,14 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+/* ... keep your existing CSS ... */
 .status-card
   transition: border-color 0.2s ease
-
   &:hover
     border-color: rgba(255, 255, 255, 0.35) !important
 
 .order-row
   transition: background-color 0.15s ease
-
   &:hover
     background-color: rgba(255, 255, 255, 0.03)
 
@@ -761,53 +871,40 @@ export default {
 
 .order-search
   min-width: 260px
-
   :deep(.q-field__control)
     background-color: #121212
     border-radius: 6px
     box-shadow: none !important
-
   :deep(.q-field__control:before)
     border: 1px solid rgba(255, 255, 255, 0.2) !important
-
   :deep(.q-field__control:hover:before)
     border-color: rgba(255, 255, 255, 0.35) !important
-
   :deep(.q-field__control:after)
     border-color: transparent !important
     box-shadow: none !important
-
   :deep(.q-field--focused .q-field__control:before)
     border-color: rgba(255, 255, 255, 0.5) !important
-
   :deep(.q-field__native)
     color: #f0f0f0
-
   :deep(.q-field__marginal)
     color: #9b9b9b
 
 .status-filter
   min-width: 130px
   font-size: 0.85rem
-
   :deep(.q-field__control)
     background-color: #121212
     border-radius: 6px
     box-shadow: none !important
-
   :deep(.q-field__control:before)
     border: 1px solid rgba(255, 255, 255, 0.2) !important
-
   :deep(.q-field__control:after)
     border-color: transparent !important
     box-shadow: none !important
-
   :deep(.q-field--focused .q-field__control:before)
     border-color: rgba(255, 255, 255, 0.5) !important
-
   :deep(.q-field__native)
     color: #f0f0f0
-
   :deep(.q-field__marginal)
     color: #9b9b9b
 
@@ -816,48 +913,37 @@ export default {
   height: 8px
   border-radius: 50%
   display: inline-block
-
 .status-dot--pending
   background-color: #fbbf24
   box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15)
-
 .status-dot--paid
   background-color: #22c55e
   box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15)
-
 .status-dot--collected
   background-color: #14b8a6
   box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15)
-
 .status-dot--delivered
   background-color: #a855f7
   box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15)
-
 .status-dot--refunded
   background-color: #ef4444
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15)
-
 .status-dot--grey
   background-color: #9b9b9b
 
 .text-collected
   color: #14b8a6 !important
-
 .text-delivered
   color: #a855f7 !important
 
 .row-actions-menu
-  // background-color: #141414
   border: 1px solid rgba(255, 255, 255, 0.12)
   border-radius: 10px
   min-width: 160px
-
   .q-item
     color: #e8e8e8
     min-height: 40px
     border-radius: 6px
-    // margin: 2px
-
     &:hover
       background-color: rgba(255, 255, 255, 0.06)
 </style>
