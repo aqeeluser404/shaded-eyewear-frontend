@@ -3,6 +3,8 @@
     class="orders-details"
     :class="$q.screen.gt.sm ? 'q-pl-lg' : 'q-pl-none'"
   >
+    <div class="section-spacer-xs small-screen-only"></div>
+
     <!--------------------------------------------------------------------- HAS ORDERS -------------------------------------------------->
     <section v-if="loading || orders.length > 0">
       <!-- Heading -->
@@ -11,8 +13,8 @@
           ORDER HISTORY
         </div>
         <div class="row justify-between items-center">
-          <div class="text-subtitle1 text-dimmed q-mt-sm">
-            Every frame you've bought, in one place.
+          <div class="font-size-responsive-sm text-dimmed q-mt-sm">
+            Track your orders and collection status.
           </div>
           <q-btn
             v-if="!loading && hasPendingOrder"
@@ -22,7 +24,7 @@
             label="AWAITING PAYMENT"
             color="orange"
             text-color="orange"
-            class="q-px-lg q-py-sm text-caption rounded-button text-bold"
+            class="q-px-lg q-py-sm text-caption rounded-button text-bold large-screen-only"
           />
           <q-btn
             v-else-if="!loading && hasReadyToCollectOrder"
@@ -32,7 +34,7 @@
             label="READY TO COLLECT"
             color="green"
             text-color="green"
-            class="q-px-lg q-py-sm text-caption rounded-button text-bold"
+            class="q-px-lg q-py-sm text-caption rounded-button text-bold large-screen-only"
           />
         </div>
       </div>
@@ -55,36 +57,44 @@
               class="row justify-between items-center"
               style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
             >
-              <div class="col-4">
-                <div class="skeleton-line skeleton-line--xs q-mb-xs"></div>
-                <div class="skeleton-line skeleton-line--md"></div>
+              <!-- Left: Order ID -->
+              <div style="width: 30%">
+                <div class="skeleton-line skeleton-line--xs q-mb-xs" style="width: 60%"></div>
+                <div class="skeleton-line skeleton-line--md" style="width: 100%"></div>
               </div>
-              <div class="col-4">
-                <div class="skeleton-line skeleton-line--xs q-mb-xs"></div>
-                <div class="skeleton-line skeleton-line--md"></div>
+
+              <!-- Center: Placed Date -->
+              <div style="width: 30%; text-align: center;">
+                <div class="skeleton-line skeleton-line--xs q-mb-xs" style="width: 60%;"></div>
+                <div class="skeleton-line skeleton-line--md" style="width: 100%"></div>
               </div>
-              <div class="col-4 row justify-end">
-                <div>
-                  <div class="skeleton-line skeleton-line--xs q-mb-xs"></div>
-                  <div class="skeleton-line skeleton-line--sm"></div>
-                </div>
+
+              <!-- Right: Total -->
+              <div class="column items-end" style="width: 30%">
+                <div class="skeleton-line skeleton-line--xs q-mb-xs" style="width: 60%"></div>
+                <div class="skeleton-line skeleton-line--sm" style="width: 100%"></div>
               </div>
             </q-card-section>
 
             <!-- item skeleton -->
             <q-card-section class="q-pa-none">
-              <div class="row items-center q-py-lg q-px-md">
-                <div class="col-md-1 col-6">
-                  <div class="skeleton-line skeleton-line--thumb-sm"></div>
+              <div class="q-py-lg q-px-md" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1)">
+                <!-- Top row: Image + Text -->
+                <div class="row items-center">
+                  <div class="col-auto">
+                    <div class="skeleton-line skeleton-line--thumb-sm"></div>
+                  </div>
+                  <div class="col column items-start q-pl-md">
+                    <div class="skeleton-line skeleton-line--md q-mb-sm" style="width: 50%"></div>
+                    <div class="skeleton-line skeleton-line--sm" style="width: 30%"></div>
+                  </div>
                 </div>
-                <div class="col-md-7 col-6 q-pl-md">
-                  <div class="skeleton-line skeleton-line--md q-mb-sm"></div>
-                  <div class="skeleton-line skeleton-line--sm"></div>
-                </div>
-                <div
-                  class="col-md-3 col-12 row justify-end q-mt-lg q-mt-md-none"
-                >
-                  <div class="skeleton-line skeleton-line--btn"></div>
+
+                <!-- Bottom row: Button -->
+                <div class="row q-mt-md q-mt-md-none">
+                  <div class="col-12 col-md-auto">
+                    <div class="skeleton-line skeleton-line--btn full-width" style="height: 36px; border-radius: 20px;"></div>
+                  </div>
                 </div>
               </div>
             </q-card-section>
@@ -92,7 +102,7 @@
             <!-- footer skeleton -->
             <q-card-section
               class="order-footer"
-              style="border-top: 1px solid rgba(255, 255, 255, 0.2)"
+              style="border-top: 1px solid rgba(255, 255, 255, 0.1)"
             >
               <div class="skeleton-line skeleton-line--md"></div>
               <div class="order-footer-actions">
@@ -166,38 +176,37 @@
                 :key="sunglass._id"
                 class="q-py-lg q-px-md"
                 :style="
-                  index !== order.sunglassesDetails.length - 1
-                    ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.2)'
+                  index !== 0
+                    ? 'border-top: 1px solid rgba(255, 255, 255, 0.1)'
                     : ''
                 "
               >
                 <!-- top row: image + model/price + button -->
                 <div class="row items-center">
-                  <div class="col-md-1 col-6">
+                  <!-- Image -->
+                  <div class="col-auto">
                     <q-img
                       :src="getImageUrl(sunglass.images[0].imageUrl)"
                       alt="Sunglass"
                       class="border"
+                      style="width: 70px; border-radius: 4px"
                     />
                   </div>
 
-                  <div class="col-md-7 col-6 q-pl-md">
+                  <!-- Text Details -->
+                  <div class="col column items-start q-pl-md">
                     <div
-                      class="font-size-responsive-md archivo text-uppercase text-light"
+                      class="font-size-responsive-sm archivo text-uppercase text-light q-mb-xs"
                     >
                       <b>{{ capitalizeFirstLetter(sunglass.model) }}</b>
                     </div>
-                    <div class="text-subtitle1 text-dimmed">
-                      R {{ sunglass.price }}.00
-                    </div>
-                    <div class="text-caption text-dimmed q-mt-xs">
-                      Qty {{ sunglass.quantity || 1 }}
+                    <div class="font-size-responsive-xs text-dimmed">
+                      {{ sunglass.quantity }} x R {{ sunglass.price }}.00
                     </div>
                   </div>
 
-                  <div
-                    class="col-md-3 col-12 row justify-end q-mt-lg q-mt-md-none"
-                  >
+                  <!-- Action Button -->
+                  <div class="col-12 col-md-auto q-mt-md q-mt-md-none">
                     <q-btn
                       rounded
                       dense
@@ -207,7 +216,7 @@
                       text-color="grey"
                       label="View frame"
                       icon-right="eva-arrow-forward-outline"
-                      class="col-md-8 col-12 q-px-lg q-py-sm text-caption icon-btn text-subtitle1 text-bold"
+                      class="q-px-lg q-py-sm text-caption icon-btn text-bold full-width"
                       @click.stop="viewSunglassesDetails(sunglass._id)"
                     />
                   </div>
@@ -216,7 +225,7 @@
                 <!-- bottom row: collection line, only on pickup -->
                 <div v-if="order.orderType === 'pickup'" class="row q-mt-md">
                   <div class="col-12">
-                    <div class="text-subtitle1 text-dimmed">
+                    <div class="font-size-responsive-sm text-dimmed">
                       Collection at 65 Stockley Road, Kenwyn
                     </div>
                   </div>
@@ -274,7 +283,7 @@
                     no-caps
                     flat
                     label="Cancel"
-                    class="custom-button text-subtitle1 text-dimmed q-px-lg q-py-sm"
+                    class="custom-button text-caption text-dimmed q-px-lg q-py-sm"
                     @click="cancelOrder(order._id)"
                   />
                   <q-btn
@@ -284,7 +293,7 @@
                     to="/cart"
                     label="Proceed to checkout"
                     text-color="dark"
-                    class="btn-gradient-primary q-px-lg q-py-sm rounded-button text-subtitle1 text-bold"
+                    class="btn-gradient-primary q-px-lg q-py-sm text-caption rounded-button text-bold"
                   />
                 </template>
               </div>

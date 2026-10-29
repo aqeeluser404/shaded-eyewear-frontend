@@ -15,13 +15,24 @@ class Helper {
     return format.capitalize(lowerCaseText);
   }
 
+  // For standard orders
   static formateOrderId(order) {
-    // Use existing order number/date if you store one, otherwise derive from _id + date
+    if (!order || !order._id) return "N/A";
     const datePart = new Date(order.orderDate)
       .toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit" })
       .replace("/", "");
-    const shortId = order._id.slice(-3).toUpperCase();
+    const shortId = String(order._id).slice(-3).toUpperCase();
     return `SHD-${datePart}-${shortId}`;
+  }
+
+  // For refunds
+  static formateRefundId(order) {
+    if (!order || !order._id) return "N/A";
+    const datePart = new Date(order.orderDate)
+      .toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit" })
+      .replace("/", "");
+    const shortId = String(order._id).slice(-3).toUpperCase();
+    return `RFD-${datePart}-${shortId}`;
   }
 
   static formatUserId(user) {
