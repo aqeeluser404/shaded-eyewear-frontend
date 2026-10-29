@@ -4,6 +4,7 @@
     :class="$q.screen.gt.sm ? 'q-pl-lg' : 'q-pl-none'"
   >
     <!-- Heading -->
+    <div class="section-spacer-xs small-screen-only"></div>
     <section>
       <div class="overline-tight text-dimmed text-caption">ADMIN DASHBOARD</div>
       <div class="font-size-responsive-xl archivo text-light text-bold">
@@ -16,8 +17,17 @@
     <!--------------------------------------------------------------------- LOADING SKELETON -------------------------------------------------->
     <template v-if="loading">
       <div class="row q-col-gutter-md q-mb-lg">
-        <div v-for="n in 4" :key="'skel-stat-' + n" class="col-12 col-sm-6 col-md-3">
-          <q-card flat bordered class="bg-dark-secondary q-pa-md" style="border: 1px solid rgba(255, 255, 255, 0.2)">
+        <div
+          v-for="n in 4"
+          :key="'skel-stat-' + n"
+          class="col-12 col-sm-6 col-md-3"
+        >
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-md"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
             <div class="row justify-between items-center q-mb-md">
               <div class="skeleton-line skeleton-line--sm"></div>
               <div class="skeleton-line skeleton-line--avatar"></div>
@@ -29,28 +39,58 @@
       </div>
       <div class="row q-col-gutter-md q-mb-lg">
         <div class="col-12 col-md-8">
-          <q-card flat bordered class="bg-dark-secondary q-pa-lg" style="border: 1px solid rgba(255, 255, 255, 0.2)">
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-lg"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
             <div class="skeleton-line skeleton-line--md q-mb-sm"></div>
             <div class="skeleton-line skeleton-line--sm q-mb-lg"></div>
             <div class="skeleton-line" style="height: 260px"></div>
           </q-card>
         </div>
         <div class="col-12 col-md-4">
-          <q-card flat bordered class="bg-dark-secondary q-pa-lg" style="border: 1px solid rgba(255, 255, 255, 0.2)">
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-lg"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
             <div class="skeleton-line skeleton-line--md q-mb-sm"></div>
             <div class="skeleton-line skeleton-line--sm q-mb-lg"></div>
             <div class="skeleton-line" style="height: 260px"></div>
           </q-card>
         </div>
       </div>
-      <q-card flat bordered class="bg-dark-secondary q-pa-lg" style="border: 1px solid rgba(255, 255, 255, 0.2)">
+      <q-card
+        flat
+        bordered
+        class="bg-dark-secondary q-pa-lg"
+        style="border: 1px solid rgba(255, 255, 255, 0.2)"
+      >
         <div class="skeleton-line skeleton-line--md q-mb-lg"></div>
-        <div v-for="n in 3" :key="'skel-row-' + n" class="row items-center q-py-md" style="border-top: 1px solid rgba(255, 255, 255, 0.1)">
-          <div class="col-2"><div class="skeleton-line skeleton-line--sm"></div></div>
-          <div class="col-3"><div class="skeleton-line skeleton-line--md"></div></div>
-          <div class="col-3"><div class="skeleton-line skeleton-line--md"></div></div>
-          <div class="col-2"><div class="skeleton-line skeleton-line--sm"></div></div>
-          <div class="col-2 row justify-end"><div class="skeleton-line skeleton-line--sm"></div></div>
+        <div
+          v-for="n in 3"
+          :key="'skel-row-' + n"
+          class="row items-center q-py-md"
+          style="border-top: 1px solid rgba(255, 255, 255, 0.1)"
+        >
+          <div class="col-2">
+            <div class="skeleton-line skeleton-line--sm"></div>
+          </div>
+          <div class="col-3">
+            <div class="skeleton-line skeleton-line--md"></div>
+          </div>
+          <div class="col-3">
+            <div class="skeleton-line skeleton-line--md"></div>
+          </div>
+          <div class="col-2">
+            <div class="skeleton-line skeleton-line--sm"></div>
+          </div>
+          <div class="col-2 row justify-end">
+            <div class="skeleton-line skeleton-line--sm"></div>
+          </div>
         </div>
       </q-card>
     </template>
@@ -58,30 +98,52 @@
     <!--------------------------------------------------------------------- REAL CONTENT -------------------------------------------------->
     <template v-else>
       <!-------------------------------------- STAT CARDS -------------------------------------->
-      <div class="row q-col-gutter-md q-mb-lg">
+      <div class="row q-col-gutter-md items-stretch"
+        :class="$q.screen.gt.sm ? 'q-mb-lg' : 'q-mb-md'"
+      >
         <!-- Revenue -->
         <div class="col-12 col-sm-6 col-md-3">
-          <q-card flat bordered class="bg-dark-secondary q-pa-md stat-card" style="border: 1px solid rgba(255, 255, 255, 0.2)">
-            <div class="row justify-between items-center q-mb-lg">
-              <div class="overline-tight text-dimmed text-caption">REVENUE</div>
-              <q-icon name="fa-solid fa-coins" color="primary" size="16px" />
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-md stat-card full-height column justify-between"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
+            <div>
+              <div class="row justify-between items-center q-mb-lg">
+                <div class="overline-tight text-dimmed text-caption">
+                  REVENUE
+                </div>
+                <q-icon name="fa-solid fa-coins" color="primary" size="16px" />
+              </div>
+              <div class="font-size-responsive-xl archivo text-light text-bold">
+                R {{ formatNumber(stats.revenue) }}
+              </div>
             </div>
-            <div class="font-size-responsive-xl archivo text-light text-bold">
-              R {{ formatNumber(stats.revenue) }}
+            <div class="text-caption text-dimmed q-mt-sm">
+              Lifetime net revenue
             </div>
-            <div class="text-caption text-dimmed q-mt-sm">Lifetime net revenue</div>
           </q-card>
         </div>
 
         <!-- Orders -->
         <div class="col-12 col-sm-6 col-md-3">
-          <q-card flat bordered class="bg-dark-secondary q-pa-md stat-card" style="border: 1px solid rgba(255, 255, 255, 0.2)">
-            <div class="row justify-between items-center q-mb-lg">
-              <div class="overline-tight text-dimmed text-caption">ORDERS</div>
-              <q-icon name="eva-cube-outline" color="primary" size="20px" />
-            </div>
-            <div class="font-size-responsive-xl archivo text-light text-bold">
-              {{ stats.orders }}
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-md stat-card full-height column justify-between"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
+            <div>
+              <div class="row justify-between items-center q-mb-lg">
+                <div class="overline-tight text-dimmed text-caption">
+                  ORDERS
+                </div>
+                <q-icon name="eva-cube-outline" color="primary" size="20px" />
+              </div>
+              <div class="font-size-responsive-xl archivo text-light text-bold">
+                {{ stats.orders }}
+              </div>
             </div>
             <div class="text-caption text-dimmed q-mt-sm">
               {{ stats.pendingOrders }} awaiting action
@@ -91,13 +153,22 @@
 
         <!-- Customers -->
         <div class="col-12 col-sm-6 col-md-3">
-          <q-card flat bordered class="bg-dark-secondary q-pa-md stat-card" style="border: 1px solid rgba(255, 255, 255, 0.2)">
-            <div class="row justify-between items-center q-mb-lg">
-              <div class="overline-tight text-dimmed text-caption">CUSTOMERS</div>
-              <q-icon name="eva-people-outline" color="primary" size="20px" />
-            </div>
-            <div class="font-size-responsive-xl archivo text-light text-bold">
-              {{ stats.customers }}
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-md stat-card full-height column justify-between"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
+            <div>
+              <div class="row justify-between items-center q-mb-lg">
+                <div class="overline-tight text-dimmed text-caption">
+                  CUSTOMERS
+                </div>
+                <q-icon name="eva-people-outline" color="primary" size="20px" />
+              </div>
+              <div class="font-size-responsive-xl archivo text-light text-bold">
+                {{ stats.customers }}
+              </div>
             </div>
             <div class="text-caption text-dimmed q-mt-sm">
               {{ stats.activeToday }} active today
@@ -107,13 +178,26 @@
 
         <!-- Inventory -->
         <div class="col-12 col-sm-6 col-md-3">
-          <q-card flat bordered class="bg-dark-secondary q-pa-md stat-card" style="border: 1px solid rgba(255, 255, 255, 0.2)">
-            <div class="row justify-between items-center q-mb-lg">
-              <div class="overline-tight text-dimmed text-caption">INVENTORY</div>
-              <q-icon name="fa-solid fa-glasses" color="primary" size="16px" />
-            </div>
-            <div class="font-size-responsive-xl archivo text-light text-bold">
-              {{ stats.totalStock }}
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-md stat-card full-height column justify-between"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
+            <div>
+              <div class="row justify-between items-center q-mb-lg">
+                <div class="overline-tight text-dimmed text-caption">
+                  INVENTORY
+                </div>
+                <q-icon
+                  name="fa-solid fa-glasses"
+                  color="primary"
+                  size="16px"
+                />
+              </div>
+              <div class="font-size-responsive-xl archivo text-light text-bold">
+                {{ stats.totalStock }}
+              </div>
             </div>
             <div class="text-caption text-dimmed q-mt-sm">
               {{ stats.frameCount }} frames in stock
@@ -123,12 +207,28 @@
       </div>
 
       <!-------------------------------------- CHARTS -------------------------------------->
-      <div class="row q-col-gutter-md q-mb-lg">
+      <div class="row q-col-gutter-md items-stretch"
+        :class="$q.screen.gt.sm ? 'q-mb-lg' : 'q-mb-md'"
+      >
         <div class="col-12 col-md-8">
-          <q-card flat bordered class="bg-dark-secondary q-pa-lg" style="border: 1px solid rgba(255, 255, 255, 0.2)">
-            <div class="row justify-between items-start q-mb-md">
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-md full-height"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
+            <div class="row justify-between items-center q-mb-md">
               <div>
-                <div class="font-size-responsive-md text-light text-bold">Sales</div>
+                <div
+                  class="font-size-responsive-md text-light text-bold large-screen-only"
+                >
+                  Sales
+                </div>
+                <div
+                  class="font-size-responsive-lg text-light text-bold small-screen-only"
+                >
+                  Sales
+                </div>
                 <div class="text-caption text-dimmed">{{ periodCaption }}</div>
               </div>
               <q-select
@@ -138,7 +238,10 @@
                 option-value="value"
                 emit-value
                 map-options
-                dense outlined dark color="primary"
+                dense
+                outlined
+                dark
+                color="primary"
                 class="period-select"
                 popup-content-class="period-menu"
                 :popup-content-style="{
@@ -151,57 +254,150 @@
                 @update:model-value="computeCharts"
               />
             </div>
-            <apexchart type="area" height="280" :options="salesChartOptions" :series="salesChartSeries" />
+            <apexchart
+              type="area"
+              height="280"
+              :options="salesChartOptions"
+              :series="salesChartSeries"
+            />
           </q-card>
         </div>
 
         <div class="col-12 col-md-4">
-          <q-card flat bordered class="bg-dark-secondary q-pa-lg" style="border: 1px solid rgba(255, 255, 255, 0.2)">
-            <div class="font-size-responsive-md text-light text-bold">Frequent users</div>
-            <div class="text-caption text-dimmed q-mb-md">Top customers by login count</div>
-            <apexchart type="bar" height="280" :options="usersChartOptions" :series="usersChartSeries" />
+          <q-card
+            flat
+            bordered
+            class="bg-dark-secondary q-pa-md full-height"
+            style="border: 1px solid rgba(255, 255, 255, 0.2)"
+          >
+            <div
+              class="font-size-responsive-lg text-light text-bold small-screen-only"
+            >
+              Frequent users
+            </div>
+            <div
+              class="font-size-responsive-md text-light text-bold large-screen-only"
+            >
+              Frequent users
+            </div>
+            <div class="text-caption text-dimmed q-mb-md">
+              Top customers by login count
+            </div>
+            <apexchart
+              type="bar"
+              height="280"
+              :options="usersChartOptions"
+              :series="usersChartSeries"
+            />
           </q-card>
         </div>
       </div>
 
       <!-------------------------------------- RECENT ORDERS -------------------------------------->
-      <q-card flat bordered class="bg-dark-secondary" style="border: 1px solid rgba(255, 255, 255, 0.2)">
-        <q-card-section class="row justify-between items-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
+      <q-card
+        flat
+        bordered
+        class="bg-dark-secondary"
+        style="border: 1px solid rgba(255, 255, 255, 0.2)"
+      >
+        <q-card-section
+          class="row justify-between items-center"
+          style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+        >
           <div>
-            <div class="font-size-responsive-md text-light text-bold">Recent Orders</div>
-            <div class="text-caption text-dimmed">Latest orders across the store</div>
+            <div
+              class="font-size-responsive-lg text-light text-bold small-screen-only"
+            >
+              Recent Orders
+            </div>
+            <div
+              class="font-size-responsive-md text-light text-bold large-screen-only"
+            >
+              Recent Orders
+            </div>
+
+            <div class="text-caption text-dimmed">
+              Latest orders across the store
+            </div>
           </div>
         </q-card-section>
 
         <q-card-section class="q-pa-none">
-          <div class="row items-center q-px-md q-py-md" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1)">
-            <div class="col-2 text-dimmed font-size-responsive-xs text-bold">ORDER</div>
-            <div class="col-3 text-dimmed font-size-responsive-xs text-bold">CUSTOMER</div>
-            <div class="col-3 text-dimmed font-size-responsive-xs text-bold">ITEM</div>
-            <div class="col-2 text-dimmed font-size-responsive-xs text-bold">TOTAL</div>
-            <div class="col-2 text-dimmed font-size-responsive-xs text-bold text-center">STATUS</div>
-          </div>
+          <!-- 🚨 SCROLL WRAPPER -->
+          <div style="overflow-x: auto">
+            <!-- 🚨 MIN-WIDTH ON THE CONTENT -->
+            <div style="min-width: 600px">
+              <!-- HEADER ROW -->
+              <div
+                class="row items-center q-px-md q-py-md"
+                style="border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
+              >
+                <div class="col text-dimmed font-size-responsive-xs text-bold">
+                  ORDER
+                </div>
+                <div class="col text-dimmed font-size-responsive-xs text-bold">
+                  CUSTOMER
+                </div>
+                <div
+                  class="col text-dimmed font-size-responsive-xs text-bold text-left"
+                >
+                  TOTAL
+                </div>
+                <div
+                  class="col text-dimmed font-size-responsive-xs text-bold text-left"
+                >
+                  STATUS
+                </div>
+              </div>
 
-          <div
-            v-for="(order, index) in recentOrders"
-            :key="order._id"
-            class="row items-center q-px-md q-py-md"
-            :style="index !== recentOrders.length - 1 ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)' : ''"
-          >
-            <div class="col-2">
-              <q-badge outline color="grey" text-color="grey" class="order-id-badge">
-                #{{ formateOrderId(order) }}
-              </q-badge>
-            </div>
-            <div class="col-3 font-size-responsive-sm text-dimmed">{{ order.userFirstName }}</div>
-            <div class="col-3 font-size-responsive-sm text-dimmed">{{ order.itemName }}</div>
-            <div class="col-2 font-size-responsive-sm text-dimmed">R {{ order.totalAmount }}.00</div>
-            <div class="col-2 row justify-center">
-              <div class="row items-center">
-                <div class="status-dot" :class="'status-dot--' + order.statusBucket"></div>
-                <span class="text-caption text-bold q-ml-sm" :class="'text-' + order.statusColor">
-                  {{ order.statusLabel }}
-                </span>
+              <!-- DATA ROWS -->
+              <div
+                v-for="(order, index) in recentOrders"
+                :key="order._id"
+                class="row items-center q-px-md q-py-md order-row"
+                :style="
+                  index !== recentOrders.length - 1
+                    ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)'
+                    : ''
+                "
+              >
+                <!-- Order ID -->
+                <div class="col">
+                  <q-badge
+                    outline
+                    color="grey"
+                    text-color="grey"
+                    class="order-id-badge"
+                  >
+                    #{{ formateOrderId(order) }}
+                  </q-badge>
+                </div>
+
+                <!-- Customer -->
+                <div class="col font-size-responsive-sm text-dimmed">
+                  {{ order.userFirstName }}
+                </div>
+
+                <!-- Total -->
+                <div class="col font-size-responsive-sm text-dimmed text-left">
+                  R {{ order.totalAmount }}.00
+                </div>
+
+                <!-- Status -->
+                <div class="col text-left text-md-right">
+                  <div class="inline-flex items-center gap-2">
+                    <div
+                      class="status-dot"
+                      :class="'status-dot--' + order.statusBucket"
+                    ></div>
+                    <span
+                      class="font-size-responsive-xs statement-label text-bold q-ml-sm"
+                      :class="'text-' + order.statusColor"
+                    >
+                      {{ order.statusLabel }}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -265,37 +461,117 @@ export default {
     },
     salesChartOptions() {
       const { labels } = this.getPeriodRange();
+      const allTimeMode =
+        this.period === "all-time" ? this.getAllTimeBucketMode() : null;
+
       return {
-        chart: { id: "sales-weekly", toolbar: { show: false }, background: "transparent", fontFamily: "Hind, sans-serif" },
+        chart: {
+          id: "sales-chart",
+          toolbar: { show: false },
+          background: "transparent",
+          fontFamily: "Hind, sans-serif",
+          animations: {
+            enabled: true,
+            speed: 350,
+          },
+        },
         theme: { mode: "dark" },
         colors: ["#F97316", "#EF4444"],
         stroke: { curve: "smooth", width: 2 },
-        fill: { type: "gradient", gradient: { shadeIntensity: 1, opacityFrom: 0.5, opacityTo: 0.05, stops: [0, 100] } },
+        fill: {
+          type: "gradient",
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.5,
+            opacityTo: 0.05,
+            stops: [0, 100],
+          },
+        },
         dataLabels: { enabled: false },
-        grid: { borderColor: "rgba(255, 255, 255, 0.08)", strokeDashArray: 3 },
-        legend: { show: true, position: "top", horizontalAlign: "right", labels: { colors: "#9b9b9b" }, markers: { radius: 6, offsetX: -4 }, itemMargin: { horizontal: 16, vertical: 0 } },
-        xaxis: { categories: labels, labels: { style: { colors: "#9b9b9b" } }, axisBorder: { color: "rgba(255, 255, 255, 0.1)" }, axisTicks: { color: "rgba(255, 255, 255, 0.1)" } },
-        yaxis: { labels: { style: { colors: "#9b9b9b" }, formatter: (val) => Math.round(val) } },
-        tooltip: { theme: "dark", y: { formatter: (val) => `R ${val}` } },
+        markers: {
+          size: this.period === "all-time" ? 4 : 0,
+          hover: { sizeOffset: 2 },
+        },
+        grid: {
+          borderColor: "rgba(255, 255, 255, 0.08)",
+          strokeDashArray: 3,
+        },
+        legend: {
+          show: true,
+          position: "top",
+          horizontalAlign: "right",
+          labels: { colors: "#9b9b9b" },
+          markers: { radius: 6, offsetX: -4 },
+          itemMargin: { horizontal: 16, vertical: 0 },
+        },
+        xaxis: {
+          categories: labels,
+          tickAmount:
+            this.period === "all-time" && allTimeMode === "year"
+              ? Math.min(10, Math.max(1, labels.length - 1))
+              : this.period === "all-time" && allTimeMode === "month"
+                ? Math.min(12, Math.max(1, labels.length - 1))
+                : undefined,
+          labels: {
+            style: { colors: "#9b9b9b" },
+            hideOverlappingLabels: true,
+            trim: true,
+          },
+          axisBorder: { color: "rgba(255, 255, 255, 0.1)" },
+          axisTicks: { color: "rgba(255, 255, 255, 0.1)" },
+        },
+        yaxis: {
+          min: 0,
+          forceNiceScale: true,
+          labels: {
+            style: { colors: "#9b9b9b" },
+            formatter: (val) => Math.round(val),
+          },
+        },
+        tooltip: {
+          theme: "dark",
+          shared: true,
+          intersect: false,
+          y: {
+            formatter: (val) =>
+              `R ${Number(val || 0).toLocaleString("en-ZA")}`,
+          },
+        },
       };
     },
     usersChartOptions() {
-      const names = this.frequentUsers.slice(0, 5).map((u) => u.username || "Unknown");
+      const names = this.frequentUsers
+        .slice(0, 5)
+        .map((u) => u.username || "Unknown");
       return {
-        chart: { id: "frequent-users", toolbar: { show: false }, background: "transparent", fontFamily: "Hind, sans-serif" },
+        chart: {
+          id: "frequent-users",
+          toolbar: { show: false },
+          background: "transparent",
+          fontFamily: "Hind, sans-serif",
+        },
         theme: { mode: "dark" },
         colors: ["#38BDF8"],
-        plotOptions: { bar: { horizontal: true, borderRadius: 4, barHeight: "55%" } },
+        plotOptions: {
+          bar: { horizontal: true, borderRadius: 4, barHeight: "55%" },
+        },
         dataLabels: { enabled: false },
         grid: { borderColor: "rgba(255, 255, 255, 0.08)", strokeDashArray: 3 },
-        xaxis: { categories: names, labels: { style: { colors: "#9b9b9b" } }, axisBorder: { color: "rgba(255, 255, 255, 0.1)" }, axisTicks: { color: "rgba(255, 255, 255, 0.1)" } },
+        xaxis: {
+          categories: names,
+          labels: { style: { colors: "#9b9b9b" } },
+          axisBorder: { color: "rgba(255, 255, 255, 0.1)" },
+          axisTicks: { color: "rgba(255, 255, 255, 0.1)" },
+        },
         yaxis: { labels: { style: { colors: "#9b9b9b" } } },
         tooltip: { theme: "dark", y: { formatter: (val) => `${val} logins` } },
       };
     },
     usersChartSeries() {
       const top = this.frequentUsers.slice(0, 5);
-      return [{ name: "Logins", data: top.map((u) => u?.loginInfo?.loginCount || 0) }];
+      return [
+        { name: "Logins", data: top.map((u) => u?.loginInfo?.loginCount || 0) },
+      ];
     },
   },
   methods: {
@@ -380,35 +656,59 @@ export default {
     },
 
     async computeCharts() {
-      const { start, end, labels, bucketKeys } = this.getPeriodRange();
-      const revenueBuckets = {};
-      const refundBuckets = {};
-      for (const key of bucketKeys) {
-        revenueBuckets[key] = 0;
-        refundBuckets[key] = 0;
-      }
-      const paidStatuses = ["paid", "paid & picked up", "paid & delivered"];
+      const { start, end, bucketKeys } = this.getPeriodRange();
+      const revenueBuckets = Object.fromEntries(
+        bucketKeys.map((key) => [key, 0])
+      );
+      const refundBuckets = Object.fromEntries(
+        bucketKeys.map((key) => [key, 0])
+      );
+
+      const paidStatuses = [
+        "paid",
+        "paid & picked up",
+        "paid & delivered",
+      ];
 
       for (const order of this.orders) {
-        const d = new Date(order.orderDate);
+        const amount = Number(order?.totalAmount);
+        const d = this.parseOrderDate(order?.orderDate);
+
+        // Ignore malformed orders instead of letting one bad date/amount
+        // break the all-time range or produce incorrect chart values.
+        if (!d || !Number.isFinite(amount)) continue;
+
         if (start && d < start) continue;
         if (end && d > end) continue;
-        const key = this.getBucketKey(d, this.period);
-        if (!(key in revenueBuckets)) continue;
 
-        if (paidStatuses.includes(order.status)) {
-          revenueBuckets[key] += order.totalAmount || 0;
+        const key = this.getBucketKey(d, this.period);
+        if (!key || !(key in revenueBuckets)) continue;
+
+        // Revenue and refunds are deliberately kept separate:
+        //   positive + paid status = revenue
+        //   negative amount      = refund
+        if (paidStatuses.includes(order?.status) && amount > 0) {
+          revenueBuckets[key] += amount;
         }
 
-        // Only plot refunds that actually went through
-        if (order.returns === "returned item(s)") {
-          refundBuckets[key] += Math.abs(order.totalAmount || 0);
+        if (amount < 0) {
+          refundBuckets[key] += Math.abs(amount);
         }
       }
 
       this.salesChartSeries = [
-        { name: "Revenue", data: bucketKeys.map((k) => revenueBuckets[k]) },
-        { name: "Refunds", data: bucketKeys.map((k) => refundBuckets[k]) },
+        {
+          name: "Revenue",
+          data: bucketKeys.map((key) =>
+            Number(revenueBuckets[key].toFixed(2))
+          ),
+        },
+        {
+          name: "Refunds",
+          data: bucketKeys.map((key) =>
+            Number(refundBuckets[key].toFixed(2))
+          ),
+        },
       ];
     },
 
@@ -448,71 +748,258 @@ export default {
       );
     },
 
+    parseOrderDate(value) {
+      if (!value) return null;
+
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? null : date;
+    },
+
+    getAllTimeBucketMode() {
+      const now = new Date();
+
+      const validDates = this.orders
+        .map((order) => this.parseOrderDate(order?.orderDate))
+        .filter(Boolean);
+
+      if (!validDates.length) return "day";
+
+      const earliest = new Date(
+        Math.min(...validDates.map((date) => date.getTime()))
+      );
+
+      const days = Math.floor(
+        (now.getTime() - earliest.getTime()) / (1000 * 60 * 60 * 24)
+      );
+
+      // Short histories stay DAILY so separate order dates such as
+      // Oct 26 and Oct 29 remain separate points on the All Time chart.
+      if (days <= 90) return "day";
+
+      // Medium histories use monthly buckets so the chart stays readable.
+      if (days <= 60 * 30.44) return "month";
+
+      // Very long histories use yearly buckets.
+      return "year";
+    },
+
     getPeriodRange() {
       const now = new Date();
+
       if (this.period === "this-week") {
         const day = now.getDay();
         const diffToMonday = (day + 6) % 7;
         const monday = new Date(now);
         monday.setDate(now.getDate() - diffToMonday);
         monday.setHours(0, 0, 0, 0);
+
         const sunday = new Date(monday);
         sunday.setDate(monday.getDate() + 6);
         sunday.setHours(23, 59, 59, 999);
-        return { start: monday, end: sunday, labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], bucketKeys: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] };
+
+        return {
+          start: monday,
+          end: sunday,
+          labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          bucketKeys: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        };
       }
+
       if (this.period === "last-week") {
         const day = now.getDay();
         const diffToMonday = (day + 6) % 7;
         const monday = new Date(now);
         monday.setDate(now.getDate() - diffToMonday - 7);
         monday.setHours(0, 0, 0, 0);
+
         const sunday = new Date(monday);
         sunday.setDate(monday.getDate() + 6);
         sunday.setHours(23, 59, 59, 999);
-        return { start: monday, end: sunday, labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], bucketKeys: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] };
+
+        return {
+          start: monday,
+          end: sunday,
+          labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          bucketKeys: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        };
       }
+
       if (this.period === "this-month") {
-        const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-        const lastOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        const firstOfMonth = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          1,
+          0,
+          0,
+          0,
+          0
+        );
+        const lastOfMonth = new Date(
+          now.getFullYear(),
+          now.getMonth() + 1,
+          0,
+          23,
+          59,
+          59,
+          999
+        );
+
         const bucketKeys = [];
         const labels = [];
+
         for (let d = 1; d <= lastOfMonth.getDate(); d++) {
           bucketKeys.push(String(d));
           labels.push(String(d));
         }
-        return { start: firstOfMonth, end: lastOfMonth, labels, bucketKeys };
+
+        return {
+          start: firstOfMonth,
+          end: lastOfMonth,
+          labels,
+          bucketKeys,
+        };
       }
+
       if (this.period === "last-30") {
         const start = new Date(now);
         start.setDate(now.getDate() - 29);
         start.setHours(0, 0, 0, 0);
+
+        const end = new Date(now);
+        end.setHours(23, 59, 59, 999);
+
         const bucketKeys = [];
         const labels = [];
+
         for (let i = 0; i < 30; i++) {
           const d = new Date(start);
           d.setDate(start.getDate() + i);
-          bucketKeys.push(d.toISOString().slice(0, 10));
+
+          bucketKeys.push(this.toDateKey(d));
           labels.push(`${d.getDate()}/${d.getMonth() + 1}`);
         }
-        return { start, end: now, labels, bucketKeys };
+
+        return { start, end, labels, bucketKeys };
       }
+
       if (this.period === "all-time") {
+        const mode = this.getAllTimeBucketMode();
+        const validDates = this.orders
+          .map((order) => this.parseOrderDate(order?.orderDate))
+          .filter(Boolean);
+
+        if (!validDates.length) {
+          return {
+            start: null,
+            end: null,
+            labels: [],
+            bucketKeys: [],
+          };
+        }
+
+        const earliest = new Date(
+          Math.min(...validDates.map((date) => date.getTime()))
+        );
+
         const bucketKeys = [];
         const labels = [];
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const dates = this.orders.map((o) => new Date(o.orderDate));
-        const earliest = dates.length ? new Date(Math.min(...dates)) : now;
-        const cursor = new Date(earliest.getFullYear(), earliest.getMonth(), 1);
-        while (cursor <= now) {
-          const key = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}`;
-          bucketKeys.push(key);
-          labels.push(`${monthNames[cursor.getMonth()]} ${String(cursor.getFullYear()).slice(-2)}`);
-          cursor.setMonth(cursor.getMonth() + 1);
+
+        if (mode === "day") {
+          const cursor = new Date(
+            earliest.getFullYear(),
+            earliest.getMonth(),
+            earliest.getDate(),
+            0,
+            0,
+            0,
+            0
+          );
+          const lastDay = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            0,
+            0,
+            0,
+            0
+          );
+
+          while (cursor <= lastDay) {
+            bucketKeys.push(this.toDateKey(cursor));
+            labels.push(
+              `${cursor.getDate()} ${cursor.toLocaleString("en-ZA", {
+                month: "short",
+              })}`
+            );
+            cursor.setDate(cursor.getDate() + 1);
+          }
+        } else if (mode === "year") {
+          const startYear = earliest.getFullYear();
+          const endYear = now.getFullYear();
+
+          for (let year = startYear; year <= endYear; year++) {
+            bucketKeys.push(String(year));
+            labels.push(String(year));
+          }
+        } else {
+          const monthNames = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ];
+
+          const cursor = new Date(
+            earliest.getFullYear(),
+            earliest.getMonth(),
+            1
+          );
+          const currentMonth = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            1
+          );
+
+          while (cursor <= currentMonth) {
+            const key = `${cursor.getFullYear()}-${String(
+              cursor.getMonth() + 1
+            ).padStart(2, "0")}`;
+
+            bucketKeys.push(key);
+            labels.push(
+              `${monthNames[cursor.getMonth()]} ${String(
+                cursor.getFullYear()
+              ).slice(-2)}`
+            );
+
+            cursor.setMonth(cursor.getMonth() + 1);
+          }
         }
-        return { start: null, end: null, labels, bucketKeys };
+
+        return {
+          start: null,
+          end: null,
+          labels,
+          bucketKeys,
+        };
       }
+
       return { start: null, end: null, labels: [], bucketKeys: [] };
+    },
+
+    toDateKey(date) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}-${String(date.getDate()).padStart(2, "0")}`;
     },
 
     getBucketKey(date, period) {
@@ -520,9 +1007,31 @@ export default {
         const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
         return days[date.getDay()];
       }
-      if (period === "this-month") return String(date.getDate());
-      if (period === "last-30") return date.toISOString().slice(0, 10);
-      if (period === "all-time") return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+
+      if (period === "this-month") {
+        return String(date.getDate());
+      }
+
+      if (period === "last-30") {
+        return this.toDateKey(date);
+      }
+
+      if (period === "all-time") {
+        const mode = this.getAllTimeBucketMode();
+
+        if (mode === "day") {
+          return this.toDateKey(date);
+        }
+
+        if (mode === "year") {
+          return String(date.getFullYear());
+        }
+
+        return `${date.getFullYear()}-${String(
+          date.getMonth() + 1
+        ).padStart(2, "0")}`;
+      }
+
       return "";
     },
 
@@ -544,13 +1053,39 @@ export default {
       }
 
       const map = {
-        pending: { statusLabel: "PENDING", statusColor: "warning", statusBucket: "pending" },
-        paid: { statusLabel: "PAID", statusColor: "positive", statusBucket: "paid" },
-        "paid & picked up": { statusLabel: "COLLECTED", statusColor: "collected", statusBucket: "collected" },
-        "paid & delivered": { statusLabel: "DELIVERED", statusColor: "delivered", statusBucket: "delivered" },
-        refunded: { statusLabel: "REFUNDED", statusColor: "negative", statusBucket: "refunded" },
+        pending: {
+          statusLabel: "PENDING",
+          statusColor: "warning",
+          statusBucket: "pending",
+        },
+        paid: {
+          statusLabel: "PAID",
+          statusColor: "positive",
+          statusBucket: "paid",
+        },
+        "paid & picked up": {
+          statusLabel: "COLLECTED",
+          statusColor: "collected",
+          statusBucket: "collected",
+        },
+        "paid & delivered": {
+          statusLabel: "DELIVERED",
+          statusColor: "delivered",
+          statusBucket: "delivered",
+        },
+        refunded: {
+          statusLabel: "REFUNDED",
+          statusColor: "negative",
+          statusBucket: "refunded",
+        },
       };
-      return map[status] || { statusLabel: status?.toUpperCase() || "—", statusColor: "grey", statusBucket: "grey" };
+      return (
+        map[status] || {
+          statusLabel: status?.toUpperCase() || "—",
+          statusColor: "grey",
+          statusBucket: "grey",
+        }
+      );
     },
   },
   created() {

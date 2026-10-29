@@ -12,7 +12,7 @@
               Command Center
             </div>
 
-            <div class="row items-center q-gutter-sm">
+            <div class="col-12 col-md-auto">
               <q-btn
                 rounded
                 no-caps
@@ -21,7 +21,7 @@
                 color="grey"
                 text-color="grey"
                 to="/"
-                class="q-px-lg q-py-sm text-subtitle1 rounded-button text-bold"
+                class="q-px-lg q-py-sm text-subtitle1 rounded-button text-bold full-width"
               />
             </div>
           </div>
