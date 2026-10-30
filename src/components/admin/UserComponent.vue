@@ -4,6 +4,7 @@
     :class="$q.screen.gt.sm ? 'q-pl-lg' : 'q-pl-none'"
   >
     <!-- Heading -->
+    <div class="section-spacer-xs small-screen-only"></div>
     <section>
       <div class="row justify-between items-center">
         <div>
@@ -15,13 +16,32 @@
           </div>
         </div>
 
+        <div v-if="$q.screen.gt.sm" class="col-md-auto">
+          <q-input
+            v-model="search"
+            placeholder="Search records"
+            dense
+            outlined
+            dark
+            class="customer-search"
+            @update:model-value="applyFilters"
+          >
+            <template #prepend>
+              <q-icon name="eva-search-outline" size="18px" />
+            </template>
+          </q-input>
+        </div>
+      </div>
+
+      <div v-if="!$q.screen.gt.sm">
+        <div class="section-spacer-sm"></div>
         <q-input
           v-model="search"
           placeholder="Search records"
           dense
           outlined
           dark
-          class="customer-search"
+          class="customer-search full-width q-mb-md"
           @update:model-value="applyFilters"
         >
           <template #prepend>
@@ -31,7 +51,7 @@
       </div>
     </section>
 
-    <div class="section-spacer-sm"></div>
+    <div class="section-spacer-sm large-screen-only"></div>
 
     <!--------------------------------------------------------------------- LOADING SKELETON -------------------------------------------------->
     <template v-if="loading">
@@ -46,30 +66,57 @@
           style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
         >
           <div>
-            <div class="skeleton-line skeleton-line--md q-mb-sm"></div>
-            <div class="skeleton-line skeleton-line--sm"></div>
+            <div
+              class="skeleton-line skeleton-line--md q-mb-sm"
+              style="width: 150px"
+            ></div>
+            <div
+              class="skeleton-line skeleton-line--sm"
+              style="width: 100px"
+            ></div>
           </div>
         </q-card-section>
+
         <q-card-section class="q-pa-none">
-          <div
-            v-for="n in 4"
-            :key="'skel-' + n"
-            class="row items-center q-px-md q-py-md"
-            :style="
-              n !== 4 ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)' : ''
-            "
-          >
-            <div class="col-3">
-              <div class="skeleton-line skeleton-line--md"></div>
-            </div>
-            <div class="col-3">
-              <div class="skeleton-line skeleton-line--md"></div>
-            </div>
-            <div class="col-3">
-              <div class="skeleton-line skeleton-line--md"></div>
-            </div>
-            <div class="col-3 row justify-end">
-              <div class="skeleton-line skeleton-line--sm"></div>
+          <!-- 🚨 SCROLL WRAPPER -->
+          <div style="overflow-x: auto">
+            <!-- 🚨 MIN-WIDTH ON THE CONTENT -->
+            <div style="min-width: 600px">
+              <div
+                v-for="n in 4"
+                :key="'skel-' + n"
+                class="row items-center q-px-md q-py-md"
+                :style="
+                  n !== 4
+                    ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)'
+                    : ''
+                "
+              >
+                <div class="col">
+                  <div
+                    class="skeleton-line skeleton-line--md"
+                    style="width: 80%"
+                  ></div>
+                </div>
+                <div class="col">
+                  <div
+                    class="skeleton-line skeleton-line--md"
+                    style="width: 80%"
+                  ></div>
+                </div>
+                <div class="col">
+                  <div
+                    class="skeleton-line skeleton-line--md"
+                    style="width: 80%"
+                  ></div>
+                </div>
+                <div class="col row justify-end">
+                  <div
+                    class="skeleton-line skeleton-line--sm"
+                    style="width: 60%"
+                  ></div>
+                </div>
+              </div>
             </div>
           </div>
         </q-card-section>
@@ -103,23 +150,22 @@
                 <div class="font-size-responsive-md text-light text-bold">
                   {{ selectedUser.firstName }} {{ selectedUser.lastName }}
                 </div>
-                <div class="row items-center q-mt-xs">
-                  <div
+                <div class="row items-center">
+                  <!-- <div
                     class="status-dot"
                     :class="
                       selectedUser.loginInfo?.isLoggedIn
                         ? 'status-dot--online'
                         : 'status-dot--offline'
                     "
-                  ></div>
+                  ></div> -->
                   <span
-                    class="text-caption text-bold q-ml-sm"
+                    class="font-size-responsive-xs statement-label text-bold"
                     :class="
                       selectedUser.loginInfo?.isLoggedIn
                         ? 'text-positive'
                         : 'text-dimmed'
                     "
-                    style="letter-spacing: 0.08em"
                   >
                     {{
                       selectedUser.loginInfo?.isLoggedIn ? "ONLINE" : "OFFLINE"
@@ -129,16 +175,18 @@
               </div>
             </div>
 
-            <q-btn
-              rounded
-              dense
-              no-caps
-              flat
-              label="Close"
-              icon="eva-close-outline"
-              class="custom-button icon-btn text-subtitle1 text-dimmed q-px-lg q-py-sm"
-              @click="closeDetails"
-            />
+            <div class="row items-center">
+              <q-btn
+                align="center"
+                rounded
+                dense
+                no-caps
+                flat
+                icon="eva-close-outline"
+                class="custom-button icon-btn text-subtitle1 text-dimmed q-px-lg q-py-sm"
+                @click="closeDetails"
+              />
+            </div>
           </q-card-section>
 
           <!-- body: two columns -->
@@ -471,7 +519,14 @@
             style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
           >
             <div>
-              <div class="font-size-responsive-md text-light text-bold">
+              <div
+                class="font-size-responsive-lg text-light text-bold small-screen-only"
+              >
+                Registered Customers
+              </div>
+              <div
+                class="font-size-responsive-md text-light text-bold large-screen-only"
+              >
                 Registered Customers
               </div>
               <div class="text-caption text-dimmed">
@@ -500,102 +555,123 @@
           </q-card-section>
 
           <q-card-section class="q-pa-none">
-            <!-- header row -->
-            <div
-              class="row items-center q-px-md q-py-md"
-              style="border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
-            >
-              <div class="col-3 text-dimmed font-size-responsive-xs text-bold">
-                USERNAME
-              </div>
-              <div class="col-3 text-dimmed font-size-responsive-xs text-bold">
-                NAME
-              </div>
-              <div class="col-3 text-dimmed font-size-responsive-xs text-bold">
-                LAST LOGIN
-              </div>
-              <div
-                class="col-3 text-dimmed font-size-responsive-xs text-bold text-center"
-              >
-                STATUS
-              </div>
-            </div>
-
-            <!-- data rows -->
-            <div
-              v-for="(user, index) in filteredList"
-              :key="user._id"
-              class="row items-center q-px-md q-py-md cursor-pointer user-row"
-              :style="
-                index !== filteredList.length - 1
-                  ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)'
-                  : ''
-              "
-              @click="openDetails(user)"
-            >
-              <div class="col-3">
-                <q-badge
-                  outline
-                  color="grey"
-                  text-color="grey"
-                  class="user-badge"
+            <!-- 🚨 SCROLL WRAPPER -->
+            <div style="overflow-x: auto">
+              <!-- 🚨 MIN-WIDTH ON THE CONTENT -->
+              <div style="min-width: 600px">
+                <!-- HEADER ROW -->
+                <div
+                  class="row items-center q-px-md q-py-md"
+                  style="border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
                 >
-                  {{ user.username }}
-                </q-badge>
-              </div>
-              <div class="col-3 font-size-responsive-sm text-dimmed">
-                {{ user.firstName }} {{ user.lastName }}
-              </div>
-              <div class="col-3 font-size-responsive-sm text-dimmed">
-                {{
-                  user.loginInfo && user.loginInfo.lastLogin
-                    ? formatDate(user.loginInfo.lastLogin)
-                    : "—"
-                }}
-              </div>
-              <div class="col-3 row justify-center">
-                <div class="row items-center">
                   <div
-                    class="status-dot"
-                    :class="
-                      user.loginInfo && user.loginInfo.isLoggedIn
-                        ? 'status-dot--online'
-                        : 'status-dot--offline'
-                    "
-                  ></div>
-                  <span
-                    class="text-caption text-bold q-ml-sm"
-                    :class="
-                      user.loginInfo && user.loginInfo.isLoggedIn
-                        ? 'text-positive'
-                        : 'text-dimmed'
-                    "
+                    class="col text-dimmed font-size-responsive-xs text-bold"
                   >
-                    {{
-                      user.loginInfo && user.loginInfo.isLoggedIn
-                        ? "ONLINE"
-                        : "OFFLINE"
-                    }}
-                  </span>
+                    USERNAME
+                  </div>
+                  <div
+                    class="col text-dimmed font-size-responsive-xs text-bold"
+                  >
+                    NAME
+                  </div>
+                  <div
+                    class="col text-dimmed font-size-responsive-xs text-bold"
+                  >
+                    LAST LOGIN
+                  </div>
+                  <div
+                    class="col text-dimmed font-size-responsive-xs text-bold text-left"
+                  >
+                    STATUS
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <!-- empty state -->
-            <div
-              v-if="filteredList.length === 0"
-              class="column items-center q-py-xl q-px-md"
-            >
-              <q-icon
-                name="fa-solid fa-user-slash"
-                color="primary"
-                size="42px"
-              />
-              <div class="font-size-responsive-md text-light text-bold q-mt-md">
-                NO USERS FOUND
-              </div>
-              <div class="text-caption text-dimmed q-mt-sm">
-                Try adjusting your search or filters.
+                <!-- DATA ROWS -->
+                <div
+                  v-for="(user, index) in filteredList"
+                  :key="user._id"
+                  class="row items-center q-px-md q-py-md cursor-pointer order-row"
+                  :style="
+                    index !== filteredList.length - 1
+                      ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)'
+                      : ''
+                  "
+                  @click="openDetails(user)"
+                >
+                  <!-- Username -->
+                  <div class="col">
+                    <q-badge
+                      outline
+                      color="grey"
+                      text-color="grey"
+                      class="user-badge"
+                    >
+                      {{ user.username }}
+                    </q-badge>
+                  </div>
+
+                  <!-- Name -->
+                  <div class="col font-size-responsive-sm text-dimmed">
+                    {{ user.firstName }} {{ user.lastName }}
+                  </div>
+
+                  <!-- Last Login -->
+                  <div class="col font-size-responsive-sm text-dimmed">
+                    {{
+                      user.loginInfo && user.loginInfo.lastLogin
+                        ? formatDate(user.loginInfo.lastLogin)
+                        : "—"
+                    }}
+                  </div>
+
+                  <!-- Status -->
+                  <div class="col row justify-start items-center">
+                    <div class="inline-flex items-center gap-2">
+                      <div
+                        class="status-dot"
+                        :class="
+                          user.loginInfo && user.loginInfo.isLoggedIn
+                            ? 'status-dot--online'
+                            : 'status-dot--offline'
+                        "
+                      ></div>
+                      <span
+                        class="font-size-responsive-xs statement-label text-bold q-ml-sm"
+                        :class="
+                          user.loginInfo && user.loginInfo.isLoggedIn
+                            ? 'text-positive'
+                            : 'text-dimmed'
+                        "
+                      >
+                        {{
+                          user.loginInfo && user.loginInfo.isLoggedIn
+                            ? "ONLINE"
+                            : "OFFLINE"
+                        }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- EMPTY STATE -->
+                <div
+                  v-if="filteredList.length === 0"
+                  class="column items-center q-py-xl q-px-md"
+                >
+                  <q-icon
+                    name="fa-solid fa-user-slash"
+                    color="primary"
+                    size="42px"
+                  />
+                  <div
+                    class="font-size-responsive-md text-light text-bold q-mt-md"
+                  >
+                    NO USERS FOUND
+                  </div>
+                  <div class="text-caption text-dimmed q-mt-sm">
+                    Try adjusting your search or filters.
+                  </div>
+                </div>
               </div>
             </div>
           </q-card-section>

@@ -1156,4 +1156,10 @@ export default {
   .q-item--active
     color: var(--q-primary)
     background-color: rgba(255, 255, 255, 0.06)
+
+.text-collected
+  color: #14b8a6 !important
+
+.text-delivered
+  color: #a855f7 !important
 </style>

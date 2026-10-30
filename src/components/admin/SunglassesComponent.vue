@@ -4,6 +4,7 @@
     :class="$q.screen.gt.sm ? 'q-pl-lg' : 'q-pl-none'"
   >
     <!-- Heading -->
+    <div class="section-spacer-xs small-screen-only"></div>
     <section>
       <div class="row justify-between items-center">
         <div>
