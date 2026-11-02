@@ -18,7 +18,7 @@
 
         <!-- Add button only visible when NOT showing the add form -->
         <q-btn
-          v-if="!openAddSunglasses"
+          v-if="!openAddSunglasses && $q.screen.gt.sm"
           rounded
           dense
           no-caps
@@ -26,6 +26,16 @@
           label="Add frame"
           text-color="dark"
           class="btn-gradient-primary icon-btn q-px-lg q-py-sm rounded-button text-subtitle1 text-bold"
+          @click="toggleAddSunglasses"
+        />
+        <q-btn
+          v-if="!openAddSunglasses && !$q.screen.gt.sm"
+          round
+          dense
+          no-caps
+          icon="eva-plus-outline"
+          text-color="dark"
+          class="btn-gradient-primary icon-btn q-pa-sm"
           @click="toggleAddSunglasses"
         />
       </div>
@@ -210,29 +220,29 @@
               </div>
             </div>
 
-  <!-- ACTION BUTTONS -->
-  <div class="row items-center q-gutter-sm q-mt-lg">
-    <q-btn
-      rounded
-      dense
-      no-caps
-      type="submit"
-      label="Save frame"
-      icon="eva-cloud-upload-outline"
-      text-color="dark"
-      class="btn-gradient-primary icon-btn q-px-lg q-py-sm rounded-button text-subtitle1 text-bold"
-    />
+            <!-- ACTION BUTTONS -->
+            <div class="row items-center q-gutter-sm q-mt-lg">
+              <q-btn
+                rounded
+                dense
+                no-caps
+                type="submit"
+                label="Save frame"
+                icon="eva-cloud-upload-outline"
+                text-color="dark"
+                class="btn-gradient-primary icon-btn q-px-lg q-py-sm rounded-button text-subtitle1 text-bold"
+              />
 
-    <q-btn
-      rounded
-      dense
-      no-caps
-      flat
-      type="reset"
-      label="Reset"
-      class="custom-button text-subtitle1 text-dimmed q-px-lg q-py-sm"
-    />
-  </div>
+              <q-btn
+                rounded
+                dense
+                no-caps
+                flat
+                type="reset"
+                label="Reset"
+                class="custom-button text-subtitle1 text-dimmed q-px-lg q-py-sm"
+              />
+            </div>
           </q-form>
         </q-card-section>
       </q-card>
@@ -289,251 +299,256 @@
       </q-card>
 
       <!-- real list -->
-      <q-card
-        v-else
-        flat
-        bordered
-        class="bg-dark-secondary"
-        style="border: 1px solid rgba(255, 255, 255, 0.2)"
-      >
-        <q-card-section
-          class="row justify-between items-center"
-          style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+<q-card
+  v-else
+  flat
+  bordered
+  class="bg-dark-secondary"
+  style="border: 1px solid rgba(255, 255, 255, 0.2)"
+>
+  <q-card-section
+    class="row justify-between items-center"
+    style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
+  >
+    <div>
+      <div class="font-size-responsive-md text-light text-bold">
+        All Sunglasses
+      </div>
+      <div class="text-caption text-dimmed">
+        {{ sunglasses.length }}
+        {{ sunglasses.length === 1 ? "frame" : "frames" }} in catalogue
+      </div>
+    </div>
+  </q-card-section>
+
+  <q-card-section class="q-pa-none">
+
+    <!-- 🚨 SCROLL WRAPPER -->
+    <div style="overflow-x: auto">
+      <!-- 🚨 MIN-WIDTH ON THE CONTENT -->
+      <div style="min-width: 800px">
+
+        <!-- HEADER ROW -->
+        <div
+          class="row items-center q-px-lg q-py-md"
+          style="border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
         >
-          <div>
-            <div class="font-size-responsive-md text-light text-bold">
-              All Sunglasses
-            </div>
-            <div class="text-caption text-dimmed">
-              {{ sunglasses.length }}
-              {{ sunglasses.length === 1 ? "frame" : "frames" }} in catalogue
+          <!-- Matches Image -->
+          <div class="col-1 q-mr-sm"></div>
+          <!-- Matches Model -->
+          <div class="col text-dimmed font-size-responsive-xs text-bold q-pr-sm">MODEL</div>
+          <!-- Matches ID -->
+          <div class="col-2 text-dimmed font-size-responsive-xs text-bold text-left q-pl-sm">ID</div>
+          <!-- Matches Description -->
+          <div class="col-4 text-dimmed font-size-responsive-xs text-bold q-px-md q-mr-sm">DESCRIPTION</div>
+          <!-- Matches Price -->
+          <div class="col text-dimmed font-size-responsive-xs text-bold q-pr-sm">PRICE</div>
+          <!-- Matches Stock -->
+          <div class="col text-dimmed font-size-responsive-xs text-bold text-center">STOCK</div>
+          <!-- Matches Actions -->
+          <div class="col-1"></div>
+        </div>
+
+        <!-- DATA ROWS -->
+        <div
+          v-for="(sunglass, index) in sunglasses"
+          :key="sunglass._id"
+          class="row items-center q-px-lg q-py-lg sunglass-row"
+          :class="{ 'sunglass-row--editing': editMode === sunglass._id }"
+          :style="
+            index !== sunglasses.length - 1
+              ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)'
+              : ''
+          "
+        >
+          <!-- Image -->
+          <div class="col-1 q-mr-sm">
+            <q-img
+              :src="getImageUrl(sunglass.images[0].imageUrl)"
+              alt="Sunglass"
+              class="sunglass-thumb"
+            />
+          </div>
+
+          <!-- Model -->
+          <div class="col q-pr-sm">
+            <q-input
+              v-if="editMode === sunglass._id"
+              v-model="sunglass.model"
+              dense
+              outlined
+              dark
+              class="custom-input"
+              input-style="color: white;"
+            />
+            <div v-else class="font-size-responsive-sm text-light text-bold">
+              {{ sunglass.model }}
             </div>
           </div>
-        </q-card-section>
 
-        <q-card-section class="q-pa-none">
-          <!-- header row -->
-          <div
-            class="row items-center q-px-lg q-py-md"
-            style="border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
-          >
-            <div
-              class="col-1 text-dimmed font-size-responsive-xs text-bold"
-            ></div>
-            <div class="col-2 text-dimmed font-size-responsive-xs text-bold">
-              MODEL
-            </div>
-            <div class="col-2 text-dimmed font-size-responsive-xs text-bold">
-              ID
-            </div>
-            <div class="col-4 text-dimmed font-size-responsive-xs text-bold">
-              DESCRIPTION
-            </div>
-            <div class="col-1 text-dimmed font-size-responsive-xs text-bold">
-              PRICE
-            </div>
-            <div
-              class="col-1 text-dimmed font-size-responsive-xs text-bold text-center"
+          <!-- ID -->
+          <div class="col-2 q-pl-sm">
+            <q-badge
+              outline
+              color="grey"
+              text-color="grey"
+              class="user-badge"
             >
-              STOCK
-            </div>
-            <div class="col-1"></div>
+              #{{ formatSunglassesId(sunglass) }}
+            </q-badge>
           </div>
 
-          <!-- data rows -->
-          <div
-            v-for="(sunglass, index) in sunglasses"
-            :key="sunglass._id"
-            class="row items-center q-px-lg q-py-lg sunglass-row"
-            :class="{ 'sunglass-row--editing': editMode === sunglass._id }"
-            :style="
-              index !== sunglasses.length - 1
-                ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.1)'
-                : ''
-            "
-          >
-            <div class="col-1">
-              <q-img
-                :src="getImageUrl(sunglass.images[0].imageUrl)"
-                alt="Sunglass"
-                class="sunglass-thumb"
-              />
+          <!-- Description -->
+          <div class="col-4 q-px-md q-mr-sm">
+            <q-input
+              v-if="editMode === sunglass._id"
+              v-model="sunglass.description"
+              dense
+              outlined
+              dark
+              type="textarea"
+              autogrow
+              class="custom-input"
+              input-style="color: white;"
+            />
+            <div
+              v-else
+              class="font-size-responsive-xs text-dimmed limit-text-2"
+            >
+              {{ sunglass.description }}
             </div>
+          </div>
 
-            <div class="col-2 q-pr-sm">
-              <q-input
-                v-if="editMode === sunglass._id"
-                v-model="sunglass.model"
+          <!-- Price -->
+          <div class="col q-pr-sm">
+            <q-input
+              v-if="editMode === sunglass._id"
+              v-model="sunglass.price"
+              dense
+              outlined
+              dark
+              type="number"
+              prefix="R"
+              class="custom-input"
+              input-style="color: white;"
+            />
+            <div v-else class="font-size-responsive-sm text-gradient-primary">
+              R{{ sunglass.price }}
+            </div>
+          </div>
+
+          <!-- Stock -->
+          <div class="col row justify-center">
+            <q-input
+              v-if="editMode === sunglass._id"
+              v-model="sunglass.stock"
+              dense
+              outlined
+              dark
+              type="number"
+              style="width: 70px"
+              class="custom-input"
+              input-style="color: white; text-align: center;"
+            />
+            <div
+              v-else
+              class="row items-center"
+              :class="sunglass.stock < 3 ? 'text-negative' : 'text-light'"
+            >
+              <div
+                class="status-dot q-mr-xs"
+                :class="
+                  sunglass.stock < 3
+                    ? 'status-dot--low'
+                    : 'status-dot--in-stock'
+                "
+              ></div>
+              <span class="font-size-responsive-sm text-dimmed q-ml-sm">{{
+                sunglass.stock
+              }}</span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="col-1 row justify-end">
+            <template v-if="editMode !== sunglass._id">
+              <q-btn
+                round
                 dense
-                outlined
-                dark
-                class="custom-input"
-                input-style="color: white;"
+                flat
+                color="grey"
+                icon="eva-more-vertical-outline"
+                size="sm"
+              >
+                <q-menu
+                  anchor="bottom right"
+                  self="top right"
+                  class="row-actions-menu bg-dark-secondary"
+                >
+                  <q-list dense>
+                    <q-item
+                      clickable
+                      v-close-popup
+                      @click="editMode = sunglass._id"
+                    >
+                      <q-item-section>Edit</q-item-section>
+                    </q-item>
+                    <q-item
+                      clickable
+                      v-close-popup
+                      @click="deleteSunglasses(sunglass)"
+                    >
+                      <q-item-section class="text-negative">Delete</q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
+              </q-btn>
+            </template>
+            <template v-else>
+              <q-btn
+                rounded
+                dense
+                no-caps
+                flat
+                color="primary"
+                text-color="primary"
+                icon="eva-checkmark-outline"
+                size="sm"
+                @click="updateSunglasses(sunglass)"
               />
-              <div v-else class="font-size-responsive-sm text-light text-bold">
-                {{ sunglass.model }}
-              </div>
-            </div>
-
-            <div class="col-2 q-pr-sm">
-              <q-badge
-                outline
+              <q-btn
+                rounded
+                dense
+                no-caps
+                flat
                 color="grey"
                 text-color="grey"
-                class="user-badge"
-              >
-                #{{ formatSunglassesId(sunglass) }}
-              </q-badge>
-            </div>
-
-            <div class="col-4 q-pr-md">
-              <q-input
-                v-if="editMode === sunglass._id"
-                v-model="sunglass.description"
-                dense
-                outlined
-                dark
-                type="textarea"
-                autogrow
-                class="custom-input"
-                input-style="color: white;"
+                icon="eva-close-outline"
+                size="sm"
+                @click="cancelEdit"
               />
-              <div
-                v-else
-                class="font-size-responsive-xs text-dimmed limit-text-2"
-              >
-                {{ sunglass.description }}
-              </div>
-            </div>
-
-            <div class="col-1 q-pr-sm">
-              <q-input
-                v-if="editMode === sunglass._id"
-                v-model="sunglass.price"
-                dense
-                outlined
-                dark
-                type="number"
-                prefix="R"
-                class="custom-input"
-                input-style="color: white;"
-              />
-              <div v-else class="font-size-responsive-sm text-gradient-primary">
-                R{{ sunglass.price }}
-              </div>
-            </div>
-
-            <div class="col-1 row justify-center">
-              <q-input
-                v-if="editMode === sunglass._id"
-                v-model="sunglass.stock"
-                dense
-                outlined
-                dark
-                type="number"
-                style="width: 70px"
-                class="custom-input"
-                input-style="color: white; text-align: center;"
-              />
-              <div
-                v-else
-                class="row items-center"
-                :class="sunglass.stock < 3 ? 'text-negative' : 'text-light'"
-              >
-                <div
-                  class="status-dot q-mr-xs"
-                  :class="
-                    sunglass.stock < 3
-                      ? 'status-dot--low'
-                      : 'status-dot--in-stock'
-                  "
-                ></div>
-                <span class="font-size-responsive-sm text-dimmed q-ml-sm">{{
-                  sunglass.stock
-                }}</span>
-              </div>
-            </div>
-
-            <div class="col-1 row justify-end">
-              <template v-if="editMode !== sunglass._id">
-                <q-btn
-                  round
-                  dense
-                  flat
-                  color="grey"
-                  icon="eva-more-vertical-outline"
-                  size="sm"
-                >
-                  <q-menu
-                    anchor="bottom right"
-                    self="top right"
-                    class="row-actions-menu bg-dark-secondary"
-                  >
-                    <q-list dense>
-                      <q-item
-                        clickable
-                        v-close-popup
-                        @click="editMode = sunglass._id"
-                      >
-                        <!-- <q-item-section avatar><q-icon name="eva-edit-outline" size="18px" /></q-item-section> -->
-                        <q-item-section>Edit</q-item-section>
-                      </q-item>
-                      <q-item
-                        clickable
-                        v-close-popup
-                        @click="deleteSunglasses(sunglass)"
-                      >
-                        <!-- <q-item-section avatar><q-icon name="eva-trash-2-outline" size="18px" color="negative" /></q-item-section> -->
-                        <q-item-section class="text-negative"
-                          >Delete</q-item-section
-                        >
-                      </q-item>
-                    </q-list>
-                  </q-menu>
-                </q-btn>
-              </template>
-              <template v-else>
-                <q-btn
-                  rounded
-                  dense
-                  no-caps
-                  flat
-                  color="primary"
-                  text-color="primary"
-                  icon="eva-checkmark-outline"
-                  size="sm"
-                  @click="updateSunglasses(sunglass)"
-                />
-                <q-btn
-                  rounded
-                  dense
-                  no-caps
-                  flat
-                  color="grey"
-                  text-color="grey"
-                  icon="eva-close-outline"
-                  size="sm"
-                  @click="cancelEdit"
-                />
-              </template>
-            </div>
+            </template>
           </div>
+        </div>
 
-          <!-- empty state -->
-          <div
-            v-if="sunglasses.length === 0"
-            class="column items-center q-py-xl q-px-md"
-          >
-            <q-icon name="fa-solid fa-glasses" color="primary" size="42px" />
-            <div class="font-size-responsive-md text-light text-bold q-mt-md">
-              NO FRAMES YET
-            </div>
-            <div class="text-caption text-dimmed q-mt-sm">
-              Add your first frame to get started.
-            </div>
+        <!-- EMPTY STATE -->
+        <div
+          v-if="sunglasses.length === 0"
+          class="column items-center q-py-xl q-px-md"
+        >
+          <q-icon name="fa-solid fa-glasses" color="primary" size="42px" />
+          <div class="font-size-responsive-md text-light text-bold q-mt-md">
+            NO FRAMES YET
           </div>
-        </q-card-section>
-      </q-card>
+          <div class="text-caption text-dimmed q-mt-sm">
+            Add your first frame to get started.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </q-card-section>
+</q-card>
     </template>
   </div>
 </template>
@@ -688,23 +703,24 @@ export default {
         "Update sunglasses",
         `You are about to update ${sunglasses.model}, continue?`,
         "Update Sunglasses"
-      ).onOk(async () => {
-        const response = await SunglassesService.updateSunglasses(
-          sunglasses._id,
-          updatedSunglasses
-        );
-        if (response) {
-          UiAlerts.success("Update successful!");
+      )
+        .onOk(async () => {
+          const response = await SunglassesService.updateSunglasses(
+            sunglasses._id,
+            updatedSunglasses
+          );
+          if (response) {
+            UiAlerts.success("Update successful!");
+            this.editMode = null;
+            this.getAllSunglasses();
+          } else {
+            UiAlerts.error("Update failed. Please try again.");
+          }
+        })
+        .onCancel(() => {
           this.editMode = null;
           this.getAllSunglasses();
-        } else {
-          UiAlerts.error("Update failed. Please try again.");
-        }
-      })
-      .onCancel(() => {
-        this.editMode = null;
-        this.getAllSunglasses();
-      });
+        });
     },
 
     async deleteSunglasses(sunglasses) {
