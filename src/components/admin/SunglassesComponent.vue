@@ -413,7 +413,7 @@
             />
             <div
               v-else
-              class="font-size-responsive-xs text-dimmed limit-text-2"
+              class="font-size-responsive-sm text-dimmed limit-text-2"
             >
               {{ sunglass.description }}
             </div>
