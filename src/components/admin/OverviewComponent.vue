@@ -98,7 +98,8 @@
     <!--------------------------------------------------------------------- REAL CONTENT -------------------------------------------------->
     <template v-else>
       <!-------------------------------------- STAT CARDS -------------------------------------->
-      <div class="row q-col-gutter-md items-stretch"
+      <div
+        class="row q-col-gutter-md items-stretch"
         :class="$q.screen.gt.sm ? 'q-mb-lg' : 'q-mb-md'"
       >
         <!-- Revenue -->
@@ -207,7 +208,8 @@
       </div>
 
       <!-------------------------------------- CHARTS -------------------------------------->
-      <div class="row q-col-gutter-md items-stretch"
+      <div
+        class="row q-col-gutter-md items-stretch"
         :class="$q.screen.gt.sm ? 'q-mb-lg' : 'q-mb-md'"
       >
         <div class="col-12 col-md-8">
@@ -510,8 +512,8 @@ export default {
             this.period === "all-time" && allTimeMode === "year"
               ? Math.min(10, Math.max(1, labels.length - 1))
               : this.period === "all-time" && allTimeMode === "month"
-                ? Math.min(12, Math.max(1, labels.length - 1))
-                : undefined,
+              ? Math.min(12, Math.max(1, labels.length - 1))
+              : undefined,
           labels: {
             style: { colors: "#9b9b9b" },
             hideOverlappingLabels: true,
@@ -533,8 +535,7 @@ export default {
           shared: true,
           intersect: false,
           y: {
-            formatter: (val) =>
-              `R ${Number(val || 0).toLocaleString("en-ZA")}`,
+            formatter: (val) => `R ${Number(val || 0).toLocaleString("en-ZA")}`,
           },
         },
       };
@@ -664,11 +665,7 @@ export default {
         bucketKeys.map((key) => [key, 0])
       );
 
-      const paidStatuses = [
-        "paid",
-        "paid & picked up",
-        "paid & delivered",
-      ];
+      const paidStatuses = ["paid", "paid & picked up", "paid & delivered"];
 
       for (const order of this.orders) {
         const amount = Number(order?.totalAmount);
@@ -699,15 +696,11 @@ export default {
       this.salesChartSeries = [
         {
           name: "Revenue",
-          data: bucketKeys.map((key) =>
-            Number(revenueBuckets[key].toFixed(2))
-          ),
+          data: bucketKeys.map((key) => Number(revenueBuckets[key].toFixed(2))),
         },
         {
           name: "Refunds",
-          data: bucketKeys.map((key) =>
-            Number(refundBuckets[key].toFixed(2))
-          ),
+          data: bucketKeys.map((key) => Number(refundBuckets[key].toFixed(2))),
         },
       ];
     },
@@ -962,11 +955,7 @@ export default {
             earliest.getMonth(),
             1
           );
-          const currentMonth = new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            1
-          );
+          const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
           while (cursor <= currentMonth) {
             const key = `${cursor.getFullYear()}-${String(
@@ -1027,9 +1016,10 @@ export default {
           return String(date.getFullYear());
         }
 
-        return `${date.getFullYear()}-${String(
-          date.getMonth() + 1
-        ).padStart(2, "0")}`;
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+          2,
+          "0"
+        )}`;
       }
 
       return "";
