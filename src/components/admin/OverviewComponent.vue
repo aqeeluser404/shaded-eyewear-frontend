@@ -367,7 +367,7 @@
                     outline
                     color="grey"
                     text-color="grey"
-                    class="order-id-badge"
+                    class="id-badge"
                   >
                     #{{ formateOrderId(order) }}
                   </q-badge>
@@ -1110,18 +1110,6 @@ export default {
 
   &:hover
     border-color: rgba(255, 255, 255, 0.35) !important
-
-.order-id-badge
-  font-family: 'Hind', sans-serif
-  font-weight: 900
-  letter-spacing: 0.05em
-  padding: 4px 10px
-  border-radius: 4px
-  max-width: 100%
-  display: inline-block
-  white-space: nowrap
-  overflow: hidden
-  text-overflow: ellipsis
 
 .status-dot
   width: 8px

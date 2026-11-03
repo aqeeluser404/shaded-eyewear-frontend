@@ -57,7 +57,10 @@
           style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)"
         >
           <div>
-            <div class="font-size-responsive-md text-light text-bold">
+            <div class="font-size-responsive-lg text-light text-bold small-screen-only">
+              Add Sunglasses
+            </div>
+            <div class="font-size-responsive-md text-light text-bold large-screen--only">
               Add Sunglasses
             </div>
             <div class="text-caption text-dimmed">
@@ -392,7 +395,7 @@
               outline
               color="grey"
               text-color="grey"
-              class="user-badge"
+              class="id-badge"
             >
               #{{ formatSunglassesId(sunglass) }}
             </q-badge>
@@ -774,18 +777,6 @@ export default {
 <style lang="sass" scoped>
 .admin-sunglasses-details
   // wrapper
-
-.order-id-badge
-  font-family: 'Hind', sans-serif
-  font-weight: 700
-  letter-spacing: 0.05em
-  padding: 4px 10px
-  border-radius: 4px
-  max-width: 100%
-  display: inline-block
-  white-space: nowrap
-  overflow: hidden
-  text-overflow: ellipsis
 
 .status-dot
   width: 8px

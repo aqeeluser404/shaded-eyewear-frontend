@@ -604,7 +604,7 @@
                       outline
                       color="grey"
                       text-color="grey"
-                      class="user-badge"
+                      class="id-badge"
                     >
                       {{ user.username }}
                     </q-badge>
@@ -1112,18 +1112,6 @@ export default {
 
   &:hover
     background-color: rgba(255, 255, 255, 0.03)
-
-.user-badge
-  font-family: 'Hind', sans-serif
-  font-weight: 700
-  letter-spacing: 0.03em
-  padding: 4px 10px
-  border-radius: 4px
-  max-width: 100%
-  display: inline-block
-  white-space: nowrap
-  overflow: hidden
-  text-overflow: ellipsis
 
 .status-dot
   width: 8px
